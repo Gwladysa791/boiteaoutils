@@ -78,6 +78,25 @@
     return channel; // pour se désabonner : client.removeChannel(channel)
   }
 
+  function ecouterSession(sessionId, callback) {
+    const client = getClient();
+    if (!client) return null;
+    const channel = client
+      .channel('session-' + sessionId)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'sessions', filter: 'id=eq.' + sessionId }, function (payload) {
+        callback(payload.new);
+      })
+      .subscribe();
+    return channel; // pour se désabonner : client.removeChannel(channel)
+  }
+
+  async function definirConsigne(sessionId, consigne) {
+    const client = getClient();
+    if (!client) throw new Error('Supabase indisponible');
+    const { error } = await client.from('sessions').update({ consigne: consigne || null }).eq('id', sessionId);
+    if (error) throw error;
+  }
+
   async function fermerSession(sessionId) {
     const client = getClient();
     if (!client) throw new Error('Supabase indisponible');
@@ -92,6 +111,8 @@
     envoyerReponse,
     listerReponses,
     ecouterReponses,
+    ecouterSession,
+    definirConsigne,
     fermerSession,
     getClient
   };

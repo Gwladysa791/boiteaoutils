@@ -159,7 +159,8 @@
   html.mode-participant #lancerSessionLink,
   html.mode-participant .hero-stats,
   html.mode-participant .hero-illus,
-  html.mode-participant .hero-cta{display:none !important;}
+  html.mode-participant .hero-cta,
+  html.mode-participant .actions-row{display:none !important;}
   html.mode-participant .hero-inner{padding-bottom:30px;}
 
   .actions-row{text-align:center;margin-top:20px;}
@@ -253,7 +254,7 @@
   <div class="session-badge" id="sessionBadge" style="display:none;"></div>
 
   <div class="intro">
-    <p><strong>Consigne :</strong> choisissez la note qui correspond le mieux à votre ressenti sur la valeur du temps passé, puis expliquez ce qui motive ce choix.</p>
+    <p><strong>Consigne :</strong> <span id="introConsigneText">choisissez la note qui correspond le mieux à votre ressenti sur la valeur du temps passé, puis expliquez ce qui motive ce choix.</span></p>
   </div>
 
   <div class="panel" id="rotiPanel">
@@ -368,6 +369,17 @@ async function initSessionMode(){
   }
   afficherStatutSession('Session en direct — code ' + liveSessionRow.code);
   document.getElementById('sessionSendBlock').style.display = 'block';
+  appliquerConsigne(liveSessionRow.consigne);
+  AXMSession.ecouterSession(liveSessionRow.id, function(s){
+    liveSessionRow = s;
+    appliquerConsigne(s.consigne);
+  });
+}
+
+function appliquerConsigne(consigne){
+  if(consigne && consigne.trim()){
+    document.getElementById('introConsigneText').textContent = consigne;
+  }
 }
 
 async function envoyerReponseSession(){

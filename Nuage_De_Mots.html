@@ -247,7 +247,9 @@
   html.mode-participant #lancerSessionLink,
   html.mode-participant .hero-stats,
   html.mode-participant .hero-illus,
-  html.mode-participant .hero-cta{display:none !important;}
+  html.mode-participant .hero-cta,
+  html.mode-participant .actions-row,
+  html.mode-participant .share-note{display:none !important;}
   html.mode-participant .hero-inner{padding-bottom:30px;}
 </style>
 </head>
@@ -309,7 +311,7 @@
   <div class="session-badge" id="sessionBadge" style="display:none;"></div>
 
   <div class="intro">
-    <p><strong>Consigne :</strong> saisissez librement votre ou vos mots-clés en réponse à la question posée. Un mot saisi plusieurs fois grossit dans le nuage : sa taille reflète directement sa fréquence.</p>
+    <p><strong>Consigne :</strong> <span id="introConsigneText">saisissez librement votre ou vos mots-clés en réponse à la question posée. Un mot saisi plusieurs fois grossit dans le nuage : sa taille reflète directement sa fréquence.</span></p>
   </div>
 
   <div class="panel" id="inputPanel">
@@ -603,6 +605,17 @@ async function initSessionMode(){
   }
   afficherStatutSession('Session en direct — code ' + liveSessionRow.code);
   document.getElementById('sessionPseudoRow').style.display = 'flex';
+  appliquerConsigne(liveSessionRow.consigne);
+  AXMSession.ecouterSession(liveSessionRow.id, function(s){
+    liveSessionRow = s;
+    appliquerConsigne(s.consigne);
+  });
+}
+
+function appliquerConsigne(consigne){
+  if(consigne && consigne.trim()){
+    document.getElementById('introConsigneText').textContent = consigne;
+  }
 }
 
 async function envoyerMotSession(mot){

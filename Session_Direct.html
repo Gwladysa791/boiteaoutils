@@ -64,6 +64,26 @@
   .join-count{font-size:13px; font-weight:700; color:var(--gris);}
   .join-count span{color:var(--vert); font-size:18px;}
 
+  .consigne-panel{
+    background:#fff; border-radius:12px; padding:22px 24px 24px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:20px;
+  }
+  .consigne-panel h2{margin:0 0 6px; font-size:15px; color:var(--bleu-fonce);}
+  .consigne-panel .consigne-sub{margin:0 0 14px; font-size:12.5px; color:var(--gris-moyen);}
+  .consigne-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .consigne-row textarea{
+    flex:1 1 320px; min-height:60px; border:1.5px solid var(--gris-clair); border-radius:8px;
+    padding:10px 14px; font-family:inherit; font-size:13.5px; color:var(--gris); resize:vertical;
+  }
+  .consigne-row textarea:focus{outline:none; border-color:var(--bleu);}
+  .consigne-row button{
+    background:var(--bleu-fonce); color:#fff; border:none; padding:10px 20px; border-radius:20px;
+    font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; align-self:flex-start;
+    transition:background .15s ease;
+  }
+  .consigne-row button:hover{background:#006f87;}
+  .consigne-status{font-size:12px; color:var(--gris-moyen); margin:8px 0 0;}
+
   .results-panel{
     background:#fff; border-radius:12px; padding:26px 28px 32px;
     box-shadow:0 1px 3px rgba(0,0,0,0.06); min-height:360px;
@@ -109,8 +129,20 @@
     <p class="join-count"><span id="participantCount">0</span> réponse(s) reçue(s)</p>
   </div>
 
-  <div class="results-panel" id="resultsPanel">
-    <p class="empty">Initialisation de la session…</p>
+  <div>
+    <div class="consigne-panel">
+      <h2>Consigne donnée aux participants</h2>
+      <p class="consigne-sub">Modifiable à tout moment — la mise à jour est immédiate sur les téléphones des participants déjà connectés.</p>
+      <div class="consigne-row">
+        <textarea id="consigneInput" placeholder="Ex. : Un mot qui décrit votre semaine…"></textarea>
+        <button type="button" id="btnEnregistrerConsigne" onclick="enregistrerConsigne()">Enregistrer</button>
+      </div>
+      <p class="consigne-status" id="consigneStatus"></p>
+    </div>
+
+    <div class="results-panel" id="resultsPanel">
+      <p class="empty">Initialisation de la session…</p>
+    </div>
   </div>
 </div>
 
@@ -150,6 +182,13 @@ async function init(){
 
     document.getElementById('outilNom').textContent = TOOL_LABELS[outil] || outil;
     document.getElementById('joinCode').textContent = code;
+    document.getElementById('consigneInput').value = sessionRow.consigne || '';
+    AXMSession.ecouterSession(sessionRow.id, function(s){
+      sessionRow = s;
+      if(document.activeElement !== document.getElementById('consigneInput')){
+        document.getElementById('consigneInput').value = s.consigne || '';
+      }
+    });
     const participantUrl = new URL(TOOL_PAGES[outil], location.href);
     participantUrl.searchParams.set('session', code);
     document.getElementById('joinUrl').textContent = participantUrl.toString();
@@ -368,6 +407,25 @@ function renderCloudLive(){
     ctx.fillText(w.text, 0, 0);
     ctx.restore();
   });
+}
+
+async function enregistrerConsigne(){
+  if(!sessionRow) return;
+  const btn = document.getElementById('btnEnregistrerConsigne');
+  const statusEl = document.getElementById('consigneStatus');
+  const texte = document.getElementById('consigneInput').value.trim();
+  btn.disabled = true;
+  btn.textContent = 'Enregistrement…';
+  try{
+    await AXMSession.definirConsigne(sessionRow.id, texte);
+    sessionRow.consigne = texte;
+    statusEl.textContent = 'Consigne à jour, visible côté participants.';
+  } catch(e){
+    statusEl.textContent = 'Erreur : ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Enregistrer';
+  }
 }
 
 function fermerLaSession(){
