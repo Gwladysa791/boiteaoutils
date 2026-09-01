@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionnaire d'assertivité — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --orange: #F5AB33;
+    --violet: #884EC2;
+    --vert: #15CA88;
+    --rouge: #DE5C5C;
+    --gris-fond2: #ECEDED;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{
+    max-width:760px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:26px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro strong{color:var(--bleu-fonce);}
+  .progress-wrap{
+    position:sticky;
+    top:0;
+    background:var(--fond);
+    padding:10px 0 14px;
+    z-index:10;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--gris-fond2);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:var(--bleu);
+    transition:width .25s ease;
+  }
+  .progress-label{
+    font-size:12px;
+    color:var(--gris-moyen);
+    text-align:right;
+    margin-top:4px;
+  }
+  .question{
+    background:#fff;
+    border-radius:8px;
+    padding:16px 18px;
+    margin-bottom:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .question .qnum{
+    display:inline-block;
+    min-width:24px;
+    font-weight:700;
+    color:var(--bleu-fonce);
+    margin-right:6px;
+  }
+  .question .qtext{
+    font-size:14.5px;
+    color:#2f3130;
+  }
+  .options{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+  }
+  .options label{
+    flex:1;
+    text-align:center;
+    padding:9px 6px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:6px;
+    font-size:13px;
+    cursor:pointer;
+    color:var(--gris);
+    transition:all .15s ease;
+    user-select:none;
+  }
+  .options input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+  }
+  .options label.selected-vrai{
+    background:var(--bleu);
+    border-color:var(--bleu);
+    color:#fff;
+    font-weight:700;
+  }
+  .options label.selected-faux{
+    background:var(--gris-moyen);
+    border-color:var(--gris-moyen);
+    color:#fff;
+    font-weight:700;
+  }
+  .cta-wrap{
+    text-align:center;
+    margin-top:30px;
+  }
+  button#submitBtn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:14px 34px;
+    font-size:15px;
+    font-weight:700;
+    border-radius:30px;
+    cursor:pointer;
+    font-family:inherit;
+    letter-spacing:0.5px;
+    transition:background .2s ease;
+  }
+  button#submitBtn:hover{background:#006f87;}
+  button#submitBtn:disabled{background:var(--gris-moyen);cursor:not-allowed;}
+  .missing-note{
+    text-align:center;
+    color:var(--rouge);
+    font-size:13px;
+    margin-top:10px;
+    min-height:18px;
+  }
+  /* Results */
+  #resultsSection{display:none;}
+  .results-card{
+    background:#fff;
+    border-radius:8px;
+    padding:26px 22px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.08);
+  }
+  .results-card h2{
+    color:var(--bleu-fonce);
+    margin-top:0;
+    font-size:20px;
+  }
+  .chart{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-around;
+    height:280px;
+    border-bottom:2px solid var(--gris-clair);
+    padding:0 6px;
+    margin:30px 0 8px;
+    position:relative;
+  }
+  .chart .gridline{
+    position:absolute;
+    left:0;right:0;
+    border-top:1px dashed #e3e0da;
+    font-size:10px;
+    color:var(--gris-moyen);
+  }
+  .bar-col{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+    width:70px;
+    height:100%;
+    position:relative;
+    z-index:1;
+  }
+  .bar{
+    width:46px;
+    border-radius:6px 6px 0 0;
+    transition:height 1s cubic-bezier(.2,.9,.3,1);
+    height:0;
+  }
+  .bar-value{
+    font-weight:700;
+    font-size:15px;
+    margin-bottom:4px;
+    color:var(--gris);
+  }
+  .bar-label{
+    margin-top:8px;
+    font-size:12px;
+    text-align:center;
+    color:var(--gris);
+    font-weight:700;
+  }
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:18px;
+    font-size:12.5px;
+  }
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .interpretation{
+    margin-top:24px;
+    font-size:14px;
+  }
+  .interpretation .attitude-block{
+    border-left:4px solid var(--gris-clair);
+    padding:10px 14px;
+    margin-bottom:12px;
+    border-radius:4px;
+    background:var(--gris-fond2);
+  }
+  .interpretation .attitude-block h3{
+    margin:0 0 4px;
+    font-size:14.5px;
+  }
+  .dominant-tag{
+    display:inline-block;
+    background:var(--vert);
+    color:#fff;
+    font-size:11px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:10px;
+    margin-left:8px;
+    vertical-align:middle;
+  }
+  .actions-row{
+    text-align:center;
+    margin-top:24px;
+  }
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--gris-moyen);
+    padding:20px;
+  }
+  .back-link{
+    display:inline-block;
+    margin:18px 0 0;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  @media(max-width:480px){
+    .options label{font-size:12px;padding:8px 4px;}
+    .bar-col{width:52px;}
+    .bar{width:32px;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Fuite, attaque, manipulation<span>ou assertivité ?</span></h1>
+      <p class="hero-desc">Inspiré des travaux de Thomas Gordon, ce questionnaire objective votre attitude spontanée face aux situations de tension, sur quatre registres relationnels distincts.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          10-15 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          60 affirmations, 4 profils
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('questionsList').scrollIntoView({behavior:'smooth',block:'start'})">
+        Commencer le questionnaire &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+
+        <!-- graphique des 4 profils -->
+        <line x1="30" y1="172" x2="215" y2="172" stroke="var(--gris-clair)" stroke-width="1.5"/>
+        <rect x="42" y="112" width="30" height="60" rx="5" fill="var(--gris-moyen)"/>
+        <rect x="90" y="92" width="30" height="80" rx="5" fill="var(--rouge)"/>
+        <rect x="138" y="122" width="30" height="50" rx="5" fill="var(--violet)"/>
+        <rect x="186" y="52" width="30" height="120" rx="5" fill="var(--vert)"/>
+        <line x1="180" y1="46" x2="222" y2="46" stroke="var(--vert)" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <g transform="translate(201,36)">
+          <circle r="11" fill="#fff" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15));"/>
+          <path d="M-4,0 l3,3 l6,-7" fill="none" stroke="var(--vert)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Questionnaire d'assertivité</span>
+  </nav>
+
+  <div id="formSection">
+    <div class="intro">
+      <strong>Consigne :</strong> répondez le plus spontanément possible à chacune des 60 affirmations suivantes, en indiquant si elle correspond plutôt à votre façon de penser ou d'agir.<br><br>
+      <strong>Plutôt vrai</strong> : vous pensez ou agissez la plupart du temps de cette façon.<br>
+      <strong>Plutôt faux</strong> : vous pensez ou agissez rarement de cette façon.
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 60 questions répondues</div>
+    </div>
+
+    <div id="questionsList"></div>
+
+    <div class="cta-wrap">
+      <button id="submitBtn" onclick="calculerResultats()">Voir mes résultats</button>
+      <div class="missing-note" id="missingNote"></div>
+    </div>
+  </div>
+
+  <div id="resultsSection">
+    <div class="results-card">
+      <h2>Vos résultats</h2>
+      <p style="font-size:13.5px;color:var(--gris-moyen);">Score obtenu pour chaque attitude, sur un maximum de 15 points.</p>
+
+      <div class="chart" id="chartArea"></div>
+
+      <div class="legend">
+        <span><i style="background:var(--gris-moyen);"></i> Fuite</span>
+        <span><i style="background:var(--rouge);"></i> Attaque</span>
+        <span><i style="background:var(--violet);"></i> Manipulation</span>
+        <span><i style="background:var(--vert);"></i> Assertivité</span>
+      </div>
+
+      <div class="interpretation" id="interpretationArea"></div>
+
+      <div class="actions-row">
+        <button onclick="recommencer()">Recommencer le questionnaire</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique d'auto-positionnement. Ce questionnaire ne constitue pas un diagnostic clinique.</footer>
+
+<script>
+const questions = [
+ {n:1,t:"Je dis souvent oui, alors que je voudrais dire non",c:"fuite"},
+ {n:2,t:"Je défends mes droits, sans empiéter sur ceux des autres",c:"assertivite"},
+ {n:3,t:"Je préfère dissimuler ce que je pense ou ressens, si je ne connais pas bien la personne",c:"manipulation"},
+ {n:4,t:"Je suis plutôt autoritaire et décidé",c:"attaque"},
+ {n:5,t:"Il est en général plus facile et habile d'agir par personne interposée que directement",c:"manipulation"},
+ {n:6,t:"Je ne crains pas de critiquer et de dire aux gens ce que je pense",c:"attaque"},
+ {n:7,t:"Je n'ose pas refuser certaines tâches qui manifestement ne relèvent pas de mes attributions",c:"fuite"},
+ {n:8,t:"Je ne crains pas de donner mon opinion, même en face d'interlocuteurs hostiles",c:"assertivite"},
+ {n:9,t:"Quand il y a un débat, je préfère me tenir en retrait pour voir comment cela va tourner",c:"manipulation"},
+ {n:10,t:"On me reproche parfois d'avoir l'esprit de contradiction",c:"attaque"},
+ {n:11,t:"J'ai du mal à écouter les autres",c:"attaque"},
+ {n:12,t:"Je m'arrange pour être dans les secrets des dieux ; cela m'a bien rendu service",c:"manipulation"},
+ {n:13,t:"On me considère en général comme assez malin et habile dans les relations",c:"manipulation"},
+ {n:14,t:"J'entretiens avec les autres des rapports fondés sur la confiance plutôt que sur la domination ou le calcul",c:"assertivite"},
+ {n:15,t:"Je préfère ne pas demander de l'aide à un collègue ; il risquerait de penser que je ne suis pas compétent",c:"fuite"},
+ {n:16,t:"Je suis timide et je me sens bloqué dès que je dois réaliser une action inhabituelle",c:"fuite"},
+ {n:17,t:"On me dit « soupe au lait » ; je m'énerve et cela fait rire les autres",c:"fuite"},
+ {n:18,t:"Je suis à l'aise dans les contacts de face à face",c:"assertivite"},
+ {n:19,t:"Je joue assez souvent la comédie : comment faire autrement pour arriver à ses fins ?",c:"manipulation"},
+ {n:20,t:"Je suis bavard et je coupe la parole aux autres sans m'en rendre compte à temps",c:"attaque"},
+ {n:21,t:"J'ai de l'ambition et je suis prêt à faire ce qu'il faut pour arriver",c:"attaque"},
+ {n:22,t:"Je sais en général qui il faut voir et quand il faut le voir : c'est important pour réussir",c:"manipulation"},
+ {n:23,t:"En cas de désaccord, je recherche les compromis réalistes sur la base des intérêts mutuels",c:"assertivite"},
+ {n:24,t:"Je préfère « jouer cartes sur table »",c:"assertivite"},
+ {n:25,t:"J'ai tendance à remettre à plus tard ce que je dois faire",c:"fuite"},
+ {n:26,t:"Je laisse souvent un travail en train sans le terminer",c:"fuite"},
+ {n:27,t:"En général, je me présente tel que je suis, sans dissimuler mes sentiments",c:"assertivite"},
+ {n:28,t:"Il en faut beaucoup pour m'intimider",c:"attaque"},
+ {n:29,t:"Faire peur aux autres est souvent un bon moyen de prendre du pouvoir",c:"attaque"},
+ {n:30,t:"Quand je me suis fait avoir une fois, je sais prendre ma revanche à l'occasion",c:"attaque"},
+ {n:31,t:"Pour critiquer quelqu'un, il est efficace de lui reprocher de ne pas suivre ses propres principes. Il est forcément d'accord.",c:"manipulation"},
+ {n:32,t:"Je sais tirer parti du système : je suis débrouillard",c:"manipulation"},
+ {n:33,t:"Je suis capable d'être moi-même, tout en continuant d'être accepté socialement",c:"assertivite"},
+ {n:34,t:"Quand je ne suis pas d'accord, j'ose le dire sans passion et je me fais entendre",c:"assertivite"},
+ {n:35,t:"J'ai le souci de ne pas importuner les autres",c:"fuite"},
+ {n:36,t:"J'ai du mal à prendre parti et à choisir",c:"fuite"},
+ {n:37,t:"Je n'aime pas être la seule personne de mon avis dans un groupe : dans ce cas, je préfère me taire",c:"fuite"},
+ {n:38,t:"Je n'ai pas peur de parler en public",c:"assertivite"},
+ {n:39,t:"La vie n'est que rapports de forces et lutte",c:"attaque"},
+ {n:40,t:"Je n'ai pas peur de relever des défis dangereux et risqués",c:"attaque"},
+ {n:41,t:"Créer des conflits peut être plus efficace que réduire les tensions",c:"manipulation"},
+ {n:42,t:"Jouer la franchise est un bon moyen pour mettre en confiance",c:"manipulation"},
+ {n:43,t:"Je sais écouter et je ne coupe pas la parole",c:"assertivite"},
+ {n:44,t:"Je mène jusqu'au bout ce que j'ai décidé de faire",c:"assertivite"},
+ {n:45,t:"Je n'ai pas peur d'exprimer mes sentiments tels que je les ressens",c:"assertivite"},
+ {n:46,t:"Je sais bien faire adhérer les gens et les amener à mes idées",c:"manipulation"},
+ {n:47,t:"Flatter tout un chacun reste encore un bon moyen d'obtenir ce que l'on veut",c:"manipulation"},
+ {n:48,t:"J'ai du mal à maîtriser mon temps de parole",c:"attaque"},
+ {n:49,t:"Je sais manier l'ironie mordante",c:"attaque"},
+ {n:50,t:"Je suis serviable et facile à vivre ; parfois même je me fais un peu exploiter",c:"fuite"},
+ {n:51,t:"J'aime mieux observer que participer",c:"fuite"},
+ {n:52,t:"Je préfère être dans les coulisses qu'au premier rang",c:"fuite"},
+ {n:53,t:"Je ne pense pas que la manipulation soit une solution efficace",c:"assertivite"},
+ {n:54,t:"Il ne faut pas annoncer trop vite ses intentions, c'est maladroit",c:"manipulation"},
+ {n:55,t:"Je choque souvent les gens par mes propos",c:"attaque"},
+ {n:56,t:"Je préfère être loup qu'agneau",c:"attaque"},
+ {n:57,t:"Manipuler les autres est souvent le seul moyen pratique pour obtenir ce que l'on veut",c:"manipulation"},
+ {n:58,t:"Je sais en général protester avec efficacité, sans agressivité excessive",c:"assertivite"},
+ {n:59,t:"Je trouve que les problèmes ne peuvent être vraiment résolus sans en chercher les causes profondes",c:"fuite"},
+ {n:60,t:"Je n'aime pas me faire mal voir",c:"fuite"}
+];
+
+const answers = {};
+
+const categoryMeta = {
+  fuite: {label:"Fuite", color:"var(--gris-moyen)", desc:"Évitement du conflit, difficulté à s'affirmer, tendance au retrait ou à l'ajournement des décisions."},
+  attaque: {label:"Attaque", color:"var(--rouge)", desc:"Rapport de force, imposition du point de vue, difficulté à écouter et à laisser de la place à l'autre."},
+  manipulation: {label:"Manipulation", color:"var(--violet)", desc:"Recherche d'influence indirecte, stratégies détournées pour obtenir ce que l'on veut sans confrontation ouverte."},
+  assertivite: {label:"Assertivité", color:"var(--vert)", desc:"Expression directe et respectueuse de ses positions, écoute réelle de l'autre, recherche de solutions équilibrées."}
+};
+
+function buildQuestions(){
+  const list = document.getElementById('questionsList');
+  const frag = document.createDocumentFragment();
+  questions.forEach(q=>{
+    const div = document.createElement('div');
+    div.className='question';
+    div.innerHTML = `
+      <span class="qnum">${q.n}.</span><span class="qtext">${q.t}</span>
+      <div class="options">
+        <label id="lbl-${q.n}-vrai">
+          <input type="radio" name="q${q.n}" value="vrai" onchange="setAnswer(${q.n},'vrai')">
+          Plutôt vrai
+        </label>
+        <label id="lbl-${q.n}-faux">
+          <input type="radio" name="q${q.n}" value="faux" onchange="setAnswer(${q.n},'faux')">
+          Plutôt faux
+        </label>
+      </div>
+    `;
+    frag.appendChild(div);
+  });
+  list.appendChild(frag);
+}
+
+function setAnswer(n, val){
+  answers[n]=val;
+  document.getElementById(`lbl-${n}-vrai`).classList.toggle('selected-vrai', val==='vrai');
+  document.getElementById(`lbl-${n}-faux`).classList.toggle('selected-faux', val==='faux');
+  updateProgress();
+}
+
+function updateProgress(){
+  const count = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (count/60*100)+'%';
+  document.getElementById('progressLabel').textContent = `${count} / 60 questions répondues`;
+}
+
+function calculerResultats(){
+  const count = Object.keys(answers).length;
+  if(count < 60){
+    document.getElementById('missingNote').textContent = `Il reste ${60-count} question(s) sans réponse. Merci de compléter le questionnaire avant de voir vos résultats.`;
+    const firstMissing = questions.find(q=>!answers[q.n]);
+    if(firstMissing){
+      document.querySelector(`label[id="lbl-${firstMissing.n}-vrai"]`).closest('.question').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    return;
+  }
+  document.getElementById('missingNote').textContent='';
+
+  const scores = {fuite:0, attaque:0, manipulation:0, assertivite:0};
+  questions.forEach(q=>{
+    if(answers[q.n]==='vrai') scores[q.c]++;
+  });
+
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('resultsSection').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderChart(scores);
+  renderInterpretation(scores);
+}
+
+function renderChart(scores){
+  const chart = document.getElementById('chartArea');
+  chart.innerHTML='';
+  const maxVal = 15;
+  for(let v=0; v<=maxVal; v+=5){
+    const gl = document.createElement('div');
+    gl.className='gridline';
+    gl.style.bottom = (v/maxVal*100)+'%';
+    gl.textContent = v;
+    chart.appendChild(gl);
+  }
+  const order = ['fuite','attaque','manipulation','assertivite'];
+  order.forEach(key=>{
+    const col = document.createElement('div');
+    col.className='bar-col';
+    const meta = categoryMeta[key];
+    const val = scores[key];
+    col.innerHTML = `
+      <div class="bar-value">${val}</div>
+      <div class="bar" style="background:${meta.color};" data-h="${val/maxVal*100}"></div>
+      <div class="bar-label">${meta.label}</div>
+    `;
+    chart.appendChild(col);
+  });
+  setTimeout(()=>{
+    chart.querySelectorAll('.bar').forEach(b=>{
+      b.style.height = b.getAttribute('data-h')+'%';
+    });
+  },80);
+}
+
+function renderInterpretation(scores){
+  const area = document.getElementById('interpretationArea');
+  area.innerHTML='';
+  const order = ['fuite','attaque','manipulation','assertivite'];
+  const maxScore = Math.max(...order.map(k=>scores[k]));
+  const dominant = order.filter(k=>scores[k]===maxScore);
+
+  const h3 = document.createElement('p');
+  h3.style.fontSize='14px';
+  h3.innerHTML = dominant.length===1
+    ? `Votre attitude la plus fréquente dans les situations que vous avez évaluées est <strong style="color:${categoryMeta[dominant[0]].color}">${categoryMeta[dominant[0]].label}</strong> (${maxScore}/15).`
+    : `Plusieurs attitudes ressortent à un niveau comparable : ${dominant.map(d=>categoryMeta[d].label).join(', ')} (${maxScore}/15 chacune).`;
+  area.appendChild(h3);
+
+  order.forEach(key=>{
+    const meta = categoryMeta[key];
+    const block = document.createElement('div');
+    block.className='attitude-block';
+    block.style.borderLeftColor = meta.color;
+    block.innerHTML = `<h3>${meta.label} — ${scores[key]}/15 ${dominant.includes(key)?'<span class="dominant-tag" style="background:'+meta.color+'">dominante</span>':''}</h3>
+    <div style="font-size:13px;color:var(--gris);">${meta.desc}</div>`;
+    area.appendChild(block);
+  });
+
+  const note = document.createElement('p');
+  note.style.cssText='font-size:12.5px;color:var(--gris-moyen);margin-top:14px;';
+  note.textContent = "Ce résultat reflète une tendance déclarée à un instant donné, sensible au contexte professionnel et personnel. Il constitue un point de départ pour la réflexion, non un profil figé.";
+  area.appendChild(note);
+}
+
+function recommencer(){
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  document.querySelectorAll('.options label').forEach(l=>l.classList.remove('selected-vrai','selected-faux'));
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  updateProgress();
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('formSection').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuestions();
+</script>
+
+</body>
+</html>

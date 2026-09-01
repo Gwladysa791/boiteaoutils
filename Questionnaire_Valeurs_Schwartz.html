@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionnaire des valeurs de Schwartz — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+    --vert: #15CA88;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:840px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{display:inline-block;margin:0 0 18px;font-size:12.5px;color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .back-link:hover{text-decoration:underline;}
+  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:18px;font-size:14px;color:var(--gris);}
+  .intro strong{color:var(--bleu-fonce);}
+  .intro .source-note{display:block;margin-top:10px;font-size:12px;color:var(--gris-moyen);font-style:italic;}
+  .scale-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+  .scale-legend .sl-item{flex:1;min-width:110px;background:var(--gris-fond2);border-radius:6px;padding:7px 8px;font-size:11.5px;text-align:center;}
+  .scale-legend b{display:block;color:var(--bleu-fonce);font-size:13px;margin-bottom:2px;}
+
+  /* ---------- Rappel d'échelle flottant ---------- */
+  .scale-sidebar{
+    position:fixed;
+    top:50%;
+    right:22px;
+    transform:translateY(-50%);
+    width:156px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.12);
+    padding:14px 13px;
+    z-index:60;
+  }
+  .scale-sidebar .ss-title{font-size:10.5px;font-weight:700;color:var(--bleu-fonce);text-transform:uppercase;letter-spacing:.4px;margin:0 0 10px;}
+  .scale-sidebar .ss-item{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+  .scale-sidebar .ss-item:last-child{margin-bottom:0;}
+  .scale-sidebar .ss-num{width:20px;height:20px;border-radius:50%;background:var(--gris-fond2);color:var(--gris);font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .scale-sidebar .ss-label{font-size:11px;color:var(--gris);line-height:1.25;}
+  @media(max-width:1240px){.scale-sidebar{display:none !important;}}
+  @media print{.scale-sidebar{display:none !important;}}
+  .progress-wrap{position:sticky;top:0;background:var(--fond);padding:10px 0 14px;z-index:10;}
+  .progress-bar{height:6px;background:var(--gris-fond2);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;width:0%;background:var(--bleu);transition:width .25s ease;}
+  .progress-label{font-size:12px;color:var(--gris-moyen);text-align:right;margin-top:4px;}
+  .value-card{background:#fff;border-radius:8px;padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border-left:4px solid var(--gris-clair);}
+  .value-card .vhead{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;}
+  .value-card .vname{font-size:15.5px;font-weight:700;color:#20282b;}
+  .value-card .vdim{font-size:11px;color:var(--gris-moyen);font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+  .value-card .vdesc{font-size:13px;color:var(--gris);margin-bottom:12px;}
+  .options{display:flex;gap:6px;flex-wrap:wrap;}
+  .options label{flex:1;min-width:70px;text-align:center;padding:9px 4px;border:1.5px solid var(--gris-clair);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--gris);transition:all .15s ease;user-select:none;}
+  .options input{position:absolute;opacity:0;pointer-events:none;}
+  .options label.selected{color:#fff;font-weight:700;}
+  .cta-wrap{text-align:center;margin-top:30px;}
+  button#submitBtn{background:var(--bleu-fonce);color:#fff;border:none;padding:11px 26px;font-size:13.5px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:0.5px;transition:background .2s ease;}
+  button#submitBtn:hover{background:#006f87;}
+  .missing-note{text-align:center;color:var(--rouge);font-size:13px;margin-top:10px;min-height:18px;}
+  #resultsSection{display:none;}
+  .results-card{background:#fff;border-radius:8px;padding:26px 22px;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+  .results-card h2{color:var(--bleu-fonce);margin-top:0;font-size:20px;}
+  .circle-wrap{display:flex;justify-content:center;margin:20px 0;}
+  .circle-wrap svg{max-width:100%;height:auto;}
+  .top-bottom{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;}
+  .rank-col{flex:1;min-width:230px;}
+  .rank-col h3{font-size:13.5px;margin:0 0 10px;}
+  .rank-col.top h3{color:var(--vert);}
+  .rank-col.bottom h3{color:var(--gris-moyen);}
+  .rank-item{display:flex;justify-content:space-between;background:var(--gris-fond2);border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:13px;}
+  .rank-item b{color:#20282b;}
+  .tension-block{margin-top:22px;background:#fdeeee;border-left:4px solid var(--rouge);border-radius:4px;padding:14px 16px;display:none;}
+  .tension-block h3{margin:0 0 8px;font-size:14px;color:#20282b;}
+  .tension-block p{margin:0 0 6px;font-size:13px;}
+  .tension-block p:last-child{margin-bottom:0;}
+  .synth-textarea{width:100%;min-height:90px;border:1.5px solid var(--gris-clair);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:13.5px;color:var(--gris);resize:vertical;margin-top:16px;}
+  .synth-textarea:focus{outline:none;border-color:var(--bleu);}
+  .actions-row{text-align:center;margin-top:24px;}
+  .actions-row button{background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:7px 15px;border-radius:9px;font-size:12px;cursor:pointer;font-family:inherit;margin:0 6px;}
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+  @media print{
+    .hero-header, .back-link, .intro, .actions-row, footer, .progress-wrap{display:none !important;}
+    body{background:#fff;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Qu'est-ce qui compte<span>vraiment pour vous ?</span></h1>
+      <p class="hero-desc">Inspiré de la théorie des valeurs de base de Shalom Schwartz, cet outil vous aide à situer vos priorités parmi 10 valeurs universelles, et à repérer les tensions possibles entre elles.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          8-10 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          10 valeurs, cartographie circulaire
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('valuesList').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer l'auto-positionnement &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <circle cx="120" cy="105" r="70" fill="none" stroke="var(--bleu)" stroke-width="1.5" opacity="0.35"/>
+        <g fill="var(--bleu-fonce)" opacity="0.85">
+          <circle cx="120" cy="35" r="6"/><circle cx="186" cy="61" r="6"/><circle cx="190" cy="128" r="6"/>
+          <circle cx="150" cy="175" r="6"/><circle cx="90" cy="175" r="6"/><circle cx="50" cy="128" r="6"/>
+          <circle cx="54" cy="61" r="6"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="scale-sidebar" id="scaleSidebar">
+  <p class="ss-title">Rappel de l'échelle</p>
+  <div class="ss-item"><span class="ss-num">1</span><span class="ss-label">Peu importante</span></div>
+  <div class="ss-item"><span class="ss-num">2</span><span class="ss-label">Assez peu</span></div>
+  <div class="ss-item"><span class="ss-num">3</span><span class="ss-label">Modérément</span></div>
+  <div class="ss-item"><span class="ss-num">4</span><span class="ss-label">Assez importante</span></div>
+  <div class="ss-item"><span class="ss-num">5</span><span class="ss-label">Essentielle</span></div>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Questionnaire des valeurs de Schwartz</span>
+  </nav>
+
+  <div id="formSection">
+    <div class="intro">
+      <strong>Consigne :</strong> pour chacune des 10 valeurs suivantes, indiquez son degré d'importance dans votre vie actuelle — professionnelle et personnelle confondues.
+      <div class="scale-legend">
+        <div class="sl-item"><b>1</b>Peu importante</div>
+        <div class="sl-item"><b>2</b>Assez peu</div>
+        <div class="sl-item"><b>3</b>Modérément</div>
+        <div class="sl-item"><b>4</b>Assez importante</div>
+        <div class="sl-item"><b>5</b>Essentielle</div>
+      </div>
+      <span class="source-note">Adapté de la théorie des valeurs de base de Shalom H. Schwartz (Schwartz, 1992, 2012). Les 10 valeurs sont représentées ici selon leur structure circulaire : deux valeurs voisines sur le cercle sont généralement compatibles, deux valeurs opposées entrent plus souvent en tension.</span>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 10 valeurs évaluées</div>
+    </div>
+
+    <div id="valuesList"></div>
+
+    <div class="cta-wrap">
+      <button id="submitBtn" onclick="calculerResultats()">Voir ma cartographie</button>
+      <div class="missing-note" id="missingNote"></div>
+    </div>
+  </div>
+
+  <div id="resultsSection">
+    <div class="results-card">
+      <h2>Votre cartographie de valeurs</h2>
+      <p style="font-size:13.5px;color:var(--gris-moyen);">Plus un point est éloigné du centre, plus la valeur correspondante est prioritaire pour vous.</p>
+
+      <div class="circle-wrap"><svg id="circleSvg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"></svg></div>
+
+      <div class="top-bottom">
+        <div class="rank-col top">
+          <h3>Vos 3 valeurs dominantes</h3>
+          <div id="topList"></div>
+        </div>
+        <div class="rank-col bottom">
+          <h3>Vos 3 valeurs les moins prioritaires</h3>
+          <div id="bottomList"></div>
+        </div>
+      </div>
+
+      <div class="tension-block" id="tensionBlock">
+        <h3>Une tension à regarder de plus près</h3>
+        <p id="tensionText"></p>
+      </div>
+
+      <div>
+        <label style="font-size:13px;font-weight:700;color:var(--bleu-fonce);">Ce que cette cartographie m'inspire</label>
+        <textarea class="synth-textarea" id="synthese" placeholder="Ce classement correspond-il à ce que je vis au quotidien ? Où se logent les écarts entre mes valeurs et mon contexte professionnel actuel ?"></textarea>
+      </div>
+
+      <div class="actions-row">
+        <button onclick="window.print()">Imprimer / exporter</button>
+        <button onclick="recommencer()">Recommencer</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique de réflexion individuelle, adapté d'un modèle de recherche académique. Il ne constitue pas un test de personnalité validé ni un diagnostic. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+// Ordre circulaire standard du modèle de Schwartz
+const VALUES = [
+ {id:"autodetermination", nom:"Autodétermination", dim:"Ouverture au changement", hex:"#0088A9",
+   desc:"Penser et agir de façon indépendante : choisir, créer, explorer ses propres voies."},
+ {id:"stimulation", nom:"Stimulation", dim:"Ouverture au changement", hex:"#00B5E2",
+   desc:"Rechercher la nouveauté, le challenge et une vie riche en expériences variées."},
+ {id:"hedonisme", nom:"Hédonisme", dim:"Ouverture / Affirmation de soi", hex:"#5FA7A0",
+   desc:"Rechercher le plaisir et la gratification sensorielle pour soi-même."},
+ {id:"accomplissement", nom:"Accomplissement", dim:"Affirmation de soi", hex:"#F5AB33",
+   desc:"Réussir personnellement en démontrant sa compétence selon des standards reconnus socialement."},
+ {id:"pouvoir", nom:"Pouvoir", dim:"Affirmation de soi", hex:"#DE5C5C",
+   desc:"Rechercher un statut social valorisé, le contrôle ou l'autorité sur des personnes et des ressources."},
+ {id:"securite", nom:"Sécurité", dim:"Conservation", hex:"#884EC2",
+   desc:"Rechercher la sûreté, l'harmonie et la stabilité — pour la société, les relations et soi-même."},
+ {id:"conformite", nom:"Conformité", dim:"Conservation", hex:"#6b5ea3",
+   desc:"Retenir les actions et impulsions susceptibles de heurter autrui ou de contrevenir aux normes sociales."},
+ {id:"tradition", nom:"Tradition", dim:"Conservation", hex:"#5D6160",
+   desc:"Respecter et accepter les coutumes et idées transmises par sa culture ou sa religion."},
+ {id:"bienveillance", nom:"Bienveillance", dim:"Dépassement de soi", hex:"#15CA88",
+   desc:"Préserver et améliorer le bien-être des personnes avec qui l'on est en contact régulier."},
+ {id:"universalisme", nom:"Universalisme", dim:"Dépassement de soi", hex:"#0aa06f",
+   desc:"Rechercher la compréhension, la tolérance et la protection du bien-être de tous et de la nature."}
+];
+
+const OPPOSITES = {
+  autodetermination: "conformite", conformite: "autodetermination",
+  stimulation: "securite", securite: "stimulation",
+  pouvoir: "universalisme", universalisme: "pouvoir",
+  accomplissement: "bienveillance", bienveillance: "accomplissement",
+  hedonisme: "tradition", tradition: "hedonisme"
+};
+
+const answers = {};
+
+function buildValues(){
+  const list = document.getElementById('valuesList');
+  const frag = document.createDocumentFragment();
+  VALUES.forEach(v=>{
+    const div = document.createElement('div');
+    div.className='value-card';
+    div.style.borderLeftColor = v.hex;
+    let optsHtml = '';
+    for(let s=1; s<=5; s++){
+      optsHtml += `
+        <label id="lbl-${v.id}-${s}">
+          <input type="radio" name="q-${v.id}" value="${s}" onchange="setAnswer('${v.id}',${s},'${v.hex}')">
+          ${s}
+        </label>`;
+    }
+    div.innerHTML = `
+      <div class="vhead"><span class="vname">${v.nom}</span><span class="vdim">${v.dim}</span></div>
+      <div class="vdesc">${v.desc}</div>
+      <div class="options">${optsHtml}</div>
+    `;
+    frag.appendChild(div);
+  });
+  list.appendChild(frag);
+}
+
+function setAnswer(id, val, hex){
+  answers[id]=val;
+  for(let s=1; s<=5; s++){
+    const lbl = document.getElementById(`lbl-${id}-${s}`);
+    lbl.classList.toggle('selected', s===val);
+    lbl.style.background = (s===val) ? hex : '';
+    lbl.style.borderColor = (s===val) ? hex : '';
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const count = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (count/10*100)+'%';
+  document.getElementById('progressLabel').textContent = `${count} / 10 valeurs évaluées`;
+}
+
+function calculerResultats(){
+  const count = Object.keys(answers).length;
+  if(count < 10){
+    document.getElementById('missingNote').textContent = `Il reste ${10-count} valeur(s) sans évaluation. Merci de compléter avant de voir votre cartographie.`;
+    const firstMissing = VALUES.find(v=>answers[v.id]===undefined);
+    if(firstMissing){
+      document.querySelector(`label[id="lbl-${firstMissing.id}-1"]`).closest('.value-card').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    return;
+  }
+  document.getElementById('missingNote').textContent='';
+
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('resultsSection').style.display='block';
+  const sidebar = document.getElementById('scaleSidebar');
+  if(sidebar) sidebar.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderCircle();
+  renderRanking();
+  renderTension();
+}
+
+function renderCircle(){
+  const svg = document.getElementById('circleSvg');
+  const cx=200, cy=200, rMax=150, rMin=30;
+  const n = VALUES.length;
+  let html = '';
+
+  // cercles de fond
+  [1,2,3,4,5].forEach(s=>{
+    const r = rMin + (rMax-rMin)*(s/5);
+    html += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#e3e0da" stroke-width="1"/>`;
+  });
+
+  // polygone reliant les scores
+  let points = [];
+  VALUES.forEach((v,i)=>{
+    const angle = (Math.PI*2*i/n) - Math.PI/2;
+    const score = answers[v.id];
+    const r = rMin + (rMax-rMin)*(score/5);
+    const x = cx + r*Math.cos(angle);
+    const y = cy + r*Math.sin(angle);
+    points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+  });
+  html += `<polygon points="${points.join(' ')}" fill="var(--bleu)" fill-opacity="0.18" stroke="var(--bleu-fonce)" stroke-width="2"/>`;
+
+  // axes + points + labels
+  VALUES.forEach((v,i)=>{
+    const angle = (Math.PI*2*i/n) - Math.PI/2;
+    const xOuter = cx + rMax*Math.cos(angle);
+    const yOuter = cy + rMax*Math.sin(angle);
+    html += `<line x1="${cx}" y1="${cy}" x2="${xOuter.toFixed(1)}" y2="${yOuter.toFixed(1)}" stroke="#e3e0da" stroke-width="1"/>`;
+
+    const score = answers[v.id];
+    const r = rMin + (rMax-rMin)*(score/5);
+    const x = cx + r*Math.cos(angle);
+    const y = cy + r*Math.sin(angle);
+    html += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${v.hex}"/>`;
+
+    const lr = rMax + 26;
+    const lx = cx + lr*Math.cos(angle);
+    const ly = cy + lr*Math.sin(angle);
+    const anchor = Math.cos(angle) > 0.15 ? 'start' : (Math.cos(angle) < -0.15 ? 'end' : 'middle');
+    html += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-size="11" font-weight="700" fill="#20282b" text-anchor="${anchor}" dominant-baseline="middle">${v.nom}</text>`;
+  });
+
+  svg.innerHTML = html;
+}
+
+function renderRanking(){
+  const scored = VALUES.map(v=>({...v, score:answers[v.id]}));
+  const sorted = [...scored].sort((a,b)=>b.score-a.score);
+  const top = sorted.slice(0,3);
+  const bottom = sorted.slice(-3).reverse();
+
+  document.getElementById('topList').innerHTML = top.map(v=>
+    `<div class="rank-item"><b>${v.nom}</b><span>${v.score}/5</span></div>`
+  ).join('');
+  document.getElementById('bottomList').innerHTML = bottom.map(v=>
+    `<div class="rank-item"><b>${v.nom}</b><span>${v.score}/5</span></div>`
+  ).join('');
+}
+
+function renderTension(){
+  const block = document.getElementById('tensionBlock');
+  const text = document.getElementById('tensionText');
+  let found = null;
+  for(const v of VALUES){
+    const opp = OPPOSITES[v.id];
+    if(!opp) continue;
+    const oppVal = VALUES.find(o=>o.id===opp);
+    if(answers[v.id] >= 4 && answers[opp] >= 4){
+      found = {a:v, b:oppVal};
+      break;
+    }
+  }
+  if(found){
+    block.style.display='block';
+    text.textContent = `Vous accordez une importance élevée à la fois à ${found.a.nom.toLowerCase()} et à ${found.b.nom.toLowerCase()}, deux valeurs qui se situent à l'opposé l'une de l'autre dans le modèle. Ce n'est pas une incohérence : cela signale souvent un arbitrage récurrent à opérer entre ces deux registres, selon les situations. Repérer ce point permet d'anticiper les moments où ce compromis devient plus coûteux.`;
+  } else {
+    block.style.display='none';
+  }
+}
+
+function recommencer(){
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  document.querySelectorAll('.options label').forEach(l=>{l.classList.remove('selected'); l.style.background=''; l.style.borderColor='';});
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  document.getElementById('synthese').value='';
+  updateProgress();
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('formSection').style.display='block';
+  const sidebar = document.getElementById('scaleSidebar');
+  if(sidebar) sidebar.style.display='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildValues();
+</script>
+
+</body>
+</html>

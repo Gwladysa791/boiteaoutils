@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scénario rose, scénario noir — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+    --vert: #15CA88;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:920px;margin:0 auto;padding:26px 20px 60px;}
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+
+  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:20px;font-size:14px;color:var(--gris);}
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-caution{display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;}
+
+  .panel{background:#fff;border-radius:8px;padding:20px 22px 24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);}
+  .panel .panel-sub{margin:0 0 16px;font-size:13px;color:var(--gris-moyen);}
+  .panel textarea{width:100%;min-height:70px;border:1.5px solid var(--gris-clair);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:13.5px;color:var(--gris);resize:vertical;}
+  .panel textarea:focus{outline:none;border-color:var(--bleu);}
+
+  /* ---------- Mode sous-groupe ---------- */
+  .group-mode-panel{background:#fff;border-radius:8px;padding:18px 22px 20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .group-mode-panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);}
+  .group-mode-panel .panel-sub{margin:0 0 14px;font-size:13px;color:var(--gris-moyen);}
+  .group-mode-options{display:flex;flex-wrap:wrap;gap:8px;}
+  .group-mode-btn{background:#fff;border:1.5px solid var(--gris-clair);color:var(--gris);padding:7px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color .15s ease,color .15s ease;}
+  .group-mode-btn:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .group-mode-btn.active{background:transparent;border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+
+  /* ---------- Cartes scénario ---------- */
+  .scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .scenario-grid.single-mode{grid-template-columns:1fr;max-width:520px;margin:0 auto;}
+  @media (max-width:700px){.scenario-grid{grid-template-columns:1fr;}}
+  .scenario-card{border-radius:12px;padding:20px 20px 22px;border:1.5px solid transparent;}
+  .scenario-card.noir{background:var(--gris-fond2);border-color:rgba(93,97,96,0.25);}
+  .scenario-card.rose{background:#fdf1f1;border-color:rgba(222,92,92,0.28);}
+  .scenario-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .scenario-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0;}
+  .noir .scenario-badge{background:var(--gris);}
+  .rose .scenario-badge{background:var(--rouge);}
+  .scenario-title{font-size:16px;font-weight:700;color:#20282b;}
+  .scenario-tagline{font-size:12.5px;color:var(--gris-moyen);margin:0 0 16px;}
+  .scenario-q{margin-bottom:14px;}
+  .scenario-q:last-child{margin-bottom:0;}
+  .scenario-q label{display:block;font-size:13px;font-weight:700;color:#33393b;margin-bottom:6px;}
+  .scenario-q textarea{width:100%;min-height:64px;border:1.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:13px;color:var(--gris);background:#fff;resize:vertical;}
+  .scenario-q textarea:focus{outline:none;border-color:var(--bleu);}
+
+  /* ---------- Question d'ouverture (séparée du reste) ---------- */
+  .scenario-open{background:rgba(255,255,255,0.65);border:1.5px dashed rgba(0,0,0,0.15);border-radius:10px;padding:14px 16px;margin-bottom:18px;}
+  .scenario-open .open-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gris-moyen);margin-bottom:8px;}
+  .scenario-open label{display:block;font-size:14.5px;font-weight:700;color:#20282b;margin-bottom:8px;}
+  .scenario-open textarea{width:100%;min-height:70px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:13.5px;color:var(--gris);background:#fff;resize:vertical;}
+  .scenario-open textarea:focus{outline:none;border-color:var(--bleu);}
+
+  .scenario-divider{display:flex;align-items:center;gap:10px;margin:0 0 14px;}
+  .scenario-divider .dline{flex:1;height:1px;background:rgba(0,0,0,0.12);}
+  .scenario-divider .dtxt{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gris-moyen);white-space:nowrap;}
+
+  .group-note{background:var(--gris-fond2);border-left:4px solid var(--bleu);border-radius:4px;padding:14px 16px;margin:2px 0 20px;font-size:12.5px;color:var(--gris);font-style:italic;}
+
+  .synth-panel{background:#fff;border-radius:8px;padding:20px 22px 24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .synth-panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);}
+  .synth-panel .panel-sub{margin:0 0 16px;font-size:13px;color:var(--gris-moyen);}
+  .synth-q{margin-bottom:16px;}
+  .synth-q:last-child{margin-bottom:0;}
+  .synth-q label{display:block;font-size:13px;font-weight:700;color:var(--bleu-fonce);margin-bottom:6px;}
+  .synth-q textarea{width:100%;min-height:80px;border:1.5px solid var(--gris-clair);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:13.5px;color:var(--gris);resize:vertical;}
+  .synth-q textarea:focus{outline:none;border-color:var(--bleu);}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:7px 15px;border-radius:9px;font-size:12px;cursor:pointer;font-family:inherit;margin:0 6px 8px;}
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+  @media print{
+    .hero-header, .breadcrumb, .actions-row, .group-note, .group-mode-panel, footer{display:none !important;}
+    body{background:#fff;}
+    .scenario-card, .panel, .synth-panel{box-shadow:none;}
+    .scenario-card{display:block !important;}
+    .scenario-grid.single-mode{grid-template-columns:1fr 1fr;max-width:none;margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Scénario rose,<span>scénario noir</span></h1>
+      <p class="hero-desc">Une technique de projection pour explorer les deux extrêmes d'une situation à venir — le meilleur comme le pire — afin de mieux distinguer ce qui relève de la crainte, de l'aspiration, et de l'action réellement possible.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          20-30 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Individuel ou en accompagnement
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('situationPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer l'exercice &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+        <g transform="translate(60,55)">
+          <circle cx="30" cy="30" r="30" fill="#5D6160" opacity="0.85"/>
+          <path d="M18,26 q12,-10 24,0" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <circle cx="120" cy="30" r="30" fill="var(--rouge)" opacity="0.85"/>
+          <path d="M108,32 q12,10 24,0" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M62,30 h34" stroke="#20282b" stroke-width="2" stroke-dasharray="4,4" opacity="0.4"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Scénario rose, scénario noir</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> face à la situation qui vous occupe, écrivez d'abord le scénario noir, puis le scénario rose, avant de revenir sur une synthèse partagée autour de la question « Entre les deux extrêmes ».</p>
+    <span class="note-caution">Le scénario noir n'est pas une invitation à ruminer : c'est un point de passage structuré, avec un temps limité, dont l'objectif final est toujours de revenir vers l'action. Si une situation génère une inquiétude durable ou un mal-être, en parler à un professionnel reste la meilleure option.</span>
+  </div>
+
+  <div class="panel" id="situationPanel">
+    <h2>La situation à explorer</h2>
+    <p class="panel-sub">Décrivez en quelques phrases la décision, le changement ou la situation qui vous occupe.</p>
+    <textarea id="situation" placeholder="Ex : le lancement d'un projet de réorganisation dans mon équipe, une prise de poste, une négociation à venir…"></textarea>
+  </div>
+
+  <div class="panel group-mode-panel" id="groupModePanel">
+    <h2>Votre sous-groupe travaille sur</h2>
+    <p class="panel-sub">Si le formateur a réparti la salle en sous-groupes, sélectionnez ici le scénario confié au vôtre — l'autre carte se masque le temps de cette phase. Sinon, laissez « Les deux scénarios ».</p>
+    <div class="group-mode-options">
+      <button class="group-mode-btn active" data-mode="both" onclick="setGroupMode('both')">Les deux scénarios</button>
+      <button class="group-mode-btn" data-mode="noir" onclick="setGroupMode('noir')">Scénario noir</button>
+      <button class="group-mode-btn" data-mode="rose" onclick="setGroupMode('rose')">Scénario rose</button>
+    </div>
+  </div>
+
+  <div class="scenario-grid" id="scenarioGrid">
+    <div class="scenario-card noir">
+      <div class="scenario-head"><span class="scenario-badge">&#9729;</span><span class="scenario-title">Scénario noir</span></div>
+      <p class="scenario-tagline">Le pire des cas plausibles — pas la catastrophe absolue, mais ce qui vous inquiète réellement.</p>
+
+      <div class="scenario-open">
+        <span class="open-tag">Question d'ouverture</span>
+        <label for="noir1">Dans le pire des cas, que pourrait-il se passer ?</label>
+        <textarea id="noir1" placeholder="Décrivez ce scénario aussi concrètement que possible…"></textarea>
+      </div>
+
+      <div class="scenario-divider"><span class="dline"></span><span class="dtxt">Pour aller plus loin</span><span class="dline"></span></div>
+
+      <div class="scenario-q">
+        <label for="noir2">Qu'est-ce que ce scénario révèle comme crainte sous-jacente ?</label>
+        <textarea id="noir2" placeholder="De quoi avez-vous vraiment peur, derrière ce scénario ?"></textarea>
+      </div>
+      <div class="scenario-q">
+        <label for="noir3">Si ce scénario se produisait malgré tout, quelle serait la toute première chose à faire ?</label>
+        <textarea id="noir3" placeholder="Un premier geste concret, réaliste, à votre portée…"></textarea>
+      </div>
+    </div>
+
+    <div class="scenario-card rose">
+      <div class="scenario-head"><span class="scenario-badge">&#9728;</span><span class="scenario-title">Scénario rose</span></div>
+      <p class="scenario-tagline">Le meilleur des cas plausibles — pas un fantasme, mais ce qui serait réellement satisfaisant.</p>
+
+      <div class="scenario-open">
+        <span class="open-tag">Question d'ouverture</span>
+        <label for="rose1">Dans le meilleur des cas, à quoi ressemblerait la situation ?</label>
+        <textarea id="rose1" placeholder="Décrivez ce scénario aussi concrètement que possible…"></textarea>
+      </div>
+
+      <div class="scenario-divider"><span class="dline"></span><span class="dtxt">Pour aller plus loin</span><span class="dline"></span></div>
+
+      <div class="scenario-q">
+        <label for="rose2">Qu'est-ce que ce scénario révèle comme aspiration ou besoin réel ?</label>
+        <textarea id="rose2" placeholder="Qu'est-ce qui compte vraiment pour vous, derrière ce scénario ?"></textarea>
+      </div>
+      <div class="scenario-q">
+        <label for="rose3">Qu'est-ce qui, dans ce scénario, dépend réellement de vous ?</label>
+        <textarea id="rose3" placeholder="Ce que vous pouvez influencer directement, à votre niveau…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <p class="group-note">Une fois les productions partagées à l'oral entre sous-groupes, cliquez sur « Les deux scénarios » ci-dessus pour retrouver l'exercice complet avant d'aborder la synthèse commune ci-dessous.</p>
+
+  <div class="synth-panel">
+    <h2>Entre les deux extrêmes</h2>
+    <p class="panel-sub">La plupart des situations réelles se jouent entre ces deux scénarios. C'est là que se construit une trajectoire réaliste.</p>
+    <div class="synth-q">
+      <label for="synthScenario">Au regard de ces deux projections, quel scénario réaliste et engageant pouvez-vous construire ?</label>
+      <textarea id="synthScenario" placeholder="Ce qui vous semble le plus probable, et acceptable, entre ces deux extrêmes…"></textarea>
+    </div>
+    <div class="synth-q">
+      <label for="synthActions">Quelles sont vos 2 à 3 premières actions concrètes — celles qui vous rapprochent du scénario rose et vous prémunissent du scénario noir ?</label>
+      <textarea id="synthActions" placeholder="Des actions précises, réalistes, que vous pouvez engager rapidement…"></textarea>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique de projection individuelle. Il ne remplace pas un accompagnement professionnel en cas de difficulté durable. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+const FIELD_IDS = ['situation','noir1','noir2','noir3','rose1','rose2','rose3','synthScenario','synthActions'];
+
+function resetAll(){
+  const hasContent = FIELD_IDS.some(id => document.getElementById(id).value.trim() !== '');
+  if(hasContent){
+    if(!confirm('Effacer toutes vos réponses et repartir de zéro ?')) return;
+  }
+  FIELD_IDS.forEach(id => { document.getElementById(id).value = ''; });
+  setGroupMode('both');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* =========================================================
+   MODE SOUS-GROUPE
+   Permet à un sous-groupe assigné à un seul scénario (par le formateur,
+   verbalement, en répartissant la salle) de ne voir que sa carte le temps
+   de la phase d'ouverture, sans dépendre d'une synchronisation entre postes.
+   ========================================================= */
+function setGroupMode(mode){
+  document.querySelectorAll('.group-mode-btn').forEach(function(b){
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  const noirCard = document.querySelector('.scenario-card.noir');
+  const roseCard = document.querySelector('.scenario-card.rose');
+  const grid = document.getElementById('scenarioGrid');
+  if(mode === 'noir'){
+    noirCard.style.display = '';
+    roseCard.style.display = 'none';
+    grid.classList.add('single-mode');
+  } else if(mode === 'rose'){
+    noirCard.style.display = 'none';
+    roseCard.style.display = '';
+    grid.classList.add('single-mode');
+  } else {
+    noirCard.style.display = '';
+    roseCard.style.display = '';
+    grid.classList.remove('single-mode');
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidéothèque — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:33px;font-weight:700;line-height:1.16;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:420px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-player-img{position:absolute;top:50%;left:50%;width:112%;transform:translate(-50%,-50%);z-index:2;filter:drop-shadow(0 10px 18px rgba(0,90,110,0.20));}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:820px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro strong{color:var(--bleu-fonce);}
+
+  /* ---------- Lecteur ---------- */
+  .player-panel{
+    background:#fff;border-radius:8px;padding:18px;margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .player-frame{
+    position:relative;width:100%;padding-top:56.25%;border-radius:6px;overflow:hidden;
+    background:#000;
+  }
+  .player-frame iframe{
+    position:absolute;top:0;left:0;width:100%;height:100%;border:none;
+  }
+  .player-info{padding:16px 4px 4px;}
+  .player-info h2{margin:0 0 4px;font-size:17px;color:var(--bleu-fonce);}
+  .player-source{font-size:12px;color:var(--gris-moyen);margin-bottom:10px;}
+  .player-info p.desc{font-size:13.5px;color:var(--gris);margin:0 0 10px;}
+  .player-themes{display:flex;flex-wrap:wrap;gap:6px;}
+  .theme-chip{
+    display:inline-block;background:var(--gris-fond2);color:var(--gris);font-size:11px;font-weight:700;
+    padding:3px 10px;border-radius:10px;
+  }
+
+  /* ---------- Galerie ---------- */
+  .gallery-panel h2{margin:0 0 4px;font-size:16px;color:var(--bleu-fonce);}
+  .gallery-hint{font-size:12.5px;color:var(--gris-moyen);margin:0 0 14px;}
+  .video-gallery{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;
+  }
+  .video-card{
+    background:#fff;border-radius:8px;overflow:hidden;cursor:pointer;text-align:left;
+    border:2px solid transparent;padding:0;font-family:inherit;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);transition:border-color .15s ease, transform .15s ease;
+  }
+  .video-card:hover{transform:translateY(-2px);}
+  .video-card.active{border-color:var(--bleu);}
+  .video-card .thumb-wrap{position:relative;}
+  .video-card img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;}
+  .video-card .play-badge{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,0.15);
+  }
+  .video-card .play-badge svg{width:34px;height:34px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));}
+  .video-card .vc-body{padding:10px 12px 12px;}
+  .video-card h3{margin:0 0 4px;font-size:12.5px;color:#2f3130;line-height:1.3;}
+  .video-card .vc-source{font-size:10.5px;color:var(--gris-moyen);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Vidéothèque<span>AXIS MUNDI</span></h1>
+      <p class="hero-desc">Une sélection de vidéos courtes — animations pédagogiques, reportages, interventions — pour illustrer un point en formation, lancer un débat ou prolonger une séance à distance.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          <span id="statCount">1 vidéo disponible</span>
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M9 9a3 3 0 1 1 4 2.8c-.7.4-1 1-1 1.7" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Diffusée directement depuis YouTube
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('playerPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Lancer la lecture &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+      </svg>
+      <img class="hero-player-img" src="Illustrations%20headers/skin-pour-lecteur-video-web-design-minimaliste.png" alt="">
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Vidéothèque</span>
+  </nav>
+
+  <div class="intro">
+    <strong>Comment l'utiliser :</strong> lancez la lecture ci-dessous, ou choisissez une autre vidéo dans la galerie pour changer le contenu diffusé. Cette vidéothèque s'enrichit au fil des besoins de formation.
+  </div>
+
+  <div class="player-panel" id="playerPanel">
+    <div class="player-frame">
+      <iframe id="playerFrame" src="https://www.youtube-nocookie.com/embed/B9P9k7o8Nxg" title="Lecteur vidéo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+    <div class="player-info">
+      <h2 id="playerTitle"></h2>
+      <div class="player-source" id="playerSource"></div>
+      <p class="desc" id="playerDesc"></p>
+      <div class="player-themes" id="playerThemes"></div>
+    </div>
+  </div>
+
+  <div class="gallery-panel">
+    <h2>Toutes les vidéos</h2>
+    <p class="gallery-hint">Cliquez sur une vignette pour la lancer dans le lecteur ci-dessus.</p>
+    <div class="video-gallery" id="videoGallery"></div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — La lecture d'une vidéo charge du contenu directement depuis YouTube (Google) : contrairement aux autres outils de ce site, cette page communique donc avec un service tiers pendant la lecture. Aucune autre donnée n'est enregistrée ni transmise par AXIS MUNDI.</footer>
+
+<script>
+/*
+  Pour ajouter une vidéo : ajouter un objet à ce tableau.
+  id = identifiant YouTube (dans l'URL youtu.be/XXXXXXXXXXX ou watch?v=XXXXXXXXXXX)
+*/
+const videos = [
+  {
+    id: "B9P9k7o8Nxg",
+    titre: "Les mécanismes du stress au travail",
+    source: "INRS France — animation pédagogique, 2009",
+    description: "Cette animation de l'INRS explique les effets du stress sur l'organisme et distingue le stress aigu — ponctuel — du stress chronique, aux conséquences plus lourdes pour la santé.",
+    themes: ["Stress", "RPS", "Santé mentale"]
+  },
+  {
+    id: "GBb61l2WP9g",
+    titre: "Harcèlement sexuel au travail",
+    source: "Fondation FACE (Agir Contre l'Exclusion)",
+    description: "Une ressource vidéo de la Fondation FACE sur le harcèlement sexuel au travail, utile pour introduire ou objectiver un temps de sensibilisation sur ce sujet en formation.",
+    themes: ["Harcèlement", "RPS", "Prévention"]
+  }
+];
+
+let activeId = videos[0].id;
+
+function thumbUrl(id){
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}
+function embedUrl(id){
+  return `https://www.youtube-nocookie.com/embed/${id}`;
+}
+
+function selectVideo(id){
+  activeId = id;
+  const v = videos.find(x=>x.id===id);
+  const frame = document.getElementById('playerFrame');
+  const newSrc = embedUrl(id);
+  if(frame.src !== newSrc) frame.src = newSrc;
+  document.getElementById('playerTitle').textContent = v.titre;
+  document.getElementById('playerSource').textContent = v.source;
+  document.getElementById('playerDesc').textContent = v.description;
+  document.getElementById('playerThemes').innerHTML = v.themes.map(t=>`<span class="theme-chip">${t}</span>`).join('');
+  document.querySelectorAll('.video-card').forEach(c=>{
+    c.classList.toggle('active', c.dataset.id === id);
+  });
+}
+
+function renderGallery(){
+  const wrap = document.getElementById('videoGallery');
+  wrap.innerHTML = videos.map(v => `
+    <button class="video-card ${v.id===activeId?'active':''}" data-id="${v.id}" onclick="selectVideo('${v.id}')">
+      <div class="thumb-wrap">
+        <img src="${thumbUrl(v.id)}" alt="" loading="lazy">
+        <div class="play-badge">
+          <svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <div class="vc-body">
+        <h3>${v.titre}</h3>
+        <div class="vc-source">${v.source}</div>
+      </div>
+    </button>
+  `).join('');
+  document.getElementById('statCount').textContent = `${videos.length} vidéo${videos.length>1?'s':''} disponible${videos.length>1?'s':''}`;
+}
+
+renderGallery();
+selectVideo(activeId);
+</script>
+
+</body>
+</html>

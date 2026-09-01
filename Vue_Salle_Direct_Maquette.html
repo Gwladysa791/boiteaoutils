@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vue Salle — activité en direct — Maquette d'interface — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.5;
+  }
+  button, input, select{font-family:inherit;}
+
+  /* ---------- Bandeau maquette ---------- */
+  .demo-bar{position:sticky;top:0;z-index:200;background:#20282b;color:#fff;display:flex;align-items:center;gap:14px;padding:9px 18px;flex-wrap:wrap;}
+  .demo-bar .demo-tag{background:var(--orange);color:#20282b;font-weight:800;font-size:11px;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:20px;flex-shrink:0;}
+  .demo-bar .demo-note{font-size:12px;color:#C9CDCC;flex:1;min-width:220px;}
+  .demo-bar .back-link{font-size:12px;font-weight:700;color:#fff;text-decoration:none;flex-shrink:0;}
+  .demo-bar .back-link:hover{text-decoration:underline;}
+  .view-switch{display:flex;gap:4px;background:rgba(255,255,255,0.08);border-radius:24px;padding:3px;flex-shrink:0;}
+  .view-switch button{border:none;background:none;color:#C9CDCC;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;}
+  .view-switch button.active{background:#fff;color:#20282b;}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--gris-clair);background:#fff;color:var(--gris);padding:7px 13px;border-radius:9px;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+  .btn:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .btn.primary{background:var(--bleu-fonce);border-color:var(--bleu-fonce);color:#fff;}
+  .btn.primary:hover{background:#00708a;}
+  .btn:disabled{opacity:.42;cursor:not-allowed;}
+  .btn:disabled:hover{border-color:var(--gris-clair);color:var(--gris);}
+
+  .shell{max-width:900px;margin:0 auto;padding:24px 24px 60px;}
+
+  .vs-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:6px;}
+  .vs-head h1{margin:0 0 5px;font-size:20px;color:#20282b;}
+  .vs-head .vs-sub{margin:0;font-size:12.5px;color:var(--gris-moyen);max-width:520px;}
+  .vs-progress{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--gris-clair);border-radius:20px;padding:8px 16px;font-size:12.5px;font-weight:800;color:#20282b;flex-shrink:0;}
+  .vs-progress .dot{width:8px;height:8px;border-radius:50%;background:var(--vert);}
+
+  .vs-actions{display:flex;align-items:center;gap:10px;margin:18px 0 20px;flex-wrap:wrap;}
+
+  .panel{background:#fff;border:1px solid var(--gris-clair);border-radius:16px;padding:22px 24px 24px;}
+  .panel h2{margin:0 0 18px;font-size:16.5px;color:#20282b;line-height:1.4;}
+
+  .vote-row{display:flex;align-items:center;gap:12px;background:var(--gris-fond2);border-radius:10px;padding:11px 16px;margin-bottom:10px;}
+  .vote-rank{width:26px;height:26px;border-radius:50%;background:#fff;color:#20282b;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .vote-rank.top{background:var(--orange);color:#fff;}
+  .vote-text{flex:1;font-size:13.5px;color:#20282b;font-weight:700;}
+  .vote-bar-wrap{width:180px;height:9px;background:#fff;border-radius:6px;overflow:hidden;flex-shrink:0;}
+  .vote-bar{height:100%;background:var(--bleu-fonce);transition:width .3s ease;}
+  .vote-count{font-size:12px;font-weight:800;color:var(--bleu-fonce);width:38px;text-align:right;flex-shrink:0;}
+  @media (max-width:640px){.vote-bar-wrap{width:100px;}}
+
+  .cloud-box{min-height:220px;display:flex;flex-wrap:wrap;align-content:center;gap:10px 14px;justify-content:center;padding:20px 10px;}
+  .cloud-tag{color:var(--bleu-fonce);font-weight:800;line-height:1;transition:font-size .25s ease;}
+  .cloud-tag.new{color:var(--vert);}
+
+  .vs-note{font-size:11.5px;color:var(--gris-moyen);margin-top:16px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="demo-bar" id="demoBar">
+  <span class="demo-tag">Maquette</span>
+  <span class="demo-note">Vue Salle — pendant formateur de l'espace apprenant, pour une activité de groupe entier (pas de sous-groupes). Données factices, aucune synchronisation réelle.</span>
+  <div class="view-switch" id="viewSwitch"></div>
+  <a class="back-link" href="Sommaire.html">&larr; Boîte à outils</a>
+</div>
+
+<div class="shell">
+
+  <div class="vs-head">
+    <div>
+      <h1 id="vsTitre"></h1>
+      <p class="vs-sub" id="vsSub"></p>
+    </div>
+    <div class="vs-progress"><span class="dot"></span><span id="vsProgress"></span></div>
+  </div>
+
+  <div class="vs-actions">
+    <button class="btn primary" id="btnSimulate" onclick="simulateResponse()"></button>
+    <button class="btn" onclick="resetView()">↺ Réinitialiser</button>
+  </div>
+
+  <div class="panel" id="vsPanel"></div>
+
+  <p class="vs-note" id="vsNote"></p>
+
+</div>
+
+<script>
+/* =========================================================
+   DONNÉES DE DÉMONSTRATION
+   Reprend la session et l'activité de Espace_Apprenant_Maquette.html, pour montrer
+   les deux bouts de la même histoire : ce que chaque participant envoie depuis
+   son téléphone, et ce que la formatrice voit remonter en direct sur son écran.
+   Cette maquette ne se connecte à rien : tout vit en mémoire, dans cet onglet.
+   ========================================================= */
+const SESSION = { titre: "Prévenir les RPS dans les équipes" };
+const TOTAL_PARTICIPANTS = 23;
+
+const SONDAGE = {
+  question: "Selon vous, quel est aujourd'hui le principal facteur de risque dans votre équipe ?",
+  options: [
+    { texte: "La charge de travail", votes: 9 },
+    { texte: "Le manque de reconnaissance", votes: 6 },
+    { texte: "Les tensions relationnelles", votes: 4 },
+    { texte: "Le manque d'autonomie", votes: 2 }
+  ]
+};
+const SONDAGE_BASELINE = SONDAGE.options.map(function(o){ return o.votes; });
+
+let MOTS = [
+  { texte:"surcharge", poids:5 },
+  { texte:"injonctions", poids:3 },
+  { texte:"reconnaissance", poids:4 },
+  { texte:"délais", poids:2 },
+  { texte:"isolement", poids:2 },
+  { texte:"pression", poids:6 },
+  { texte:"flou", poids:1 },
+  { texte:"fatigue", poids:3 },
+  { texte:"charge mentale", poids:2 }
+];
+const MOTS_BASELINE = MOTS.map(function(m){ return { texte:m.texte, poids:m.poids }; });
+const MOTS_POOL_SIMULATION = ["pression","surcharge","deadline","confiance","clarté","soutien","fatigue","rythme","autonomie","silence","tension","épuisement","reconnaissance","flou","isolement","charge mentale","injonctions","délais","écoute"];
+
+let currentView = 'sondage';
+let dernierMotAjoute = null;
+const MOTS_REPONDANTS_BASELINE = 15;
+let motsRepondantsCount = MOTS_REPONDANTS_BASELINE;
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+  });
+}
+function sondageRepondants(){ return SONDAGE.options.reduce(function(a,o){ return a + o.votes; }, 0); }
+function motsRepondants(){ return motsRepondantsCount; }
+
+/* =========================================================
+   SWITCHER DE VUE
+   ========================================================= */
+const VIEWS = [
+  { key:'sondage', label:'🗳️ Sondage en direct' },
+  { key:'nuagemots', label:'🧠 Nuage de mots en direct' }
+];
+function renderViewSwitch(){
+  document.getElementById('viewSwitch').innerHTML = VIEWS.map(function(v){
+    return '<button type="button" class="' + (currentView===v.key?'active':'') + '" onclick="setView(\'' + v.key + '\')">' + v.label + '</button>';
+  }).join('');
+}
+function setView(key){
+  currentView = key;
+  renderApp();
+}
+
+/* =========================================================
+   RENDU
+   ========================================================= */
+function renderApp(){
+  renderViewSwitch();
+  document.getElementById('vsTitre').textContent = SESSION.titre;
+
+  if(currentView === 'sondage'){
+    const n = sondageRepondants();
+    document.getElementById('vsSub').textContent = SONDAGE.question;
+    document.getElementById('vsProgress').textContent = n + ' / ' + TOTAL_PARTICIPANTS + ' ont répondu';
+    document.getElementById('btnSimulate').textContent = '🎲 Simuler une nouvelle réponse';
+    document.getElementById('btnSimulate').disabled = n >= TOTAL_PARTICIPANTS;
+    renderSondagePanel();
+    document.getElementById('vsNote').textContent = "Sur le téléphone des participants, l'écran affiche la question puis, une fois répondu, ces mêmes barres de résultats.";
+  } else {
+    const n = motsRepondants();
+    document.getElementById('vsSub').textContent = "Un mot pour résumer votre semaine de travail";
+    document.getElementById('vsProgress').textContent = n + ' / ' + TOTAL_PARTICIPANTS + ' ont contribué';
+    document.getElementById('btnSimulate').textContent = '🎲 Simuler un nouveau mot';
+    document.getElementById('btnSimulate').disabled = n >= TOTAL_PARTICIPANTS;
+    renderNuagePanel();
+    document.getElementById('vsNote').textContent = "Chaque nouveau mot agrandit sa taille dans le nuage s'il est déjà présent, ou apparaît en vert le temps d'un instant s'il est inédit.";
+  }
+}
+
+function renderSondagePanel(){
+  const total = sondageRepondants();
+  const max = Math.max.apply(null, SONDAGE.options.map(function(o){ return o.votes; }));
+  const ranked = SONDAGE.options.map(function(o,i){ return { texte:o.texte, votes:o.votes, idx:i }; }).sort(function(a,b){ return b.votes - a.votes; });
+  document.getElementById('vsPanel').innerHTML =
+    '<h2>' + escapeHtml(SONDAGE.question) + '</h2>' +
+    ranked.map(function(o, rank){
+      const pct = total ? Math.round(o.votes/total*100) : 0;
+      return '<div class="vote-row"><div class="vote-rank' + (rank===0?' top':'') + '">' + (rank+1) + '</div>' +
+        '<div class="vote-text">' + escapeHtml(o.texte) + '</div>' +
+        '<div class="vote-bar-wrap"><div class="vote-bar" style="width:' + Math.round(o.votes/max*100) + '%;"></div></div>' +
+        '<div class="vote-count">' + pct + '%</div></div>';
+    }).join('');
+}
+
+function renderNuagePanel(){
+  const maxPoids = Math.max.apply(null, MOTS.map(function(m){ return m.poids; }));
+  document.getElementById('vsPanel').innerHTML =
+    '<h2>Nuage de mots — en construction</h2>' +
+    '<div class="cloud-box">' + MOTS.slice().sort(function(a,b){ return b.poids - a.poids; }).map(function(m){
+      const ratio = m.poids / maxPoids;
+      const size = Math.round(13 + ratio * 26);
+      return '<span class="cloud-tag' + (m.texte === dernierMotAjoute ? ' new' : '') + '" style="font-size:' + size + 'px;">' + escapeHtml(m.texte) + '</span>';
+    }).join('') + '</div>';
+}
+
+/* =========================================================
+   SIMULATION D'ARRIVÉES EN DIRECT
+   ========================================================= */
+function simulateResponse(){
+  if(currentView === 'sondage'){
+    if(sondageRepondants() >= TOTAL_PARTICIPANTS) return;
+    const idx = Math.floor(Math.random() * SONDAGE.options.length);
+    SONDAGE.options[idx].votes += 1;
+  } else {
+    if(motsRepondants() >= TOTAL_PARTICIPANTS) return;
+    const mot = MOTS_POOL_SIMULATION[Math.floor(Math.random() * MOTS_POOL_SIMULATION.length)];
+    const existant = MOTS.find(function(m){ return m.texte === mot; });
+    if(existant) existant.poids += 1;
+    else MOTS.push({ texte: mot, poids: 1 });
+    dernierMotAjoute = mot;
+    motsRepondantsCount = Math.min(TOTAL_PARTICIPANTS, motsRepondantsCount + 1);
+  }
+  renderApp();
+}
+function resetView(){
+  SONDAGE.options.forEach(function(o, i){ o.votes = SONDAGE_BASELINE[i]; });
+  MOTS = MOTS_BASELINE.map(function(m){ return { texte:m.texte, poids:m.poids }; });
+  motsRepondantsCount = MOTS_REPONDANTS_BASELINE;
+  dernierMotAjoute = null;
+  renderApp();
+}
+
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+if(window.self !== window.top){
+  const bar = document.getElementById('demoBar');
+  if(bar) bar.style.display = 'none';
+}
+renderApp();
+</script>
+
+</body>
+</html>

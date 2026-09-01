@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline collaborative — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:900px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{
+    display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;
+  }
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Formulaire d'ajout ---------- */
+  .form-row{margin-bottom:16px;}
+  .form-row label{display:block;font-size:12.5px;font-weight:700;color:var(--gris);margin-bottom:6px;}
+  .form-row input[type=date],
+  .form-row input[type=text]{
+    width:100%;
+    border:1.5px solid var(--gris-clair);
+    border-radius:8px;
+    padding:10px 14px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--gris);
+    background:#fff;
+  }
+  .form-row input:focus{outline:none;border-color:var(--bleu);}
+  .form-hint{font-size:11.5px;color:var(--gris-moyen);margin-top:5px;}
+
+  .image-upload-btn{
+    border:1.5px dashed var(--gris-moyen);
+    background:transparent;
+    color:var(--gris);
+    padding:9px 18px;
+    border-radius:16px;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .image-upload-btn:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .image-preview{
+    margin-top:12px;
+    position:relative;
+    display:inline-block;
+  }
+  .image-preview img{
+    max-width:220px;
+    max-height:150px;
+    border-radius:8px;
+    display:block;
+    box-shadow:0 1px 3px rgba(0,0,0,0.12);
+  }
+  .image-preview .remove-image-btn{
+    position:absolute;
+    top:-8px;right:-8px;
+    width:24px;height:24px;
+    border-radius:50%;
+    background:var(--rouge);
+    color:#fff;
+    border:2px solid #fff;
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+  }
+
+  .primary-cta-row{text-align:center;margin-top:22px;}
+  .primary-cta{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:13px 32px;
+    font-size:14px;
+    font-weight:700;
+    border-radius:26px;
+    cursor:pointer;
+    font-family:inherit;
+    box-shadow:0 8px 18px rgba(0,136,169,0.25);
+    transition:background .15s ease;
+  }
+  .primary-cta:hover{background:#006f87;}
+
+  /* ---------- La frise ---------- */
+  .timeline{position:relative;max-width:760px;margin:10px auto 6px;padding:10px 0 4px;}
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:50%;top:0;bottom:0;
+    width:3px;
+    background:var(--gris-clair);
+    transform:translateX(-50%);
+  }
+  .timeline-item{position:relative;width:50%;padding:0 32px 32px;}
+  .timeline-item.side-left{left:0;text-align:right;}
+  .timeline-item.side-right{left:50%;text-align:left;}
+  .timeline-dot{
+    position:absolute;top:5px;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:#fff;
+    border:3px solid var(--bleu-fonce);
+    z-index:1;
+  }
+  .timeline-item.side-left .timeline-dot{right:-8px;}
+  .timeline-item.side-right .timeline-dot{left:-8px;}
+  .timeline-card{
+    position:relative;
+    display:inline-block;
+    text-align:left;
+    max-width:100%;
+    background:var(--gris-fond2);
+    border-radius:10px;
+    padding:14px 18px 16px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .timeline-date{font-size:11.5px;font-weight:700;color:var(--bleu-fonce);text-transform:uppercase;letter-spacing:.4px;margin:0 0 6px;}
+  .timeline-text{font-size:13.5px;color:var(--gris);margin:0;line-height:1.5;}
+  .timeline-img{width:100%;max-height:170px;object-fit:cover;border-radius:6px;display:block;margin-bottom:10px;}
+  .timeline-remove{
+    position:absolute;top:8px;right:8px;
+    background:none;border:none;
+    color:var(--gris-moyen);
+    font-size:14px;
+    cursor:pointer;
+    line-height:1;
+    padding:2px 4px;
+  }
+  .timeline-remove:hover{color:var(--rouge);}
+  .timeline-empty{font-size:13px;color:var(--gris-moyen);font-style:italic;text-align:center;padding:16px 10px;}
+
+  @media (max-width:680px){
+    .timeline::before{left:15px;}
+    .timeline-item{width:100%;left:0 !important;text-align:left !important;padding:0 0 26px 42px;}
+    .timeline-item .timeline-dot{left:8px;right:auto;}
+  }
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .form-row, .image-upload-btn, .primary-cta-row, .timeline-remove, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+    .timeline-card{box-shadow:none;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Timeline collaborative<span>La frise chronologique de votre équipe</span></h1>
+      <p class="hero-desc">Chaque participant ajoute un événement marquant de la vie de l'équipe — une date, une phrase courte, une image si vous le souhaitez — et la frise se construit automatiquement, dans l'ordre chronologique.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          20-40 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 12h16M4 12l4-4M4 12l4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Tri chronologique automatique
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Ajouter un événement &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- frise chronologique -->
+        <line x1="35" y1="108" x2="205" y2="108" stroke="#0088A9" stroke-width="3"/>
+        <circle cx="55" cy="108" r="9" fill="#F5AB33"/>
+        <circle cx="105" cy="108" r="9" fill="#884EC2"/>
+        <circle cx="155" cy="108" r="9" fill="#15CA88"/>
+        <circle cx="195" cy="108" r="9" fill="#DE5C5C"/>
+        <rect x="34" y="60" width="42" height="30" rx="6" fill="#fff" stroke="#0088A9" stroke-width="1.5"/>
+        <rect x="84" y="128" width="42" height="30" rx="6" fill="#fff" stroke="#0088A9" stroke-width="1.5"/>
+        <rect x="134" y="60" width="42" height="30" rx="6" fill="#fff" stroke="#0088A9" stroke-width="1.5"/>
+        <path d="M55,90 L55,99" stroke="#0088A9" stroke-width="1.5"/>
+        <path d="M105,118 L105,127" stroke="#0088A9" stroke-width="1.5"/>
+        <path d="M155,90 L155,99" stroke="#0088A9" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Timeline collaborative</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> proposez un événement qui vous a marqué — une réussite, une arrivée, un cap franchi, une difficulté surmontée. La frise se construit au fil des contributions, triée automatiquement par date.</p>
+    <span class="note-dev">La frise se construit en session unique, sur l'écran ou l'appareil utilisé pendant l'animation.</span>
+  </div>
+
+  <div class="panel" id="formPanel">
+    <h2>Ajouter un événement</h2>
+    <p class="panel-sub">Une date, un texte court, et une image si vous le souhaitez.</p>
+
+    <div class="form-row">
+      <label for="eventDate">Date</label>
+      <input type="date" id="eventDate">
+    </div>
+
+    <div class="form-row">
+      <label for="eventText">Événement</label>
+      <input type="text" id="eventText" maxlength="140" placeholder="Ex. Lancement du projet X, arrivée de Julie dans l'équipe, déménagement des bureaux…">
+      <p class="form-hint">140 caractères maximum — restez concis, le détail se raconte à l'oral.</p>
+    </div>
+
+    <div class="form-row">
+      <label>Image (facultatif)</label>
+      <div>
+        <button type="button" class="image-upload-btn" onclick="requestEventImage()">+ Ajouter une image</button>
+        <input type="file" id="eventImageInput" accept="image/*" style="display:none;" onchange="onEventImageChange(event)">
+        <div class="image-preview" id="imagePreview" style="display:none;">
+          <img id="imagePreviewImg" src="" alt="">
+          <button type="button" class="remove-image-btn" onclick="removeEventImage()" title="Retirer l'image">&times;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="primary-cta-row">
+      <button class="primary-cta" onclick="addEvent()">Ajouter à la frise</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>La frise de l'équipe</h2>
+    <p class="panel-sub">Les événements s'affichent automatiquement dans l'ordre chronologique, du plus ancien au plus récent.</p>
+
+    <div class="timeline" id="timelineList"></div>
+    <p class="timeline-empty" id="timelineEmpty">Aucun événement ajouté pour le moment — soyez le premier à en proposer un.</p>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+/* ---------- État ---------- */
+let events = [];
+let nextEventId = 1;
+let pendingImageDataUrl = null;
+
+const MONTHS_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+/* ---------- Utilitaires ---------- */
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function formatDateFr(isoDate){
+  if(!isoDate) return '';
+  const parts = isoDate.split('-');
+  if(parts.length !== 3) return isoDate;
+  const y = parts[0], m = parseInt(parts[1], 10) - 1, d = parseInt(parts[2], 10);
+  if(isNaN(m) || isNaN(d) || !MONTHS_FR[m]) return isoDate;
+  return d + ' ' + MONTHS_FR[m] + ' ' + y;
+}
+
+/* ---------- Image de l'événement en cours de saisie ---------- */
+function requestEventImage(){
+  document.getElementById('eventImageInput').click();
+}
+
+function onEventImageChange(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    pendingImageDataUrl = ev.target.result;
+    document.getElementById('imagePreviewImg').src = pendingImageDataUrl;
+    document.getElementById('imagePreview').style.display = 'inline-block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeEventImage(){
+  pendingImageDataUrl = null;
+  const input = document.getElementById('eventImageInput');
+  if(input) input.value = '';
+  document.getElementById('imagePreview').style.display = 'none';
+}
+
+/* ---------- Ajout / suppression d'événements ---------- */
+function addEvent(){
+  const dateInput = document.getElementById('eventDate');
+  const textInput = document.getElementById('eventText');
+  const date = dateInput.value;
+  const text = textInput.value.trim();
+
+  if(!date){ alert('Indiquez une date pour cet événement.'); return; }
+  if(!text){ alert('Décrivez brièvement l\'événement.'); return; }
+
+  events.push({ id: nextEventId++, date: date, text: text, image: pendingImageDataUrl });
+
+  dateInput.value = '';
+  textInput.value = '';
+  removeEventImage();
+  renderTimeline();
+}
+
+function removeEvent(id){
+  events = events.filter(function(e){ return e.id !== id; });
+  renderTimeline();
+}
+
+/* ---------- Rendu de la frise ---------- */
+function renderTimeline(){
+  const wrap = document.getElementById('timelineList');
+  const empty = document.getElementById('timelineEmpty');
+
+  if(events.length === 0){
+    wrap.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const sorted = events.slice().sort(function(a, b){
+    if(a.date < b.date) return -1;
+    if(a.date > b.date) return 1;
+    return a.id - b.id;
+  });
+
+  wrap.innerHTML = sorted.map(function(ev, i){
+    const side = i % 2 === 0 ? 'side-left' : 'side-right';
+    const imgHtml = ev.image ? '<img class="timeline-img" src="' + ev.image + '" alt="">' : '';
+    return '<div class="timeline-item ' + side + '">' +
+      '<span class="timeline-dot"></span>' +
+      '<div class="timeline-card">' +
+        '<button class="timeline-remove" onclick="removeEvent(' + ev.id + ')" title="Retirer cet événement">&times;</button>' +
+        '<div class="timeline-date">' + escapeHtml(formatDateFr(ev.date)) + '</div>' +
+        imgHtml +
+        '<p class="timeline-text">' + escapeHtml(ev.text) + '</p>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* ---------- Réinitialisation ---------- */
+function resetAll(){
+  const hasContent = events.length > 0;
+  if(hasContent){
+    if(!confirm('Effacer tous les événements de la frise et repartir de zéro ?')) return;
+  }
+  events = [];
+  document.getElementById('eventDate').value = '';
+  document.getElementById('eventText').value = '';
+  removeEventImage();
+  renderTimeline();
+}
+
+renderTimeline();
+</script>
+
+</body>
+</html>

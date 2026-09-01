@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Pédagogie & Animations — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #005B71;
+    --orange-fond: #E1EDEF;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  header{
+    background:var(--bleu-fonce);
+    color:#fff;
+    padding:40px 24px 32px;
+    text-align:center;
+  }
+  header .brand-logo{
+    height:50px;
+    width:auto;
+    display:block;
+    margin:0 auto 16px;
+  }
+  header h1{
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+  }
+  header p.signature{
+    margin:8px 0 0;
+    font-size:13.5px;
+    color:#eaf7fb;
+    font-style:italic;
+  }
+  .container{
+    max-width:1040px;
+    margin:0 auto;
+    padding:30px 20px 60px;
+  }
+  .back-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin:0 0 18px;
+  }
+  .back-link{
+    display:inline-block;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .hero-text-card{
+    background:#fff;
+    border-radius:12px;
+    padding:28px 32px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom:26px;
+    border-left:5px solid var(--bleu);
+  }
+  .hero-text-card h2{
+    margin:0 0 10px;
+    font-size:20px;
+    color:var(--bleu-fonce);
+  }
+  .hero-text-card p{
+    margin:0;
+    font-size:14px;
+    color:var(--gris);
+    max-width:720px;
+  }
+  .themes-preview{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:18px;
+  }
+  .themes-preview span{
+    background:var(--gris-fond2);
+    color:var(--gris);
+    font-size:11.5px;
+    font-weight:700;
+    padding:5px 13px;
+    border-radius:14px;
+  }
+  .section-label{
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    color:var(--gris-moyen);
+    margin:0 0 14px;
+  }
+  .articles-list{
+    display:flex;
+    flex-direction:column;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    padding:6px 32px;
+  }
+  .empty-state{
+    background:#fff;
+    border-radius:10px;
+    padding:48px 24px;
+    text-align:center;
+    color:var(--gris-moyen);
+    font-size:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .empty-state .empty-icon{
+    width:52px;height:52px;border-radius:50%;background:var(--gris-fond2);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--gris-moyen);
+  }
+  .empty-state .empty-icon svg{width:26px;height:26px;}
+  .empty-state p{margin:0 auto 14px;max-width:460px;}
+  .empty-state .notify{
+    display:inline-block;
+    background:none;
+    border:1.5px solid var(--bleu-fonce);
+    color:var(--bleu-fonce);
+    padding:9px 18px;
+    border-radius:20px;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .empty-state .notify:hover{background:var(--bleu-fonce);color:#fff;}
+
+  .article-row{
+    display:block;
+    padding:28px 4px;
+    border-bottom:1px solid var(--gris-fond2);
+    text-decoration:none;
+    color:inherit;
+  }
+  .article-row:first-child{padding-top:24px;}
+  .article-row:last-child{border-bottom:none;padding-bottom:24px;}
+  .article-row-top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .article-icon{
+    width:32px;
+    height:32px;
+    border-radius:9px;
+    background:var(--orange-fond);
+    color:var(--orange);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .article-icon svg{width:16px;height:16px;}
+  .article-theme{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    color:var(--orange);
+  }
+  .article-row-title{
+    margin:0 0 10px;
+    font-size:19.5px;
+    line-height:1.35;
+    font-weight:700;
+    color:#20282b;
+    transition:color .15s ease;
+  }
+  .article-row:hover .article-row-title{color:var(--bleu-fonce);}
+  .article-row-excerpt{
+    margin:0 0 14px;
+    font-size:14px;
+    color:var(--gris);
+    max-width:660px;
+    line-height:1.6;
+  }
+  .article-row-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    font-size:12px;
+    color:var(--gris-moyen);
+    margin-bottom:12px;
+  }
+  .article-row-meta span{display:inline-flex;align-items:center;gap:5px;}
+  .article-row-meta svg{width:13px;height:13px;}
+  .article-cta{
+    font-size:13px;
+    font-weight:700;
+    color:var(--orange);
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+  }
+  .article-row:hover .article-cta{text-decoration:underline;}
+  @media (max-width:600px){input,select,textarea{font-size:16px;}
+    .articles-list{padding:4px 20px;}
+    .article-row-title{font-size:17px;}
+  }
+
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--gris-moyen);
+    padding:24px 20px;
+  }
+
+/* =========================================================
+   BANDEAU DE NAVIGATION COMMUN (onglets + méga-menus)
+   ========================================================= */
+.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.94);backdrop-filter:blur(8px);border-bottom:1px solid #D7D3CE;}
+.header-inner{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:40px;}
+.brand-mark{display:flex;align-items:center;gap:16px;text-decoration:none;flex-shrink:0;}
+.brand-mark img{height:28px;width:auto;}
+nav.main-nav{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap;}
+nav.main-nav > a{font-size:13.5px;font-weight:700;color:#5D6160;text-decoration:none;padding:9px 16px;border-radius:8px;transition:background .15s ease,color .15s ease;white-space:nowrap;}
+nav.main-nav > a:hover, nav.main-nav > a:focus-visible{background:#EAF7FB;color:#0088A9;}
+.header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.header-actions .btn-nav{display:inline-flex;align-items:center;gap:8px;background:#0088A9;color:#fff;border:none;padding:9px 18px;font-size:13px;font-weight:700;border-radius:24px;text-decoration:none;white-space:nowrap;transition:background .15s ease;}
+.header-actions .btn-nav:hover{background:#00708a;}
+.header-burger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:#464948;}
+.nav-item{position:relative;}
+.nav-link-btn{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:#5D6160;text-decoration:none;padding:7px 13px;border-radius:8px;transition:background .15s ease,color .15s ease;white-space:nowrap;background:none;border:none;cursor:pointer;font-family:inherit;}
+.nav-link-btn:hover, .nav-link-btn:focus-visible, .nav-item.open .nav-link-btn{background:#EAF7FB;color:#0088A9;}
+.nav-link-btn .chevron{width:9px;height:9px;flex-shrink:0;transition:transform .18s ease;}
+.nav-item.open .nav-link-btn .chevron{transform:rotate(180deg);}
+.nav-dropdown{position:absolute;top:calc(100% + 10px);left:0;min-width:600px;background:#fff;border-radius:14px;box-shadow:0 16px 40px rgba(70,73,72,0.16);border:1px solid #D7D3CE;padding:22px 26px;display:none;grid-template-columns:repeat(4,1fr);gap:24px;z-index:110;}
+.nav-dropdown.simple{min-width:280px;grid-template-columns:1fr;gap:2px;padding:14px;}
+.nav-item.open .nav-dropdown{display:grid;}
+.nav-dropdown-col{display:flex;flex-direction:column;gap:2px;}
+.nav-dropdown-col .col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#A2A5A4;margin:0 0 8px;padding:0 8px;}
+.nav-dropdown-col a{font-size:13.5px;color:#464948;text-decoration:none;padding:7px 8px;border-radius:7px;transition:background .15s ease,color .15s ease;line-height:1.3;}
+.nav-dropdown-col a:hover, .nav-dropdown-col a:focus-visible{background:#F0EBE5;color:#0088A9;}
+@media (max-width:920px){
+  nav.main-nav{position:fixed;top:60px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;padding:10px 20px 20px;border-bottom:1px solid #D7D3CE;box-shadow:0 12px 20px rgba(0,0,0,0.06);display:none;max-height:calc(100vh - 60px);overflow-y:auto;}
+  nav.main-nav.open{display:flex;}
+  .header-burger{display:block;}
+  .header-actions .btn-nav span{display:none;}
+  .nav-item{width:100%;}
+  .nav-link-btn{width:100%;justify-content:space-between;padding:12px 8px;}
+  .nav-dropdown, .nav-dropdown.simple{position:static;box-shadow:none;border:none;border-left:2px solid #EAF7FB;padding:2px 6px 8px 16px;margin:0 0 6px;min-width:0;display:none;grid-template-columns:1fr;gap:0;}
+  .nav-item.open .nav-dropdown{display:grid;}
+  .nav-dropdown-col{margin-top:8px;}
+  .nav-dropdown-col:first-child{margin-top:2px;}
+}
+</style>
+</head>
+<body>
+<div class="site-header">
+  <div class="header-inner">
+    <a class="brand-mark" href="index.html">
+      <img src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+    </a>
+    <button class="header-burger" onclick="toggleNav()" aria-label="Ouvrir le menu" aria-expanded="false" id="burgerBtn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Accueil</a>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Outils pédagogiques
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-col">
+            <p class="col-title">Découvrir</p>
+            <a href="Sommaire.html">Tous les outils</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Démarrer &amp; animer</p>
+            <a href="Sommaire.html?cat=icebreakers">Icebreakers</a>
+            <a href="Sommaire.html?cat=animation-collective">Animation collective</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Comprendre &amp; diagnostiquer</p>
+            <a href="Sommaire.html?cat=questionnaires-auto-positionnement">Questionnaires</a>
+            <a href="Sommaire.html?cat=diagnostics-cadres-methodo">Diagnostics &amp; cadres</a>
+            <a href="Sommaire.html?cat=etude-de-cas">Études de cas</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Tester &amp; débriefer</p>
+            <a href="Sommaire.html?cat=quiz-connaissances">Quiz de connaissances</a>
+            <a href="Sommaire.html?cat=jeu-serieux">Jeu pédagogique</a>
+            <a href="Sommaire.html?cat=outils-debrief">Outils de débrief</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Ressources
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown simple">
+          <div class="nav-dropdown-col">
+            <a href="Pedagogie.html">Blog Pédagogie &amp; Animations</a>
+            <a href="Videotheque.html">Vidéothèque</a>
+            <a href="Supports_PowerPoint.html">Supports PowerPoint</a>
+            <a href="Fiches_Memos.html">Fiches mémos</a>
+            <a href="Bibliotheque_IA.html">Bibliothèque d'IA</a>
+            <a href="Glossaire.html">Glossaire</a>
+          </div>
+        </div>
+      </div>
+      <a href="https://regardsperspectivesaxismundi-gwladysguerin-9131s-projects.vercel.app/" target="_blank" rel="noopener">Actualités</a>
+      <a href="A_Propos.html">À propos</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn-nav" href="Espace_Formateur.html"><span>Mon espace formateur</span></a>
+
+    </div>
+  </div>
+</div>
+
+
+
+<header>
+  <img class="brand-logo" src="brand_assets/logo_axismundi_blanc.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+  <h1>Blog Pédagogie &amp; Animations</h1>
+  <p class="signature">Articles et repères pour nourrir votre pratique de formateur</p>
+</header>
+
+<div class="container">
+
+  <div class="back-links">
+    <a class="back-link" href="index.html">&larr; Retour à l'accueil</a>
+    <a class="back-link" href="Sommaire.html">Voir tous les outils &rarr;</a>
+  </div>
+
+  <div class="hero-text-card">
+    <h2>Comprendre pour mieux transmettre</h2>
+    <p>Ce blog rassemble des articles sur la pédagogie et l'animation de formation : andragogie, neurosciences de l'apprentissage, ingénierie pédagogique, dynamiques de groupe, évaluation des apprentissages et conduite du changement pédagogique. L'objectif est de proposer des repères théoriques directement reliés aux réalités de terrain rencontrées en formation.</p>
+    <div class="themes-preview">
+      <span>Andragogie</span>
+      <span>Neurosciences de l'apprentissage</span>
+      <span>Jeux pédagogiques</span>
+      <span>Intelligence artificielle &amp; formation</span>
+      <span>Ingénierie pédagogique</span>
+      <span>Dynamiques de groupe</span>
+      <span>Évaluation des apprentissages</span>
+      <span>Conduite du changement pédagogique</span>
+    </div>
+  </div>
+
+  <p class="section-label">Articles</p>
+  <div id="grid"></div>
+
+</div>
+
+<footer>AXIS MUNDI — Les articles publiés sur cette page sont rédigés par l'équipe AXIS MUNDI à destination des formateurs et intervenants. <a href="index.html#suggestion" style="color:var(--bleu-fonce);font-weight:700;">Proposer une idée / signaler un besoin</a></footer>
+
+<script>
+/* =========================================================
+   NAVIGATION — bandeau commun (onglets + méga-menus)
+   ========================================================= */
+function toggleNav(){
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('burgerBtn');
+  const open = nav.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function initNavDropdowns(){
+  const items = Array.from(document.querySelectorAll('.nav-item.has-dropdown'));
+  function closeAll(){
+    items.forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.nav-link-btn').setAttribute('aria-expanded','false');
+    });
+  }
+  items.forEach(item=>{
+    const btn = item.querySelector('.nav-link-btn');
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const wasOpen = item.classList.contains('open');
+      closeAll();
+      if(!wasOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+  document.addEventListener('click', (e)=>{
+    if(!e.target.closest('.nav-item.has-dropdown')) closeAll();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeAll();
+  });
+}
+initNavDropdowns();
+
+
+/*
+  Pour publier un article, ajouter un objet à ce tableau puis créer le fichier associé :
+  {
+    titre: "Titre de l'article",
+    description: "Chapô ou résumé court de l'article (1-2 phrases).",
+    fichier: "nom-du-fichier.html",   // à placer dans ce même dossier
+    theme: "Andragogie",
+    duree: "6 min de lecture",
+    date: "AAAA-MM-JJ"
+  }
+*/
+const articles = [
+  {
+    titre: "Réussir l'animation d'une formation à distance",
+    description: "Atouts, limites et précautions de la classe virtuelle : comment le rôle du formateur évolue, quelles bonnes pratiques d'animation privilégier et quelles erreurs fréquentes éviter pour maintenir l'engagement à distance.",
+    fichier: "Article_Formation_Distance.html",
+    theme: "Ingénierie pédagogique",
+    duree: "3 min de lecture",
+    date: "2026-07-27"
+  },
+  {
+    titre: "Les différentes méthodes pédagogiques pour construire une formation",
+    description: "Expositive, interrogative, démonstrative, active, expérientielle, collaborative, inversée, par projet : un panorama des méthodes pédagogiques et des repères pour choisir la plus adaptée à chaque objectif.",
+    fichier: "Article_Methodes_Pedagogiques.html",
+    theme: "Ingénierie pédagogique",
+    duree: "3 min de lecture",
+    date: "2026-07-27"
+  },
+  {
+    titre: "Comment les neurosciences peuvent transformer vos animations de formation",
+    description: "Dix principes issus des neurosciences cognitives — attention, mémoire de travail, récupération active, sécurité psychologique — pour ajuster concrètement ses pratiques d'animation, sans céder aux neuromythes.",
+    fichier: "Article_Neurosciences_Formation.html",
+    theme: "Neurosciences de l'apprentissage",
+    duree: "6 min de lecture",
+    date: "2026-07-22"
+  },
+  {
+    titre: "Le jeu pédagogique en formation : un puissant levier d'engagement… à condition de bien l'utiliser",
+    description: "Ce qui distingue un vrai jeu pédagogique d'une simple animation ludique, pourquoi il favorise l'apprentissage, et les questions à se poser avant de l'intégrer — jusqu'au débrief, étape la plus souvent négligée.",
+    fichier: "Article_Jeu_Pedagogique.html",
+    theme: "Jeux pédagogiques",
+    duree: "7 min de lecture",
+    date: "2026-07-22"
+  },
+  {
+    titre: "L'intelligence artificielle au service de la formation : opportunités, limites et bonnes pratiques",
+    description: "Ce que l'IA peut réellement apporter aux formateurs, ses limites concrètes, et les compétences profondément humaines — climat de confiance, régulation du groupe, intelligence collective — qu'elle ne remplacera pas.",
+    fichier: "Article_IA_Formation.html",
+    theme: "Intelligence artificielle & formation",
+    duree: "3 min de lecture",
+    date: "2026-07-22"
+  },
+  {
+    titre: "Pourquoi les quiz sont l'un des meilleurs outils pédagogiques",
+    description: "Le quiz ne se limite pas à l'évaluation : récupération active, rythme de la session, indicateurs pour le formateur. Comment le construire, l'animer et éviter qu'il ne se transforme en examen déguisé.",
+    fichier: "Article_Quiz_Pedagogique.html",
+    theme: "Évaluation des apprentissages",
+    duree: "2 min de lecture",
+    date: "2026-07-22"
+  },
+  {
+    titre: "S'inspirer du codéveloppement en formation : des techniques d'animation pour renforcer l'apprentissage collectif",
+    description: "Quatre techniques issues du codéveloppement professionnel, adaptables à une formation de quelques heures, pour partir du vécu des participants sans transformer la session en séance de codéveloppement.",
+    fichier: "Article_Techniques_Codeveloppement.html",
+    theme: "Dynamiques de groupe",
+    duree: "3 min de lecture",
+    date: "2026-07-22"
+  },
+  {
+    titre: "Le World Café : une méthode d'animation pour développer l'intelligence collective",
+    description: "Principe, déroulement, facteurs clés de réussite et adaptation en distanciel de cette méthode participative, particulièrement adaptée aux sujets sans réponse unique.",
+    fichier: "Article_World_Cafe.html",
+    theme: "Dynamiques de groupe",
+    duree: "3 min de lecture",
+    date: "2026-07-22"
+  }
+];
+
+const ARTICLE_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5V6a2 2 0 0 1 2-2h8l6 6v9.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 4v6h6"/><path d="M8 13h8M8 17h5"/></svg>';
+const CLOCK_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>';
+const CALENDAR_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke-linecap="round"/></svg>';
+
+function formatDate(iso){
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function renderArticles(){
+  const grid = document.getElementById('grid');
+  if(articles.length === 0){
+    grid.className = '';
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">${ARTICLE_ICON_SVG}</div>
+        <p>Aucun article disponible pour le moment.</p>
+        <button class="notify" onclick="window.location.href='mailto:gwladys.guerin@axismundi.fr?subject=' + encodeURIComponent('Blog Pédagogie & Animations — suggestion de thème')">Suggérer un thème</button>
+      </div>
+    `;
+    return;
+  }
+  grid.className = 'articles-list';
+  grid.innerHTML = articles.map(a => `
+    <a class="article-row" href="${a.fichier}">
+      <div class="article-row-top">
+        <span class="article-icon">${ARTICLE_ICON_SVG}</span>
+        <span class="article-theme">${a.theme}</span>
+      </div>
+      <h3 class="article-row-title">${a.titre}</h3>
+      <p class="article-row-excerpt">${a.description}</p>
+      <div class="article-row-meta">
+        <span>${CLOCK_ICON_SVG}${a.duree}</span>
+        <span>${CALENDAR_ICON_SVG}${formatDate(a.date)}</span>
+      </div>
+      <span class="article-cta">Lire l'article &rarr;</span>
+    </a>
+  `).join('');
+}
+
+renderArticles();
+</script>
+
+</body>
+</html>

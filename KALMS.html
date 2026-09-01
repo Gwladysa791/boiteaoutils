@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KALMS — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:1180px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{
+    display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;
+  }
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Déroulé conseillé ---------- */
+  .deroule-list{display:flex;flex-direction:column;gap:0;}
+  .deroule-step{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--gris-fond2);}
+  .deroule-step:last-child{border-bottom:none;padding-bottom:0;}
+  .deroule-step:first-child{padding-top:0;}
+  .step-num{
+    flex:0 0 30px;width:30px;height:30px;border-radius:50%;
+    background:var(--bleu-fonce);color:#fff;font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step-body{flex:1;min-width:0;}
+  .step-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+  .step-title{font-size:14.5px;font-weight:700;color:#20282b;}
+  .step-time{font-size:11px;font-weight:700;color:var(--bleu-fonce);background:var(--gris-fond2);border-radius:10px;padding:2px 9px;}
+  .step-body p{margin:0;font-size:13.5px;color:var(--gris);}
+
+  /* ---------- Barre d'action du tableau ---------- */
+  .board-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .board-legend{font-size:12px;color:var(--gris-moyen);}
+  .board-legend strong{color:#33393b;}
+
+  /* ---------- Tableau de colonnes ---------- */
+  .board-wrap{
+    overflow-x:auto;
+    padding-bottom:10px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .board{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    min-height:160px;
+  }
+  .board-col{
+    background:var(--gris-fond2);
+    border-radius:10px;
+    width:212px;
+    flex:0 0 212px;
+    display:flex;
+    flex-direction:column;
+    max-height:640px;
+  }
+  .col-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:8px;
+    padding:14px 14px 4px;
+  }
+  .col-titles{display:flex;flex-direction:column;line-height:1.18;}
+  .col-title{font-size:15px;font-weight:800;letter-spacing:.3px;}
+  .col-subtitle{font-size:11px;color:var(--gris-moyen);font-weight:600;margin-top:1px;}
+  .col-count{
+    font-size:11px;
+    font-weight:700;
+    color:var(--gris);
+    background:#fff;
+    border-radius:10px;
+    padding:2px 8px;
+    flex-shrink:0;
+  }
+  .col-hint{
+    font-size:11.5px;
+    color:var(--gris-moyen);
+    line-height:1.42;
+    padding:0 14px 12px;
+    margin:0;
+    border-bottom:1.5px solid #fff;
+  }
+  .col-body{
+    flex:1;
+    padding:12px 12px 6px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-height:100px;
+    overflow-y:auto;
+    transition:background .12s ease;
+  }
+  .col-body.drag-over{background:#e3f3f8;}
+  .col-empty{
+    font-size:12px;
+    color:var(--gris-moyen);
+    font-style:italic;
+    text-align:center;
+    padding:16px 4px;
+    margin:0;
+  }
+  .col-add-postit{
+    padding:10px 12px 14px;
+  }
+  .col-add-btn{
+    width:100%;
+    border:1.5px dashed var(--gris-moyen);
+    background:transparent;
+    color:var(--gris);
+    padding:9px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .col-add-btn:hover{background:rgba(255,255,255,0.6);}
+
+  /* ---------- Post-it ---------- */
+  .postit{
+    border-radius:5px;
+    padding:10px 10px 8px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.12);
+    cursor:grab;
+  }
+  .postit:active{cursor:grabbing;}
+  .postit.dragging{opacity:0.35;}
+  .postit.starred{box-shadow:0 4px 12px rgba(0,0,0,0.20);outline:2px solid rgba(32,40,43,0.18);}
+  .postit-text{
+    display:block;
+    width:100%;
+    border:none;
+    background:transparent;
+    resize:none;
+    font-family:inherit;
+    font-size:13px;
+    color:#33393b;
+    line-height:1.4;
+    min-height:48px;
+    padding:0;
+    overflow:hidden;
+  }
+  .postit-text:focus{outline:none;}
+  .postit-footer{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    margin-top:6px;
+    flex-wrap:wrap;
+  }
+  .postit-star{
+    background:none;border:none;font-size:16px;cursor:pointer;
+    padding:0 2px;line-height:1;flex-shrink:0;color:#a8791a;
+  }
+  .postit-star:hover{transform:scale(1.12);}
+  .postit-move{
+    border:none;
+    background:rgba(255,255,255,0.65);
+    border-radius:10px;
+    font-size:10px;
+    color:#33393b;
+    font-family:inherit;
+    padding:3px 4px;
+    flex:1;
+    min-width:64px;
+  }
+  .postit-move:focus{outline:none;}
+  .postit-del{
+    background:none;
+    border:none;
+    color:rgba(0,0,0,0.35);
+    font-size:15px;
+    cursor:pointer;
+    padding:0 2px;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .postit-del:hover{color:var(--rouge);}
+
+  /* ---------- Plan d'action ---------- */
+  .plan-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+  .plan-import-btn{background:transparent;border:1.5px solid #c9a227;color:#8a6d1a;padding:6px 13px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .plan-import-btn:hover{background:#FDEED6;}
+  .plan-add-btn{background:var(--bleu-fonce);color:#fff;border:none;padding:6px 14px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .plan-add-btn:hover{background:#006f87;}
+
+  .plan-table-wrap{overflow-x:auto;}
+  .plan-table{min-width:640px;}
+  .plan-head-row{
+    display:grid;grid-template-columns:130px 1fr 170px 130px 26px;gap:10px;
+    padding:0 14px 8px;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.3px;color:var(--gris-moyen);
+  }
+  .plan-row{
+    display:grid;grid-template-columns:130px 1fr 170px 130px 26px;gap:10px;align-items:center;
+    background:var(--fond);border-left:4px solid var(--gris-moyen);border-radius:6px;
+    padding:9px 12px;margin-bottom:8px;
+  }
+  .plan-origin{
+    border:none;background:#fff;border-radius:14px;font-size:11px;font-weight:700;
+    color:#33393b;font-family:inherit;padding:5px 6px;width:100%;
+  }
+  .plan-origin:focus{outline:none;}
+  .plan-field{
+    border:none;background:transparent;font-family:inherit;font-size:13px;
+    color:var(--gris);padding:5px 4px;width:100%;border-radius:4px;
+  }
+  .plan-field:focus{outline:none;background:#fff;}
+  .plan-field::placeholder{color:var(--gris-moyen);font-style:italic;}
+  .plan-del{background:none;border:none;color:rgba(0,0,0,0.32);font-size:16px;cursor:pointer;padding:0;line-height:1;}
+  .plan-del:hover{color:var(--rouge);}
+  .plan-empty{font-size:13px;color:var(--gris-moyen);font-style:italic;text-align:center;padding:20px 10px;}
+
+  @media (max-width:700px){
+    .plan-head-row{display:none;}
+    .plan-row{grid-template-columns:1fr;gap:5px;border-left-width:5px;}
+  }
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media (max-width:640px){
+    .board-col{width:196px;flex:0 0 196px;}
+  }
+
+  @media print{
+    .hero-header, .back-link, .board-toolbar, .col-add-postit, .postit-move, .postit-del, .postit-star, .plan-toolbar, .plan-del, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+    .board-col{background:#fff;border:1px solid var(--gris-fond2);}
+    .board-wrap{overflow:visible;}
+    .board{flex-wrap:wrap;}
+    .plan-row{background:#fff;border:1px solid var(--gris-fond2);border-left-width:4px;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">KALMS<span>Keep, Add, Less, More, Stop</span></h1>
+      <p class="hero-desc">Une grille de bilan en cinq mouvements pour transformer un retour d'expérience — fin de projet, période de transformation, fonctionnement d'équipe — en décisions concrètes, sans se limiter à un simple constat.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          45-60 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke-width="2" stroke-linecap="round"/><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Individuel puis collectif
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('boardPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- cinq colonnes KALMS, hauteurs variables -->
+        <g transform="translate(38,50)">
+          <rect x="0"   y="50" width="26" height="70" rx="6" fill="#15CA88" opacity="0.6"/>
+          <rect x="34"  y="20" width="26" height="100" rx="6" fill="#0088A9" opacity="0.6"/>
+          <rect x="68"  y="62" width="26" height="58" rx="6" fill="#F5AB33" opacity="0.6"/>
+          <rect x="102" y="8"  width="26" height="112" rx="6" fill="#884EC2" opacity="0.6"/>
+          <rect x="136" y="72" width="26" height="48" rx="6" fill="#DE5C5C" opacity="0.6"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">KALMS</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> classez vos observations dans les quatre catégories — ce qu'il faut renforcer (<em>More</em>), ce qu'il faut créer (<em>Add</em>), ce qu'il faut alléger (<em>Less</em>) et ce qu'il faut abandonner (<em>Stop</em>).</p>
+    <span class="note-dev">Version atelier local, projetée ou partagée à l'écran. Aucune saisie n'est enregistrée ni transmise automatiquement.</span>
+  </div>
+
+  <div class="panel">
+    <h2>Déroulé conseillé pour l'animateur</h2>
+    <p class="panel-sub">Un format indicatif pour un groupe de 6 à 12 personnes — à ajuster selon le sujet et le temps disponible.</p>
+    <div class="deroule-list">
+      <div class="deroule-step">
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <div class="step-head"><span class="step-title">Cadrer le sujet</span><span class="step-time">5 min</span></div>
+          <p>Rappelez précisément ce sur quoi porte le bilan — un projet qui se termine, une période de transformation, un mode de fonctionnement d'équipe — et le cadre de la démarche : il ne s'agit pas de chercher des responsables, mais de dégager des décisions pour la suite.</p>
+        </div>
+      </div>
+      <div class="deroule-step">
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <div class="step-head"><span class="step-title">Réflexion individuelle</span><span class="step-time">10-15 min</span></div>
+          <p>Chacun renseigne ses idées dans les cinq colonnes, seul et en silence, avant tout échange. Ce temps évite l'effet d'entraînement ou l'autocensure qui s'installe dès qu'une première idée est verbalisée à voix haute.</p>
+        </div>
+      </div>
+      <div class="deroule-step">
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <div class="step-head"><span class="step-title">Mise en commun</span><span class="step-time">15-20 min</span></div>
+          <p>Chaque participant présente ses idées à tour de rôle. Les idées proches sont regroupées et reformulées si besoin. C'est souvent à ce stade que les vraies divergences de perception apparaissent — elles méritent d'être nommées plutôt que lissées.</p>
+        </div>
+      </div>
+      <div class="deroule-step">
+        <span class="step-num">4</span>
+        <div class="step-body">
+          <div class="step-head"><span class="step-title">Priorisation</span><span class="step-time">10 min</span></div>
+          <p>Utilisez l'étoile disponible sur chaque post-it pour identifier collectivement deux ou trois priorités, en particulier du côté <em>Add</em> et <em>Stop</em>, qui engagent le plus de changement. Un vote à main levée ou des gommettes fonctionnent tout aussi bien en présentiel.</p>
+        </div>
+      </div>
+      <div class="deroule-step">
+        <span class="step-num">5</span>
+        <div class="step-body">
+          <div class="step-head"><span class="step-title">Plan d'action</span><span class="step-time">10-15 min</span></div>
+          <p>Pour chaque priorité retenue, formulez une action réellement engageante : quoi, qui, pour quand. Une rétrospective se mesure moins à la richesse des post-it qu'au nombre de décisions tenues trois mois plus tard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="boardPanel">
+    <h2>Votre tableau KALMS</h2>
+    <div class="board-toolbar">
+      <p class="panel-sub" style="margin:0;">Ajoutez une idée dans chaque colonne concernée — une idée par post-it.</p>
+      <span class="board-legend">★ <strong>= priorité retenue</strong> lors de la mise en commun</span>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board" id="board"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Votre plan d'action</h2>
+    <p class="panel-sub">Une ligne par décision, colorée selon son origine (Keep / Add / Less / More / Stop) — l'action doit être formulée de façon à ce qu'on puisse vérifier, dans trois mois, si elle a été tenue.</p>
+    <div class="plan-toolbar">
+      <button class="plan-import-btn" onclick="importStarred()">★ Importer les priorités du tableau</button>
+      <button class="plan-add-btn" onclick="addPlanRow()">+ Ajouter une ligne</button>
+    </div>
+    <div class="plan-table-wrap">
+      <div class="plan-table" id="planTable"></div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation collective. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+const COLUMNS = [
+  {key:'keep', title:'Keep', subtitle:'Garder', bg:'#CBFAE9', accent:'#15CA88',
+   hint:"Ce qui fonctionne bien aujourd'hui et qu'il faut absolument préserver."},
+  {key:'add', title:'Add', subtitle:'Ajouter', bg:'#E3F2F7', accent:'#0088A9',
+   hint:"Une pratique nouvelle, une idée qui n'existe pas encore et qui mériterait d'être testée."},
+  {key:'less', title:'Less', subtitle:'Moins', bg:'#FDEED6', accent:'#F5AB33',
+   hint:"Ce qui prend trop de place sans qu'il faille l'arrêter — à alléger, à espacer, à simplifier."},
+  {key:'more', title:'More', subtitle:'Plus', bg:'#E7DCF3', accent:'#884EC2',
+   hint:"Ce qui va dans le bon sens mais reste trop rare ou trop timide — à intensifier, à généraliser."},
+  {key:'stop', title:'Stop', subtitle:'Arrêter', bg:'#F8DEDE', accent:'#DE5C5C',
+   hint:"Ce qui ne fonctionne plus, ce qui pèse sans apporter de valeur — à abandonner clairement."}
+];
+
+let postits = [];
+let nextPostitId = 1;
+let draggedId = null;
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function findColumn(key){
+  return COLUMNS.find(c => c.key === key) || COLUMNS[0];
+}
+
+/* ---------- Post-it ---------- */
+
+function addPostit(colKey){
+  const id = nextPostitId++;
+  postits.push({id: id, colKey: colKey, text: '', starred: false});
+  renderBoard();
+  const ta = document.getElementById('postit-text-' + id);
+  if(ta){ ta.focus(); }
+}
+
+function removePostit(id){
+  postits = postits.filter(p => p.id !== id);
+  renderBoard();
+}
+
+function onPostitInput(id, val){
+  const p = postits.find(p => p.id === id);
+  if(p) p.text = val;
+}
+
+function toggleStar(id){
+  const p = postits.find(p => p.id === id);
+  if(p) p.starred = !p.starred;
+  renderBoard();
+}
+
+function movePostit(id, newColKey){
+  if(newColKey === '') return;
+  const p = postits.find(p => p.id === id);
+  if(p) p.colKey = newColKey;
+  renderBoard();
+}
+
+/* ---------- Glisser-déposer (bureau) ---------- */
+
+function onDragStart(e, id){
+  draggedId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain', String(id)); }catch(err){}
+  if(e.target && e.target.classList) e.target.classList.add('dragging');
+}
+
+function onDragEnd(e){
+  draggedId = null;
+  if(e.target && e.target.classList) e.target.classList.remove('dragging');
+}
+
+function onColDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const body = e.currentTarget;
+  if(body && body.classList) body.classList.add('drag-over');
+}
+
+function onColDragLeave(e){
+  const body = e.currentTarget;
+  if(body && body.classList) body.classList.remove('drag-over');
+}
+
+function onColDrop(e, colKey){
+  e.preventDefault();
+  const body = e.currentTarget;
+  if(body && body.classList) body.classList.remove('drag-over');
+  let id = draggedId;
+  if(id === null){
+    const raw = e.dataTransfer.getData('text/plain');
+    id = raw ? parseInt(raw, 10) : null;
+  }
+  if(id === null || isNaN(id)) return;
+  const p = postits.find(p => p.id === id);
+  if(p){ p.colKey = colKey; }
+  draggedId = null;
+  renderBoard();
+}
+
+/* ---------- Rendu ---------- */
+
+function autoResize(el){
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+function renderPostit(p){
+  const col = findColumn(p.colKey);
+  const otherCols = COLUMNS.filter(c => c.key !== p.colKey);
+  const moveOptions = otherCols.map(c =>
+    '<option value="' + c.key + '">' + escapeHtml(c.title + ' — ' + c.subtitle) + '</option>'
+  ).join('');
+  const rotation = ((p.id % 5) - 2) * 1.2;
+
+  return '' +
+    '<div class="postit' + (p.starred ? ' starred' : '') + '" style="background:' + col.bg + ';transform:rotate(' + rotation + 'deg);" draggable="true" data-id="' + p.id + '" ondragstart="onDragStart(event,' + p.id + ')" ondragend="onDragEnd(event)">' +
+      '<textarea class="postit-text" id="postit-text-' + p.id + '" placeholder="Écrivez votre idée…" oninput="onPostitInput(' + p.id + ', this.value); autoResize(this);">' + escapeHtml(p.text) + '</textarea>' +
+      '<div class="postit-footer">' +
+        '<button class="postit-star" onclick="toggleStar(' + p.id + ')" title="Marquer comme priorité">' + (p.starred ? '★' : '☆') + '</button>' +
+        '<select class="postit-move" onchange="movePostit(' + p.id + ', this.value)">' +
+          '<option value="">Déplacer vers…</option>' +
+          moveOptions +
+        '</select>' +
+        '<button class="postit-del" onclick="removePostit(' + p.id + ')" title="Supprimer">&times;</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderColumn(col){
+  const colPostits = postits.filter(p => p.colKey === col.key);
+  const body = colPostits.length
+    ? colPostits.map(renderPostit).join('')
+    : '<p class="col-empty">Aucune idée pour le moment.</p>';
+
+  return '' +
+    '<div class="board-col" style="border-top:5px solid ' + col.accent + ';">' +
+      '<div class="col-head">' +
+        '<div class="col-titles">' +
+          '<span class="col-title" style="color:' + col.accent + ';">' + col.title + '</span>' +
+          '<span class="col-subtitle">' + col.subtitle + '</span>' +
+        '</div>' +
+        '<span class="col-count">' + colPostits.length + '</span>' +
+      '</div>' +
+      '<p class="col-hint">' + col.hint + '</p>' +
+      '<div class="col-body" data-col-key="' + col.key + '" ondragover="onColDragOver(event)" ondragleave="onColDragLeave(event)" ondrop="onColDrop(event,\'' + col.key + '\')">' +
+        body +
+      '</div>' +
+      '<div class="col-add-postit">' +
+        '<button class="col-add-btn" style="border-color:' + col.accent + ';color:' + col.accent + ';" onclick="addPostit(\'' + col.key + '\')">+ Ajouter une idée</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderBoard(){
+  const board = document.getElementById('board');
+  board.innerHTML = COLUMNS.map(renderColumn).join('');
+  document.querySelectorAll('.postit-text').forEach(autoResize);
+}
+
+/* ---------- Plan d'action ---------- */
+
+const PLAN_ORIGINS = COLUMNS.concat([{key:'autre', title:'Autre', accent:'#A2A5A4'}]);
+
+let planItems = [];
+let nextPlanId = 1;
+
+function findOrigin(key){
+  return PLAN_ORIGINS.find(o => o.key === key) || PLAN_ORIGINS[PLAN_ORIGINS.length - 1];
+}
+
+function pushPlanItem(colKey, actionText, sourceId){
+  const id = nextPlanId++;
+  planItems.push({id: id, colKey: colKey || 'autre', action: actionText || '', responsable: '', echeance: '', sourceId: (sourceId === undefined ? null : sourceId)});
+  return id;
+}
+
+function addPlanRow(){
+  const id = pushPlanItem('autre', '', null);
+  renderPlan();
+  const el = document.getElementById('plan-action-' + id);
+  if(el){ el.focus(); }
+}
+
+function removePlanRow(id){
+  planItems = planItems.filter(i => i.id !== id);
+  renderPlan();
+}
+
+function onPlanFieldInput(id, field, val){
+  const item = planItems.find(i => i.id === id);
+  if(item) item[field] = val;
+}
+
+function setPlanOrigin(id, val){
+  const item = planItems.find(i => i.id === id);
+  if(item) item.colKey = val;
+  renderPlan();
+}
+
+function importStarred(){
+  const starred = postits.filter(p => p.starred);
+  if(starred.length === 0){
+    alert("Aucune idée n'est encore marquée d'une étoile dans le tableau ci-dessus.");
+    return;
+  }
+  const already = new Set(planItems.filter(i => i.sourceId !== null).map(i => i.sourceId));
+  let added = 0;
+  starred.forEach(function(p){
+    if(!already.has(p.id)){
+      pushPlanItem(p.colKey, p.text, p.id);
+      added++;
+    }
+  });
+  renderPlan();
+  if(added === 0){
+    alert('Toutes les priorités actuelles ont déjà été importées.');
+  }
+}
+
+function renderPlanRow(item){
+  const origin = findOrigin(item.colKey);
+  const options = PLAN_ORIGINS.map(function(o){
+    return '<option value="' + o.key + '"' + (o.key === item.colKey ? ' selected' : '') + '>' + escapeHtml(o.title) + '</option>';
+  }).join('');
+
+  return '' +
+    '<div class="plan-row" style="border-left-color:' + origin.accent + ';">' +
+      '<select class="plan-origin" onchange="setPlanOrigin(' + item.id + ', this.value)">' + options + '</select>' +
+      '<input type="text" class="plan-field" id="plan-action-' + item.id + '" value="' + escapeHtml(item.action) + '" placeholder="Action à mener…" oninput="onPlanFieldInput(' + item.id + ', \'action\', this.value)">' +
+      '<input type="text" class="plan-field" value="' + escapeHtml(item.responsable) + '" placeholder="Responsable" oninput="onPlanFieldInput(' + item.id + ', \'responsable\', this.value)">' +
+      '<input type="text" class="plan-field" value="' + escapeHtml(item.echeance) + '" placeholder="Échéance" oninput="onPlanFieldInput(' + item.id + ', \'echeance\', this.value)">' +
+      '<button class="plan-del" onclick="removePlanRow(' + item.id + ')" title="Supprimer">&times;</button>' +
+    '</div>';
+}
+
+function renderPlan(){
+  const wrap = document.getElementById('planTable');
+  if(planItems.length === 0){
+    wrap.innerHTML = '<p class="plan-empty">Aucune action pour le moment. Importez vos priorités ou ajoutez une ligne.</p>';
+    return;
+  }
+  wrap.innerHTML =
+    '<div class="plan-head-row"><span>Origine</span><span>Action</span><span>Responsable</span><span>Échéance</span><span></span></div>' +
+    planItems.map(renderPlanRow).join('');
+}
+
+function resetAll(){
+  const hasContent = postits.length > 0 || planItems.length > 0;
+  if(hasContent){
+    if(!confirm("Effacer toutes les idées, les priorités et le plan d'action pour repartir de zéro ?")) return;
+  }
+  postits = [];
+  planItems = [];
+  renderBoard();
+  renderPlan();
+}
+
+renderBoard();
+renderPlan();
+</script>
+
+</body>
+</html>

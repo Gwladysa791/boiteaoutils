@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portrait chinois — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:900px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:760px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:16px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-child{margin-bottom:0;}
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:26px 26px 28px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  /* Stepper */
+  .stepper{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+  }
+  .step-dot{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:var(--gris-fond2);
+    color:var(--gris-moyen);
+    border:none;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .12s ease, color .12s ease, transform .12s ease;
+  }
+  .step-dot:hover{transform:translateY(-1px);}
+  .step-dot.current{background:var(--bleu-fonce);color:#fff;}
+  .step-dot.answered:not(.current){background:var(--bleu);color:#fff;}
+
+  .progress-label{
+    text-align:center;
+    font-size:12px;
+    color:var(--gris-moyen);
+    margin-bottom:6px;
+  }
+
+  .question-text{
+    font-size:18px;
+    font-weight:700;
+    color:var(--bleu-fonce);
+    text-align:center;
+    margin:0 0 22px;
+    line-height:1.4;
+  }
+
+  .answer-zone textarea{
+    width:100%;
+    min-height:110px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:8px;
+    padding:14px 16px;
+    font-family:inherit;
+    font-size:14.5px;
+    color:var(--gris);
+    resize:vertical;
+  }
+  .answer-zone textarea:focus{outline:none;border-color:var(--bleu);}
+  .answer-note{
+    font-size:12px;
+    color:var(--gris-moyen);
+    margin-top:8px;
+  }
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:24px;
+    gap:12px;
+  }
+  .nav-row button{
+    border:1.5px solid var(--gris-moyen);
+    background:transparent;
+    color:var(--gris);
+    padding:10px 20px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .nav-row button:hover:not(:disabled){background:var(--gris-fond2);}
+  .nav-row button:disabled{opacity:0.4;cursor:default;}
+  .nav-row button.primary{
+    background:var(--bleu-fonce);
+    border-color:var(--bleu-fonce);
+    color:#fff;
+  }
+  .nav-row button.primary:hover{background:var(--bleu);border-color:var(--bleu);}
+
+  /* Portrait / summary */
+  .portrait-panel{display:none;}
+  .portrait-panel.visible{display:block;}
+  .portrait-panel h2{
+    margin:0 0 6px;
+    font-size:19px;
+    color:var(--bleu-fonce);
+    text-align:center;
+  }
+  .portrait-intro{
+    text-align:center;
+    font-size:13px;
+    color:var(--gris-moyen);
+    margin:0 0 22px;
+  }
+  .portrait-item{
+    border-bottom:1px solid var(--gris-fond2);
+    padding:16px 4px;
+  }
+  .portrait-item:last-child{border-bottom:none;}
+  .portrait-question{
+    font-size:13px;
+    font-weight:700;
+    color:var(--gris);
+    margin:0 0 6px;
+  }
+  .portrait-answer{
+    font-size:15px;
+    color:var(--bleu-fonce);
+    font-weight:700;
+    margin:0;
+  }
+  .portrait-answer.empty{
+    color:var(--gris-moyen);
+    font-weight:400;
+    font-style:italic;
+  }
+  .edit-link{
+    background:none;
+    border:none;
+    color:var(--bleu-fonce);
+    font-size:11.5px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    padding:0;
+    margin-top:6px;
+    text-decoration:underline;
+  }
+
+  .actions-row{text-align:center;margin-top:8px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+  @media print{
+    .hero-header, .back-link, .intro, #pickerPanel, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .portrait-panel{display:block !important;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Portrait chinois<span>Se décrire autrement, en six questions</span></h1>
+      <p class="hero-desc">Une entrée en matière tout en légèreté : chacun se décrit par analogie plutôt que frontalement, ce qui facilite la prise de parole — y compris pour les participants les plus réservés.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          10 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          6 questions, format individuel
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('pickerPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Commencer &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- trois cartes en éventail, façon portrait chinois -->
+        <g transform="translate(95,118) rotate(-14)">
+          <rect x="-35" y="-45" width="70" height="90" rx="14" fill="var(--bleu-fonce)"/>
+          <ellipse cx="-9" cy="-6" rx="7" ry="5" fill="#fff" transform="rotate(-30 -9 -6)"/>
+          <ellipse cx="9" cy="-10" rx="6" ry="4.5" fill="#fff" transform="rotate(10 9 -10)"/>
+          <ellipse cx="0" cy="4" rx="6.5" ry="5" fill="#fff" transform="rotate(-5 0 4)"/>
+          <ellipse cx="0" cy="12" rx="11" ry="8" fill="#fff"/>
+        </g>
+        <g transform="translate(152,102) rotate(11)">
+          <rect x="-33" y="-43" width="66" height="86" rx="13" fill="#fff" stroke="var(--bleu)" stroke-width="2"/>
+          <path d="M-16,-10 q-6,0 -6,7 q0,7 6,7 q1,4 -3,7 q7,-1 9,-7 q4,-2 4,-7 q0,-7 -6,-7 Z" fill="var(--bleu-fonce)"/>
+          <path d="M10,-10 q-6,0 -6,7 q0,7 6,7 q1,4 -3,7 q7,-1 9,-7 q4,-2 4,-7 q0,-7 -6,-7 Z" fill="var(--bleu-fonce)"/>
+        </g>
+        <g transform="translate(122,138) rotate(-4)">
+          <rect x="-35" y="-45" width="70" height="90" rx="14" fill="var(--bleu)"/>
+          <circle cx="0" cy="-8" r="19" fill="none" stroke="#fff" stroke-width="3"/>
+          <circle cx="-6" cy="-12" r="2" fill="#fff"/>
+          <circle cx="6" cy="-12" r="2" fill="#fff"/>
+          <path d="M-8,-2 Q0,6 8,-2" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Portrait chinois</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> répondez aux six questions à votre rythme et spontanément — il n'y a pas de bonne réponse. Vous découvrirez ensuite votre portrait complet, à partager à l'oral avec le groupe si vous le souhaitez.</p>
+  </div>
+
+  <div class="panel" id="pickerPanel">
+    <div class="stepper" id="stepper"></div>
+    <p class="progress-label" id="progressLabel"></p>
+    <p class="question-text" id="questionText"></p>
+
+    <div class="answer-zone">
+      <textarea id="answerText" oninput="onAnswerInput()" placeholder="Votre réponse…"></textarea>
+      <p class="answer-note">Ce texte reste affiché uniquement sur votre écran : il n'est ni enregistré, ni transmis.</p>
+    </div>
+
+    <div class="nav-row">
+      <button id="prevBtn" onclick="goPrev()">&larr; Précédent</button>
+      <button id="nextBtn" class="primary" onclick="goNext()">Suivant &rarr;</button>
+    </div>
+  </div>
+
+  <div class="panel portrait-panel" id="portraitPanel">
+    <h2>Votre portrait chinois</h2>
+    <p class="portrait-intro">À partager à l'oral avec le groupe, si vous le souhaitez.</p>
+    <div id="portraitList"></div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation collective. Les réponses saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+const questions = [
+  {
+    court: "Qualité professionnelle",
+    texte: "Si vous étiez une qualité professionnelle, laquelle seriez-vous ?"
+  },
+  {
+    court: "Animal dans une équipe",
+    texte: "Si vous étiez un animal dans une équipe, lequel seriez-vous ?"
+  },
+  {
+    court: "Outil de travail",
+    texte: "Si vous étiez un outil de travail, lequel seriez-vous ?"
+  },
+  {
+    court: "Météo du moment",
+    texte: "Si vous étiez une météo représentant votre énergie du moment, laquelle seriez-vous ?"
+  },
+  {
+    court: "Devise qui vous guide",
+    texte: "Si vous étiez une devise ou une phrase qui vous guide, laquelle serait-elle ?"
+  },
+  {
+    court: "Contribution au groupe",
+    texte: "Si vous étiez une contribution à apporter à ce groupe, laquelle seriez-vous ?"
+  }
+];
+
+let currentIndex = 0;
+let answers = new Array(questions.length).fill('');
+let showingPortrait = false;
+
+function renderStepper(){
+  const stepper = document.getElementById('stepper');
+  stepper.innerHTML = '';
+  questions.forEach((q, i)=>{
+    const dot = document.createElement('button');
+    let cls = 'step-dot';
+    if(i === currentIndex && !showingPortrait) cls += ' current';
+    else if(answers[i].trim()) cls += ' answered';
+    dot.className = cls;
+    dot.textContent = i + 1;
+    dot.title = q.court;
+    dot.onclick = () => goToQuestion(i);
+    stepper.appendChild(dot);
+  });
+}
+
+function goToQuestion(i){
+  showingPortrait = false;
+  currentIndex = i;
+  renderAll();
+}
+
+function renderQuestion(){
+  document.getElementById('progressLabel').textContent = `Question ${currentIndex + 1} sur ${questions.length}`;
+  document.getElementById('questionText').textContent = questions[currentIndex].texte;
+  document.getElementById('answerText').value = answers[currentIndex];
+  document.getElementById('prevBtn').disabled = currentIndex === 0;
+  document.getElementById('nextBtn').textContent = currentIndex === questions.length - 1 ? 'Voir mon portrait →' : 'Suivant →';
+}
+
+function onAnswerInput(){
+  answers[currentIndex] = document.getElementById('answerText').value;
+  renderStepper();
+}
+
+function goPrev(){
+  if(currentIndex > 0){
+    currentIndex--;
+    renderAll();
+  }
+}
+
+function goNext(){
+  if(currentIndex < questions.length - 1){
+    currentIndex++;
+    renderAll();
+  } else {
+    showPortrait();
+  }
+}
+
+function showPortrait(){
+  showingPortrait = true;
+  renderAll();
+}
+
+function renderPortrait(){
+  const list = document.getElementById('portraitList');
+  list.innerHTML = questions.map((q, i)=>{
+    const val = answers[i].trim();
+    const answerHtml = val
+      ? `<p class="portrait-answer">${val.replace(/</g,'&lt;')}</p>`
+      : `<p class="portrait-answer empty">Non renseigné</p>`;
+    return `
+      <div class="portrait-item">
+        <p class="portrait-question">${q.texte}</p>
+        ${answerHtml}
+        <button class="edit-link" onclick="goToQuestion(${i})">Modifier cette réponse</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderAll(){
+  document.getElementById('pickerPanel').style.display = showingPortrait ? 'none' : 'block';
+  document.getElementById('portraitPanel').classList.toggle('visible', showingPortrait);
+  renderStepper();
+  if(showingPortrait){
+    renderPortrait();
+  } else {
+    renderQuestion();
+  }
+}
+
+function resetAll(){
+  currentIndex = 0;
+  answers = new Array(questions.length).fill('');
+  showingPortrait = false;
+  renderAll();
+}
+
+renderAll();
+</script>
+
+</body>
+</html>

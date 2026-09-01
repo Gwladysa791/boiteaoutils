@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roue de la vie — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+    --vert: #15CA88;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:960px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{display:inline-block;margin:0 0 18px;font-size:12.5px;color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .back-link:hover{text-decoration:underline;}
+  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:20px;font-size:14px;color:var(--gris);}
+  .intro strong{color:var(--bleu-fonce);}
+  .intro .note-dev{display:block;margin-top:10px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;}
+
+  .layout{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;}
+  .domains-panel{flex:1 1 380px;background:#fff;border-radius:8px;padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .domains-panel h2{margin:0 0 14px;font-size:16px;color:var(--bleu-fonce);}
+  .domain-row{margin-bottom:16px;}
+  .domain-row:last-child{margin-bottom:0;}
+  .domain-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .domain-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+  .domain-name{flex:1;border:none;border-bottom:1.5px solid transparent;background:transparent;font-family:inherit;font-size:13.5px;font-weight:700;color:#20282b;padding:2px 0;}
+  .domain-name:focus{outline:none;border-bottom-color:var(--bleu);}
+  .domain-val{font-size:13px;font-weight:700;color:var(--gris);min-width:38px;text-align:right;}
+  .domain-slider{width:100%;accent-color:var(--bleu-fonce);}
+
+  .chart-panel{flex:1 1 380px;background:#fff;border-radius:8px;padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,0.06);text-align:center;}
+  .chart-panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);text-align:left;}
+  .chart-panel .panel-sub{margin:0 0 10px;font-size:12.5px;color:var(--gris-moyen);text-align:left;}
+  #wheelSvg{max-width:100%;height:auto;}
+
+  .synth-panel{background:#fff;border-radius:8px;padding:20px 22px;margin-top:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .synth-panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);}
+  .synth-panel .panel-sub{margin:0 0 14px;font-size:12.5px;color:var(--gris-moyen);}
+  .caution-block{background:var(--gris-fond2);border-left:4px solid var(--orange);border-radius:4px;padding:14px 16px;margin:4px 0 14px;}
+  .caution-block h3{margin:0 0 6px;font-size:13.5px;color:#20282b;}
+  .caution-block p{margin:0;font-size:12.8px;color:var(--gris);}
+  .consult-block{background:#fdeeee;border-left:4px solid var(--rouge);border-radius:4px;padding:14px 16px;margin:0 0 18px;display:none;}
+  .consult-block h3{margin:0 0 6px;font-size:13.5px;color:#20282b;}
+  .consult-block p{margin:0;font-size:12.8px;color:var(--gris);}
+  .priority-cols{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+  .pcol{flex:1;min-width:230px;}
+  .pcol h3{font-size:13px;margin:0 0 8px;}
+  .pcol.low h3{color:var(--rouge);}
+  .pcol.high h3{color:var(--vert);}
+  .prank-item{display:flex;justify-content:space-between;background:var(--gris-fond2);border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:13px;}
+  .prank-item b{color:#20282b;}
+  .synth-textarea{width:100%;min-height:80px;border:1.5px solid var(--gris-clair);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:13.5px;color:var(--gris);resize:vertical;}
+  .synth-textarea:focus{outline:none;border-color:var(--bleu);}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:7px 15px;border-radius:9px;font-size:12px;cursor:pointer;font-family:inherit;margin:0 6px 8px;}
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+  @media print{
+    .hero-header, .back-link, .intro, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .layout{flex-direction:column;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Où se logent<span>les déséquilibres ?</span></h1>
+      <p class="hero-desc">La roue de la vie donne une lecture visuelle immédiate de votre niveau de satisfaction sur huit domaines. Les creux de la roue indiquent où porter l'attention en priorité — pas nécessairement où investir le plus d'énergie tout de suite.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          10 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          8 domaines, personnalisables
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('layoutPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer l'auto-positionnement &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g transform="translate(120,105)">
+          <circle r="72" fill="none" stroke="var(--bleu)" stroke-width="1.5" opacity="0.3"/>
+          <circle r="48" fill="none" stroke="var(--bleu)" stroke-width="1.5" opacity="0.25"/>
+          <circle r="24" fill="none" stroke="var(--bleu)" stroke-width="1.5" opacity="0.2"/>
+          <polygon points="0,-60 42,-30 50,20 10,55 -35,45 -55,-10" fill="var(--bleu)" opacity="0.28" stroke="var(--bleu-fonce)" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Roue de la vie</span>
+  </nav>
+
+  <div class="intro">
+    <strong>Consigne :</strong> pour chacun des huit domaines, évaluez votre niveau de satisfaction actuel sur une échelle de 1 (très insatisfaisant) à 10 (pleinement satisfaisant). Le graphique se met à jour automatiquement.
+    <span class="note-dev">Les intitulés des domaines sont modifiables : vous pouvez adapter la roue à un contexte professionnel (charge de travail, reconnaissance, autonomie, relations d'équipe...) ou la conserver dans sa version globale, vie professionnelle et personnelle confondues.</span>
+  </div>
+
+  <div class="layout" id="layoutPanel">
+    <div class="domains-panel">
+      <h2>Vos huit domaines</h2>
+      <div id="domainsList"></div>
+    </div>
+
+    <div class="chart-panel">
+      <h2>Votre roue</h2>
+      <p class="panel-sub">Un creux marqué signale un domaine à regarder de plus près.</p>
+      <svg id="wheelSvg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+  </div>
+
+  <div class="synth-panel">
+    <h2>Lecture d'ensemble</h2>
+    <p class="panel-sub">Domaines les plus fragiles et points d'appui, au regard de vos scores actuels.</p>
+    <div class="priority-cols">
+      <div class="pcol low">
+        <h3>À regarder en priorité</h3>
+        <div id="lowList"></div>
+      </div>
+      <div class="pcol high">
+        <h3>Vos points d'appui</h3>
+        <div id="highList"></div>
+      </div>
+    </div>
+    <div class="caution-block">
+      <h3>Une photographie, pas un verdict</h3>
+      <p>Ce résultat reflète votre ressenti à un instant donné : il varie selon les événements traversés récemment (charge de travail, situation personnelle, changement en cours) et n'a pas vocation à rester figé. Il s'agit d'un point de départ pour la réflexion, pas d'un diagnostic.</p>
+    </div>
+    <div class="consult-block" id="consultBlock">
+      <h3>Si le constat est difficile</h3>
+      <p>Plusieurs domaines ressortent bas dans cette roue. Si ce constat s'accompagne d'un sentiment de mal-être qui dure, il est recommandé de ne pas rester seul face à cela : en parler à un professionnel (médecin traitant, médecin du travail, psychologue) peut être un premier appui utile.</p>
+    </div>
+    <label style="font-size:13px;font-weight:700;color:var(--bleu-fonce);">Ce que cette roue m'inspire</label>
+    <textarea class="synth-textarea" id="synthese" placeholder="Qu'est-ce qui explique ce déséquilibre ? Quel est le premier geste concret, réaliste, que je peux poser sur le domaine le plus fragile ?"></textarea>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique d'auto-positionnement. Il ne constitue pas un diagnostic clinique. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+const DEFAULT_DOMAINS = [
+  {nom:"Travail & carrière", hex:"#0088A9"},
+  {nom:"Argent & finances", hex:"#F5AB33"},
+  {nom:"Santé & forme physique", hex:"#15CA88"},
+  {nom:"Famille", hex:"#884EC2"},
+  {nom:"Relations amicales & vie sociale", hex:"#DE5C5C"},
+  {nom:"Développement personnel", hex:"#5FA7A0"},
+  {nom:"Loisirs & détente", hex:"#00B5E2"},
+  {nom:"Environnement & cadre de vie", hex:"#5D6160"}
+];
+
+let domains = DEFAULT_DOMAINS.map(d => ({nom:d.nom, hex:d.hex, score:5}));
+
+function buildDomains(){
+  const list = document.getElementById('domainsList');
+  list.innerHTML = domains.map((d,i)=>`
+    <div class="domain-row">
+      <div class="domain-top">
+        <span class="domain-dot" style="background:${d.hex};"></span>
+        <input type="text" class="domain-name" id="name-${i}" value="${d.nom.replace(/"/g,'&quot;')}" oninput="renameDomain(${i}, this.value)">
+        <span class="domain-val" id="val-${i}">${d.score}/10</span>
+      </div>
+      <input type="range" class="domain-slider" min="1" max="10" step="1" value="${d.score}" oninput="setScore(${i}, this.value)">
+    </div>
+  `).join('');
+}
+
+function renameDomain(i, val){
+  domains[i].nom = val;
+  renderChart();
+  renderSynthesis();
+}
+
+function setScore(i, val){
+  domains[i].score = parseInt(val,10);
+  document.getElementById('val-'+i).textContent = domains[i].score+'/10';
+  renderChart();
+  renderSynthesis();
+}
+
+function renderChart(){
+  const svg = document.getElementById('wheelSvg');
+  const cx=200, cy=200, rMax=155;
+  const n = domains.length;
+  let html = '';
+
+  [2,4,6,8,10].forEach(s=>{
+    const r = rMax*(s/10);
+    html += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#e3e0da" stroke-width="1"/>`;
+  });
+
+  let points = [];
+  domains.forEach((d,i)=>{
+    const angle = (Math.PI*2*i/n) - Math.PI/2;
+    const r = rMax*(d.score/10);
+    const x = cx + r*Math.cos(angle);
+    const y = cy + r*Math.sin(angle);
+    points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+  });
+  html += `<polygon points="${points.join(' ')}" fill="var(--bleu)" fill-opacity="0.25" stroke="var(--bleu-fonce)" stroke-width="2.5"/>`;
+
+  domains.forEach((d,i)=>{
+    const angle = (Math.PI*2*i/n) - Math.PI/2;
+    const xOuter = cx + rMax*Math.cos(angle);
+    const yOuter = cy + rMax*Math.sin(angle);
+    html += `<line x1="${cx}" y1="${cy}" x2="${xOuter.toFixed(1)}" y2="${yOuter.toFixed(1)}" stroke="#e3e0da" stroke-width="1"/>`;
+
+    const r = rMax*(d.score/10);
+    const x = cx + r*Math.cos(angle);
+    const y = cy + r*Math.sin(angle);
+    html += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${d.hex}"/>`;
+
+    const lr = rMax + 34;
+    const lx = cx + lr*Math.cos(angle);
+    const ly = cy + lr*Math.sin(angle);
+    const anchor = Math.cos(angle) > 0.15 ? 'start' : (Math.cos(angle) < -0.15 ? 'end' : 'middle');
+    const label = d.nom.length>22 ? d.nom.slice(0,20)+'…' : d.nom;
+    html += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-size="11" font-weight="700" fill="#20282b" text-anchor="${anchor}" dominant-baseline="middle">${label.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text>`;
+  });
+
+  svg.innerHTML = html;
+}
+
+function renderSynthesis(){
+  const sorted = [...domains].sort((a,b)=>a.score-b.score);
+  const low = sorted.slice(0,3);
+  const high = [...sorted].reverse().slice(0,3);
+  document.getElementById('lowList').innerHTML = low.map(d=>
+    `<div class="prank-item"><b>${d.nom || 'Domaine sans nom'}</b><span>${d.score}/10</span></div>`
+  ).join('');
+  document.getElementById('highList').innerHTML = high.map(d=>
+    `<div class="prank-item"><b>${d.nom || 'Domaine sans nom'}</b><span>${d.score}/10</span></div>`
+  ).join('');
+
+  const avg = domains.reduce((s,d)=>s+d.score,0) / domains.length;
+  const lowCount = domains.filter(d=>d.score<=3).length;
+  const consult = document.getElementById('consultBlock');
+  if(consult){
+    consult.style.display = (avg <= 4 || lowCount >= 4) ? 'block' : 'none';
+  }
+}
+
+function resetAll(){
+  domains = DEFAULT_DOMAINS.map(d => ({nom:d.nom, hex:d.hex, score:5}));
+  document.getElementById('synthese').value='';
+  buildDomains();
+  renderChart();
+  renderSynthesis();
+}
+
+buildDomains();
+renderChart();
+renderSynthesis();
+</script>
+
+</body>
+</html>

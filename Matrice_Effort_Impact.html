@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrice effort-impact — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:920px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{display:inline-block;margin:0 0 18px;font-size:12.5px;color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .back-link:hover{text-decoration:underline;}
+  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:20px;font-size:14px;color:var(--gris);}
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+
+  .panel{background:#fff;border-radius:8px;padding:22px 24px 26px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);}
+  .panel .panel-sub{margin:0 0 18px;font-size:13px;color:var(--gris-moyen);}
+
+  /* ---------- Formulaire d'ajout ---------- */
+  .add-form{background:var(--gris-fond2);border-radius:8px;padding:16px 18px;margin-bottom:24px;}
+  .add-form .label-row{font-size:12.5px;color:var(--gris-moyen);font-weight:700;margin-bottom:4px;}
+  .add-form input[type=text]{width:100%;border:1.5px solid var(--gris-clair);border-radius:6px;padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--gris);margin-bottom:12px;background:#fff;}
+  .add-form input[type=text]:focus{outline:none;border-color:var(--bleu);}
+  .scale-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+  .scale-field{flex:1;min-width:220px;}
+  .scale-picker{display:flex;gap:5px;}
+  .scale-picker label{flex:1;text-align:center;padding:8px 4px;border:1.5px solid var(--gris-clair);border-radius:6px;font-size:12px;cursor:pointer;background:#fff;color:var(--gris);user-select:none;}
+  .scale-picker input{position:absolute;opacity:0;pointer-events:none;}
+  .scale-picker label.selected{color:#fff;font-weight:700;}
+  .effort-picker label.selected{background:var(--bleu-fonce);border-color:var(--bleu-fonce);}
+  .impact-picker label.selected{background:var(--vert);border-color:var(--vert);}
+  .add-form button{background:var(--bleu-fonce);color:#fff;border:none;padding:8px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .add-form button:hover{background:#006f87;}
+
+  /* ---------- Matrice 2x2 avec axes ---------- */
+  .matrix-outer{position:relative;padding:6px 6px 34px 90px;}
+  .axis-y-label{position:absolute;left:-6px;top:0;bottom:34px;width:26px;display:flex;align-items:center;justify-content:center;}
+  .axis-y-label span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;font-weight:700;color:var(--gris);white-space:nowrap;}
+  .axis-y-ticks{position:absolute;left:32px;top:0;bottom:34px;width:50px;display:flex;flex-direction:column;justify-content:space-between;font-size:10.5px;color:var(--gris-moyen);text-align:right;padding:6px 0;}
+  .axis-x-label{text-align:center;font-size:12px;font-weight:700;color:var(--gris);margin-top:8px;}
+  .axis-x-ticks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--gris-moyen);padding:0 4px;margin-top:2px;}
+
+  .matrix-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;min-height:420px;}
+  @media (max-width:640px){.matrix-grid{grid-template-columns:1fr;grid-template-rows:auto;} .matrix-outer{padding-left:20px;} .axis-y-label,.axis-y-ticks{display:none;}}
+
+  .zone{border-radius:10px;padding:14px 16px 16px;border:1.5px solid transparent;display:flex;flex-direction:column;}
+  .zone.gains{background:#eafbf4;border-color:rgba(21,202,136,0.3);}
+  .zone.structurants{background:#e9f8fc;border-color:rgba(0,181,226,0.3);}
+  .zone.continue{background:var(--gris-fond2);border-color:rgba(93,97,96,0.2);}
+  .zone.eviter{background:#fdeeee;border-color:rgba(222,92,92,0.3);}
+  .zone-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+  .zone-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0;}
+  .gains .zone-badge{background:var(--vert);}
+  .structurants .zone-badge{background:var(--bleu-fonce);}
+  .continue .zone-badge{background:var(--gris-moyen);}
+  .eviter .zone-badge{background:var(--rouge);}
+  .zone-title{font-size:14.5px;font-weight:700;color:#20282b;}
+  .zone-action{font-size:11.5px;color:var(--gris-moyen);margin:0 0 10px;font-style:italic;}
+  .zone-items{display:flex;flex-direction:column;gap:6px;flex:1;}
+  .zone-empty{font-size:12px;color:var(--gris-moyen);font-style:italic;}
+  .zone-item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border-radius:6px;padding:7px 10px;font-size:12.5px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .zone-item button{background:none;border:none;color:var(--gris-moyen);font-size:14px;cursor:pointer;padding:0 2px;flex-shrink:0;}
+  .zone-item button:hover{color:var(--rouge);}
+
+  .synth-textarea{width:100%;min-height:80px;border:1.5px solid var(--gris-clair);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:13.5px;color:var(--gris);resize:vertical;}
+  .synth-textarea:focus{outline:none;border-color:var(--bleu);}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:7px 15px;border-radius:9px;font-size:12px;cursor:pointer;font-family:inherit;margin:0 6px 8px;}
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  .missing-note{text-align:center;color:var(--rouge);font-size:12.5px;margin-top:6px;min-height:16px;}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+  @media print{
+    .hero-header, .back-link, .add-form, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .zone{box-shadow:none;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Par quoi commencer ?<span>Prioriser sans se disperser</span></h1>
+      <p class="hero-desc">La matrice effort-impact permet de trancher collectivement entre les actions à lancer immédiatement, celles à planifier, celles qui peuvent attendre et celles à questionner avant de s'y engager.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          15-25 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Individuel ou en groupe
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('matrixPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer la priorisation &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- axes + points -->
+        <g transform="translate(55,40)">
+          <line x1="0" y1="0" x2="0" y2="130" stroke="#20282b" stroke-width="2" opacity="0.35"/>
+          <line x1="0" y1="130" x2="150" y2="130" stroke="#20282b" stroke-width="2" opacity="0.35"/>
+          <circle cx="30" cy="30" r="9" fill="var(--vert)"/>
+          <circle cx="115" cy="25" r="9" fill="var(--bleu-fonce)"/>
+          <circle cx="25" cy="105" r="9" fill="var(--gris-moyen)"/>
+          <circle cx="120" cy="100" r="9" fill="var(--rouge)"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Matrice effort-impact</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> listez les actions, chantiers ou irritants à traiter, puis évaluez chacun sur deux critères : l'effort nécessaire pour le mettre en œuvre et l'impact attendu sur la situation. L'outil les place automatiquement dans l'un des quatre cadrans.</p>
+  </div>
+
+  <div class="panel" id="matrixPanel">
+    <h2>Ajouter une action à évaluer</h2>
+    <p class="panel-sub">Formulez l'action de façon concrète et actionnable.</p>
+
+    <div class="add-form">
+      <div class="label-row">Action à évaluer</div>
+      <input type="text" id="itemInput" placeholder="Ex : clarifier les rôles entre le service X et le service Y">
+      <div class="scale-row">
+        <div class="scale-field">
+          <div class="label-row">Effort de mise en œuvre</div>
+          <div class="scale-picker effort-picker" id="effortPicker">
+            <label id="eff-1"><input type="radio" name="effort" value="1" onchange="setScale('effort',1)">1</label>
+            <label id="eff-2"><input type="radio" name="effort" value="2" onchange="setScale('effort',2)">2</label>
+            <label id="eff-3"><input type="radio" name="effort" value="3" onchange="setScale('effort',3)">3</label>
+            <label id="eff-4"><input type="radio" name="effort" value="4" onchange="setScale('effort',4)">4</label>
+            <label id="eff-5"><input type="radio" name="effort" value="5" onchange="setScale('effort',5)">5</label>
+          </div>
+        </div>
+        <div class="scale-field">
+          <div class="label-row">Impact attendu</div>
+          <div class="scale-picker impact-picker" id="impactPicker">
+            <label id="imp-1"><input type="radio" name="impact" value="1" onchange="setScale('impact',1)">1</label>
+            <label id="imp-2"><input type="radio" name="impact" value="2" onchange="setScale('impact',2)">2</label>
+            <label id="imp-3"><input type="radio" name="impact" value="3" onchange="setScale('impact',3)">3</label>
+            <label id="imp-4"><input type="radio" name="impact" value="4" onchange="setScale('impact',4)">4</label>
+            <label id="imp-5"><input type="radio" name="impact" value="5" onchange="setScale('impact',5)">5</label>
+          </div>
+        </div>
+      </div>
+      <button onclick="addItem()">+ Ajouter à la matrice</button>
+      <div class="missing-note" id="missingNote"></div>
+    </div>
+
+    <div class="matrix-outer">
+      <div class="axis-y-label"><span>Impact attendu</span></div>
+      <div class="axis-y-ticks"><span>Élevé</span><span>Faible</span></div>
+      <div class="matrix-grid">
+        <div class="zone gains">
+          <div class="zone-head"><span class="zone-badge">1</span><span class="zone-title">Gains rapides</span></div>
+          <p class="zone-action">Faible effort, fort impact — à lancer en premier.</p>
+          <div class="zone-items" id="items-gains"></div>
+        </div>
+        <div class="zone structurants">
+          <div class="zone-head"><span class="zone-badge">2</span><span class="zone-title">Projets structurants</span></div>
+          <p class="zone-action">Fort effort, fort impact — à planifier et sécuriser dans le temps.</p>
+          <div class="zone-items" id="items-structurants"></div>
+        </div>
+        <div class="zone continue">
+          <div class="zone-head"><span class="zone-badge">3</span><span class="zone-title">Amélioration continue</span></div>
+          <p class="zone-action">Faible effort, faible impact — à traiter si la capacité le permet.</p>
+          <div class="zone-items" id="items-continue"></div>
+        </div>
+        <div class="zone eviter">
+          <div class="zone-head"><span class="zone-badge">4</span><span class="zone-title">À questionner</span></div>
+          <p class="zone-action">Fort effort, faible impact — à challenger, déléguer ou abandonner.</p>
+          <div class="zone-items" id="items-eviter"></div>
+        </div>
+      </div>
+      <div class="axis-x-label">Effort de mise en œuvre</div>
+      <div class="axis-x-ticks"><span>Faible</span><span>Élevé</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Votre plan d'action</h2>
+    <p class="panel-sub">Au regard de cette répartition, par quoi commencez-vous concrètement, et avec qui ?</p>
+    <textarea class="synth-textarea" id="synthese" placeholder="Vos notes…"></textarea>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil de priorisation. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+let items = [];
+let nextId = 1;
+let currentEffort = null;
+let currentImpact = null;
+
+function setScale(type, val){
+  if(type==='effort') currentEffort = val;
+  if(type==='impact') currentImpact = val;
+  document.querySelectorAll('#effortPicker label').forEach(l=>l.classList.remove('selected'));
+  document.querySelectorAll('#impactPicker label').forEach(l=>l.classList.remove('selected'));
+  if(currentEffort) document.getElementById('eff-'+currentEffort).classList.add('selected');
+  if(currentImpact) document.getElementById('imp-'+currentImpact).classList.add('selected');
+}
+
+function zoneOf(effort, impact){
+  const highEffort = effort >= 3;
+  const highImpact = impact >= 3;
+  if(!highEffort && highImpact) return 'gains';
+  if(highEffort && highImpact) return 'structurants';
+  if(!highEffort && !highImpact) return 'continue';
+  return 'eviter';
+}
+
+function addItem(){
+  const input = document.getElementById('itemInput');
+  const val = input.value.trim();
+  const note = document.getElementById('missingNote');
+  if(!val){
+    note.textContent = 'Merci de décrire l\'action à évaluer.';
+    return;
+  }
+  if(currentEffort === null || currentImpact === null){
+    note.textContent = 'Merci de renseigner à la fois l\'effort et l\'impact.';
+    return;
+  }
+  note.textContent = '';
+  items.push({id: nextId++, texte: val, effort: currentEffort, impact: currentImpact});
+  input.value = '';
+  currentEffort = null;
+  currentImpact = null;
+  document.querySelectorAll('#effortPicker label, #impactPicker label').forEach(l=>l.classList.remove('selected'));
+  document.querySelectorAll('input[name=effort], input[name=impact]').forEach(r=>r.checked=false);
+  input.focus();
+  renderMatrix();
+}
+
+function removeItem(id){
+  items = items.filter(i=>i.id!==id);
+  renderMatrix();
+}
+
+function renderMatrix(){
+  const zones = {gains:[], structurants:[], continue:[], eviter:[]};
+  items.forEach(i=>{
+    zones[zoneOf(i.effort, i.impact)].push(i);
+  });
+  Object.keys(zones).forEach(z=>{
+    const wrap = document.getElementById('items-'+z);
+    if(zones[z].length===0){
+      wrap.innerHTML = '<span class="zone-empty">Aucune action pour le moment.</span>';
+      return;
+    }
+    wrap.innerHTML = zones[z].map(i=>`
+      <div class="zone-item"><span>${i.texte.replace(/</g,'&lt;')}</span><button onclick="removeItem(${i.id})" title="Retirer">&times;</button></div>
+    `).join('');
+  });
+}
+
+function resetAll(){
+  items = [];
+  currentEffort = null;
+  currentImpact = null;
+  document.getElementById('itemInput').value='';
+  document.getElementById('synthese').value='';
+  document.querySelectorAll('#effortPicker label, #impactPicker label').forEach(l=>l.classList.remove('selected'));
+  document.querySelectorAll('input[name=effort], input[name=impact]').forEach(r=>r.checked=false);
+  renderMatrix();
+}
+
+renderMatrix();
+</script>
+
+</body>
+</html>

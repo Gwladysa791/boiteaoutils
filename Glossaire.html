@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossaire — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+    --vert: #15CA88;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 340px;height:290px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:260px;height:220px;}
+  }
+  .container{max-width:900px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-child{margin-bottom:0;}
+  .intro strong{color:var(--bleu-fonce);}
+
+  .toolbar{margin-bottom:16px;}
+  .search-wrap input{
+    width:100%;padding:11px 16px;border:1.5px solid var(--gris-clair);border-radius:22px;
+    font-family:inherit;font-size:14px;color:var(--gris);background:#fff;
+  }
+  .search-wrap input:focus{outline:none;border-color:var(--bleu);}
+
+  .az-index{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 30px;}
+  .az-index a{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:50%;
+    background:#fff;color:var(--bleu-fonce);font-size:12px;font-weight:700;
+    text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    transition:background .15s ease,color .15s ease;
+  }
+  .az-index a:hover{background:var(--bleu-fonce);color:#fff;}
+
+  /* ---------- Séparateur de lettre : trait / lettre bleue / trait ---------- */
+  .letter-section{margin-bottom:8px;scroll-margin-top:90px;}
+  .letter-divider{display:flex;align-items:center;gap:16px;margin:40px 0 20px;}
+  .letter-section:first-of-type .letter-divider{margin-top:6px;}
+  .letter-divider .line{flex:1;height:1px;background:var(--gris-clair);}
+  .letter-divider .letter{
+    flex-shrink:0;font-size:26px;font-weight:700;color:var(--bleu-fonce);
+    min-width:36px;text-align:center;
+  }
+
+  .term-list{display:flex;flex-direction:column;gap:16px;}
+  .term-item{background:#fff;border-radius:10px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .term-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+  .term-name{font-size:15px;font-weight:700;color:#20282b;}
+  .term-domaine{
+    font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:9px;
+    text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap;background:var(--gris-fond2);color:var(--bleu-fonce);
+  }
+  .term-def{margin:0;font-size:13.5px;color:var(--gris);line-height:1.55;}
+
+  .empty-state{
+    background:#fff;border-radius:10px;padding:40px 24px;text-align:center;
+    color:var(--gris-moyen);font-size:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .howto-box{
+    background:var(--gris-fond2);border-radius:8px;padding:16px 18px;margin-top:30px;
+    font-size:12.5px;color:var(--gris);
+  }
+  .howto-box strong{color:var(--bleu-fonce);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Glossaire<span>Les mots-clés de la formation et de l'accompagnement</span></h1>
+      <p class="hero-desc">Un vocabulaire de référence pour l'ingénierie pédagogique, l'accompagnement des adultes et les apports des neurosciences appliquées à la formation — à consulter en préparation de séance ou pour clarifier un terme avec un client.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span id="statCount">70 termes référencés</span>
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Classement alphabétique
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('glossaire').scrollIntoView({behavior:'smooth',block:'start'})">
+        Parcourir le glossaire &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.14">
+          <circle cx="20" cy="35" r="2.2"/><circle cx="44" cy="18" r="1.8"/><circle cx="12" cy="75" r="1.8"/>
+          <circle cx="215" cy="28" r="2.2"/><circle cx="226" cy="60" r="1.8"/><circle cx="60" cy="192" r="1.8"/>
+        </g>
+        <line x1="30" y1="70" x2="90" y2="70" stroke="#0088A9" stroke-width="2"/>
+        <text x="120" y="80" text-anchor="middle" font-size="42" font-weight="700" fill="#0088A9">A</text>
+        <line x1="150" y1="70" x2="210" y2="70" stroke="#0088A9" stroke-width="2"/>
+        <rect x="50" y="100" width="140" height="10" rx="5" fill="#D7D3CE"/>
+        <rect x="50" y="118" width="110" height="10" rx="5" fill="#ECEDED"/>
+        <line x1="30" y1="155" x2="90" y2="155" stroke="#00B5E2" stroke-width="2" opacity="0.5"/>
+        <text x="120" y="163" text-anchor="middle" font-size="28" font-weight="700" fill="#00B5E2" opacity="0.5">B</text>
+        <line x1="150" y1="155" x2="210" y2="155" stroke="#00B5E2" stroke-width="2" opacity="0.5"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Glossaire</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>À propos de cette page :</strong> ce glossaire rassemble des notions issues de quatre champs qui structurent la pratique du formateur — l'ingénierie de formation, la pédagogie, l'accompagnement des adultes et les neurosciences appliquées à l'apprentissage. Les définitions sont volontairement courtes : elles servent de point de repère, pas de cours théorique.</p>
+    <p>Un mot manque, une définition mérite d'être affinée ? Ce glossaire a vocation à s'enrichir au fil des besoins.</p>
+  </div>
+
+  <div id="glossaire">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Rechercher un mot-clé..." oninput="renderGlossaire()">
+      </div>
+    </div>
+    <div class="az-index" id="azIndex"></div>
+    <div id="glossaireContent"></div>
+  </div>
+
+  <div class="howto-box">
+    <strong>Repère de lecture :</strong> chaque terme porte une étiquette de domaine (Formation, Pédagogie, Accompagnement, Neurosciences) — utile pour situer rapidement de quel champ relève la notion, certaines s'articulant naturellement entre plusieurs.
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Glossaire à visée pratique, sans prétention d'exhaustivité académique.</footer>
+
+<script>
+/*
+  Pour ajouter un terme, ajouter un objet à ce tableau :
+  {
+    terme: "Nom du terme",
+    domaine: "Formation" | "Pédagogie" | "Accompagnement" | "Neurosciences",
+    definition: "Définition courte, 1 à 3 phrases."
+  }
+  Le classement alphabétique et le regroupement par lettre sont calculés automatiquement.
+*/
+const TERMES = [
+  { terme: "Accompagnement (posture d')", domaine: "Accompagnement", definition: "Manière de se positionner auprès d'une personne ou d'un groupe pour soutenir sa progression sans se substituer à elle : on outille, on questionne, on régule le rythme, mais la décision et l'appropriation restent du côté de l'accompagné." },
+  { terme: "Alliance pédagogique", domaine: "Pédagogie", definition: "Relation de confiance construite entre le formateur et le groupe dès l'ouverture d'une session, condition pour que les participants acceptent de se mettre en risque (essayer, se tromper, exprimer un désaccord)." },
+  { terme: "Analyse de pratiques professionnelles", domaine: "Accompagnement", definition: "Dispositif où un groupe de professionnels examine collectivement une situation vécue par l'un d'eux, pour en dégager des pistes d'action — animé selon un cadre précis (temps de parole, non-jugement, confidentialité)." },
+  { terme: "Ancrage mémoriel", domaine: "Neurosciences", definition: "Fait de relier une information nouvelle à un repère déjà présent en mémoire (image, émotion, expérience vécue) pour en faciliter la rétention et le rappel ultérieur." },
+  { terme: "Andragogie", domaine: "Accompagnement", definition: "Approche de la formation des adultes formalisée par Malcolm Knowles, qui postule que l'adulte apprend différemment de l'enfant : il a besoin de comprendre pourquoi il apprend, de mobiliser son expérience, et d'être traité comme autonome dans ses choix." },
+  { terme: "Approche par compétences", domaine: "Formation", definition: "Logique de conception qui part de ce que l'apprenant doit être capable de faire en situation professionnelle réelle, plutôt que des seuls contenus à transmettre — les objectifs et l'évaluation en découlent." },
+  { terme: "Attention sélective", domaine: "Neurosciences", definition: "Capacité du cerveau à traiter en priorité certaines informations de l'environnement au détriment d'autres ; en formation, elle explique pourquoi un support surchargé disperse l'attention plutôt que de la capter." },
+  { terme: "Autoformation accompagnée", domaine: "Accompagnement", definition: "Modalité où l'apprenant progresse principalement en autonomie sur des ressources ou un parcours, avec des points de régulation ponctuels avec un formateur ou un tuteur." },
+  { terme: "Autonomie de l'apprenant", domaine: "Accompagnement", definition: "Capacité à piloter soi-même ses choix d'apprentissage (rythme, ressources, priorités) ; un objectif à construire progressivement plutôt qu'un prérequis, notamment avec des publics peu habitués à la formation." },
+
+  { terme: "Béhaviorisme", domaine: "Pédagogie", definition: "Courant qui explique l'apprentissage par le conditionnement (stimulus-réponse-renforcement), sans s'intéresser aux processus mentaux internes. Toujours présent dans certains dispositifs de type entraînement répété ou gamification à récompenses." },
+  { terme: "Biais de confirmation", domaine: "Neurosciences", definition: "Tendance à privilégier les informations qui confirment ce que l'on pense déjà et à minimiser celles qui le contredisent — un point de vigilance en formation au changement, où il freine la remise en question." },
+  { terme: "Blended learning (formation mixte)", domaine: "Formation", definition: "Dispositif qui articule présentiel et distanciel (ou synchrone et asynchrone) de façon pensée, chaque modalité étant choisie pour ce qu'elle sert le mieux, et non par juxtaposition automatique." },
+  { terme: "Bloom (taxonomie de)", domaine: "Pédagogie", definition: "Classification des niveaux d'objectifs pédagogiques, de la simple restitution (se souvenir, comprendre) jusqu'aux capacités les plus complexes (analyser, évaluer, créer) — sert à calibrer un objectif au verbe juste plutôt que vague." },
+
+  { terme: "Charge cognitive", domaine: "Neurosciences", definition: "Quantité d'effort mental mobilisée pour traiter une information à un instant donné. Théorisée par John Sweller, elle explique pourquoi surcharger un support (trop de texte, trop de stimuli) nuit à l'apprentissage même si l'intention est de bien faire." },
+  { terme: "Classe inversée", domaine: "Pédagogie", definition: "Organisation où les apports théoriques sont travaillés en amont individuellement (vidéo, lecture), pour libérer le temps collectif à l'application, l'échange et la résolution de cas." },
+  { terme: "Co-développement professionnel", domaine: "Accompagnement", definition: "Méthode structurée où un groupe de pairs aide, à tour de rôle, l'un de ses membres à progresser sur une problématique professionnelle réelle, par un jeu de questions puis de contributions." },
+  { terme: "Cognitivisme", domaine: "Pédagogie", definition: "Courant qui s'intéresse aux processus mentaux de traitement de l'information (mémorisation, compréhension, résolution de problème) — à la différence du béhaviorisme, il ouvre la boîte noire du cerveau plutôt que de s'en tenir aux comportements observables." },
+  { terme: "Constructivisme", domaine: "Pédagogie", definition: "Approche selon laquelle l'apprenant construit activement ses connaissances par l'action et l'expérimentation, plutôt que de les recevoir passivement — fonde une grande partie des pédagogies actives." },
+  { terme: "Contrat pédagogique", domaine: "Accompagnement", definition: "Cadre explicite négocié en début de parcours entre formateur et participants : objectifs, règles de fonctionnement, engagements réciproques — pose les bases d'une relation adulte plutôt que d'un rapport descendant." },
+  { terme: "Cortex préfrontal", domaine: "Neurosciences", definition: "Région du cerveau impliquée dans les fonctions exécutives : planification, prise de décision, régulation des émotions. Son fonctionnement se dégrade sous stress ou fatigue intense, ce qui affecte directement la capacité à apprendre." },
+  { terme: "Courbe de l'oubli", domaine: "Neurosciences", definition: "Modélisée par Hermann Ebbinghaus, elle montre qu'une information non retravaillée se perd très rapidement après un apprentissage — l'argument central en faveur de la répétition espacée plutôt que d'un seul passage de contenu." },
+
+  { terme: "Débriefing", domaine: "Pédagogie", definition: "Temps structuré de retour sur une expérience (jeu, mise en situation, exercice) qui permet d'en extraire les apprentissages — sa qualité pédagogique tient souvent plus au débrief qu'à l'activité elle-même." },
+  { terme: "Différenciation pédagogique", domaine: "Pédagogie", definition: "Fait d'adapter les modalités, le rythme ou les supports à l'hétérogénéité réelle d'un groupe, sans pour autant abaisser le niveau d'exigence pour certains." },
+  { terme: "Digital learning", domaine: "Formation", definition: "Ensemble des modalités de formation qui s'appuient sur le numérique (e-learning, classes virtuelles, mobile learning) — un ensemble d'outils, pas une pédagogie en soi : leur usage doit rester au service d'un objectif clair." },
+  { terme: "Double tâche", domaine: "Neurosciences", definition: "Situation où deux activités mobilisent en même temps l'attention et les ressources cognitives (par exemple lire des consignes tout en écoutant une explication orale), ce qui dégrade la performance sur les deux." },
+
+  { terme: "Effet de primauté", domaine: "Neurosciences", definition: "Tendance à mieux retenir ce qui a été présenté en premier lors d'une séquence — un argument pour soigner particulièrement l'ouverture d'une session ou d'une séquence." },
+  { terme: "Effet de récence", domaine: "Neurosciences", definition: "Tendance à mieux retenir ce qui a été présenté en dernier — un argument pour soigner la synthèse de clôture autant que l'introduction." },
+  { terme: "Effet-test (testing effect)", domaine: "Neurosciences", definition: "Constat robuste selon lequel se tester activement sur un contenu (quiz, question à voix haute, rappel libre) l'ancre mieux en mémoire que de le relire passivement plusieurs fois." },
+  { terme: "Émotion et mémorisation", domaine: "Neurosciences", definition: "Une information associée à une charge émotionnelle (même modérée) s'encode plus fortement qu'une information neutre — ce qui explique l'intérêt des mises en situation et du storytelling en formation, sans en faire un but en soi." },
+  { terme: "Évaluation formative", domaine: "Formation", definition: "Évaluation réalisée en cours de parcours pour ajuster la progression, sans enjeu de notation — elle informe le formateur et l'apprenant plutôt qu'elle ne sanctionne." },
+  { terme: "Évaluation sommative", domaine: "Formation", definition: "Évaluation réalisée en fin de parcours pour vérifier l'atteinte des objectifs, avec un enjeu de validation (certification, décision de passage) — à ne pas confondre avec la satisfaction, qui mesure autre chose." },
+  { terme: "Expérientiel (apprentissage)", domaine: "Pédagogie", definition: "Apprentissage qui part d'une expérience vécue par l'apprenant (mise en situation, jeu, cas réel) suivie d'une réflexion structurée sur cette expérience, selon le cycle formalisé par David Kolb." },
+
+  { terme: "Feedback", domaine: "Pédagogie", definition: "Retour donné à un apprenant sur une production ou un comportement, dont l'utilité dépend moins de sa fréquence que de sa précision : il gagne à porter sur du factuel observable plutôt que sur un jugement global." },
+  { terme: "Formation-action", domaine: "Formation", definition: "Dispositif où les participants travaillent directement sur un projet ou un problème réel de leur organisation pendant la formation, de sorte que l'apprentissage et la production avancent de front." },
+
+  { terme: "Gamification (ludification)", domaine: "Pédagogie", definition: "Fait d'introduire des mécaniques issues du jeu (score, progression, défi) dans un dispositif qui n'est pas un jeu au départ, pour soutenir l'engagement — utile si elle sert un objectif pédagogique, superflue sinon." },
+
+  { terme: "Hétérogénéité des publics", domaine: "Formation", definition: "Écarts de niveau, d'expérience ou de rapport à la formation au sein d'un même groupe — un paramètre à anticiper dès la conception plutôt qu'à gérer dans l'urgence en séance." },
+
+  { terme: "Ingénierie de formation", domaine: "Formation", definition: "Démarche globale de conception d'un dispositif de formation, de l'analyse du besoin jusqu'à l'évaluation, en passant par le cadrage des objectifs et des moyens — englobe l'ingénierie pédagogique sans s'y réduire." },
+  { terme: "Ingénierie pédagogique", domaine: "Formation", definition: "Conception détaillée du déroulé pédagogique lui-même : séquençage, choix des modalités, supports, consignes d'animation — la partie la plus opérationnelle de l'ingénierie de formation." },
+  { terme: "Intelligence collective", domaine: "Pédagogie", definition: "Capacité d'un groupe à produire, en interaction, une réflexion ou une solution plus riche que la somme des apports individuels — suppose un cadre d'animation qui organise réellement les échanges, pas seulement un objectif affiché." },
+  { terme: "Interférence (mémoire)", domaine: "Neurosciences", definition: "Phénomène par lequel l'apprentissage d'une information nouvelle vient brouiller le rappel d'une information proche déjà apprise, ou inversement — un argument pour espacer des contenus trop similaires dans un même parcours." },
+
+  { terme: "Jeu de rôle pédagogique", domaine: "Pédagogie", definition: "Mise en situation où des participants incarnent des rôles pour expérimenter une posture ou une interaction difficile (entretien, négociation, annonce) avant de la vivre réellement — son efficacité tient largement à la qualité du débrief qui suit." },
+
+  { terme: "Learning by doing", domaine: "Pédagogie", definition: "Principe selon lequel on apprend mieux en faisant qu'en écoutant — ne dispense pas de structurer l'activité et le débrief, sous peine de rester au stade de l'expérience sans apprentissage réel." },
+  { terme: "Ludopédagogie", domaine: "Pédagogie", definition: "Usage du jeu comme support d'apprentissage à part entière, et non comme simple animation de transition — suppose des règles claires et un objectif pédagogique identifié en amont." },
+
+  { terme: "Mémoire à long terme", domaine: "Neurosciences", definition: "Système de mémoire où une information peut être stockée durablement, potentiellement toute une vie, à condition d'avoir été suffisamment consolidée — c'est elle que vise, in fine, tout dispositif de formation." },
+  { terme: "Mémoire de travail", domaine: "Neurosciences", definition: "Système de mémoire à capacité très limitée (quelques éléments à la fois) qui permet de manipuler une information sur une courte durée — sa saturation est l'une des causes les plus fréquentes de décrochage en formation." },
+  { terme: "Mentorat", domaine: "Accompagnement", definition: "Relation d'accompagnement dans la durée entre une personne expérimentée et une personne moins expérimentée, centrée sur le développement professionnel global plutôt que sur une compétence technique isolée." },
+  { terme: "Métacognition", domaine: "Pédagogie", definition: "Capacité à réfléchir sur sa propre façon d'apprendre (ce qui fonctionne pour soi, ce qui bloque) — un levier puissant et souvent sous-exploité en formation d'adultes." },
+  { terme: "Micro-learning", domaine: "Formation", definition: "Format de contenu très court (quelques minutes) centré sur un seul objectif d'apprentissage, pensé pour s'insérer dans un temps contraint plutôt que pour remplacer un parcours complet." },
+  { terme: "Modalité pédagogique", domaine: "Formation", definition: "Manière concrète dont un contenu est délivré ou travaillé (atelier, quiz, étude de cas, exposé, jeu de rôle) — la variété des modalités au sein d'un même parcours soutient l'attention autant que la pertinence de chacune prise isolément." },
+  { terme: "Motivation extrinsèque", domaine: "Pédagogie", definition: "Motivation qui vient d'une source externe à l'activité elle-même (récompense, obligation, évaluation) — efficace à court terme, moins soutenable dans la durée que la motivation intrinsèque." },
+  { terme: "Motivation intrinsèque", domaine: "Pédagogie", definition: "Motivation qui vient de l'intérêt ou du plaisir trouvé dans l'activité elle-même, sans besoin de récompense externe — un objectif de conception plus qu'un donné acquis d'avance chez l'apprenant." },
+
+  { terme: "Neuroéducation", domaine: "Neurosciences", definition: "Champ qui met en dialogue les résultats des neurosciences cognitives et les pratiques pédagogiques. Un champ encore jeune, à manier avec prudence : nombre d'idées reçues qui s'en réclament (comme les « styles d'apprentissage » visuel/auditif/kinesthésique) ne résistent pas à l'examen scientifique." },
+  { terme: "Neuroplasticité", domaine: "Neurosciences", definition: "Capacité du cerveau à modifier ses connexions tout au long de la vie en fonction de l'expérience — le fondement biologique qui rend l'apprentissage possible à tout âge, y compris chez l'adulte." },
+  { terme: "Neurones miroirs", domaine: "Neurosciences", definition: "Neurones qui s'activent à la fois quand on réalise une action et quand on observe quelqu'un la réaliser. Un mécanisme probablement impliqué dans l'apprentissage par observation et l'empathie, dont la portée exacte chez l'humain reste discutée dans la recherche." },
+
+  { terme: "Objectif pédagogique", domaine: "Formation", definition: "Formulation de ce que l'apprenant doit être capable de faire à l'issue d'une séquence, à l'aide d'un verbe d'action observable — un objectif flou (« comprendre », « connaître ») rend l'évaluation impossible à construire." },
+
+  { terme: "Pédagogie active", domaine: "Pédagogie", definition: "Approche qui place l'apprenant en position de faire, chercher ou produire plutôt que de seulement recevoir un contenu — s'oppose à la pédagogie dite transmissive, sans que l'une exclue totalement l'autre dans un même parcours." },
+  { terme: "Posture haute / posture basse", domaine: "Accompagnement", definition: "Deux positions relationnelles du formateur : la posture haute (détenteur du savoir, qui transmet) et la posture basse (qui accompagne, questionne, laisse l'apprenant chercher) — un même formateur alterne généralement entre les deux selon les moments." },
+  { terme: "Prérequis", domaine: "Formation", definition: "Connaissances ou compétences supposées acquises avant l'entrée en formation — les vérifier réellement (et pas seulement les afficher) évite des écarts de niveau qui plombent la dynamique de groupe." },
+
+  { terme: "Référentiel de compétences", domaine: "Formation", definition: "Document qui décrit les compétences attendues pour un métier ou une fonction, souvent découpées en niveaux de maîtrise — sert de base à la conception d'un parcours comme à son évaluation." },
+  { terme: "Répétition espacée (spaced repetition)", domaine: "Neurosciences", definition: "Méthode qui consiste à retravailler un contenu à intervalles progressivement croissants plutôt qu'en une seule fois — l'un des leviers les mieux documentés pour ancrer un apprentissage dans la durée." },
+
+  { terme: "Scénarisation pédagogique", domaine: "Formation", definition: "Mise en récit et en séquence du déroulé d'une formation : ce qui se passe, dans quel ordre, avec quelles transitions — la différence entre une succession de contenus et un parcours qui a un sens." },
+  { terme: "Séquençage pédagogique", domaine: "Formation", definition: "Découpage d'un contenu en unités logiques et progressives, chacune avec son propre objectif — évite l'écueil du programme trop dense qui juxtapose les sujets sans respiration ni progression réelle." },
+  { terme: "Socioconstructivisme", domaine: "Pédagogie", definition: "Variante du constructivisme qui insiste sur le rôle des interactions sociales dans la construction des savoirs — fonde la valeur pédagogique du travail en sous-groupes et des échanges entre pairs, pas seulement organisationnelle." },
+  { terme: "Storytelling pédagogique", domaine: "Pédagogie", definition: "Fait de vêtir un contenu d'une trame narrative (situation, personnage, tension) pour en faciliter la mémorisation et l'engagement — utile s'il reste au service du message, disqualifiant s'il prend toute la place au détriment du fond." },
+  { terme: "Stress et apprentissage", domaine: "Neurosciences", definition: "Relation en U inversé décrite par la loi de Yerkes-Dodson : un niveau modéré de stress mobilise l'attention et favorise la performance, un niveau trop élevé ou trop prolongé la dégrade nettement, notamment via son effet sur le cortex préfrontal." },
+  { terme: "Supervision", domaine: "Accompagnement", definition: "Espace régulier où un professionnel de l'accompagnement (formateur, coach, intervenant) prend du recul sur sa pratique avec un tiers qualifié — distinct de l'analyse de pratiques par son caractère individuel et suivi dans la durée." },
+
+  { terme: "Transfert des acquis", domaine: "Formation", definition: "Capacité à réutiliser en situation professionnelle réelle ce qui a été appris en formation — le point souvent le plus fragile d'un dispositif, qui ne se joue pas seulement pendant la session mais dans les conditions de son après (soutien managérial, occasions de pratiquer)." },
+  { terme: "Transposition didactique", domaine: "Pédagogie", definition: "Processus par lequel un savoir savant ou expert est retravaillé pour devenir enseignable à un public donné, sans en trahir le fond — un exercice d'autant plus exigeant que le sujet est technique ou sensible." },
+
+  { terme: "VAE (Validation des Acquis de l'Expérience)", domaine: "Accompagnement", definition: "Dispositif permettant de faire reconnaître officiellement, sous forme de diplôme ou de certification, des compétences acquises par l'expérience professionnelle plutôt que par la formation initiale." },
+
+  { terme: "Zone proximale de développement", domaine: "Neurosciences", definition: "Concept de Lev Vygotsky désignant l'écart entre ce qu'un apprenant sait faire seul et ce qu'il peut réussir avec l'aide d'un tiers — l'endroit précis où un accompagnement a le plus de valeur ajoutée, ni trop facile ni hors de portée." }
+];
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function normalizeLetter(str){
+  return str.normalize('NFD').replace(/[̀-ͯ]/g, '').charAt(0).toUpperCase();
+}
+
+function groupByLetter(terms){
+  const groups = {};
+  terms.forEach(function(t){
+    const letter = normalizeLetter(t.terme);
+    if(!groups[letter]) groups[letter] = [];
+    groups[letter].push(t);
+  });
+  const letters = Object.keys(groups).sort();
+  letters.forEach(function(l){
+    groups[l].sort(function(a,b){ return a.terme.localeCompare(b.terme, 'fr'); });
+  });
+  return { groups: groups, letters: letters };
+}
+
+function termItemHtml(t){
+  return `
+    <div class="term-item">
+      <div class="term-head">
+        <span class="term-name">${escapeHtml(t.terme)}</span>
+        <span class="term-domaine">${escapeHtml(t.domaine)}</span>
+      </div>
+      <p class="term-def">${escapeHtml(t.definition)}</p>
+    </div>
+  `;
+}
+
+function matchSearch(t, query){
+  if(!query) return true;
+  const haystack = (t.terme + ' ' + t.definition + ' ' + t.domaine).toLowerCase();
+  return haystack.includes(query.toLowerCase());
+}
+
+function renderAzIndex(letters){
+  const wrap = document.getElementById('azIndex');
+  wrap.innerHTML = letters.map(function(l){
+    return '<a href="#lettre-' + l + '">' + l + '</a>';
+  }).join('');
+}
+
+function renderGlossaire(){
+  const query = document.getElementById('searchInput').value.trim();
+  const filtered = TERMES.filter(function(t){ return matchSearch(t, query); });
+  const content = document.getElementById('glossaireContent');
+
+  if(filtered.length === 0){
+    content.innerHTML = '<div class="empty-state"><p>Aucun terme ne correspond à cette recherche.</p></div>';
+    document.getElementById('azIndex').innerHTML = '';
+    return;
+  }
+
+  const grouped = groupByLetter(filtered);
+  renderAzIndex(query ? [] : grouped.letters);
+
+  content.innerHTML = grouped.letters.map(function(l){
+    const items = grouped.groups[l].map(termItemHtml).join('');
+    return `
+      <div class="letter-section" id="lettre-${l}">
+        <div class="letter-divider">
+          <span class="line"></span>
+          <span class="letter">${l}</span>
+          <span class="line"></span>
+        </div>
+        <div class="term-list">${items}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('statCount').textContent = TERMES.length + ' termes référencés';
+renderGlossaire();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Boîte à outils AXIS MUNDI</title>
+<meta name="description" content="Plateforme pédagogique réservée aux formateurs et intervenants AXIS MUNDI : quiz, questionnaires, animations et outils de diagnostic prêts à l'emploi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* =========================================================
+   0. VARIABLES & BASE
+   ========================================================= */
+:root{
+  --cyan:        #00B5E2;
+  --petrole:     #0088A9;
+  --bleu-clair:  #55DDFF;
+  --bleu-tres-clair: #C6F4FF;
+  --gris-fonce:  #464948;
+  --gris:        #5D6160;
+  --gris-clair:  #9DA1A0;
+  --gris-tres-clair: #DEE0DF;
+  --beige:       #F0EBE5;
+  --beige-gris:  #D7D3CE;
+
+  --accent-vert:   #15CA88;
+  --accent-orange: #F5AB33;
+  --accent-violet: #884EC2;
+  --accent-rouge:  #DE5C5C;
+
+  --font-titre: 'Poppins', 'Segoe UI', sans-serif;
+  --font-texte: 'Inter', 'Segoe UI', sans-serif;
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --shadow-soft: 0 4px 18px rgba(70,73,72,0.07);
+  --shadow-hover: 0 10px 28px rgba(0,136,169,0.14);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--font-texte);
+  color:var(--gris-fonce);
+  background:#ffffff;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:var(--font-titre);
+  margin:0;
+  color:var(--gris-fonce);
+}
+a{color:inherit;}
+button{font-family:var(--font-texte);}
+img,svg{display:block;max-width:100%;}
+.skip-link{
+  position:absolute;left:-999px;top:auto;
+  background:var(--petrole);color:#fff;padding:10px 16px;border-radius:8px;z-index:200;
+}
+.skip-link:focus{left:12px;top:12px;}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px;}
+.section{padding:64px 24px;}
+.section-inner{max-width:1180px;margin:0 auto;}
+.section-head{max-width:640px;margin:0 auto 40px;text-align:center;}
+.eyebrow{
+  display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--petrole);background:var(--bleu-tres-clair);padding:5px 14px;border-radius:20px;margin-bottom:14px;
+}
+.section-head h2{font-size:28px;font-weight:700;margin-bottom:10px;}
+.section-head p{font-size:15px;color:var(--gris);margin:0;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-family:var(--font-titre);font-weight:600;font-size:13px;
+  padding:11px 22px;border-radius:10px;cursor:pointer;border:none;text-decoration:none;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--petrole);color:#fff;box-shadow:0 4px 12px rgba(0,136,169,0.20);}
+.btn-primary:hover{background:#00708a;}
+.btn-secondary{background:#fff;color:var(--petrole);border:1.5px solid var(--bleu-tres-clair);}
+.btn-secondary:hover{border-color:var(--petrole);}
+.btn-ghost{background:transparent;color:var(--gris);border:1.5px solid var(--gris-tres-clair);}
+.btn-ghost:hover{border-color:var(--gris-clair);}
+.btn-sm{padding:8px 16px;font-size:12px;}
+.pill-tag{
+  display:inline-flex;align-items:center;gap:6px;background:var(--gris-tres-clair);color:var(--gris);
+  font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:12px;
+}
+
+/* =========================================================
+   1. HEADER
+   ========================================================= */
+header.site-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--gris-tres-clair);
+}
+.header-inner{
+  max-width:1180px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;gap:40px;
+}
+.brand-mark{display:flex;align-items:center;gap:16px;text-decoration:none;flex-shrink:0;}
+.brand-mark img{height:30px;width:auto;}
+nav.main-nav{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap;}
+nav.main-nav a{
+  font-size:12.5px;font-weight:600;color:var(--gris);text-decoration:none;
+  padding:7px 13px;border-radius:8px;transition:background .15s ease,color .15s ease;
+  white-space:nowrap;
+}
+nav.main-nav a:hover, nav.main-nav a:focus-visible{background:var(--bleu-tres-clair);color:var(--petrole);}
+.header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.header-actions .btn{padding:9px 18px;font-size:13px;}
+.profile-btn{
+  width:36px;height:36px;border-radius:50%;background:var(--gris-tres-clair);border:none;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gris-fonce);
+}
+.header-burger{display:none;background:none;border:none;cursor:pointer;padding:6px;}
+
+/* ---------- Onglets avec méga-menus déroulants ---------- */
+.nav-item{position:relative;}
+.nav-link-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:13.5px;font-weight:600;color:var(--gris);text-decoration:none;
+  padding:9px 16px;border-radius:8px;transition:background .15s ease,color .15s ease;
+  white-space:nowrap;background:none;border:none;cursor:pointer;font-family:var(--font-texte);
+}
+.nav-link-btn:hover, .nav-link-btn:focus-visible, .nav-item.open .nav-link-btn{background:var(--bleu-tres-clair);color:var(--petrole);}
+.nav-link-btn .chevron{width:9px;height:9px;flex-shrink:0;transition:transform .18s ease;}
+.nav-item.open .nav-link-btn .chevron{transform:rotate(180deg);}
+.nav-dropdown{
+  position:absolute;top:calc(100% + 10px);left:0;min-width:600px;
+  background:#fff;border-radius:var(--radius-md);box-shadow:0 16px 40px rgba(70,73,72,0.16);
+  border:1px solid var(--gris-tres-clair);
+  padding:22px 26px;display:none;grid-template-columns:repeat(4,1fr);gap:24px;
+  z-index:110;
+}
+.nav-dropdown.simple{min-width:280px;grid-template-columns:1fr;gap:2px;padding:14px;}
+.nav-item.open .nav-dropdown{display:grid;}
+.nav-dropdown-col{display:flex;flex-direction:column;gap:2px;}
+.nav-dropdown-col .col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gris-clair);margin:0 0 8px;padding:0 8px;}
+.nav-dropdown-col a{font-size:13.5px;color:var(--gris-fonce);text-decoration:none;padding:7px 8px;border-radius:7px;transition:background .15s ease,color .15s ease;line-height:1.3;}
+.nav-dropdown-col a:hover, .nav-dropdown-col a:focus-visible{background:var(--beige);color:var(--petrole);}
+
+@media (max-width:920px){
+  nav.main-nav{
+    position:fixed;top:62px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;
+    padding:10px 20px 20px;border-bottom:1px solid var(--gris-tres-clair);
+    box-shadow:0 12px 20px rgba(0,0,0,0.06);
+    display:none;max-height:calc(100vh - 62px);overflow-y:auto;
+  }
+  nav.main-nav.open{display:flex;}
+  .header-burger{display:block;}
+  .header-actions .btn span{display:none;}
+  .nav-item{width:100%;}
+  .nav-link-btn{width:100%;justify-content:space-between;padding:12px 8px;}
+  .nav-dropdown, .nav-dropdown.simple{
+    position:static;box-shadow:none;border:none;border-left:2px solid var(--bleu-tres-clair);
+    padding:2px 6px 8px 16px;margin:0 0 6px;min-width:0;display:none;grid-template-columns:1fr;gap:0;
+  }
+  .nav-item.open .nav-dropdown{display:grid;}
+  .nav-dropdown-col{margin-top:8px;}
+  .nav-dropdown-col:first-child{margin-top:2px;}
+}
+
+/* =========================================================
+   2. HERO
+   ========================================================= */
+.hero{
+  background:linear-gradient(160deg,#ffffff 0%,var(--bleu-tres-clair) 130%);
+  padding:70px 24px 40px;
+  position:relative;overflow:hidden;
+}
+.hero-inner{
+  max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:48px;
+}
+.hero-copy{flex:1 1 440px;min-width:300px;}
+.hero-copy h1{font-size:42px;font-weight:800;line-height:1.15;margin-bottom:18px;}
+.hero-copy h1 .accent{color:var(--cyan);}
+.hero-sub{font-size:18px;font-weight:600;color:var(--petrole);margin-bottom:14px;font-family:var(--font-titre);}
+.hero-copy p.lead{font-size:15px;color:var(--gris);max-width:520px;margin:0 0 30px;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-illus{flex:1 1 480px;max-width:600px;aspect-ratio:1207/997;position:relative;}
+.hero-illus svg{width:100%;height:100%;overflow:visible;}
+.hero-illus img{filter:drop-shadow(0 18px 30px rgba(32,40,43,0.18));}
+@media (max-width:980px){input,select,textarea{font-size:16px;}
+  .hero-inner{flex-direction:column;text-align:center;}
+  .hero-copy p.lead{margin-left:auto;margin-right:auto;}
+  .hero-actions{justify-content:center;}
+  .hero-illus{width:100%;max-width:520px;flex:0 0 auto;}
+}
+
+/* =========================================================
+   2bis. PRÉSENTATION — "Qu'est-ce que la boîte à outils ?"
+   ========================================================= */
+.presentation-section{padding:66px 24px 20px;background:#fff;}
+.presentation-head{max-width:700px;margin:0 auto 56px;text-align:center;}
+.presentation-head h2{font-size:29px;font-weight:800;margin-bottom:14px;line-height:1.28;}
+.presentation-head p{font-size:15.5px;color:var(--gris);margin:0;}
+.presentation-row{display:flex;align-items:center;gap:56px;max-width:1180px;margin:0 auto 80px;}
+.presentation-row:last-child{margin-bottom:0;}
+.presentation-row.reverse{flex-direction:row-reverse;}
+.presentation-copy{flex:1 1 400px;min-width:260px;}
+.presentation-copy .tag{
+  display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
+  color:var(--petrole);margin-bottom:10px;
+}
+.presentation-copy h3{font-size:22px;font-weight:700;margin:0 0 12px;line-height:1.3;}
+.presentation-copy p{font-size:14.5px;color:var(--gris);margin:0;max-width:440px;}
+.presentation-visual{flex:1 1 460px;min-width:260px;}
+
+.device-mockup{
+  background:#20282b;border-radius:14px;padding:14px 14px 20px;
+  box-shadow:0 26px 60px rgba(32,40,43,0.22);position:relative;max-width:480px;margin:0 auto;
+}
+.device-mockup .device-stand{height:9px;background:#33393b;border-radius:0 0 10px 10px;margin:0 34px;}
+.device-screen{background:#fff;border-radius:6px;overflow:hidden;}
+.device-topbar{height:24px;background:#EDEEEE;display:flex;align-items:center;gap:5px;padding:0 10px;}
+.device-topbar .dot{width:7px;height:7px;border-radius:50%;background:#D7D3CE;}
+.device-body{padding:18px;min-height:220px;}
+
+/* mini-recréations d'interface à l'intérieur des mockups */
+.mock-toolbar{display:flex;gap:6px;margin-bottom:14px;}
+.mock-search{flex:1;height:20px;border-radius:10px;background:var(--gris-tres-clair);}
+.mock-pill{height:20px;width:46px;border-radius:10px;background:var(--gris-tres-clair);}
+.mock-pill.active{background:var(--petrole);width:56px;}
+.mock-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.mock-card{background:var(--beige);border-radius:8px;padding:10px 9px;border-top:3px solid var(--cyan);}
+.mock-card .mock-tag{display:block;font-size:8px;font-weight:700;text-transform:uppercase;color:var(--gris-clair);margin-bottom:8px;letter-spacing:.4px;}
+.mock-line{height:6px;border-radius:3px;background:var(--gris-tres-clair);margin-bottom:6px;}
+.mock-line.w70{width:70%;}
+.mock-line.w90{width:90%;}
+.mock-line:last-child{margin-bottom:0;}
+
+.mock-wheel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:14px;padding-top:6px;}
+.mock-wheel-caption{font-size:11px;font-weight:700;color:var(--gris);text-align:center;}
+.mock-wheel-caption span{display:block;font-size:9px;font-weight:600;color:var(--gris-clair);margin-top:3px;}
+
+.mock-steps{display:flex;flex-direction:column;gap:10px;}
+.mock-step{display:flex;align-items:center;gap:10px;background:var(--beige);border-radius:8px;padding:9px 12px;}
+.mock-step .mock-num{
+  flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--petrole);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+}
+.mock-step .mock-line{flex:1;margin:0;}
+.mock-step.marker{background:#fdf6e8;}
+.mock-step.marker .mock-num{background:var(--accent-orange);}
+
+@media (max-width:900px){
+  .presentation-row, .presentation-row.reverse{flex-direction:column;gap:36px;text-align:center;}
+  .presentation-copy p{margin-left:auto;margin-right:auto;}
+}
+
+/* =========================================================
+   3. RECHERCHE + FILTRES
+   ========================================================= */
+.recherche-layout{
+  display:flex;align-items:flex-start;gap:28px;
+  margin-top:-40px;position:relative;z-index:5;
+}
+.search-zone{
+  background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);
+  flex:0 0 400px;max-width:400px;padding:28px 26px;
+  position:sticky;top:24px;
+}
+.search-bar{
+  display:flex;align-items:center;gap:10px;background:var(--beige);
+  border-radius:30px;padding:6px 6px 6px 16px;margin-bottom:18px;flex-wrap:wrap;
+}
+.search-bar svg{flex-shrink:0;color:var(--gris-clair);}
+.search-bar input{
+  flex:1;min-width:120px;border:none;background:none;font-family:var(--font-texte);font-size:15px;
+  padding:10px 4px;color:var(--gris-fonce);
+}
+.search-bar input:focus{outline:none;}
+.search-bar button{
+  background:var(--petrole);color:#fff;border:none;border-radius:24px;padding:11px 20px;
+  font-weight:600;font-size:13.5px;cursor:pointer;font-family:var(--font-titre);white-space:nowrap;
+}
+.filters-row{display:flex;flex-direction:column;flex-wrap:nowrap;gap:14px;align-items:stretch;}
+.filter-field{display:flex;flex-direction:column;gap:4px;flex:none;min-width:0;}
+.filter-field label{font-size:11px;font-weight:700;color:var(--gris-clair);text-transform:uppercase;letter-spacing:0.4px;}
+.filter-field select{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;width:100%;
+  border:1.5px solid var(--gris-tres-clair);border-radius:10px;padding:9px 30px 9px 12px;font-size:13.5px;
+  color:var(--gris-fonce);font-family:var(--font-texte);background:#fff;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%235D6160' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:11px 7px;
+  transition:border-color .15s ease,background-color .15s ease;
+}
+.filter-field select:hover{border-color:var(--gris-clair);background-color:var(--beige);}
+.filter-field select:focus{outline:none;border-color:var(--cyan);}
+.filters-actions{display:flex;align-items:center;gap:10px;justify-content:space-between;}
+.results-count{font-size:12.5px;color:var(--gris-clair);font-weight:600;white-space:nowrap;}
+.reset-filters{
+  background:none;border:none;color:var(--petrole);font-size:12.5px;font-weight:700;cursor:pointer;
+  text-decoration:underline;white-space:nowrap;
+}
+.active-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.active-chip{
+  display:inline-flex;align-items:center;gap:6px;background:var(--bleu-tres-clair);color:var(--petrole);
+  font-size:12px;font-weight:700;padding:5px 6px 5px 12px;border-radius:16px;
+}
+.active-chip button{background:none;border:none;color:var(--petrole);cursor:pointer;font-size:14px;line-height:1;padding:2px;}
+
+/* =========================================================
+   4. MOTEUR DE RECHERCHE — bloc résultats
+   ========================================================= */
+.search-results{flex:1;min-width:0;padding-top:6px;}
+.search-results h3{font-size:17px;font-weight:700;color:#20282b;margin:0 0 18px;}
+@media (max-width:900px){
+  .recherche-layout{flex-direction:column;margin-top:-24px;}
+  .search-zone{position:static;flex:1 1 auto;max-width:none;width:100%;}
+  .filters-row{flex-direction:row;flex-wrap:wrap;align-items:center;}
+  .filter-field{flex:1;min-width:150px;}
+  .filters-actions{margin-left:auto;}
+}
+
+/* =========================================================
+   6. GRILLE D'OUTILS (résultats / incontournables)
+   ========================================================= */
+.tools-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;
+}
+.tool-card{
+  background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-soft);
+  overflow:hidden;display:flex;flex-direction:column;transition:all .18s ease;position:relative;
+}
+.tool-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-3px);}
+.tool-thumb{
+  height:88px;display:flex;align-items:center;justify-content:center;position:relative;
+}
+.tool-thumb svg{width:38px;height:38px;color:#fff;}
+.fav-btn{
+  position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,0.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--gris-clair);transition:color .15s ease;
+}
+.fav-btn.active{color:var(--accent-rouge);}
+.fav-btn svg{width:17px;height:17px;}
+.tool-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;gap:10px;}
+.tool-meta{display:flex;flex-wrap:wrap;gap:6px;}
+.tool-body h3{font-size:16px;font-weight:700;line-height:1.3;}
+.tool-body p.desc{font-size:13px;color:var(--gris);margin:0;flex:1;}
+.tool-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;color:#fff;}
+.badge.nouveau{background:var(--accent-vert);}
+.tool-actions{display:flex;gap:8px;margin-top:6px;}
+.tool-actions .btn{flex:1;padding:10px 14px;font-size:12.5px;}
+.empty-state{
+  grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--gris-clair);
+  background:var(--beige);border-radius:var(--radius-md);font-size:14.5px;
+}
+
+/* =========================================================
+   6bis. SHOWCASE PREMIUM — LES INCONTOURNABLES
+   ========================================================= */
+.showcase-wrap{position:relative;}
+.showcase-track{
+  display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:6px 4px 18px;scrollbar-width:none;
+}
+.showcase-track::-webkit-scrollbar{display:none;}
+.showcase-card{
+  scroll-snap-align:start;flex:0 0 300px;background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:0 14px 34px rgba(32,40,43,0.10);display:flex;flex-direction:column;position:relative;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.showcase-card:hover{transform:translateY(-5px);box-shadow:0 20px 44px rgba(32,40,43,0.16);}
+.showcase-banner{
+  height:132px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.showcase-banner svg{width:44px;height:44px;color:rgba(255,255,255,0.94);position:relative;z-index:2;}
+.showcase-banner::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(120% 120% at 12% 12%, rgba(255,255,255,0.24), transparent 60%);
+}
+.showcase-num{
+  position:absolute;top:14px;left:16px;font-family:var(--font-titre);font-size:12px;font-weight:800;
+  color:rgba(255,255,255,0.88);letter-spacing:0.5px;z-index:2;
+}
+.showcase-ribbon{
+  position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.96);color:#20282b;
+  font-size:10px;font-weight:800;letter-spacing:0.4px;text-transform:uppercase;
+  padding:5px 12px;border-radius:20px;z-index:2;white-space:nowrap;
+  box-shadow:0 2px 8px rgba(0,0,0,0.14);
+}
+.showcase-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1;}
+.showcase-body h3{font-size:17px;font-weight:700;line-height:1.32;}
+.showcase-body p{font-size:13px;color:var(--gris);margin:0;flex:1;line-height:1.55;}
+.showcase-meta{display:flex;gap:6px;flex-wrap:wrap;}
+.showcase-actions{display:flex;align-items:center;justify-content:space-between;margin-top:4px;gap:10px;}
+.showcase-link{
+  font-family:var(--font-titre);font-size:13px;font-weight:700;color:var(--petrole);text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px;transition:gap .15s ease;white-space:nowrap;
+}
+.showcase-link:hover{gap:10px;}
+.showcase-fiche-btn{
+  background:none;border:none;color:var(--gris-clair);font-size:12px;font-weight:600;cursor:pointer;
+  font-family:inherit;white-space:nowrap;
+}
+.showcase-fiche-btn:hover{color:var(--gris);}
+.showcase-nav{
+  position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:#fff;
+  border:1.5px solid var(--gris-tres-clair);box-shadow:0 6px 16px rgba(0,0,0,0.10);cursor:pointer;
+  color:var(--gris-fonce);display:flex;align-items:center;justify-content:center;z-index:5;transition:all .15s ease;
+}
+.showcase-nav.prev{left:-16px;}
+.showcase-nav.next{right:-16px;}
+.showcase-nav:hover{border-color:var(--petrole);color:var(--petrole);box-shadow:0 8px 20px rgba(0,136,169,0.18);}
+@media (max-width:900px){
+  .showcase-nav{display:none;}
+}
+@media (max-width:700px){
+  .showcase-card{flex:0 0 250px;}
+}
+
+/* =========================================================
+   8. MODE D'EMPLOI
+   ========================================================= */
+.steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative;}
+.step-card{text-align:center;padding:0 22px;position:relative;}
+.step-card::before{
+  content:'';position:absolute;top:26px;left:-50%;width:100%;height:2px;background:var(--gris-tres-clair);z-index:0;
+}
+.step-card:first-child::before{display:none;}
+.step-num{
+  width:52px;height:52px;border-radius:50%;background:var(--petrole);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-family:var(--font-titre);
+  font-weight:700;font-size:18px;margin:0 auto 18px;position:relative;z-index:1;
+  box-shadow:0 8px 20px rgba(0,136,169,0.24);
+}
+.step-card:nth-child(2) .step-num{background:var(--accent-orange);box-shadow:0 8px 20px rgba(245,171,51,0.28);}
+.step-card:nth-child(3) .step-num{background:var(--accent-vert);box-shadow:0 8px 20px rgba(21,202,136,0.28);}
+.step-card h3{font-size:16.5px;margin-bottom:8px;font-weight:700;}
+.step-card p{font-size:13.5px;color:var(--gris);margin:0 auto;max-width:250px;}
+@media (max-width:760px){
+  .steps-row{grid-template-columns:1fr;gap:36px;}
+  .step-card::before{display:none;}
+  .step-card{padding:0;}
+}
+
+/* =========================================================
+   9. AVANTAGES
+   ========================================================= */
+.avantages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.avantage-item{display:flex;gap:12px;align-items:flex-start;padding:6px;}
+.avantage-item .check{
+  width:26px;height:26px;border-radius:50%;background:var(--accent-vert);color:#fff;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.avantage-item .check svg{width:14px;height:14px;}
+.avantage-item p{font-size:14px;margin:0;color:var(--gris-fonce);font-weight:500;}
+
+/* =========================================================
+   10. CHIFFRES CLÉS
+   ========================================================= */
+.stats-band{
+  background:linear-gradient(135deg,var(--petrole),var(--cyan));
+  border-radius:var(--radius-lg);padding:44px 30px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;text-align:center;
+}
+.stat-item .num{font-family:var(--font-titre);font-size:34px;font-weight:800;color:#fff;}
+.stat-item .lbl{font-size:13px;color:#eaf9ff;font-weight:600;margin-top:4px;}
+
+/* =========================================================
+   11. SUGGESTION
+   ========================================================= */
+.suggestion-box{
+  background:var(--beige);border-radius:var(--radius-lg);padding:48px 40px;text-align:center;
+}
+.suggestion-box h2{font-size:24px;margin-bottom:12px;}
+.suggestion-box p{font-size:14.5px;color:var(--gris);max-width:560px;margin:0 auto 26px;}
+.suggestion-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+/* =========================================================
+   12. FOOTER
+   ========================================================= */
+footer.site-footer{background:var(--gris-fonce);color:var(--gris-tres-clair);padding:56px 24px 24px;}
+.footer-inner{max-width:1180px;margin:0 auto;}
+.footer-top{display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,0.12);}
+.footer-brand{max-width:340px;}
+.footer-logo{display:inline-block;margin-bottom:16px;}
+.footer-logo img{height:34px;width:auto;display:block;}
+.footer-tagline{color:#fff;font-size:14px;font-weight:600;margin:0 0 16px;}
+.footer-address{font-style:normal;font-size:13.5px;color:var(--gris-clair);line-height:1.7;margin:0;}
+.footer-address a{color:var(--gris-clair);text-decoration:none;}
+.footer-address a:hover{color:#fff;}
+.footer-cols{display:flex;gap:50px;flex-wrap:wrap;}
+.footer-col h4{color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;}
+.footer-col a, .footer-col button{
+  display:block;color:var(--gris-clair);text-decoration:none;font-size:13.5px;margin-bottom:10px;
+  background:none;border:none;cursor:pointer;padding:0;text-align:left;font-family:inherit;
+}
+.footer-col a:hover, .footer-col button:hover{color:#fff;}
+.footer-certifs{
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:24px 0;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+}
+.footer-certifs-label{font-size:11px;text-transform:uppercase;letter-spacing:0.6px;color:var(--gris-clair);font-weight:700;}
+.footer-certifs-badges{display:flex;flex-wrap:wrap;gap:10px;}
+.certif-badge{
+  border:1px solid rgba(255,255,255,0.22);border-radius:8px;padding:5px 12px;
+  font-size:11.5px;font-weight:700;letter-spacing:0.3px;color:#fff;
+}
+.certif-logo{
+  display:inline-flex;align-items:center;background:#fff;border-radius:8px;padding:6px 10px;
+}
+.certif-logo img{height:26px;width:auto;display:block;}
+.certif-logo-flush{background:none;padding:0;border-radius:8px;overflow:hidden;}
+.certif-logo-flush img{height:32px;}
+.footer-bottom{
+  display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;
+  padding-top:22px;font-size:11.5px;color:var(--gris-clair);
+}
+.footer-legal{display:flex;gap:18px;flex-wrap:wrap;}
+.footer-legal a{color:var(--gris-clair);text-decoration:none;}
+.footer-legal a:hover{color:#fff;}
+.footer-reserve{
+  display:inline-block;margin-top:18px;font-size:12px;color:var(--bleu-clair);font-weight:600;
+}
+
+/* =========================================================
+   MODALES
+   ========================================================= */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(35,38,38,0.55);z-index:200;display:none;
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-backdrop.open{display:flex;}
+.modal-box{
+  background:#fff;border-radius:var(--radius-lg);max-width:520px;width:100%;
+  padding:30px 28px;max-height:86vh;overflow-y:auto;position:relative;
+}
+.modal-close{
+  position:absolute;top:16px;right:18px;background:none;border:none;font-size:22px;
+  cursor:pointer;color:var(--gris-clair);line-height:1;
+}
+.modal-box h2{font-size:19px;margin-bottom:6px;padding-right:24px;}
+.modal-box .modal-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.modal-box p{font-size:14px;color:var(--gris);margin:0 0 14px;}
+.modal-box textarea{
+  width:100%;min-height:110px;border:1.5px solid var(--gris-tres-clair);border-radius:10px;
+  padding:12px;font-family:var(--font-texte);font-size:13.5px;color:var(--gris-fonce);resize:vertical;
+}
+.modal-box textarea:focus{outline:none;border-color:var(--cyan);}
+.modal-box label{font-size:12.5px;font-weight:700;color:var(--gris-clair);display:block;margin-bottom:6px;}
+.modal-actions{display:flex;gap:10px;margin-top:16px;}
+
+@media (max-width:600px){
+  .section{padding:44px 18px;}
+  .search-zone{padding:20px 18px;}
+  .stats-band{padding:32px 20px;}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Aller au contenu principal</a>
+
+<!-- =========================================================
+     1. HEADER
+     ========================================================= -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand-mark" href="index.html">
+      <img src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+    </a>
+    <button class="header-burger" onclick="toggleNav()" aria-label="Ouvrir le menu" aria-expanded="false" id="burgerBtn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Accueil</a>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Outils pédagogiques
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-col">
+            <p class="col-title">Découvrir</p>
+            <a href="Sommaire.html">Tous les outils</a>
+            <a href="#" onclick="showFavoris(event)">Mes favoris</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Démarrer &amp; animer</p>
+            <a href="Sommaire.html?cat=icebreakers">Icebreakers</a>
+            <a href="Sommaire.html?cat=animation-collective">Animation collective</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Comprendre &amp; diagnostiquer</p>
+            <a href="Sommaire.html?cat=questionnaires-auto-positionnement">Questionnaires</a>
+            <a href="Sommaire.html?cat=diagnostics-cadres-methodo">Diagnostics &amp; cadres</a>
+            <a href="Sommaire.html?cat=etude-de-cas">Études de cas</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Tester &amp; débriefer</p>
+            <a href="Sommaire.html?cat=quiz-connaissances">Quiz de connaissances</a>
+            <a href="Sommaire.html?cat=jeu-serieux">Jeu pédagogique</a>
+            <a href="Sommaire.html?cat=outils-debrief">Outils de débrief</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Ressources
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown simple">
+          <div class="nav-dropdown-col">
+            <a href="Pedagogie.html">Blog Pédagogie &amp; Animations</a>
+            <a href="Videotheque.html">Vidéothèque</a>
+            <a href="Supports_PowerPoint.html">Supports PowerPoint</a>
+            <a href="Fiches_Memos.html">Fiches mémos</a>
+            <a href="Bibliotheque_IA.html">Bibliothèque d'IA</a>
+            <a href="Glossaire.html">Glossaire</a>
+          </div>
+        </div>
+      </div>
+      <a href="https://regardsperspectivesaxismundi-gwladysguerin-9131s-projects.vercel.app/" target="_blank" rel="noopener">Actualités</a>
+      <a href="A_Propos.html">À propos</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-secondary" href="Espace_Formateur.html"><span>Mon espace formateur</span></a>
+      <button class="profile-btn" aria-label="Profil">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- =========================================================
+     2. HERO PRINCIPAL
+     ========================================================= -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <h1>La <span class="accent">Boîte à outils</span> AXIS MUNDI</h1>
+      <p class="hero-sub">Des outils interactifs pour enrichir vos formations et engager vos participants.</p>
+      <p class="lead">Retrouvez une sélection de quiz, questionnaires, animations, jeux et supports pédagogiques conçus pour faciliter la préparation de vos sessions et diversifier vos pratiques d'animation.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="Sommaire.html">Explorer les outils</a>
+        <button class="btn btn-secondary" onclick="focusSearch()">Rechercher un outil</button>
+      </div>
+    </div>
+    <div class="hero-illus" aria-hidden="true">
+      <img src="Illustrations%20headers/hero-accueil-illustration.png" alt="" style="width:100%;height:100%;object-fit:contain;">
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     2bis. PRÉSENTATION — Qu'est-ce que la boîte à outils ?
+     ========================================================= -->
+<section class="presentation-section">
+  <div class="presentation-head">
+    <span class="eyebrow">La boîte à outils du formateur</span>
+    <h2>Concevoir des expériences d'apprentissage qui font réellement progresser</h2>
+    <p>Un bon outil pédagogique ne se résume pas à une animation amusante casée entre deux séquences. Chaque outil de cette bibliothèque répond à une fonction didactique précise — ouvrir un temps collectif, faire émerger une dynamique de groupe, évaluer une acquisition — et s'inscrit dans une logique de progression plutôt que dans un empilement d'activités.</p>
+  </div>
+
+  <div class="presentation-row">
+    <div class="presentation-copy">
+      <span class="tag">Découvrir</span>
+      <h3>Une bibliothèque organisée par fonction pédagogique</h3>
+      <p>Icebreakers, questionnaires d'auto-positionnement, quiz, études de cas, outils de débrief : chaque outil est classé selon ce qu'il permet de faire, pas selon sa forme. De quoi construire une séquence cohérente en quelques minutes, sans y passer la soirée.</p>
+    </div>
+    <div class="presentation-visual">
+      <div class="device-mockup" aria-hidden="true">
+        <div class="device-screen">
+          <div class="device-topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="device-body">
+            <div class="mock-toolbar">
+              <div class="mock-search"></div>
+              <div class="mock-pill active"></div>
+              <div class="mock-pill"></div>
+            </div>
+            <div class="mock-grid">
+              <div class="mock-card" style="border-top-color:var(--cyan);">
+                <span class="mock-tag">Icebreaker</span>
+                <div class="mock-line w90"></div>
+                <div class="mock-line w70"></div>
+              </div>
+              <div class="mock-card" style="border-top-color:var(--accent-orange);">
+                <span class="mock-tag">Quiz</span>
+                <div class="mock-line w90"></div>
+                <div class="mock-line w70"></div>
+              </div>
+              <div class="mock-card" style="border-top-color:var(--accent-vert);">
+                <span class="mock-tag">Diagnostic</span>
+                <div class="mock-line w90"></div>
+                <div class="mock-line w70"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="device-stand"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="presentation-row reverse">
+    <div class="presentation-copy">
+      <span class="tag">Animer</span>
+      <h3>Faire vivre la dynamique de groupe dès les premières minutes</h3>
+      <p>Une roue de questions, un nuage de mots collaboratif, un photolangage : des formats qui mettent le groupe en mouvement rapidement, et donnent au formateur des repères concrets sur l'état d'esprit de la salle avant même d'entrer dans le contenu.</p>
+    </div>
+    <div class="presentation-visual">
+      <div class="device-mockup" aria-hidden="true">
+        <div class="device-screen">
+          <div class="device-topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="device-body">
+            <div class="mock-wheel-wrap">
+              <svg viewBox="0 0 100 100" width="150" height="150">
+                <path d="M50,50 L50,5 A45,45 0 0,1 88.97,27.5 Z" fill="var(--cyan)"/>
+                <path d="M50,50 L88.97,27.5 A45,45 0 0,1 88.97,72.5 Z" fill="var(--accent-orange)"/>
+                <path d="M50,50 L88.97,72.5 A45,45 0 0,1 50,95 Z" fill="var(--accent-vert)"/>
+                <path d="M50,50 L50,95 A45,45 0 0,1 11.03,72.5 Z" fill="var(--accent-rouge)"/>
+                <path d="M50,50 L11.03,72.5 A45,45 0 0,1 11.03,27.5 Z" fill="var(--accent-violet)"/>
+                <path d="M50,50 L11.03,27.5 A45,45 0 0,1 50,5 Z" fill="var(--petrole)"/>
+                <circle cx="50" cy="50" r="9" fill="#fff" stroke="var(--gris-tres-clair)" stroke-width="1.5"/>
+                <path d="M46,2 L54,2 L50,-6 Z" fill="var(--gris-fonce)" transform="translate(0,8)"/>
+              </svg>
+              <p class="mock-wheel-caption">« Quel a été ton premier métier ? »<span>Roue Icebreaker — question 3/6</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="device-stand"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="presentation-row">
+    <div class="presentation-copy">
+      <span class="tag">Structurer</span>
+      <h3>Un Studio pour préparer, animer et projeter toute la séquence</h3>
+      <p>Depuis l'espace formateur, composez une succession de pages — diapositives, tableau blanc, outils AXIS MUNDI, synthèses, débriefings — puis basculez en Mode Formation pour animer sans jamais quitter votre fil conducteur, avec chronomètre, dé, roue et écran de projection séparé intégrés.</p>
+    </div>
+    <div class="presentation-visual">
+      <div class="device-mockup" aria-hidden="true">
+        <div class="device-screen">
+          <div class="device-topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="device-body">
+            <div class="mock-steps">
+              <div class="mock-step">
+                <span class="mock-num">1</span>
+                <div class="mock-line w70"></div>
+              </div>
+              <div class="mock-step marker">
+                <span class="mock-num">•</span>
+                <div class="mock-line w90"></div>
+              </div>
+              <div class="mock-step">
+                <span class="mock-num">2</span>
+                <div class="mock-line w70"></div>
+              </div>
+              <div class="mock-step">
+                <span class="mock-num">3</span>
+                <div class="mock-line w70"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="device-stand"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     2ter. MODE D'EMPLOI
+     ========================================================= -->
+<section class="section" id="mode-emploi">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Mode d'emploi</span>
+      <h2>Comment utiliser la Boîte à outils ?</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Choisissez un outil</h3>
+        <p>Recherchez par thématique, durée, objectif pédagogique ou type d'animation.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Préparez votre animation</h3>
+        <p>Consultez les consignes, les objectifs, le déroulé et les conseils de débrief.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Animez et adaptez</h3>
+        <p>Utilisez l'outil en présentiel ou à distance et adaptez-le à votre contexte.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     3. MOTEUR DE RECHERCHE (recherche + filtres + résultats)
+     ========================================================= -->
+<section class="section" id="recherche">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Moteur de recherche</span>
+      <h2>Trouvez l'outil qu'il vous faut</h2>
+      <p>Filtrez par objectif pédagogique, type d'outil ou thématique — ou passez directement par le mot-clé.</p>
+    </div>
+
+    <div class="recherche-layout">
+      <div class="search-zone" id="searchZone">
+        <div class="search-bar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input type="text" id="searchInput" placeholder="Rechercher un outil, une thématique ou un objectif pédagogique…" oninput="setFilter('query', this.value)">
+          <button onclick="focusSearch()">Rechercher</button>
+        </div>
+        <div class="filters-row">
+          <div class="filter-field">
+            <label for="fObjectif">Objectif</label>
+            <select id="fObjectif" onchange="setFilter('objectif', this.value)">
+              <option value="">Tous</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="fType">Type d'outil</label>
+            <select id="fType" onchange="setFilter('type', this.value)">
+              <option value="">Tous</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="fTheme">Thématique</label>
+            <select id="fTheme" onchange="setFilter('theme', this.value)">
+              <option value="">Toutes</option>
+            </select>
+          </div>
+          <div class="filters-actions">
+            <span class="results-count" id="resultsCount"></span>
+            <button class="reset-filters" onclick="resetFilters()">Réinitialiser</button>
+          </div>
+        </div>
+        <div class="active-chips" id="activeChips"></div>
+      </div>
+
+      <div class="search-results">
+        <h3 id="resultsTitle">Tous les outils</h3>
+        <div class="tools-grid" id="resultsGrid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     6bis. LES INCONTOURNABLES
+     ========================================================= -->
+<section class="section" id="incontournables" style="background:var(--beige);">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Sélection</span>
+      <h2>Les incontournables</h2>
+      <p>Quelques outils particulièrement utilisés en ouverture, en clôture ou en fil rouge d'atelier.</p>
+    </div>
+    <div class="showcase-wrap">
+      <div class="showcase-track" id="incontournablesGrid"></div>
+      <button class="showcase-nav prev" onclick="scrollShowcase(-1)" aria-label="Précédent">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="showcase-nav next" onclick="scrollShowcase(1)" aria-label="Suivant">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     10. AVANTAGES
+     ========================================================= -->
+<section class="section" id="avantages" style="background:var(--beige);">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Pourquoi cette boîte à outils</span>
+      <h2>Des ressources pensées pour les formateurs</h2>
+    </div>
+    <div class="avantages-grid" id="avantagesGrid"></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     11. CHIFFRES CLÉS
+     ========================================================= -->
+<section class="section" id="chiffres">
+  <div class="section-inner">
+    <div class="stats-band" id="statsBand"></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     12. ZONE DE SUGGESTION
+     ========================================================= -->
+<section class="section" id="suggestion">
+  <div class="section-inner">
+    <div class="suggestion-box">
+      <h2>Un besoin pédagogique ?</h2>
+      <p>Vous ne trouvez pas l'outil adapté à votre animation ? Partagez votre besoin ou proposez une nouvelle idée de ressource.</p>
+      <div class="suggestion-actions">
+        <button class="btn btn-primary" onclick="openSuggestion('idee')">Proposer une idée</button>
+        <button class="btn btn-secondary" onclick="openSuggestion('besoin')">Signaler un besoin</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =========================================================
+     13. FOOTER
+     ========================================================= -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="footer-logo" href="index.html">
+          <img src="brand_assets/logo_axismundi_blanc.svg" alt="AXIS MUNDI">
+        </a>
+        <p class="footer-tagline">Développer le potentiel humain</p>
+        <address class="footer-address">
+          60 Rue Saint-Lazare<br>
+          75009 Paris, France<br>
+          <a href="tel:+33155331213">+33 1 55 33 12 13</a><br>
+          <a href="mailto:contact@axismundi.fr">contact@axismundi.fr</a>
+        </address>
+        <div class="footer-reserve">Plateforme réservée aux formateurs et intervenants AXIS MUNDI.</div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Boîte à outils</h4>
+          <a href="Sommaire.html">Tous les outils</a>
+          <a href="Pedagogie.html">Blog Pédagogie &amp; Animations</a>
+          <button onclick="showFavoris(event)">Favoris</button>
+          <a href="#suggestion">Aide</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contribuer</h4>
+          <button onclick="openSuggestion('besoin')">Signaler un problème</button>
+          <button onclick="openSuggestion('idee')">Proposer un outil</button>
+        </div>
+        <div class="footer-col">
+          <h4>Nous suivre</h4>
+          <a href="https://www.linkedin.com/company/axis-mundi/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.youtube.com/@AXISMUNDI-cabinet-conseil" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://www.axismundi.fr" target="_blank" rel="noopener">Site institutionnel</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-certifs">
+      <span class="footer-certifs-label">Certifications &amp; agréments</span>
+      <div class="footer-certifs-badges">
+        <span class="certif-logo"><img src="brand_assets/certif_qualiopi.jpg" alt="Certification Qualiopi — processus certifié, catégorie actions de formation"></span>
+        <span class="certif-badge">IPRP</span>
+        <span class="certif-logo certif-logo-flush"><img src="brand_assets/certif_firps.jpg" alt="FIRPS — Fédération Inter-entreprises pour la Régulation Psychosociale"></span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>Copyright© <span id="year"></span> AXIS MUNDI — Tous droits réservés.</span>
+      <div class="footer-legal">
+        <a href="https://www.axismundi.fr/mentions-legales" target="_blank" rel="noopener">Mentions légales</a>
+        <a href="https://www.axismundi.fr/politique-de-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a>
+        <a href="https://www.axismundi.fr/donnees-personnelles" target="_blank" rel="noopener">Vos données personnelles</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- =========================================================
+     MODALE : FICHE OUTIL
+     ========================================================= -->
+<div class="modal-backdrop" id="ficheModal" onclick="if(event.target===this) closeFiche()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeFiche()" aria-label="Fermer">&times;</button>
+    <div id="ficheContent"></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     MODALE : SUGGESTION
+     ========================================================= -->
+<div class="modal-backdrop" id="suggestionModal" onclick="if(event.target===this) closeSuggestion()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeSuggestion()" aria-label="Fermer">&times;</button>
+    <h2 id="suggestionTitle">Proposer une idée</h2>
+    <p>Décrivez votre besoin ou votre idée : votre message s'ouvrira dans votre messagerie, prêt à être envoyé à l'équipe AXIS MUNDI.</p>
+    <label for="suggestionText">Votre message</label>
+    <textarea id="suggestionText" placeholder="Ex : un outil de débrief pour clôturer un atelier sur la charge mentale…"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="submitSuggestion()">Envoyer par e-mail</button>
+      <button class="btn btn-ghost" onclick="closeSuggestion()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   DONNÉES — OUTILS
+   Pour ajouter un outil : ajouter un objet à TOOLS.
+   Pour ajouter une catégorie / un objectif : compléter
+   CATEGORY_DEFS / OBJECTIF_DEFS plus bas.
+   ========================================================= */
+const TOOLS = [
+  {
+    id:"assertivite", titre:"Questionnaire d'assertivité", fichier:"Questionnaire_Assertivite_Gordon.html",
+    description:"Auto-positionnement individuel sur 60 items, inspiré des travaux de Thomas Gordon. Restitue un score sur 4 attitudes : fuite, attaque, manipulation, assertivité.",
+    type:"Questionnaire", themes:["Communication","Développement personnel"],
+    dureeBucket:"10-30", dureeLabel:"10-15 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Questionnaires","Communication et leadership"],
+    objectifs:["Diagnostiquer une situation","Développer la prise de recul"],
+    date:"2026-07-17"
+  },
+  {
+    id:"autonomie", titre:"Cartographier l'autonomie de mes collaborateurs", fichier:"Outil_Positionnement_Autonomie.html",
+    description:"Positionnement d'une équipe sur le cycle de l'autonomie (dépendant, contre-dépendant, indépendant, interdépendant), avec repères comportementaux et posture managériale associée.",
+    type:"Diagnostic", themes:["Management","Leadership"],
+    dureeBucket:"10-30", dureeLabel:"15-20 minutes", modalite:["Présentiel","Distanciel"], taille:"Petit groupe",
+    categories:["Outils managers"],
+    objectifs:["Diagnostiquer une situation","Développer la prise de recul"],
+    date:"2026-07-21"
+  },
+  {
+    id:"maturite", titre:"Questionnaire Maturité d'Équipe", fichier:"Questionnaire_Maturite_Equipe.html",
+    description:"Diagnostic collectif sur 24 items observables, restituant la phase de développement dominante d'une équipe parmi 6 : prise de contact, exploration, adaptation, rencontre, efficacité, créativité.",
+    type:"Diagnostic", themes:["Management","Intelligence collective","Coopération"],
+    dureeBucket:"10-30", dureeLabel:"10-15 minutes", modalite:["Présentiel","Distanciel"], taille:"Petit groupe",
+    categories:["Outils managers","Outils de débrief"],
+    objectifs:["Diagnostiquer une situation","Favoriser la coopération"],
+    date:"2026-07-21"
+  },
+  {
+    id:"diagramme", titre:"Diagramme relationnel d'équipe", fichier:"Diagramme_Relationnel_Equipe.html",
+    description:"Cartographie interactive des relations perçues au sein d'une équipe : diagramme cliquable, liens qualifiables et légende personnalisable, avec analyse automatique et limites de la démarche.",
+    type:"Outil de débrief", themes:["Management","Communication","Intelligence collective"],
+    dureeBucket:"10-30", dureeLabel:"10-15 minutes", modalite:["Présentiel","Distanciel"], taille:"Petit groupe",
+    categories:["Outils de débrief","Outils managers"],
+    objectifs:["Diagnostiquer une situation","Favoriser la coopération","Développer la prise de recul"],
+    date:"2026-07-21"
+  },
+  {
+    id:"testrs", titre:"Test RS — Réactivité au Stress", fichier:"Test_RS_Reactivite_Stress.html",
+    description:"Auto-positionnement sur 39 manifestations du stress (physiques, psychologiques, comportementales), avec score global, niveau de réactivité et registre prédominant.",
+    type:"Autodiagnostic", themes:["Stress","Santé mentale","RPS"],
+    dureeBucket:"10-30", dureeLabel:"15-20 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Autodiagnostics","RPS et QVCT","Santé mentale"],
+    objectifs:["Diagnostiquer une situation","Sensibiliser"],
+    date:"2026-07-21"
+  },
+  {
+    id:"photolangage", titre:"Photolangage", fichier:"Photolangage.html",
+    description:"Banque de 67 images pour animation par le détour projectif : chaque participant choisit l'image qui répond à la consigne donnée à l'oral, avant de la présenter au groupe.",
+    type:"Animation", themes:["Communication","Développement personnel","Intelligence collective"],
+    dureeBucket:"moins10", dureeLabel:"5-10 min par tour", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Icebreakers"],
+    objectifs:["Briser la glace","Faire réfléchir","Sensibiliser"],
+    date:"2026-07-21"
+  },
+  {
+    id:"arbrepersonnages", titre:"L'Arbre à personnages", fichier:"Arbre_A_Personnages.html",
+    description:"Support projectif à dix-huit personnages pour se positionner dans un collectif : chacun choisit la silhouette qui lui parle aujourd'hui — en hauteur, isolée, portée, suspendue — et dit ce qu'elle évoque de sa situation, sans grille de lecture imposée.",
+    type:"Animation", themes:["Intelligence collective","Conduite du changement","RPS","QVCT"],
+    dureeBucket:"10-30", dureeLabel:"20-40 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils de débrief"],
+    objectifs:["Faire réfléchir","Favoriser la coopération","Diagnostiquer une situation"],
+    date:"2026-08-05"
+  },
+  {
+    id:"quizstress", titre:"Le stress — Vrai ou Faux", fichier:"Quiz_VraiFaux_Stress.html",
+    description:"Quiz de connaissances en 10 affirmations sur le stress, avec corrigé argumenté — dont deux affirmations volontairement nuancées où vrai et faux sont recevables selon le contexte.",
+    type:"Quiz", themes:["Stress","Santé mentale"],
+    dureeBucket:"moins10", dureeLabel:"4 minutes chrono", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Quiz et vrais/faux","RPS et QVCT"],
+    objectifs:["Transmettre des connaissances","Évaluer les acquis","Sensibiliser"],
+    date:"2026-07-21"
+  },
+  {
+    id:"quizcerveau", titre:"Le cerveau — Vrai ou Faux", fichier:"Quiz_VraiFaux_Cerveau.html",
+    description:"Quiz de connaissances en 8 affirmations sur le fonctionnement du cerveau et les neuromythes les plus répandus, avec corrigé argumenté pour chaque item.",
+    type:"Quiz", themes:["Neurosciences"],
+    dureeBucket:"moins10", dureeLabel:"3 minutes chrono", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Quiz et vrais/faux","Neurosciences"],
+    objectifs:["Transmettre des connaissances","Évaluer les acquis","Sensibiliser"],
+    date:"2026-07-21"
+  },
+  {
+    id:"cerveauzones", titre:"Un cerveau puissant — zones et fonctions", fichier:"Exercice_Cerveau_Zones.html",
+    description:"Exercice interactif : associer chaque nom de zone cérébrale à sa localisation sur un schéma, puis explorer les fonctions associées à chaque zone après correction.",
+    type:"Jeu", themes:["Neurosciences"],
+    dureeBucket:"moins10", dureeLabel:"8-10 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Neurosciences","Animations pédagogiques"],
+    objectifs:["Transmettre des connaissances","Faire réfléchir"],
+    date:"2026-07-21"
+  },
+  {
+    id:"meteo", titre:"Ma météo du jour", fichier:"Meteo_Du_Jour.html",
+    description:"Activité d'ouverture et de clôture : chaque participant choisit l'image météo qui symbolise le mieux son état du moment, puis précise pourquoi.",
+    type:"Icebreaker", themes:["Développement personnel","Intelligence collective"],
+    dureeBucket:"moins10", dureeLabel:"5 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Icebreakers","Animations pédagogiques"],
+    objectifs:["Briser la glace","Sensibiliser"],
+    date:"2026-07-21"
+  },
+  {
+    id:"nasa", titre:"Perdus sur la Lune — L'exercice NASA", fichier:"Exercice_NASA.html",
+    description:"Grand classique de la dynamique de groupe : classer par glisser-déposer 15 objets rescapés d'un crash lunaire selon leur importance pour la survie, puis comparer son classement à la grille de référence. Version individuelle pour l'instant.",
+    type:"Jeu", themes:["Intelligence collective","Coopération"],
+    dureeBucket:"10-30", dureeLabel:"15-20 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Jeu pédagogique","Animations pédagogiques"],
+    objectifs:["Faire réfléchir","Faire débattre","Favoriser la coopération"],
+    date:"2026-07-22"
+  },
+  {
+    id:"videotheque", titre:"Vidéothèque", fichier:"Videotheque.html",
+    description:"Une sélection de vidéos courtes à diffuser en formation — animations pédagogiques et ressources de sensibilisation, sur des thématiques telles que le stress ou le harcèlement au travail.",
+    type:"Ressource vidéo", themes:["Stress","RPS","Santé mentale","Harcèlement","Prévention"],
+    dureeBucket:"moins10", dureeLabel:"format court", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Ressources vidéo"],
+    objectifs:["Sensibiliser","Transmettre des connaissances"],
+    date:"2026-07-22"
+  },
+  {
+    id:"cartementale", titre:"Carte mentale", fichier:"Carte_Mentale.html",
+    description:"Outil de structuration visuelle : placez une notion clé au centre puis développez-la en branches éditables pour organiser des idées, préparer un débrief ou structurer une réflexion collective.",
+    type:"Support interactif", themes:["Développement personnel","Intelligence collective","Management"],
+    dureeBucket:"10-30", dureeLabel:"Durée libre", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Supports interactifs"],
+    objectifs:["Faire réfléchir","Développer la prise de recul"],
+    date:"2026-07-22"
+  },
+  {
+    id:"supportsppt", titre:"Supports PowerPoint", fichier:"Supports_PowerPoint.html",
+    description:"Bibliothèque de supports PowerPoint téléchargeables et réutilisables pour vos sessions de formation.",
+    type:"Ressource téléchargeable", themes:[],
+    dureeBucket:"moins10", dureeLabel:"consultation libre", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Supports téléchargeables"],
+    objectifs:["Transmettre des connaissances"],
+    date:"2026-07-22"
+  },
+  {
+    id:"portraitchinois", titre:"Portrait chinois", fichier:"Portrait_Chinois.html",
+    description:"Activité brise-glace en six questions par analogie (qualité professionnelle, animal, outil, météo, devise, contribution au groupe), pour faciliter la prise de parole et découvrir son portrait complet.",
+    type:"Icebreaker", themes:["Développement personnel","Intelligence collective"],
+    dureeBucket:"moins10", dureeLabel:"10 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Icebreakers","Animations pédagogiques"],
+    objectifs:["Briser la glace","Faire réfléchir"],
+    date:"2026-07-22"
+  },
+  {
+    id:"nuagedemots", titre:"Nuage de mots", fichier:"Nuage_De_Mots.html",
+    description:"Saisie libre de mots-clés en réponse à une consigne donnée à l'oral : plus un mot revient, plus il apparaît grand dans le nuage généré, exportable en image. Version individuelle pour l'instant.",
+    type:"Animation", themes:["Intelligence collective","Développement personnel"],
+    dureeBucket:"moins10", dureeLabel:"5-10 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Icebreakers"],
+    objectifs:["Faire réfléchir","Favoriser la coopération","Sensibiliser"],
+    date:"2026-07-22"
+  },
+  {
+    id:"etudecasreunion", titre:"Étude de cas — Un dérapage en réunion d'équipe", fichier:"Etude_De_Cas_Reunion_Equipe.html",
+    description:"Un même incident managérial raconté par quatre points de vue (encadrant, collaborateurs, pair manager, médecin du travail), à découvrir progressivement. Analyse guidée : faits vs jugements, émotions, signaux d'alerte, contradictions entre les témoignages.",
+    type:"Étude de cas", themes:["Management","RPS","Communication"],
+    dureeBucket:"10-30", dureeLabel:"15-20 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Études de cas","RPS et QVCT","Outils managers"],
+    objectifs:["Faire réfléchir","Diagnostiquer une situation"],
+    date:"2026-07-22"
+  },
+  {
+    id:"matriceswot", titre:"Matrice SWOT", fichier:"Matrice_SWOT.html",
+    description:"Diagnostic croisant facteurs internes et externes sur quatre cadrans (forces, faiblesses, opportunités, menaces), avec ajout libre de mots-clés par cadran et synthèse finale.",
+    type:"Diagnostic", themes:["Management","Conduite du changement"],
+    dureeBucket:"10-30", dureeLabel:"20-30 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Outils managers","Outils de débrief"],
+    objectifs:["Diagnostiquer une situation","Faire réfléchir"],
+    date:"2026-07-22"
+  },
+  {
+    id:"leblason", titre:"Le Blason", fichier:"Le_Blason.html",
+    description:"Support métaphorique pour construire l'identité collective d'une équipe en quatre étapes (petits groupes puis grand groupe) : valeur ajoutée, talents, réussites, futurs défis, devise et symbole partagés.",
+    type:"Animation", themes:["Management","Intelligence collective","Coopération"],
+    dureeBucket:"30-60", dureeLabel:"45-60 minutes", modalite:["Présentiel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils managers"],
+    objectifs:["Favoriser la coopération","Faire réfléchir"],
+    date:"2026-07-22"
+  },
+  {
+    id:"brainstorming", titre:"Brainstorming", fichier:"Brainstorming.html",
+    description:"Espace de brainstorming collaboratif : le formateur crée et nomme les colonnes nécessaires, les participants déposent des post-it de couleur et les déplacent librement d'une colonne à l'autre. Version atelier local.",
+    type:"Animation", themes:["Coopération","Intelligence collective","Management"],
+    dureeBucket:"10-30", dureeLabel:"20-40 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils managers"],
+    objectifs:["Favoriser la coopération","Faire réfléchir"],
+    date:"2026-07-22"
+  },
+  {
+    id:"chapeauxbono", titre:"Les 6 chapeaux de Bono", fichier:"Chapeaux_De_Bono.html",
+    description:"Méthode de pensée parallèle : affichez à l'écran le chapeau de couleur en cours (faits, émotions, risques, bénéfices, idées, pilotage) avec la consigne associée, modifiable par couleur. Déroulé conseillé et mode plein écran pour la projection.",
+    type:"Animation", themes:["Intelligence collective","Management","Conduite du changement"],
+    dureeBucket:"30-60", dureeLabel:"Durée variable selon les phases", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils managers"],
+    objectifs:["Faire réfléchir","Favoriser la coopération","Passer à l'action"],
+    date:"2026-08-05"
+  },
+  {
+    id:"jeudeloie", titre:"Jeu de l'oie", fichier:"Jeu_De_L_Oie.html",
+    description:"Plateau illustré de 40 cases avec les règles classiques du jeu de l'oie (Oie, Pont, Puits, Labyrinthe, Prison, Mort), dé et pions en nombre libre. Cliquez sur une case pour y ajouter votre propre contenu — question, défi, consigne — et adapter le plateau à votre sujet de formation.",
+    type:"Animation", themes:["Intelligence collective","Coopération","Communication"],
+    dureeBucket:"10-30", dureeLabel:"20-40 minutes selon le groupe", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Jeu pédagogique","Animations pédagogiques"],
+    objectifs:["Favoriser la coopération","Transmettre des connaissances"],
+    date:"2026-08-05"
+  },
+  {
+    id:"tirageausort", titre:"Tirage au sort", fichier:"Tirage_Au_Sort.html",
+    description:"Sélection aléatoire pour vos animations : tirez un nom, un sujet ou une carte au hasard dans une liste (avec ou sans remise), ou répartissez un groupe de participants en sous-équipes équilibrées en un clic.",
+    type:"Animation", themes:["Management","Intelligence collective","Communication"],
+    dureeBucket:"moins10", dureeLabel:"2-5 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils managers"],
+    objectifs:["Favoriser la coopération","Briser la glace"],
+    date:"2026-07-22"
+  },
+  {
+    id:"ishikawa", titre:"Diagramme d'Ishikawa", fichier:"Ishikawa.html",
+    description:"Analyse causes-effet en 5M/6M (main-d'œuvre, méthode, matériel, matière, milieu, management) : formulez l'effet observé, classez les causes possibles par catégorie, avec un diagramme fishbone qui se met à jour en direct. Catégories renommables, ajoutables et supprimables.",
+    type:"Diagnostic", themes:["Management","RPS","QVCT"],
+    dureeBucket:"10-30", dureeLabel:"20-40 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Outils managers","Outils de débrief"],
+    objectifs:["Diagnostiquer une situation","Faire réfléchir"],
+    date:"2026-07-22"
+  },
+  {
+    id:"les4c", titre:"Les 4C — Continuer, Cesser, Commencer, Changer", fichier:"Les_4C.html",
+    description:"Exercice de clôture en fin de session : quatre questions pour transformer les apprentissages en décisions concrètes — ce que je continue, ce que je cesse, ce que je commence, ce que je change.",
+    type:"Outil de débrief", themes:["Développement personnel","Conduite du changement"],
+    dureeBucket:"moins10", dureeLabel:"5-10 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Outils de débrief"],
+    objectifs:["Faire réfléchir","Passer à l'action"],
+    date:"2026-07-22"
+  },
+  {
+    id:"kalms", titre:"KALMS — Keep, Add, Less, More, Stop", fichier:"KALMS.html",
+    description:"Grille de bilan collectif en cinq mouvements — fin de projet, période de transformation, revue de fonctionnement d'équipe. Réflexion individuelle puis tableau de post-it partagé, priorisation par étoile et plan d'action, avec un déroulé d'animation détaillé.",
+    type:"Outil de débrief", themes:["Conduite du changement","Management","Coopération"],
+    dureeBucket:"30-60", dureeLabel:"45-60 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Outils de débrief","Outils managers"],
+    objectifs:["Faire réfléchir","Passer à l'action","Favoriser la coopération"],
+    date:"2026-08-04"
+  },
+  {
+    id:"roti", titre:"ROTI — Return On Time Invested", fichier:"ROTI.html",
+    description:"Évaluation de clôture : chaque participant note de 1 à 5 la valeur du temps investi pendant la session, puis explique sa note. Un retour direct et actionnable pour le formateur.",
+    type:"Outil de débrief", themes:["Développement personnel"],
+    dureeBucket:"moins10", dureeLabel:"2-5 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Outils de débrief"],
+    objectifs:["Développer la prise de recul"],
+    date:"2026-07-22"
+  },
+  {
+    id:"evaluation", titre:"Évaluation", fichier:"Evaluation.html",
+    description:"Questionnaire de satisfaction en fin de session : cinq critères notés de 1 à 5 étoiles (contenu, animation, utilité, attentes, recommandation) et un champ de commentaire libre.",
+    type:"Outil de débrief", themes:["Développement personnel"],
+    dureeBucket:"moins10", dureeLabel:"2-5 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Outils de débrief"],
+    objectifs:["Évaluer les acquis","Développer la prise de recul"],
+    date:"2026-07-22"
+  },
+  {
+    id:"roueicebreaker", titre:"Roue des questions", fichier:"Roue_Icebreaker.html",
+    description:"Icebreaker : une roue à 6 secteurs colorés, chacun associé à une question personnalisable par le formateur. Le participant la fait tourner et répond à voix haute à la question désignée, pour se présenter autrement qu'à travers son poste.",
+    type:"Icebreaker", themes:["Développement personnel","Intelligence collective"],
+    dureeBucket:"moins10", dureeLabel:"5-10 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Icebreakers","Animations pédagogiques"],
+    objectifs:["Briser la glace","Faire réfléchir"],
+    date:"2026-07-23"
+  },
+  {
+    id:"timelinecollaborative", titre:"Timeline collaborative", fichier:"Timeline_Collaborative.html",
+    description:"Frise chronologique de l'équipe : chaque participant ajoute un événement marquant (date, texte court, image facultative), la frise se construit et se trie automatiquement dans l'ordre chronologique.",
+    type:"Animation", themes:["Intelligence collective","Management"],
+    dureeBucket:"10-30", dureeLabel:"20-40 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils managers"],
+    objectifs:["Favoriser la coopération","Faire réfléchir"],
+    date:"2026-07-23"
+  },
+  {
+    id:"classementvaleurs", titre:"Classement collectif des valeurs", fichier:"Classement_Valeurs.html",
+    description:"Chaque participant sélectionne et classe ses 10 valeurs les plus importantes parmi une liste de 65. Les classements se cumulent en direct (score pondéré par rang) pour faire émerger les valeurs partagées par le collectif.",
+    type:"Animation", themes:["Intelligence collective","Management","Développement personnel"],
+    dureeBucket:"30-60", dureeLabel:"30-45 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils managers"],
+    objectifs:["Faire réfléchir","Favoriser la coopération"],
+    date:"2026-07-23"
+  },
+  {
+    id:"motscroises", titre:"Générateur de mots croisés", fichier:"Mots_Croises.html",
+    description:"Le formateur saisit des mots-clés et leur définition, l'outil construit automatiquement une grille de mots croisés par intersection des lettres — pour ancrer un vocabulaire ou un lexique métier en fin de session.",
+    type:"Quiz", themes:["Développement personnel","Communication"],
+    dureeBucket:"10-30", dureeLabel:"10-15 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Quiz et vrais/faux","Animations pédagogiques"],
+    objectifs:["Évaluer les acquis","Transmettre des connaissances"],
+    date:"2026-07-24"
+  },
+  {
+    id:"fichesmemos", titre:"Fiches mémos", fichier:"Fiches_Memos.html",
+    description:"Bibliothèque de fiches synthétiques à sélectionner pour vos sessions : prévention des RPS, posture managériale, cadre légal, gestion du stress. Sélection multiple et téléchargement groupé.",
+    type:"Ressource téléchargeable", themes:["RPS","QVCT","Management","Stress"],
+    dureeBucket:"moins10", dureeLabel:"consultation libre", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Supports téléchargeables"],
+    objectifs:["Transmettre des connaissances","Sensibiliser"],
+    date:"2026-07-24"
+  },
+  {
+    id:"bibliothequeia", titre:"Bibliothèque d'IA", fichier:"Bibliotheque_IA.html",
+    description:"Sélection commentée d'IA utiles à la conception pédagogique — rédaction, recherche documentaire, visuels, quiz, vidéo — classées par catégorie d'usage, avec cas d'usage concret et tarifs indicatifs.",
+    type:"Ressource téléchargeable", themes:[],
+    dureeBucket:"moins10", dureeLabel:"consultation libre", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Supports téléchargeables"],
+    objectifs:["Transmettre des connaissances"],
+    date:"2026-07-24"
+  },
+  {
+    id:"glossaire", titre:"Glossaire", fichier:"Glossaire.html",
+    description:"70 mots-clés de la formation, de la pédagogie, de l'accompagnement des adultes et des neurosciences appliquées à l'apprentissage, classés par ordre alphabétique avec une définition courte.",
+    type:"Ressource téléchargeable", themes:["Neurosciences","Développement personnel"],
+    dureeBucket:"moins10", dureeLabel:"consultation libre", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Supports téléchargeables"],
+    objectifs:["Transmettre des connaissances"],
+    date:"2026-07-25"
+  },
+  {
+    id:"securitepsy", titre:"Échelle de sécurité psychologique", fichier:"Echelle_Securite_Psychologique.html",
+    description:"Auto-positionnement sur l'échelle de sécurité psychologique d'Amy Edmondson (1999) : 7 items sur le droit à l'erreur, la prise de risque et l'entraide au sein d'une équipe. Score global, jauge visuelle et points de vigilance par item.",
+    type:"Questionnaire", themes:["RPS","QVCT","Management"],
+    dureeBucket:"moins10", dureeLabel:"5-8 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Questionnaires","Outils managers"],
+    objectifs:["Diagnostiquer une situation","Développer la prise de recul"],
+    date:"2026-07-25"
+  },
+  {
+    id:"valeursschwartz", titre:"Questionnaire des valeurs de Schwartz", fichier:"Questionnaire_Valeurs_Schwartz.html",
+    description:"Auto-positionnement sur les 10 valeurs de base de la théorie de Shalom Schwartz, restitué sous forme de cartographie circulaire. Fait apparaître les valeurs dominantes et les tensions possibles entre valeurs opposées.",
+    type:"Questionnaire", themes:["Développement personnel","Management"],
+    dureeBucket:"moins10", dureeLabel:"8-10 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Questionnaires"],
+    objectifs:["Faire réfléchir","Développer la prise de recul"],
+    date:"2026-07-25"
+  },
+  {
+    id:"murirritants", titre:"Mur des irritants", fichier:"Mur_Irritants.html",
+    description:"Collecte collective de ce qui pèse au quotidien (organisation, communication, outils, relationnel), sur le même système de post-it que le Brainstorming. Quatre catégories pré-remplies, modifiables librement.",
+    type:"Animation", themes:["RPS","QVCT","Coopération"],
+    dureeBucket:"10-30", dureeLabel:"20-40 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques","Outils managers"],
+    objectifs:["Diagnostiquer une situation","Favoriser la coopération"],
+    date:"2026-07-25"
+  },
+  {
+    id:"matriceeffortimpact", titre:"Matrice effort-impact", fichier:"Matrice_Effort_Impact.html",
+    description:"Priorisation d'actions selon leur effort de mise en œuvre et leur impact attendu, répartition automatique en quatre cadrans (gains rapides, projets structurants, amélioration continue, à questionner).",
+    type:"Diagnostic", themes:["Management","Conduite du changement"],
+    dureeBucket:"10-30", dureeLabel:"15-25 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Outils managers","Outils de débrief"],
+    objectifs:["Diagnostiquer une situation","Faire réfléchir"],
+    date:"2026-07-25"
+  },
+  {
+    id:"rouedevie", titre:"Roue de la vie", fichier:"Roue_de_Vie.html",
+    description:"Auto-positionnement sur 8 domaines (personnalisables) restitué en graphique toile d'araignée, pour visualiser d'un coup d'œil les déséquilibres et identifier les priorités d'intervention.",
+    type:"Autodiagnostic", themes:["Développement personnel","QVCT"],
+    dureeBucket:"moins10", dureeLabel:"10 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Questionnaires"],
+    objectifs:["Diagnostiquer une situation","Développer la prise de recul"],
+    date:"2026-07-25"
+  },
+  {
+    id:"scenarioroseNoir", titre:"Scénario rose, scénario noir", fichier:"Scenario_Rose_Noir.html",
+    description:"Exercice de projection individuelle : explorer le meilleur et le pire scénario face à une situation ou une décision, pour distinguer craintes, aspirations, et en tirer un plan d'action réaliste.",
+    type:"Autodiagnostic", themes:["Développement personnel","Conduite du changement"],
+    dureeBucket:"10-30", dureeLabel:"20-30 minutes", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Outils managers","Outils de débrief"],
+    objectifs:["Diagnostiquer une situation","Faire réfléchir"],
+    date:"2026-07-25"
+  },
+  {
+    id:"outilsondage", titre:"Outil de sondage", fichier:"Outil_Sondage.html",
+    description:"Le formateur rédige une question et ses réponses possibles, les participants votent à tour de rôle, le résultat se construit en direct sous forme de camembert ou d'histogramme.",
+    type:"Animation", themes:["Intelligence collective","Communication"],
+    dureeBucket:"moins10", dureeLabel:"5-15 minutes", modalite:["Présentiel","Distanciel"], taille:"Groupe",
+    categories:["Animations pédagogiques"],
+    objectifs:["Faire débattre","Faire réfléchir"],
+    date:"2026-07-25"
+  },
+  {
+    id:"createurquiz", titre:"Créateur de quiz", fichier:"Createur_Quiz.html",
+    description:"Construisez un quiz sur mesure — questions à réponse unique ou à réponses multiples, bonnes réponses définies par le formateur — puis faites-le passer aux participants avec score et corrigé.",
+    type:"Quiz", themes:[],
+    dureeBucket:"10-30", dureeLabel:"durée variable", modalite:["Présentiel","Distanciel"], taille:"Individuel",
+    categories:["Quiz et vrais/faux","Animations pédagogiques"],
+    objectifs:["Évaluer les acquis","Transmettre des connaissances"],
+    date:"2026-07-25"
+  }
+];
+
+const TYPES_LIST = ["Quiz","Questionnaire","Animation","Icebreaker","Jeu","Diagnostic","Autodiagnostic","Outil de débrief","Ressource vidéo","Support interactif","Ressource téléchargeable","Étude de cas"];
+
+const THEMES_LIST = ["Management","Communication","Leadership","RPS","QVCT","Santé mentale","Stress","Prévention",
+  "Harcèlement","Addictions","Conduite du changement","Coopération","Intelligence collective","Neurosciences","Développement personnel"];
+
+const OBJECTIF_DEFS = [
+  {key:"Briser la glace", desc:"Créer un climat propice avant d'entrer dans le vif du sujet.",
+   icon:'<path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke-width="2"/>'},
+  {key:"Faire réfléchir", desc:"Susciter une prise de recul individuelle sur une situation.",
+   icon:'<path d="M9 18h6M10 21h4" stroke-width="2" stroke-linecap="round"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" stroke-width="2" stroke-linejoin="round"/>'},
+  {key:"Faire débattre", desc:"Confronter les points de vue au sein d'un groupe.",
+   icon:'<path d="M21 11.5a8.4 8.4 0 0 1 -8.9 8.4 8.5 8.5 0 0 1 -4-1L3 20l1.2-3.6a8.4 8.4 0 0 1 -1.1-4.2A8.4 8.4 0 0 1 12 4a8.4 8.4 0 0 1 9 7.5z" stroke-width="2" stroke-linejoin="round"/>'},
+  {key:"Transmettre des connaissances", desc:"Apporter un socle théorique ou factuel commun.",
+   icon:'<path d="M3 5.5C3 4.7 3.7 4 5 4c3 0 5.5 1 7 2.5C13.5 5 16 4 19 4c1.3 0 2 .7 2 1.5v13c0-.8-.7-1.5-2-1.5-3 0-5.5 1-7 2.5-1.5-1.5-4-2.5-7-2.5-1.3 0-2 .7-2 1.5z" stroke-width="2" stroke-linejoin="round"/><path d="M12 6.5v13" stroke-width="2"/>'},
+  {key:"Évaluer les acquis", desc:"Vérifier ce qui a été retenu ou compris.",
+   icon:'<path d="M9 12l2 2 4-4.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke-width="2"/>'},
+  {key:"Diagnostiquer une situation", desc:"Objectiver un contexte individuel ou collectif.",
+   icon:'<path d="M12 3a9 9 0 1 0 9 9" stroke-width="2" stroke-linecap="round"/><path d="M12 3v9l6 2" stroke-width="2" stroke-linecap="round"/>'},
+  {key:"Favoriser la coopération", desc:"Renforcer les dynamiques de travail collectif.",
+   icon:'<circle cx="8" cy="9" r="2.6" stroke-width="2"/><circle cx="16" cy="9" r="2.6" stroke-width="2"/><path d="M3.5 19c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6M11.5 19c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6" stroke-width="2" stroke-linecap="round"/>'},
+  {key:"Développer la prise de recul", desc:"Aider à sortir du quotidien pour mieux l'analyser.",
+   icon:'<circle cx="12" cy="12" r="3.2" stroke-width="2"/><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" stroke-width="2" stroke-linejoin="round"/>'},
+  {key:"Sensibiliser", desc:"Ouvrir les yeux sur un sujet encore peu discuté.",
+   icon:'<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4.5" stroke-width="2"/>'},
+  {key:"Passer à l'action", desc:"Convertir une prise de conscience en plan concret.",
+   icon:'<path d="M13 3L4 14h6l-1 7 9-11h-6z" stroke-width="2" stroke-linejoin="round"/>'}
+];
+
+/* =========================================================
+   ÉTAT DES FILTRES
+   ========================================================= */
+const filterState = {query:"", type:"", theme:"", objectif:""};
+const FILTER_LABELS = {type:"Type", theme:"Thématique", objectif:"Objectif"};
+
+function setFilter(key, value){
+  filterState[key] = value;
+  renderResults();
+}
+
+function resetFilters(){
+  Object.keys(filterState).forEach(k=> filterState[k] = "");
+  document.getElementById('searchInput').value = "";
+  ['fObjectif','fType','fTheme'].forEach(id=>{ document.getElementById(id).value=""; });
+  renderResults();
+}
+
+function matchTool(o){
+  const q = filterState.query.trim().toLowerCase();
+  const matchQuery = !q || (o.titre + " " + o.description).toLowerCase().includes(q);
+  const matchType = !filterState.type || o.type === filterState.type;
+  const matchTheme = !filterState.theme || o.themes.includes(filterState.theme);
+  const matchObjectif = !filterState.objectif || o.objectifs.includes(filterState.objectif);
+  return matchQuery && matchType && matchTheme && matchObjectif;
+}
+
+/* =========================================================
+   FAVORIS (localStorage)
+   ========================================================= */
+function getFavoris(){
+  try{ return JSON.parse(localStorage.getItem('axm_favoris') || '[]'); }catch(e){ return []; }
+}
+function isFavori(id){ return getFavoris().includes(id); }
+function toggleFavori(id, btn){
+  let favs = getFavoris();
+  if(favs.includes(id)) favs = favs.filter(f=>f!==id);
+  else favs.push(id);
+  localStorage.setItem('axm_favoris', JSON.stringify(favs));
+  if(btn) btn.classList.toggle('active');
+  if(document.getElementById('resultsTitle').textContent === 'Vos favoris') renderResults(true);
+}
+let favorisMode = false;
+function showFavoris(e){
+  if(e) e.preventDefault();
+  favorisMode = true;
+  renderResults();
+  document.getElementById('recherche').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* =========================================================
+   RENDU — CARTE OUTIL
+   ========================================================= */
+function isNouveau(dateStr){
+  const d = new Date(dateStr);
+  const today = new Date('2026-07-22');
+  const diffDays = (today - d) / (1000*60*60*24);
+  return diffDays <= 2;
+}
+
+function toolCardHtml(o){
+  const fav = isFavori(o.id);
+  const nouveauBadge = isNouveau(o.date) ? '<span class="badge nouveau">Nouveau</span>' : '';
+  return `
+    <div class="tool-card">
+      <div class="tool-thumb" style="background:linear-gradient(135deg,var(--petrole),var(--cyan));">
+        <button class="fav-btn ${fav?'active':''}" aria-label="Ajouter aux favoris" onclick="toggleFavori('${o.id}', this)">
+          <svg viewBox="0 0 24 24" fill="${fav?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.4-9.5-9C.7 8.2 3 4.5 7 4.5c2 0 3.6 1 5 2.6 1.4-1.6 3-2.6 5-2.6 4 0 6.3 3.7 4.5 7.5C19 16.6 12 21 12 21z"/></svg>
+        </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 4 2.8c-.7.4-1 1-1 1.7"/></svg>
+      </div>
+      <div class="tool-body">
+        <div class="tool-badges">${nouveauBadge}<span class="pill-tag">${o.type}</span></div>
+        <h3>${o.titre}</h3>
+        <div class="tool-meta">
+          <span class="pill-tag">${o.dureeLabel}</span>
+          <span class="pill-tag">${o.taille}</span>
+        </div>
+        <p class="desc">${o.description}</p>
+        <div class="tool-actions">
+          <a class="btn btn-primary btn-sm" href="${o.fichier}">Utiliser l'outil</a>
+          <button class="btn btn-ghost btn-sm" onclick="openFiche('${o.id}')">Voir la fiche</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderGridInto(elId, list){
+  const el = document.getElementById(elId);
+  if(list.length === 0){
+    el.innerHTML = "<div class=\"empty-state\">Aucun outil ne correspond pour le moment à cette recherche. La bibliothèque s'enrichit régulièrement — revenez bientôt, ou <button class=\"reset-filters\" style=\"display:inline;\" onclick=\"openSuggestion('besoin')\">signalez ce besoin</button>.</div>";
+    return;
+  }
+  el.innerHTML = list.map(toolCardHtml).join('');
+}
+
+/* =========================================================
+   RENDU — RÉSULTATS PRINCIPAUX + CHIPS + COMPTEUR
+   ========================================================= */
+function hasActiveSearch(){
+  return favorisMode || !!filterState.query.trim() || !!filterState.type || !!filterState.theme || !!filterState.objectif;
+}
+
+function renderResults(skipTitleUpdate){
+  const titleEl = document.getElementById('resultsTitle');
+
+  if(!hasActiveSearch()){
+    titleEl.textContent = 'Vos résultats';
+    document.getElementById('resultsGrid').innerHTML = '<div class="empty-state">Utilisez la recherche ou l\'un des filtres ci-dessus pour afficher les outils correspondants.</div>';
+    document.getElementById('resultsCount').textContent = '';
+    document.getElementById('activeChips').innerHTML = '';
+    return;
+  }
+
+  let list;
+  if(favorisMode){
+    const favs = getFavoris();
+    list = TOOLS.filter(o=>favs.includes(o.id));
+    titleEl.textContent = 'Vos favoris';
+  } else {
+    list = TOOLS.filter(matchTool);
+    titleEl.textContent = 'Résultats de recherche';
+  }
+  renderGridInto('resultsGrid', list);
+  document.getElementById('resultsCount').textContent = list.length + (list.length>1 ? ' outils' : ' outil');
+
+  const chipsWrap = document.getElementById('activeChips');
+  chipsWrap.innerHTML = '';
+  Object.entries(filterState).forEach(([k,v])=>{
+    if(!v || k==='query') return;
+    const chip = document.createElement('span');
+    chip.className = 'active-chip';
+    chip.innerHTML = `${FILTER_LABELS[k]||k} : ${v} <button onclick="clearOneFilter('${k}')" aria-label="Retirer ce filtre">&times;</button>`;
+    chipsWrap.appendChild(chip);
+  });
+  if(favorisMode){
+    const chip = document.createElement('span');
+    chip.className = 'active-chip';
+    chip.innerHTML = `Favoris <button onclick="favorisMode=false; renderResults();" aria-label="Quitter la vue favoris">&times;</button>`;
+    chipsWrap.appendChild(chip);
+  }
+}
+
+function clearOneFilter(key){
+  filterState[key] = "";
+  const map = {type:'fType', theme:'fTheme', objectif:'fObjectif'};
+  if(map[key]) document.getElementById(map[key]).value = "";
+  renderResults();
+}
+
+function focusSearch(){
+  document.getElementById('searchZone').scrollIntoView({behavior:'smooth', block:'center'});
+  document.getElementById('searchInput').focus();
+}
+
+/* =========================================================
+   RENDU — INCONTOURNABLES
+   ========================================================= */
+const SHOWCASE_GRADIENTS = [
+  "linear-gradient(135deg,var(--petrole),var(--cyan))",
+  "linear-gradient(135deg,#b9740a,var(--accent-orange))",
+  "linear-gradient(135deg,#0e8f5f,var(--accent-vert))",
+  "linear-gradient(135deg,#a83f3f,var(--accent-rouge))",
+  "linear-gradient(135deg,#5c2f8a,var(--accent-violet))",
+  "linear-gradient(135deg,var(--petrole),var(--accent-violet))"
+];
+const TYPE_ICONS = {
+  "Quiz": '<path d="M9 9a3 3 0 1 1 4 2.8c-.7.4-1 1-1 1.7v.5" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/>',
+  "Questionnaire": '<rect x="5" y="4" width="14" height="16" rx="2" stroke-width="2"/><path d="M8.5 9h7M8.5 13h7M8.5 17h4" stroke-width="2" stroke-linecap="round"/>',
+  "Diagnostic": '<path d="M12 3a9 9 0 1 0 9 9" stroke-width="2" stroke-linecap="round"/><path d="M12 3v9l6 2" stroke-width="2" stroke-linecap="round"/>',
+  "Autodiagnostic": '<path d="M12 3a9 9 0 1 0 9 9" stroke-width="2" stroke-linecap="round"/><path d="M12 3v9l6 2" stroke-width="2" stroke-linecap="round"/>',
+  "Outil de débrief": '<path d="M8 10h8M8 14h5" stroke-width="2" stroke-linecap="round"/><path d="M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1 -1 1H10l-4 4v-4H5a1 1 0 0 1 -1-1V6a1 1 0 0 1 1-1z" stroke-width="2"/>',
+  "Animation": '<circle cx="8" cy="9" r="2.6" stroke-width="2"/><circle cx="16" cy="9" r="2.6" stroke-width="2"/><path d="M3.5 19c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6M11.5 19c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6" stroke-width="2" stroke-linecap="round"/>'
+};
+
+function showcaseCardHtml(o, i){
+  const grad = SHOWCASE_GRADIENTS[i % SHOWCASE_GRADIENTS.length];
+  const icon = TYPE_ICONS[o.type] || TYPE_ICONS["Quiz"];
+  const num = String(i+1).padStart(2,'0');
+  return `
+    <div class="showcase-card">
+      <div class="showcase-banner" style="background:${grad};">
+        <span class="showcase-num">${num}</span>
+        <span class="showcase-ribbon">Incontournable</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${icon}</svg>
+      </div>
+      <div class="showcase-body">
+        <h3>${o.titre}</h3>
+        <p>${o.description}</p>
+        <div class="showcase-meta">
+          <span class="pill-tag">${o.dureeLabel}</span>
+          <span class="pill-tag">${o.taille}</span>
+        </div>
+        <div class="showcase-actions">
+          <a class="showcase-link" href="${o.fichier}">Découvrir l'outil &rarr;</a>
+          <button class="showcase-fiche-btn" onclick="openFiche('${o.id}')">Voir la fiche</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderIncontournables(){
+  const ids = ["quizcerveau","maturite","diagramme","testrs","assertivite","photolangage"];
+  const list = ids.map(id=>TOOLS.find(o=>o.id===id)).filter(Boolean);
+  document.getElementById('incontournablesGrid').innerHTML = list.map(showcaseCardHtml).join('');
+}
+
+function scrollShowcase(dir){
+  const track = document.getElementById('incontournablesGrid');
+  track.scrollBy({left: dir * 320, behavior: 'smooth'});
+}
+
+/* =========================================================
+   RENDU — FILTRES SELECT (objectif / type / thème) DYNAMIQUES
+   ========================================================= */
+function fillSelect(id, values){
+  const sel = document.getElementById(id);
+  values.forEach(v=>{
+    const opt = document.createElement('option');
+    opt.value = v; opt.textContent = v;
+    sel.appendChild(opt);
+  });
+}
+
+/* =========================================================
+   RENDU — AVANTAGES
+   ========================================================= */
+const AVANTAGES = [
+  "Outils prêts à l'emploi",
+  "Prise en main rapide",
+  "Consignes d'animation intégrées",
+  "Utilisation en présentiel et à distance",
+  "Ressources conçues par AXIS MUNDI",
+  "Approches pédagogiques variées",
+  "Contenus régulièrement enrichis",
+  "Outils adaptés aux réalités des formateurs"
+];
+function renderAvantages(){
+  document.getElementById('avantagesGrid').innerHTML = AVANTAGES.map(a=>`
+    <div class="avantage-item">
+      <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <p>${a}</p>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   RENDU — CHIFFRES CLÉS (calculés depuis TOOLS)
+   ========================================================= */
+function renderStats(){
+  const nbOutils = TOOLS.length;
+  const nbThemes = new Set(TOOLS.flatMap(o=>o.themes)).size;
+  const nbFormats = new Set(TOOLS.map(o=>o.type)).size;
+  document.getElementById('statsBand').innerHTML = `
+    <div class="stat-item"><div class="num">${nbOutils}</div><div class="lbl">outils pédagogiques</div></div>
+    <div class="stat-item"><div class="num">${nbThemes}</div><div class="lbl">thématiques couvertes</div></div>
+    <div class="stat-item"><div class="num">${nbFormats}</div><div class="lbl">formats d'animation</div></div>
+    <div class="stat-item"><div class="num">100%</div><div class="lbl">présentiel &amp; distanciel</div></div>
+  `;
+}
+
+/* =========================================================
+   FICHE OUTIL (modale)
+   ========================================================= */
+function openFiche(id){
+  const o = TOOLS.find(t=>t.id===id);
+  if(!o) return;
+  document.getElementById('ficheContent').innerHTML = `
+    <h2>${o.titre}</h2>
+    <div class="modal-meta">
+      <span class="pill-tag">${o.type}</span>
+      <span class="pill-tag">${o.dureeLabel}</span>
+      <span class="pill-tag">${o.taille}</span>
+      <span class="pill-tag">${o.modalite.join(' / ')}</span>
+    </div>
+    <p>${o.description}</p>
+    <p style="font-size:12.5px;color:var(--gris-clair);"><b>Thématiques :</b> ${o.themes.join(', ')}<br><b>Objectifs pédagogiques :</b> ${o.objectifs.join(', ')}</p>
+    <div class="modal-actions">
+      <a class="btn btn-primary" href="${o.fichier}">Utiliser l'outil &rarr;</a>
+      <button class="btn btn-ghost" onclick="closeFiche()">Fermer</button>
+    </div>
+  `;
+  document.getElementById('ficheModal').classList.add('open');
+}
+function closeFiche(){ document.getElementById('ficheModal').classList.remove('open'); }
+
+/* =========================================================
+   SUGGESTION (modale + mailto)
+   ========================================================= */
+function openSuggestion(kind){
+  document.getElementById('suggestionTitle').textContent = kind==='idee' ? 'Proposer une idée' : 'Signaler un besoin';
+  document.getElementById('suggestionText').value = '';
+  document.getElementById('suggestionModal').classList.add('open');
+  document.getElementById('suggestionModal').dataset.kind = kind;
+}
+function closeSuggestion(){ document.getElementById('suggestionModal').classList.remove('open'); }
+function submitSuggestion(){
+  const kind = document.getElementById('suggestionModal').dataset.kind;
+  const text = document.getElementById('suggestionText').value.trim();
+  if(!text){ alert("Merci de décrire votre besoin avant l'envoi."); return; }
+  const subject = encodeURIComponent(kind==='idee' ? "Boîte à outils AXIS MUNDI — proposition d'idée" : 'Boîte à outils AXIS MUNDI — besoin signalé');
+  const body = encodeURIComponent(text);
+  window.location.href = `mailto:gwladys.guerin@axismundi.fr?subject=${subject}&body=${body}`;
+  closeSuggestion();
+}
+
+/* =========================================================
+   NAVIGATION MOBILE
+   ========================================================= */
+function toggleNav(){
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('burgerBtn');
+  const open = nav.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+/* ---------- Méga-menus déroulants ---------- */
+function initNavDropdowns(){
+  const items = Array.from(document.querySelectorAll('.nav-item.has-dropdown'));
+  function closeAll(){
+    items.forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.nav-link-btn').setAttribute('aria-expanded','false');
+    });
+  }
+  items.forEach(item=>{
+    const btn = item.querySelector('.nav-link-btn');
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const wasOpen = item.classList.contains('open');
+      closeAll();
+      if(!wasOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+  document.addEventListener('click', (e)=>{
+    if(!e.target.closest('.nav-item.has-dropdown')) closeAll();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeAll();
+  });
+}
+
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+document.getElementById('year').textContent = new Date('2026-07-22').getFullYear();
+fillSelect('fObjectif', OBJECTIF_DEFS.map(def=>def.key));
+fillSelect('fType', TYPES_LIST);
+fillSelect('fTheme', THEMES_LIST);
+renderIncontournables();
+renderAvantages();
+renderStats();
+renderResults();
+initNavDropdowns();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartographier l'autonomie de mes collaborateurs — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --stage1: #0088A9;
+    --stage1-tint: #E3F4F8;
+    --stage2: #DE5C5C;
+    --stage2-tint: #FBEBEA;
+    --stage3: #5FA7A0;
+    --stage3-tint: #E9F3F1;
+    --stage4: #15CA88;
+    --stage4-tint: #E5F9F1;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-team-img{position:absolute;top:50%;left:50%;width:112%;transform:translate(-50%,-50%);z-index:2;filter:drop-shadow(0 10px 18px rgba(0,90,110,0.20));}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{
+    max-width:960px;
+    margin:0 auto;
+    padding:26px 20px 60px;
+  }
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:16px 20px;
+    margin-bottom:22px;
+    font-size:14px;
+  }
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 12px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .field-row{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:flex-end;
+  }
+  .field{
+    flex:1;
+    min-width:220px;
+  }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    margin-bottom:4px;
+    font-weight:700;
+  }
+  .field input[type=text]{
+    width:100%;
+    padding:10px 12px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .field input[type=text]:focus{outline:none;border-color:var(--bleu);}
+  button.btn-primary{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:11px 22px;
+    border-radius:22px;
+    font-size:13.5px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    white-space:nowrap;
+  }
+  button.btn-primary:hover{background:#006f87;}
+  button.btn-ghost{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 18px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  /* Tray */
+  #tray{
+    min-height:64px;
+    border:2px dashed var(--gris-clair);
+    border-radius:8px;
+    padding:12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  #tray.drag-over{background:var(--stage1-tint); border-color:var(--bleu);}
+  #tray:empty::before,
+  #tray.empty-msg::after{
+    content:"Aucun collaborateur en attente de positionnement.";
+    color:var(--gris-moyen);
+    font-size:13px;
+    font-style:italic;
+  }
+  .pastille{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--gris-fond2);
+    border-radius:20px;
+    padding:5px 12px 5px 5px;
+    cursor:grab;
+    font-size:13px;
+    user-select:none;
+    border:1px solid transparent;
+    position:relative;
+  }
+  .pastille:active{cursor:grabbing;}
+  .pastille.dragging{opacity:0.4;}
+  .pastille .avatar{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:700;
+    font-size:12px;
+    flex-shrink:0;
+  }
+  .pastille .pname{font-weight:700;color:var(--gris);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .pastille .pnote-dot{
+    width:6px;height:6px;border-radius:50%;background:var(--bleu);
+  }
+
+  /* Wheel grid */
+  .wheel-wrap{
+    position:relative;
+    max-width:760px;
+    margin:10px auto 0;
+    display:grid;
+    grid-template-columns:1fr 1.3fr 1fr;
+    grid-template-rows:auto auto auto;
+    gap:14px;
+    align-items:stretch;
+  }
+  .stage-card{
+    background:#fff;
+    border-radius:10px;
+    border:2px solid var(--gris-clair);
+    padding:12px 14px;
+    min-height:120px;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .stage-card.drag-over{
+    box-shadow:0 0 0 3px rgba(0,0,0,0.05) inset;
+  }
+  .stage-card .stage-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .stage-num{
+    width:24px;height:24px;
+    border-radius:50%;
+    color:#fff;
+    font-weight:700;
+    font-size:12px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .stage-title{font-weight:700;font-size:14px;color:var(--gris);flex:1;}
+  .info-toggle{
+    background:none;border:1.5px solid var(--gris-clair);
+    width:20px;height:20px;border-radius:50%;
+    font-size:11px;font-weight:700;color:var(--gris-moyen);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-family:inherit;
+  }
+  .stage-desc{
+    display:none;
+    font-size:12.5px;
+    color:var(--gris);
+    background:var(--gris-fond2);
+    border-radius:6px;
+    padding:10px 12px;
+    margin-bottom:10px;
+  }
+  .stage-desc.open{display:block;}
+  .stage-desc p{margin:0 0 6px;}
+  .stage-desc p:last-child{margin-bottom:0;}
+  .stage-desc b{color:var(--gris);}
+  .stage-body{
+    min-height:56px;
+    border-radius:6px;
+    padding:6px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-content:flex-start;
+  }
+  #stage1{grid-column:2; grid-row:1;}
+  #stage2{grid-column:3; grid-row:2;}
+  #stage3{grid-column:2; grid-row:3;}
+  #stage4{grid-column:1; grid-row:2;}
+  .hub{
+    grid-column:2; grid-row:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:10px;
+    position:relative;
+  }
+  .hub .hub-ring{
+    width:112px;height:112px;
+    border-radius:50%;
+    border:2px dashed var(--gris-clair);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .hub .hub-ring span.arrow{
+    position:absolute;
+    font-size:15px;
+    color:var(--gris-moyen);
+    font-weight:700;
+  }
+  .hub-title{
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--gris);
+    letter-spacing:0.5px;
+    line-height:1.3;
+    padding:0 4px;
+  }
+
+  /* Popover */
+  .popover{
+    position:fixed;
+    z-index:50;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,0.18);
+    padding:16px;
+    width:270px;
+    display:none;
+  }
+  .popover.open{display:block;}
+  .popover h4{margin:0 0 10px;font-size:14px;color:var(--bleu-fonce);}
+  .popover .stage-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    margin-bottom:10px;
+  }
+  .popover .stage-buttons button{
+    border:1.5px solid var(--gris-clair);
+    background:#fff;
+    border-radius:6px;
+    padding:7px 4px;
+    font-size:11.5px;
+    cursor:pointer;
+    font-family:inherit;
+    color:var(--gris);
+  }
+  .popover .stage-buttons button.active{
+    color:#fff;
+    border-color:transparent;
+  }
+  .popover textarea{
+    width:100%;
+    min-height:60px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:6px;
+    padding:8px;
+    font-family:inherit;
+    font-size:12.5px;
+    resize:vertical;
+    margin-bottom:10px;
+  }
+  .popover .popover-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .popover .popover-actions button{
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:16px;
+    border:1.5px solid var(--gris-clair);
+    background:#fff;
+    cursor:pointer;
+    font-family:inherit;
+    color:var(--gris);
+  }
+  .popover .popover-actions button.danger{color:var(--stage2);border-color:var(--stage2);}
+  .popover-backdrop{
+    position:fixed;inset:0;z-index:40;display:none;
+  }
+  .popover-backdrop.open{display:block;}
+
+  /* Synthesis */
+  table.synth{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  table.synth th{
+    text-align:left;
+    padding:8px 10px;
+    background:var(--gris-fond2);
+    color:var(--gris);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  table.synth td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--gris-fond2);
+    vertical-align:top;
+  }
+  .stage-chip{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:12px;
+    color:#fff;
+    font-size:11.5px;
+    font-weight:700;
+  }
+  .distrib{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:14px 0 18px;
+  }
+  .distrib .dbox{
+    flex:1;
+    min-width:130px;
+    border-radius:8px;
+    padding:12px;
+    color:#fff;
+  }
+  .distrib .dbox .dcount{font-size:22px;font-weight:700;}
+  .distrib .dbox .dlabel{font-size:11.5px;opacity:0.92;}
+
+  .actions-row{text-align:right;margin-top:14px;}
+
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--gris-moyen);
+    padding:24px 20px;
+  }
+
+  @media print{
+    .hero-header, .back-link, .intro, .panel:has(#tray), .info-toggle, #addForm, .field-row, .actions-row, footer{display:none !important;}
+    .stage-desc{display:block !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;border:1px solid var(--gris-clair);}
+  }
+  @media (max-width:720px){
+    .wheel-wrap{grid-template-columns:1fr;grid-template-rows:auto;}
+    #stage1,#stage2,#stage3,#stage4,.hub{grid-column:1;grid-row:auto;}
+    .hub{order:0;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Cartographier l'autonomie<span>de mes collaborateurs</span></h1>
+      <p class="hero-desc">Positionnez chaque collaborateur sur la roue de l'autonomie — dépendant, contre-dépendant, indépendant, interdépendant — pour ajuster votre posture managériale au plus près de chaque situation.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          15-20 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 3v9l6 3" stroke-width="2" stroke-linecap="round"/></svg></span>
+          4 stades d'autonomie
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.querySelector('.panel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Positionner mon équipe &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+      </svg>
+      <img class="hero-team-img" src="Illustrations%20headers/equipe-affaires-ligne-continue-illustration-vectorielle-coloree-groupe-hommes-affaires-debout.png" alt="">
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Cartographier l'autonomie de mes collaborateurs</span>
+  </nav>
+
+  <div class="intro">
+    <strong>Consigne :</strong> consultez les repères de chaque stade (icône <b>i</b>) — <b>dépendant</b>, <b>contre-dépendant</b>, <b>indépendant</b>, <b>interdépendant</b> —, puis positionnez chaque collaborateur par glisser-déposer sur la roue. Ce n'est pas une case définitive : un même collaborateur peut se situer différemment selon la mission ou le contexte du moment.
+  </div>
+
+  <div class="panel">
+    <h2>Périmètre concerné</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="perimetre">Personnes concernées (ex : équipe site, équipe projet, service…)</label>
+        <input type="text" id="perimetre" placeholder="Ex : équipe commerciale site de Lyon">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Ajouter un collaborateur</h2>
+    <div class="field-row" id="addForm">
+      <div class="field">
+        <label for="newName">Nom ou initiales</label>
+        <input type="text" id="newName" placeholder="Ex : M. Dupont" onkeydown="if(event.key==='Enter'){ajouterCollaborateur();}">
+      </div>
+      <button class="btn-primary" onclick="ajouterCollaborateur()">Ajouter</button>
+    </div>
+    <p style="font-size:12px;color:var(--gris-moyen);margin:10px 0 6px;">Collaborateurs en attente de positionnement — glissez une pastille sur la roue, ou cliquez dessus pour la positionner :</p>
+    <div id="tray"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Roue de l'autonomie</h2>
+    <div class="wheel-wrap" id="wheel">
+
+      <div class="stage-card" id="stage1" data-stage="stage1">
+        <div class="stage-head">
+          <div class="stage-num" style="background:var(--stage1);">1</div>
+          <div class="stage-title">Dépendant</div>
+          <button class="info-toggle" onclick="toggleDesc('stage1')">i</button>
+        </div>
+        <div class="stage-desc" id="desc-stage1">
+          <p><b>Ce qui se joue —</b> le collaborateur attend un cadrage explicite avant d'agir ; il sollicite fréquemment la validation du manager et cherche à être rassuré sur ce qui est attendu.</p>
+          <p><b>Signaux —</b> questions répétées sur le « comment faire », difficulté à trancher seul, faible prise d'initiative par crainte de l'erreur.</p>
+          <p><b>Point de vigilance —</b> un retrait trop rapide du cadre ou de l'accompagnement peut générer de l'insécurité, voire un sentiment d'abandon.</p>
+          <p><b>Posture managériale —</b> cadrer, expliciter, structurer pas à pas, valoriser les réussites pour construire progressivement la confiance.</p>
+        </div>
+        <div class="stage-body" data-stage="stage1"></div>
+      </div>
+
+      <div class="stage-card" id="stage2" data-stage="stage2">
+        <div class="stage-head">
+          <div class="stage-num" style="background:var(--stage2);">2</div>
+          <div class="stage-title">Contre-dépendant</div>
+          <button class="info-toggle" onclick="toggleDesc('stage2')">i</button>
+        </div>
+        <div class="stage-desc" id="desc-stage2">
+          <p><b>Ce qui se joue —</b> phase de test du cadre et de l'autorité ; le collaborateur cherche à se différencier de la prescription initiale, parfois en la contestant ouvertement.</p>
+          <p><b>Signaux —</b> critiques du cadre, désaccords plus affirmés, tendance à faire « à sa manière », frictions possibles avec les pairs ou la hiérarchie.</p>
+          <p><b>Point de vigilance —</b> une contestation non entendue peut se rigidifier en conflit ouvert ou en désengagement silencieux.</p>
+          <p><b>Posture managériale —</b> écouter sans céder sur l'essentiel, légitimer le besoin d'autonomie, négocier de vrais espaces de liberté, réguler sans réprimer.</p>
+        </div>
+        <div class="stage-body" data-stage="stage2"></div>
+      </div>
+
+      <div class="stage-card" id="stage3" data-stage="stage3">
+        <div class="stage-head">
+          <div class="stage-num" style="background:var(--stage3);">3</div>
+          <div class="stage-title">Indépendant</div>
+          <button class="info-toggle" onclick="toggleDesc('stage3')">i</button>
+        </div>
+        <div class="stage-desc" id="desc-stage3">
+          <p><b>Ce qui se joue —</b> le collaborateur maîtrise son périmètre et agit avec une autonomie réelle ; il ne sollicite le manager que sur les sujets qui le justifient vraiment.</p>
+          <p><b>Signaux —</b> organisation autonome du travail, propositions spontanées, faible recours à la validation, résultats tenus dans la durée.</p>
+          <p><b>Point de vigilance —</b> risque de repli individuel, de moindre coopération avec le collectif, ou de surcharge auto-imposée faute de savoir demander de l'aide.</p>
+          <p><b>Posture managériale —</b> déléguer réellement, responsabiliser, veiller à maintenir le lien avec le collectif, rester disponible sans être intrusif.</p>
+        </div>
+        <div class="stage-body" data-stage="stage3"></div>
+      </div>
+
+      <div class="stage-card" id="stage4" data-stage="stage4">
+        <div class="stage-head">
+          <div class="stage-num" style="background:var(--stage4);">4</div>
+          <div class="stage-title">Interdépendant</div>
+          <button class="info-toggle" onclick="toggleDesc('stage4')">i</button>
+        </div>
+        <div class="stage-desc" id="desc-stage4">
+          <p><b>Ce qui se joue —</b> le collaborateur articule autonomie individuelle et coopération collective ; il sollicite et propose son aide, s'inscrit dans une logique d'intelligence collective.</p>
+          <p><b>Signaux —</b> entraide spontanée, capacité à demander comme à offrir du soutien, contribution active à la régulation du collectif.</p>
+          <p><b>Point de vigilance —</b> sur-sollicitation par les pairs si les rôles restent flous ; dilution possible des responsabilités individuelles.</p>
+          <p><b>Posture managériale —</b> associer aux décisions, s'appuyer sur ces collaborateurs comme relais, veiller à la reconnaissance explicite de leur contribution.</p>
+        </div>
+        <div class="stage-body" data-stage="stage4"></div>
+      </div>
+
+      <div class="hub">
+        <div class="hub-ring">
+          <span class="arrow" style="top:-9px;left:50%;transform:translateX(-50%);">▲</span>
+          <span class="arrow" style="right:-9px;top:50%;transform:translateY(-50%);">▶</span>
+          <span class="arrow" style="bottom:-9px;left:50%;transform:translateX(-50%);">▼</span>
+          <span class="arrow" style="left:-9px;top:50%;transform:translateY(-50%);">◀</span>
+          <div class="hub-title">CYCLE DE<br>L'AUTONOMIE</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Synthèse</h2>
+    <div class="distrib" id="distrib"></div>
+    <table class="synth" id="synthTable">
+      <thead>
+        <tr><th>Collaborateur</th><th>Stade</th><th>Notes</th></tr>
+      </thead>
+      <tbody id="synthBody"></tbody>
+    </table>
+    <div class="actions-row">
+      <button class="btn-ghost" onclick="window.print()">Imprimer / exporter la synthèse</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="popover-backdrop" id="popoverBackdrop" onclick="closePopover()"></div>
+<div class="popover" id="popover">
+  <h4 id="popTitle">Collaborateur</h4>
+  <div class="stage-buttons" id="popStageButtons"></div>
+  <textarea id="popNote" placeholder="Notes, exemples observés, contexte particulier…" onchange="saveNote()"></textarea>
+  <div class="popover-actions">
+    <button onclick="unassign()">Retirer de la roue</button>
+    <button class="danger" onclick="deletePerson()">Supprimer</button>
+  </div>
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique de positionnement managérial. Les données saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+const stageMeta = {
+  stage1: {label:"Dépendant", color:"var(--stage1)", hex:"#0088A9"},
+  stage2: {label:"Contre-dépendant", color:"var(--stage2)", hex:"#DE5C5C"},
+  stage3: {label:"Indépendant", color:"var(--stage3)", hex:"#5FA7A0"},
+  stage4: {label:"Interdépendant", color:"var(--stage4)", hex:"#15CA88"}
+};
+
+const avatarPalette = ["#00B5E2","#F5AB33","#884EC2","#15CA88","#DE5C5C","#5FA7A0","#E86F5C","#B895DA","#F9CD85","#97F4D2"];
+
+let people = [];
+let idCounter = 1;
+let activePopoverId = null;
+
+function initials(name){
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if(parts.length===0) return "?";
+  if(parts.length===1) return parts[0].slice(0,2).toUpperCase();
+  return (parts[0][0]+parts[parts.length-1][0]).toUpperCase();
+}
+
+function ajouterCollaborateur(){
+  const input = document.getElementById('newName');
+  const name = input.value.trim();
+  if(!name) return;
+  const person = {
+    id: 'p'+(idCounter++),
+    name: name,
+    stage: null,
+    note: '',
+    color: avatarPalette[(idCounter-2) % avatarPalette.length]
+  };
+  people.push(person);
+  input.value='';
+  input.focus();
+  render();
+}
+
+function render(){
+  const tray = document.getElementById('tray');
+  tray.innerHTML='';
+  const unassigned = people.filter(p=>!p.stage);
+  unassigned.forEach(p=>tray.appendChild(makePastille(p)));
+
+  Object.keys(stageMeta).forEach(key=>{
+    const body = document.querySelector(`.stage-body[data-stage="${key}"]`);
+    body.innerHTML='';
+    people.filter(p=>p.stage===key).forEach(p=>body.appendChild(makePastille(p)));
+  });
+
+  renderSynthese();
+}
+
+function makePastille(p){
+  const el = document.createElement('div');
+  el.className='pastille';
+  el.draggable = true;
+  el.dataset.id = p.id;
+  el.innerHTML = `<div class="avatar" style="background:${p.color};">${initials(p.name)}</div><span class="pname">${escapeHtml(p.name)}</span>${p.note ? '<span class="pnote-dot" title="Note enregistrée"></span>':''}`;
+  el.addEventListener('dragstart', e=>{
+    e.dataTransfer.setData('text/plain', p.id);
+    el.classList.add('dragging');
+  });
+  el.addEventListener('dragend', ()=> el.classList.remove('dragging'));
+  el.addEventListener('click', e=> openPopover(p.id, e));
+  return el;
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function setupDropzones(){
+  const zones = [document.getElementById('tray'), ...document.querySelectorAll('.stage-body')];
+  zones.forEach(zone=>{
+    zone.addEventListener('dragover', e=>{
+      e.preventDefault();
+      zone.classList.add('drag-over');
+      const card = zone.closest('.stage-card');
+      if(card) card.classList.add('drag-over');
+    });
+    zone.addEventListener('dragleave', ()=>{
+      zone.classList.remove('drag-over');
+      const card = zone.closest('.stage-card');
+      if(card) card.classList.remove('drag-over');
+    });
+    zone.addEventListener('drop', e=>{
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const card = zone.closest('.stage-card');
+      if(card) card.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('text/plain');
+      const person = people.find(p=>p.id===id);
+      if(!person) return;
+      person.stage = zone.dataset.stage || null;
+      render();
+    });
+  });
+}
+
+function toggleDesc(stageKey){
+  const el = document.getElementById('desc-'+stageKey);
+  el.classList.toggle('open');
+}
+
+function openPopover(id, evt){
+  evt.stopPropagation();
+  activePopoverId = id;
+  const person = people.find(p=>p.id===id);
+  if(!person) return;
+  document.getElementById('popTitle').textContent = person.name;
+  document.getElementById('popNote').value = person.note || '';
+
+  const btnWrap = document.getElementById('popStageButtons');
+  btnWrap.innerHTML='';
+  Object.keys(stageMeta).forEach(key=>{
+    const meta = stageMeta[key];
+    const b = document.createElement('button');
+    b.textContent = meta.label;
+    if(person.stage===key){
+      b.classList.add('active');
+      b.style.background = meta.hex;
+    }
+    b.onclick = ()=>{ person.stage = key; render(); openPopover(id, {stopPropagation:()=>{}}); };
+    btnWrap.appendChild(b);
+  });
+
+  const pop = document.getElementById('popover');
+  const backdrop = document.getElementById('popoverBackdrop');
+  backdrop.classList.add('open');
+  pop.classList.add('open');
+
+  const rect = evt.target && evt.target.getBoundingClientRect ? evt.target.getBoundingClientRect() : {left:window.innerWidth/2, top:window.innerHeight/2};
+  let left = (evt.clientX || rect.left) + 12;
+  let top = (evt.clientY || rect.top) + 12;
+  const maxLeft = window.innerWidth - 290;
+  const maxTop = window.innerHeight - 300;
+  left = Math.min(left, maxLeft);
+  top = Math.min(top, maxTop);
+  pop.style.left = Math.max(10,left)+'px';
+  pop.style.top = Math.max(10,top)+'px';
+}
+
+function closePopover(){
+  activePopoverId=null;
+  document.getElementById('popover').classList.remove('open');
+  document.getElementById('popoverBackdrop').classList.remove('open');
+}
+
+function saveNote(){
+  if(!activePopoverId) return;
+  const person = people.find(p=>p.id===activePopoverId);
+  if(person){ person.note = document.getElementById('popNote').value; render(); openPopoverKeepOpen(); }
+}
+function openPopoverKeepOpen(){
+  const pop = document.getElementById('popover');
+  pop.classList.add('open');
+  document.getElementById('popoverBackdrop').classList.add('open');
+}
+
+function unassign(){
+  if(!activePopoverId) return;
+  const person = people.find(p=>p.id===activePopoverId);
+  if(person) person.stage=null;
+  render();
+  closePopover();
+}
+
+function deletePerson(){
+  if(!activePopoverId) return;
+  people = people.filter(p=>p.id!==activePopoverId);
+  render();
+  closePopover();
+}
+
+function renderSynthese(){
+  const tbody = document.getElementById('synthBody');
+  tbody.innerHTML='';
+  const distrib = document.getElementById('distrib');
+  distrib.innerHTML='';
+
+  Object.keys(stageMeta).forEach(key=>{
+    const meta = stageMeta[key];
+    const count = people.filter(p=>p.stage===key).length;
+    const dbox = document.createElement('div');
+    dbox.className='dbox';
+    dbox.style.background = meta.hex;
+    dbox.innerHTML = `<div class="dcount">${count}</div><div class="dlabel">${meta.label}</div>`;
+    distrib.appendChild(dbox);
+  });
+
+  if(people.length===0){
+    tbody.innerHTML = '<tr><td colspan="3" style="color:var(--gris-moyen);font-style:italic;">Aucun collaborateur ajouté pour le moment.</td></tr>';
+    return;
+  }
+
+  people.forEach(p=>{
+    const tr = document.createElement('tr');
+    const stageCell = p.stage
+      ? `<span class="stage-chip" style="background:${stageMeta[p.stage].hex};">${stageMeta[p.stage].label}</span>`
+      : `<span style="color:var(--gris-moyen);font-style:italic;">Non positionné</span>`;
+    tr.innerHTML = `<td>${escapeHtml(p.name)}</td><td>${stageCell}</td><td style="color:var(--gris-moyen);">${escapeHtml(p.note||'')}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+setupDropzones();
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramme d'Ishikawa — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:1000px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{
+    display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;
+  }
+  .intro .note-dev a{color:var(--bleu-fonce);font-weight:700;text-decoration:none;}
+  .intro .note-dev a:hover{text-decoration:underline;}
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Effet observé ---------- */
+  .effect-textarea{
+    width:100%;
+    min-height:70px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:8px;
+    padding:12px 14px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--gris);
+    resize:vertical;
+  }
+  .effect-textarea:focus{outline:none;border-color:var(--bleu);}
+
+  /* ---------- Diagramme ---------- */
+  .diagram-wrap{
+    background:var(--gris-fond2);
+    border-radius:10px;
+    padding:14px;
+  }
+  .diagram-wrap svg{width:100%;height:auto;display:block;}
+
+  /* ---------- Catégories ---------- */
+  .cat-toolbar{display:flex;justify-content:flex-end;margin-bottom:16px;}
+  .cat-add-btn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:10px 20px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .cat-add-btn:hover{background:#006f87;}
+
+  .cat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:16px;
+  }
+  .cat-card{
+    border-radius:10px;
+    padding:16px 18px 18px;
+    background:#fbfaf8;
+  }
+  .cat-card-head{display:flex;align-items:center;gap:6px;margin-bottom:12px;}
+  .cat-badge{width:24px;height:24px;border-radius:50%;flex-shrink:0;}
+  .info-icon{
+    position:relative;
+    flex-shrink:0;
+    width:17px;height:17px;
+    border-radius:50%;
+    background:var(--gris-fond2);
+    color:var(--gris);
+    font-size:11px;
+    font-style:italic;
+    font-weight:700;
+    font-family:Georgia,'Times New Roman',serif;
+    display:flex;align-items:center;justify-content:center;
+    cursor:help;
+    user-select:none;
+  }
+  .info-icon:hover, .info-icon:focus, .info-icon.tooltip-open{background:var(--bleu-fonce);color:#fff;outline:none;}
+  .info-tooltip{
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 9px);
+    transform:translateX(-50%);
+    background:#20282b;
+    color:#fff;
+    font-size:11.5px;
+    font-weight:500;
+    font-style:normal;
+    line-height:1.45;
+    padding:10px 12px;
+    border-radius:8px;
+    width:210px;
+    text-align:left;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .15s ease;
+    z-index:20;
+    pointer-events:none;
+    box-shadow:0 6px 18px rgba(0,0,0,0.22);
+  }
+  .info-tooltip::after{
+    content:'';
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translateX(-50%);
+    border:6px solid transparent;
+    border-top-color:#20282b;
+  }
+  .info-icon:hover .info-tooltip,
+  .info-icon:focus .info-tooltip,
+  .info-icon.tooltip-open .info-tooltip{opacity:1;visibility:visible;}
+  .cat-name-input{
+    flex:1;
+    min-width:0;
+    border:none;
+    background:transparent;
+    font-size:14px;
+    font-weight:700;
+    color:#20282b;
+    font-family:inherit;
+    padding:4px 6px;
+    border-radius:4px;
+  }
+  .cat-name-input::placeholder{color:var(--gris-moyen);font-weight:600;}
+  .cat-name-input:focus{outline:none;background:#fff;}
+  .cat-del-btn{
+    background:none;
+    border:none;
+    color:var(--gris-moyen);
+    font-size:16px;
+    cursor:pointer;
+    padding:2px 4px;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .cat-del-btn:hover{color:var(--rouge);}
+  .cat-input-row{display:flex;gap:6px;margin-bottom:12px;}
+  .cat-input-row input{
+    flex:1;
+    min-width:0;
+    border:1.5px solid var(--gris-clair);
+    border-radius:16px;
+    padding:8px 13px;
+    font-family:inherit;
+    font-size:12.5px;
+    color:var(--gris);
+    background:#fff;
+  }
+  .cat-input-row input:focus{outline:none;border-color:var(--bleu);}
+  .cat-input-row button{
+    border:none;
+    color:#fff;
+    padding:8px 15px;
+    border-radius:16px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    white-space:nowrap;
+  }
+  .cat-causes{display:flex;flex-wrap:wrap;gap:6px;}
+  .cause-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    background:#fff;
+    color:var(--gris);
+    font-size:12px;
+    font-weight:600;
+    padding:5px 7px 5px 11px;
+    border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.08);
+  }
+  .cause-chip button{
+    background:none;
+    border:none;
+    color:var(--gris-moyen);
+    font-size:12px;
+    cursor:pointer;
+    padding:1px;
+    line-height:1;
+  }
+  .cause-chip button:hover{color:var(--rouge);}
+  .cat-empty{font-size:11.5px;color:var(--gris-moyen);font-style:italic;margin:0;}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .cat-toolbar, .cat-input-row, .cat-del-btn, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Diagramme d'Ishikawa<span>Méthode des causes-effet (5M / 6M)</span></h1>
+      <p class="hero-desc">Une méthode structurée pour remonter aux causes profondes d'un problème, en évitant de s'arrêter aux explications les plus évidentes. Classez les causes possibles par catégorie, autour d'un effet clairement formulé.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          20-40 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          En groupe ou en sous-groupes
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('effectPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer l'analyse &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- mini arête de poisson -->
+        <g>
+          <line x1="20" y1="105" x2="185" y2="105" stroke="#0088A9" stroke-width="3"/>
+          <path d="M185,95 L205,105 L185,115 Z" fill="#0088A9"/>
+          <line x1="60" y1="60" x2="90" y2="105" stroke="#F5AB33" stroke-width="2.5"/>
+          <line x1="100" y1="55" x2="120" y2="105" stroke="#884EC2" stroke-width="2.5"/>
+          <line x1="140" y1="60" x2="150" y2="105" stroke="#15CA88" stroke-width="2.5"/>
+          <line x1="60" y1="150" x2="90" y2="105" stroke="#DE5C5C" stroke-width="2.5"/>
+          <line x1="100" y1="155" x2="120" y2="105" stroke="#5D6160" stroke-width="2.5"/>
+          <line x1="140" y1="150" x2="150" y2="105" stroke="#E86F5C" stroke-width="2.5"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Diagramme d'Ishikawa</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> formulez d'abord l'effet observé — le problème ou le dysfonctionnement à analyser — de façon aussi factuelle que possible. Explorez ensuite chaque catégorie de causes possibles : la méthode des 5M (main-d'œuvre, méthode, matériel, matière, milieu) est complétée ici d'une sixième catégorie, management. Renommez les catégories, ajoutez-en ou supprimez-en selon le sujet traité.</p>
+  </div>
+
+  <div class="panel" id="effectPanel">
+    <h2>Effet observé</h2>
+    <p class="panel-sub">Le problème ou le dysfonctionnement que vous cherchez à expliquer.</p>
+    <textarea class="effect-textarea" id="effectInput" oninput="onEffectInput(this.value)" placeholder="Ex. : Hausse des arrêts de travail dans l'équipe depuis trois mois…"></textarea>
+  </div>
+
+  <div class="panel">
+    <h2>Vue d'ensemble</h2>
+    <p class="panel-sub">Le diagramme se met à jour au fil de vos saisies.</p>
+    <div class="diagram-wrap" id="fishboneSvgWrap"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Détail des catégories</h2>
+    <p class="panel-sub">Ajoutez les causes possibles dans chaque catégorie (3 catégories minimum, 8 au maximum).</p>
+
+    <div class="cat-toolbar">
+      <button class="cat-add-btn" onclick="addCategory()">+ Ajouter une catégorie</button>
+    </div>
+
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil de diagnostic. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+const PALETTE = ['#F5AB33','#884EC2','#15CA88','#DE5C5C','#0088A9','#5D6160','#E86F5C','#5FA7A0'];
+const MIN_CATEGORIES = 3;
+const MAX_CATEGORIES = 8;
+
+const CATEGORY_DEFINITIONS = {
+  mainoeuvre: "Les personnes concernées : compétences, expérience, charge de travail, motivation, communication entre elles.",
+  methode: "La façon de travailler : procédures, consignes, répartition des rôles, circuits de décision.",
+  materiel: "Les outils et équipements utilisés : machines, logiciels, disponibilité, état, adéquation au besoin.",
+  matiere: "Les ressources transformées ou mobilisées : matières premières, informations, données, budget.",
+  milieu: "L'environnement de travail : locaux, ambiance physique, climat social, culture de l'organisation.",
+  management: "La posture et les pratiques d'encadrement : clarté des objectifs, soutien, reconnaissance, qualité du dialogue."
+};
+
+let nextCatId = 7;
+let categories = [
+  {id:1, name:"Main-d'œuvre", causes:[], defKey:'mainoeuvre'},
+  {id:2, name:"Méthode", causes:[], defKey:'methode'},
+  {id:3, name:"Matériel", causes:[], defKey:'materiel'},
+  {id:4, name:"Matière", causes:[], defKey:'matiere'},
+  {id:5, name:"Milieu", causes:[], defKey:'milieu'},
+  {id:6, name:"Management", causes:[], defKey:'management'}
+];
+let effect = '';
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function truncate(str, n){
+  str = str || '';
+  return str.length > n ? str.slice(0, n - 1) + '…' : str;
+}
+
+function wrapText(text, maxCharsPerLine, maxLines){
+  const words = (text || '').trim().split(/\s+/).filter(Boolean);
+  if(words.length === 0) return [];
+  const lines = [];
+  let current = '';
+  for(let i = 0; i < words.length; i++){
+    let word = words[i];
+    if(word.length > maxCharsPerLine){
+      word = word.slice(0, maxCharsPerLine - 1) + '…';
+    }
+    const candidate = current ? current + ' ' + word : word;
+    if(candidate.length <= maxCharsPerLine){
+      current = candidate;
+    } else {
+      lines.push(current);
+      current = word;
+      if(lines.length === maxLines) break;
+    }
+  }
+  if(lines.length < maxLines && current){
+    lines.push(current);
+  }
+  const wordsUsed = lines.join(' ').split(/\s+/).filter(Boolean).length;
+  if(lines.length >= maxLines && wordsUsed < words.length){
+    let last = lines[maxLines - 1];
+    last = last.length > 1 ? last.slice(0, -1) + '…' : last + '…';
+    lines[maxLines - 1] = last;
+  }
+  return lines.slice(0, maxLines);
+}
+
+function categoryColor(idx){
+  return PALETTE[idx % PALETTE.length];
+}
+
+/* ---------- Catégories : structure ---------- */
+
+function addCategory(){
+  if(categories.length >= MAX_CATEGORIES){
+    alert('Le diagramme est limité à ' + MAX_CATEGORIES + ' catégories pour rester lisible.');
+    return;
+  }
+  const id = nextCatId++;
+  categories.push({id: id, name: '', causes: [], defKey: null});
+  renderAll();
+  const input = document.getElementById('catname-' + id);
+  if(input) input.focus();
+}
+
+function removeCategory(id){
+  if(categories.length <= MIN_CATEGORIES){
+    alert('Le diagramme nécessite au moins ' + MIN_CATEGORIES + ' catégories.');
+    return;
+  }
+  const cat = categories.find(c => c.id === id);
+  if(cat && cat.causes.length > 0){
+    if(!confirm('Cette catégorie contient des causes. Les supprimer avec la catégorie ?')) return;
+  }
+  categories = categories.filter(c => c.id !== id);
+  renderAll();
+}
+
+function renameCategory(id, val){
+  const cat = categories.find(c => c.id === id);
+  if(cat) cat.name = val;
+  renderDiagram();
+}
+
+/* ---------- Causes ---------- */
+
+function addCause(catId){
+  const input = document.getElementById('causeinput-' + catId);
+  const val = input.value.trim();
+  if(!val) return;
+  const cat = categories.find(c => c.id === catId);
+  if(!cat) return;
+  cat.causes.push(val);
+  input.value = '';
+  input.focus();
+  renderCategoryCard(catId);
+}
+
+function removeCause(catId, index){
+  const cat = categories.find(c => c.id === catId);
+  if(!cat) return;
+  cat.causes.splice(index, 1);
+  renderCategoryCard(catId);
+}
+
+/* ---------- Effet ---------- */
+
+function onEffectInput(val){
+  effect = val;
+  renderDiagram();
+}
+
+/* ---------- Rendu : cartes de catégories ---------- */
+
+function renderCategoryCardHtml(cat, idx){
+  const color = categoryColor(idx);
+  const def = cat.defKey ? CATEGORY_DEFINITIONS[cat.defKey] : null;
+  const infoHtml = def
+    ? '<span class="info-icon" tabindex="0" onclick="event.stopPropagation();this.classList.toggle(' + "'tooltip-open'" + ')">i<span class="info-tooltip">' + escapeHtml(def) + '</span></span>'
+    : '';
+  const causesHtml = cat.causes.length
+    ? '<div class="cat-causes">' + cat.causes.map((c, i) =>
+        '<span class="cause-chip">' + escapeHtml(c) + '<button onclick="removeCause(' + cat.id + ',' + i + ')" title="Retirer">&times;</button></span>'
+      ).join('') + '</div>'
+    : '<p class="cat-empty">Aucune cause ajoutée pour le moment.</p>';
+
+  return '' +
+    '<div class="cat-card" style="border-left:4px solid ' + color + ';" id="catcard-' + cat.id + '">' +
+      '<div class="cat-card-head">' +
+        '<span class="cat-badge" style="background:' + color + ';"></span>' +
+        '<input type="text" class="cat-name-input" id="catname-' + cat.id + '" value="' + escapeHtml(cat.name) + '" placeholder="Nom de la catégorie…" oninput="renameCategory(' + cat.id + ', this.value)">' +
+        infoHtml +
+        '<button class="cat-del-btn" onclick="removeCategory(' + cat.id + ')" title="Supprimer la catégorie">&times;</button>' +
+      '</div>' +
+      '<div class="cat-input-row">' +
+        '<input type="text" id="causeinput-' + cat.id + '" placeholder="Ajouter une cause…" onkeydown="if(event.key==='+"'Enter'"+'){event.preventDefault();addCause(' + cat.id + ');}">' +
+        '<button style="background:' + color + ';" onclick="addCause(' + cat.id + ')">Ajouter</button>' +
+      '</div>' +
+      causesHtml +
+    '</div>';
+}
+
+function renderCategoryCard(catId){
+  const idx = categories.findIndex(c => c.id === catId);
+  if(idx === -1) return;
+  const el = document.getElementById('catcard-' + catId);
+  if(el){
+    el.outerHTML = renderCategoryCardHtml(categories[idx], idx);
+  }
+}
+
+function renderCategories(){
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = categories.map(renderCategoryCardHtml).join('');
+}
+
+/* ---------- Rendu : diagramme fishbone ---------- */
+
+function renderDiagram(){
+  const wrap = document.getElementById('fishboneSvgWrap');
+  if(!wrap) return;
+
+  const N = categories.length;
+  const topCount = Math.ceil(N / 2);
+  const bottomCount = N - topCount;
+  const xStart = 150, xEnd = 760;
+  const spineY = 190;
+  const boxW = 140, boxH = 44;
+
+  let topSlot = 0, bottomSlot = 0;
+  let ribsHtml = '';
+  let boxesHtml = '';
+
+  categories.forEach(function(cat, i){
+    const isTop = i % 2 === 0;
+    const count = isTop ? topCount : bottomCount;
+    const slot = isTop ? topSlot++ : bottomSlot++;
+    const cx = xStart + (slot + 0.5) * (xEnd - xStart) / count;
+    const color = categoryColor(i);
+    const boxY = isTop ? 25 : (380 - 25 - boxH);
+    const ribStartY = isTop ? boxY + boxH : boxY;
+    const trimmed = (cat.name || '').trim();
+    const label = trimmed ? truncate(trimmed, 16) : 'Catégorie';
+    const labelAttrs = trimmed ? 'font-weight="700" fill="#20282b"' : 'font-style="italic" fill="#A2A5A4"';
+
+    ribsHtml += '<line x1="' + cx + '" y1="' + ribStartY + '" x2="' + (cx - 50) + '" y2="' + spineY + '" stroke="' + color + '" stroke-width="2.5"/>';
+    boxesHtml +=
+      '<rect x="' + (cx - boxW / 2) + '" y="' + boxY + '" width="' + boxW + '" height="' + boxH + '" rx="8" fill="#fff" stroke="' + color + '" stroke-width="2"/>' +
+      '<text x="' + cx + '" y="' + (boxY + boxH / 2 + 5) + '" text-anchor="middle" font-size="13" ' + labelAttrs + '>' + escapeHtml(label) + '</text>';
+  });
+
+  const trimmedEffect = (effect || '').trim();
+  const effectLines = trimmedEffect ? wrapText(trimmedEffect, 17, 5) : [];
+  const isPlaceholder = effectLines.length === 0;
+  const displayLines = isPlaceholder ? ['Effet observé'] : effectLines;
+  const effectAttrs = isPlaceholder ? 'font-style="italic" font-size="11.5"' : 'font-weight="700" font-size="12.5"';
+
+  const effectBoxX = 830, effectBoxW = 150, effectBoxH = 110;
+  const effectBoxY = spineY - effectBoxH / 2;
+  const effectCx = effectBoxX + effectBoxW / 2;
+  const lineHeight = 16;
+  const startY = spineY - ((displayLines.length - 1) * lineHeight) / 2 + 4;
+  const tspans = displayLines.map((line, i) =>
+    '<tspan x="' + effectCx + '" y="' + (startY + i * lineHeight) + '">' + escapeHtml(line) + '</tspan>'
+  ).join('');
+
+  const svg = '' +
+    '<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg">' +
+      ribsHtml +
+      boxesHtml +
+      '<line x1="40" y1="' + spineY + '" x2="800" y2="' + spineY + '" stroke="#0088A9" stroke-width="3"/>' +
+      '<path d="M800,' + (spineY - 12) + ' L830,' + spineY + ' L800,' + (spineY + 12) + ' Z" fill="#0088A9"/>' +
+      '<rect x="' + effectBoxX + '" y="' + effectBoxY + '" width="' + effectBoxW + '" height="' + effectBoxH + '" rx="10" fill="#0088A9"/>' +
+      '<text text-anchor="middle" fill="#fff" ' + effectAttrs + '>' + tspans + '</text>' +
+    '</svg>';
+
+  wrap.innerHTML = svg;
+}
+
+function renderAll(){
+  renderCategories();
+  renderDiagram();
+}
+
+/* ---------- Réinitialisation ---------- */
+
+function resetAll(){
+  const hasContent = categories.some(c => c.causes.length > 0) || (effect || '').trim() !== '';
+  if(hasContent){
+    if(!confirm('Réinitialiser le diagramme (effet, catégories et causes) et repartir de zéro ?')) return;
+  }
+  nextCatId = 7;
+  categories = [
+    {id:1, name:"Main-d'œuvre", causes:[], defKey:'mainoeuvre'},
+    {id:2, name:"Méthode", causes:[], defKey:'methode'},
+    {id:3, name:"Matériel", causes:[], defKey:'materiel'},
+    {id:4, name:"Matière", causes:[], defKey:'matiere'},
+    {id:5, name:"Milieu", causes:[], defKey:'milieu'},
+    {id:6, name:"Management", causes:[], defKey:'management'}
+  ];
+  effect = '';
+  document.getElementById('effectInput').value = '';
+  renderAll();
+}
+
+document.addEventListener('click', function(e){
+  document.querySelectorAll('.info-icon.tooltip-open').forEach(function(el){
+    if(!el.contains(e.target)) el.classList.remove('tooltip-open');
+  });
+});
+
+renderAll();
+</script>
+
+</body>
+</html>

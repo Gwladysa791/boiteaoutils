@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeu de l'oie — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+    --terracotta: #E86F5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:980px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{display:inline-block;margin:0 0 18px;font-size:12.5px;color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .back-link:hover{text-decoration:underline;}
+  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:20px;font-size:14px;color:var(--gris);}
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;}
+
+  .panel{background:#fff;border-radius:8px;padding:22px 24px 26px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);}
+  .panel .panel-sub{margin:0 0 18px;font-size:13px;color:var(--gris-moyen);}
+
+  /* ---------- Pions ---------- */
+  .pawn-add-row{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+  .pawn-add-row input{
+    flex:1 1 220px;border:1.5px solid var(--gris-clair);border-radius:20px;padding:10px 16px;
+    font-family:inherit;font-size:13.5px;color:var(--gris);
+  }
+  .pawn-add-row input:focus{outline:none;border-color:var(--bleu);}
+  .pawn-add-row input:disabled{background:var(--gris-fond2);cursor:not-allowed;}
+  .pawn-add-row button{
+    background:var(--bleu-fonce);color:#fff;border:none;padding:10px 22px;border-radius:20px;
+    font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .pawn-add-row button:hover{background:#006f87;}
+  .pawn-add-row button:disabled{opacity:0.45;cursor:not-allowed;}
+  .pawn-limit-note{font-size:11.5px;color:var(--gris-moyen);margin:0 0 16px;}
+  .pawn-list{display:flex;flex-wrap:wrap;gap:10px;}
+  .pawn-chip{
+    display:inline-flex;align-items:center;gap:8px;background:var(--gris-fond2);border-radius:22px;
+    padding:5px 10px 5px 5px;font-size:13px;font-weight:700;color:var(--gris);border:2px solid transparent;
+  }
+  .pawn-chip.active{background:#fff;border-color:var(--bleu);box-shadow:0 2px 10px rgba(0,136,169,0.16);}
+  .pawn-icon-circle{
+    width:28px;height:28px;border-radius:50%;background:#fff;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,0.06);
+  }
+  .pawn-icon-circle svg{width:17px;height:17px;}
+  .pawn-status{font-size:10.5px;font-weight:700;color:var(--gris-moyen);}
+  .pawn-chip button{background:none;border:none;color:var(--gris-moyen);font-size:14px;cursor:pointer;line-height:1;padding:2px;}
+  .pawn-chip button:hover{color:var(--rouge);}
+  .pawn-empty{font-size:12.5px;color:var(--gris-moyen);font-style:italic;}
+
+  /* ---------- Rappel des pions dans le bloc plateau ---------- */
+  .board-pawns-strip{display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--gris-fond2);}
+  .board-pawn-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gris);}
+  .board-pawn-tag .pawn-icon-circle{width:22px;height:22px;}
+  .board-pawn-tag .pawn-icon-circle svg{width:13px;height:13px;}
+  .board-pawn-tag.active{color:var(--bleu-fonce);}
+
+  /* ---------- Mise en page plateau + dé (deux colonnes) ---------- */
+  .board-layout{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;}
+  .board-layout-board{flex:1 1 440px;min-width:280px;}
+  @media (max-width:760px){
+    .board-layout{flex-direction:column;}
+    .board-layout-dice{width:100%;position:static !important;}
+  }
+
+  /* ---------- Plateau illustré (image de fond + calque interactif SVG) ----------
+     L'image de fond porte les 40 cases, leurs numéros et le tracé du chemin ;
+     le calque SVG superposé (même viewBox) porte uniquement les éléments
+     interactifs — zones cliquables, icônes de cases spéciales, pions,
+     indicateurs. Toute la mise à l'échelle est native au SVG : aucun calcul
+     JS n'est nécessaire au redimensionnement de la fenêtre. */
+  .board-wrap{padding:10px;}
+  .illustrated-board{position:relative;width:100%;max-width:460px;margin:0 auto;}
+  .board-bg-img{display:block;width:100%;height:auto;}
+  .board-overlay-svg{position:absolute;top:0;left:0;width:100%;height:100%;}
+  .cell-hit{fill:transparent;stroke:none;cursor:pointer;}
+  .cell-hit:hover{fill:rgba(0,136,169,0.12);}
+  .cell-hit:focus{outline:none;fill:rgba(0,136,169,0.16);}
+
+  /* Info-bulle maison au survol d'une case (HTML, pas le <title> SVG natif,
+     dont l'affichage dépend trop du navigateur pour être fiable). Positionnée
+     en JS près du curseur, dans le repère écran du conteneur du plateau. */
+  .board-tooltip{
+    position:absolute;z-index:20;max-width:220px;pointer-events:none;
+    background:#20282b;color:#fff;font-size:12px;line-height:1.4;
+    padding:8px 11px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.22);
+    transform:translate(-50%,-115%);display:none;
+  }
+  .cell-select-ring{fill:none;stroke:var(--bleu-fonce);stroke-width:11;pointer-events:none;}
+  .cell-content-dot{fill:var(--orange);stroke:#fff;stroke-width:5;}
+
+  .cell-icon{width:24px;height:24px;}
+  .cell-icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+  .board-legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:18px;padding-top:16px;border-top:1px solid var(--gris-fond2);}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--gris);max-width:230px;}
+  .legend-item svg{width:18px;height:18px;flex-shrink:0;}
+  .legend-item b{color:#20282b;}
+
+  /* ---------- Remplissage sélectif de plusieurs cases ---------- */
+  .bulk-edit-toggle{
+    margin-top:14px;background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);
+    padding:8px 18px;border-radius:18px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;
+  }
+  .bulk-edit-toggle:hover{background:var(--gris-fond2);}
+  .bulk-edit{margin-top:14px;background:var(--gris-fond2);border-radius:10px;padding:16px 18px;}
+  .bulk-edit-list{display:flex;flex-direction:column;gap:7px;max-height:420px;overflow-y:auto;padding-right:4px;}
+  .bulk-edit-row{display:flex;align-items:center;gap:10px;}
+  .bulk-edit-num{
+    flex:0 0 30px;height:28px;display:flex;align-items:center;justify-content:center;
+    border-radius:8px;background:#fff;font-size:12px;font-weight:800;color:var(--gris);
+  }
+  .bulk-edit-special-label{
+    flex:0 0 68px;font-size:10px;font-weight:700;color:var(--bleu-fonce);text-transform:uppercase;
+    letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .bulk-edit-special-label--empty{visibility:hidden;}
+  .bulk-edit-input{
+    flex:1 1 auto;min-width:0;border:1.5px solid var(--gris-clair);border-radius:8px;padding:7px 10px;
+    font-family:inherit;font-size:12.5px;color:var(--gris);
+  }
+  .bulk-edit-input:focus{outline:none;border-color:var(--bleu);}
+
+  .case-edit{margin-top:18px;background:var(--gris-fond2);border-radius:10px;padding:16px 18px;}
+  .case-edit-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .case-edit-title{font-size:14px;font-weight:700;color:#20282b;}
+  .case-edit-title span{font-weight:400;color:var(--gris-moyen);}
+  .case-edit-illus{display:block;width:100%;max-width:220px;border-radius:8px;margin:0 0 12px;box-shadow:0 2px 8px rgba(0,0,0,0.12);}
+  .case-edit textarea{
+    width:100%;min-height:70px;border:1.5px solid var(--gris-clair);border-radius:8px;padding:10px 12px;
+    font-family:inherit;font-size:13px;color:var(--gris);resize:vertical;
+  }
+  .case-edit textarea:focus{outline:none;border-color:var(--bleu);}
+  .case-edit-actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+  .case-edit-actions button{
+    border:none;border-radius:18px;padding:8px 18px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;
+  }
+  .case-btn-primary{background:var(--bleu-fonce);color:#fff;}
+  .case-btn-primary:hover{background:#006f87;}
+  .case-btn-ghost{background:transparent;border:1.5px solid var(--gris-moyen) !important;color:var(--gris);}
+  .case-btn-ghost:hover{background:#fff;}
+  .case-btn-close{background:none;border:none;color:var(--gris-moyen);font-size:18px;cursor:pointer;line-height:1;padding:0 4px;}
+
+  /* ---------- Dé et tour de jeu (colonne latérale, compacte) ---------- */
+  .dice-stage{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;}
+  .board-layout-dice{
+    flex:0 0 208px;background:var(--gris-fond2);border-radius:14px;padding:20px 16px;
+    position:sticky;top:16px;
+  }
+  .turn-indicator{min-height:38px;display:flex;flex-direction:column;gap:2px;justify-content:center;}
+  .turn-name{font-size:14.5px;font-weight:800;color:#20282b;}
+  .turn-sub{font-size:11.5px;font-weight:600;color:var(--gris-moyen);line-height:1.35;}
+  .dice-face{
+    width:60px;height:60px;background:#fff;border:2px solid var(--gris-clair);border-radius:14px;
+    display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--bleu-fonce);
+    box-shadow:0 4px 14px rgba(0,0,0,0.08);
+  }
+  .dice-face.rolling{animation:diceRoll .45s ease;}
+  @keyframes diceRoll{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.12);}100%{transform:rotate(360deg) scale(1);}}
+  .roll-btn{
+    background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:12.5px;font-weight:700;
+    border-radius:22px;cursor:pointer;font-family:inherit;box-shadow:0 8px 18px rgba(0,136,169,0.25);
+    transition:background .15s ease;width:100%;
+  }
+  .roll-btn:hover{background:#006f87;}
+  .roll-btn:disabled{opacity:0.45;cursor:not-allowed;box-shadow:none;}
+  .winner-banner{
+    background:linear-gradient(135deg,#fff7ea 0%,#fff 100%);border:2px solid var(--orange);border-radius:12px;
+    padding:14px 12px;text-align:center;font-size:13.5px;font-weight:800;color:#20282b;margin-bottom:4px;width:100%;
+  }
+  .turn-event{margin:0;font-size:11px;color:var(--gris-moyen);min-height:14px;line-height:1.4;}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:9px 20px;
+    border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .pawn-add-row, .roll-btn, .case-edit, .bulk-edit-toggle, .bulk-edit, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+    .cell-hit{cursor:default;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Jeu de l'oie<span>Un plateau générique, à remplir selon vos besoins</span></h1>
+      <p class="hero-desc">Le moteur de jeu classique — dé, pions, cases spéciales (Oie, Pont, Puits, Prison...) — prêt à l'emploi. Ajoutez le contenu de votre choix sur les cases : question de révision, mini-défi, consigne d'expression.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          20-40 minutes selon le groupe
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Nombre de pions libre
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('pawnsPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Lancer la partie &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- chemin en spirale schématique -->
+        <g fill="none" stroke="#A2A5A4" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round" opacity="0.7">
+          <path d="M60,150 C40,110 60,60 110,55 C160,50 175,90 150,110 C130,126 105,112 112,90"/>
+        </g>
+        <circle cx="60" cy="150" r="6" fill="#15CA88"/>
+        <circle cx="112" cy="90" r="6" fill="#DE5C5C"/>
+
+        <!-- dé -->
+        <g transform="translate(150,120)">
+          <rect x="0" y="0" width="58" height="58" rx="12" fill="#fff" stroke="#A2A5A4" stroke-width="3"/>
+          <circle cx="15" cy="15" r="4.5" fill="#0088A9"/>
+          <circle cx="43" cy="15" r="4.5" fill="#0088A9"/>
+          <circle cx="15" cy="43" r="4.5" fill="#0088A9"/>
+          <circle cx="43" cy="43" r="4.5" fill="#0088A9"/>
+          <circle cx="29" cy="29" r="4.5" fill="#0088A9"/>
+        </g>
+
+        <!-- pions -->
+        <circle cx="52" cy="168" r="9" fill="#F5AB33" stroke="#fff" stroke-width="2"/>
+        <circle cx="76" cy="172" r="9" fill="#884EC2" stroke="#fff" stroke-width="2"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Jeu de l'oie</span>
+  </nav>
+
+  <div class="intro">
+    <p>Un plateau de 40 cases avec les règles classiques du jeu de l'oie, adaptées proportionnellement à ce format plus court : l'Oie fait rejouer le nombre de points obtenus, le Pont fait sauter en case 8, le Puits bloque jusqu'à délivrance par un autre pion, le Labyrinthe fait reculer, la Prison retient jusqu'à un 6, la Mort renvoie au départ, et il faut arriver exactement en case 40 pour gagner.</p>
+    <p><strong>Consigne :</strong> cliquez sur une case du plateau pour lui ajouter un contenu de votre choix — une question, un défi, une consigne — et faire de ce moteur de jeu générique un outil adapté à votre sujet.</p>
+    <span class="note-dev">Adaptation à un seul dé : en Prison, la règle historique du double aux deux dés est remplacée ici par un 6 unique pour sortir.</span>
+  </div>
+
+  <div class="panel" id="pawnsPanel">
+    <h2>Vos pions</h2>
+    <p class="panel-sub">Ajoutez un pion par joueur, équipe ou sous-groupe — 15 maximum, pour garder le plateau lisible. Chaque pion reçoit une couleur et une forme qui lui sont propres.</p>
+    <div class="pawn-add-row">
+      <input type="text" id="pawnInput" placeholder="Nom du pion ou de l'équipe…" maxlength="30" onkeydown="if(event.key==='Enter'){event.preventDefault();addPawn();}">
+      <button id="addPawnBtn" onclick="addPawn()">Ajouter un pion</button>
+    </div>
+    <p class="pawn-limit-note" id="pawnLimitNote"></p>
+    <div class="pawn-list" id="pawnList"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Le plateau</h2>
+    <p class="panel-sub">Cliquez sur une case pour consulter ou modifier son contenu. La couleur de chaque pion rappelle celle du bloc « Vos pions ».</p>
+    <div class="board-pawns-strip" id="boardPawnsStrip"></div>
+    <div class="board-layout">
+      <div class="board-layout-board">
+        <div class="board-wrap">
+          <div class="illustrated-board" id="illustratedBoard">
+            <img class="board-bg-img" src="brand_assets/jeu_de_oie/plateau_illustre.svg" alt="Plateau du jeu de l'oie, 40 cases, du Départ à l'Arrivée">
+            <svg class="board-overlay-svg" id="boardOverlay" viewBox="0 0 1974.942 2549.362" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="board-tooltip" id="boardTooltip" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="board-legend" id="boardLegend"></div>
+        <button type="button" class="bulk-edit-toggle" id="bulkEditToggleBtn" onclick="toggleBulkEdit()">Remplir plusieurs cases</button>
+        <div id="bulkEditZone"></div>
+        <div id="caseEditZone"></div>
+      </div>
+      <div class="board-layout-dice dice-stage" id="dicePanel">
+        <div id="winnerZone"></div>
+        <p class="turn-indicator" id="turnIndicator"></p>
+        <div class="dice-face" id="diceFace">–</div>
+        <button class="roll-btn" id="rollBtn" onclick="rollDice()">Lancer le dé</button>
+        <p class="turn-event" id="turnEvent"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetGame()">Recommencer la partie</button>
+    <button onclick="clearAllCaseContents()">Réinitialiser le contenu des cases</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation. Les pions, le contenu des cases et la partie en cours restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+/* ---------- Configuration du plateau ----------
+   Plateau illustré fourni par Gwladys (40 cases), en remplacement de la
+   spirale géométrique générée précédemment. Les règles classiques du jeu de
+   l'oie (calées à l'origine sur 63 cases) sont adaptées proportionnellement
+   à 40 cases : même ordre narratif (Pont tôt, Auberge, Puits, Labyrinthe,
+   Prison, Mort, Arrivée), positions recalculées au ratio 40/63 puis ajustées
+   pour éviter toute collision entre elles. Les Oies sont réparties à
+   intervalles réguliers dans les intervalles libres plutôt qu'à l'ancien pas
+   fixe de 9, pour conserver une densité d'événements comparable à l'original
+   (~20-25 % des cases) sur un plateau plus court. */
+const BOARD_SIZE = 40;
+const MAX_PAWNS = 15;
+const GOOSE_SQUARES = [9, 16, 23, 30];
+const SPECIAL_CASES = {
+  4:  { key:'pont',       short:'Pont',       label:'Le Pont',       rule:'Envoie directement le pion en case 8.' },
+  12: { key:'auberge',    short:'Auberge',    label:"L'Auberge",     rule:'Le pion passe son prochain tour.' },
+  20: { key:'puits',      short:'Puits',      label:'Le Puits',      rule:"Le pion reste bloqué jusqu'à ce qu'un autre pion tombe sur cette case." },
+  27: { key:'labyrinthe', short:'Labyrinthe', label:'Le Labyrinthe', rule:'Le pion recule en case 19.' },
+  33: { key:'prison',     short:'Prison',     label:'La Prison',     rule:"Le pion reste bloqué jusqu'à ce qu'il obtienne un 6 au dé." },
+  37: { key:'mort',       short:'Mort',       label:'La Mort',       rule:'Le pion retourne à la case départ.' },
+  40: { key:'arrivee',    short:'Arrivée',    label:'Arrivée',       rule:"Il faut arriver exactement sur cette case pour gagner ; sinon, le pion rebondit en arrière." }
+};
+
+/* Coordonnées (espace natif du SVG, viewBox 0 0 1974.942 2549.362) du centre
+   de chacune des 40 cases, dans l'ordre du chemin. Extraites par détection de
+   composantes connexes (cases = blobs blancs) sur le rendu du plateau fourni,
+   ordonnées par parcours du plus proche voisin depuis la case Départ, puis
+   vérifiées visuellement case par case contre les numéros imprimés — aucun
+   écart constaté sur les 40 cases. */
+const BOARD_COORDS = {
+  1:{x:1545,y:2246}, 2:{x:1332,y:2299}, 3:{x:1097,y:2346}, 4:{x:858,y:2370}, 5:{x:619,y:2369},
+  6:{x:383,y:2327}, 7:{x:204,y:2180}, 8:{x:233,y:1952}, 9:{x:451,y:1839}, 10:{x:691,y:1821},
+  11:{x:929,y:1837}, 12:{x:1168,y:1861}, 13:{x:1406,y:1843}, 14:{x:1607,y:1720}, 15:{x:1694,y:1499},
+  16:{x:1630,y:1272}, 17:{x:1439,y:1133}, 18:{x:1201,y:1142}, 19:{x:982,y:1233}, 20:{x:780,y:1363},
+  21:{x:556,y:1446}, 22:{x:316,y:1440}, 23:{x:175,y:1256}, 24:{x:223,y:1023}, 25:{x:416,y:882},
+  26:{x:646,y:939}, 27:{x:872,y:1004}, 28:{x:1003,y:825}, 29:{x:988,y:575}, 30:{x:1186,y:456},
+  31:{x:1363,y:609}, 32:{x:1516,y:784}, 33:{x:1735,y:715}, 34:{x:1746,y:482}, 35:{x:1594,y:295},
+  36:{x:1377,y:198}, 37:{x:1138,y:175}, 38:{x:906,y:223}, 39:{x:702,y:347}, 40:{x:525,y:494}
+};
+const BOARD_VIEWBOX = '0 0 1974.942 2549.362';
+const BOARD_CELL_HIT_RADIUS = 95;
+const BOARD_ICON_SIZE = 112;
+
+/* ---------- Identité visuelle des pions : 15 couleurs charte, un vrai jeton par pion ---------- */
+const PAWN_PALETTE = [
+  '#00B5E2', '#0088A9', '#F5AB33', '#884EC2', '#15CA88',
+  '#DE5C5C', '#5FA7A0', '#E86F5C', '#5D6160', '#B895DA',
+  '#EB9D9D', '#F9CD85', '#97F4D2', '#AFCFC8', '#E3D2A3'
+];
+
+/* Jeton de pion : silhouette (tête + corps), couleur pleine, plus un médaillon
+   blanc avec l'initiale du prénom pour lever toute ambiguïté même entre deux
+   couleurs proches. */
+function pawnIconMarkup(pawn, size){
+  const color = PAWN_PALETTE[pawn.colorIndex % PAWN_PALETTE.length];
+  const initial = escapeHtml(((pawn.name || '?').trim().charAt(0) || '?').toUpperCase());
+  const dark = '#3d4143';
+  const inner = '' +
+    '<path d="M6.6,21.6 C6.6,14.1 8.1,10.9 12,10.9 C15.9,10.9 17.4,14.1 17.4,21.6 Z" fill="' + color + '" stroke="' + dark + '" stroke-width="1.1"/>' +
+    '<circle cx="12" cy="6.9" r="4.3" fill="' + color + '" stroke="' + dark + '" stroke-width="1.1"/>' +
+    '<circle cx="12" cy="16.6" r="3.5" fill="#fff" stroke="' + dark + '" stroke-width="0.9"/>' +
+    '<text x="12" y="16.7" text-anchor="middle" dominant-baseline="central" font-size="5.4" font-weight="800" fill="' + dark + '">' + initial + '</text>';
+  return '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + inner + '</svg>';
+}
+
+/* Marqueur de pion pour l'overlay SVG du plateau : un jeton coloré (cercle +
+   initiale) positionné au centre de la case, avec un léger décalage
+   horizontal quand plusieurs pions partagent la même case pour éviter qu'ils
+   ne se superposent totalement. */
+function pawnDotSvgMarkup(pawn, cx, cy, indexInCell, countInCell){
+  const color = PAWN_PALETTE[pawn.colorIndex % PAWN_PALETTE.length];
+  const initial = escapeHtml(((pawn.name || '?').trim().charAt(0) || '?').toUpperCase());
+  const spacing = 58;
+  const offsetX = (indexInCell - (countInCell - 1) / 2) * spacing;
+  const px = cx + offsetX, py = cy + 85;
+  return '' +
+    '<g class="overlay-pawn" pointer-events="none">' +
+      '<title>' + escapeHtml(pawn.name) + '</title>' +
+      '<circle cx="' + px + '" cy="' + py + '" r="27" fill="' + color + '" stroke="#fff" stroke-width="5"/>' +
+      '<text x="' + px + '" y="' + (py + 9) + '" text-anchor="middle" font-size="25" font-weight="800" fill="#fff" font-family="\'Century Gothic Fallback\',sans-serif">' + initial + '</text>' +
+    '</g>';
+}
+
+/* ---------- Icônes des cases spéciales ----------
+   Chaque case spéciale est illustrée par une image générée puis recolorée à
+   l'exact hexadécimal de la charte AXIS MUNDI (et non l'approximation rendue
+   par le générateur) : #0088A9 Pont, #15CA88 Oie, #F5AB33 Auberge/Arrivée,
+   #884EC2 Puits, #5D6160 Prison/Mort. Fond systématiquement transparent pour
+   s'intégrer à la fois sur les cartes claires et sur la carte sombre de la
+   case Mort. La case Labyrinthe reste la seule en habillage plein cadre
+   (option full) ; les sept autres sont utilisées en miniature partout
+   (plateau, légende, panneau d'édition). */
+const SPECIAL_ICON_FILES = {
+  oie: 'oie_icon.png',
+  pont: 'pont_icon.png',
+  auberge: 'auberge_icon.png',
+  puits: 'puits_icon.png',
+  labyrinthe: 'labyrinthe_case.jpg',
+  prison: 'prison_icon.png',
+  mort: 'mort_icon.png',
+  arrivee: 'arrivee_icon.png'
+};
+const SPECIAL_ICON_LABELS = {
+  oie: 'Oie', pont: 'Pont', auberge: 'Auberge', puits: 'Puits',
+  labyrinthe: 'Labyrinthe', prison: 'Prison', mort: 'Mort', arrivee: 'Arrivée'
+};
+
+function specialIconMarkup(key, opts){
+  opts = opts || {};
+  const file = SPECIAL_ICON_FILES[key];
+  if(!file) return '';
+  const label = SPECIAL_ICON_LABELS[key] || key;
+  if(key === 'labyrinthe' && opts.full){
+    return '<img class="cell-icon-img" src="brand_assets/jeu_de_oie/' + file + '" alt="' + escapeHtml(label) + '" loading="lazy">';
+  }
+  const coverStyle = key === 'labyrinthe' ? 'border-radius:50%;object-fit:cover;' : 'object-fit:contain;';
+  return '<img class="cell-icon" style="' + coverStyle + '" width="22" height="22" src="brand_assets/jeu_de_oie/' + file + '" alt="' + escapeHtml(label) + '" loading="lazy">';
+}
+
+/* Même icône, en élément SVG natif <image> plutôt qu'en <img> HTML, pour
+   l'overlay du plateau illustré : positionnée légèrement au-dessus du centre
+   de la case pour ne pas recouvrir le numéro déjà imprimé dans l'illustration. */
+function specialIconSvgMarkup(key, cx, cy){
+  const file = SPECIAL_ICON_FILES[key];
+  if(!file) return '';
+  const label = SPECIAL_ICON_LABELS[key] || key;
+  const size = BOARD_ICON_SIZE;
+  const iconY = cy - 42;
+  return '' +
+    '<image href="brand_assets/jeu_de_oie/' + file + '" x="' + (cx - size / 2) + '" y="' + (iconY - size / 2) + '" ' +
+      'width="' + size + '" height="' + size + '" pointer-events="none">' +
+      '<title>' + escapeHtml(label) + '</title>' +
+    '</image>';
+}
+
+/* ---------- État ---------- */
+let pawns = [];
+let nextPawnId = 1;
+let currentIndex = 0;
+let diceValue = null;
+let winnerId = null;
+let lastEvent = ''; // dernier événement de jeu, affiché seul (pas d'historique conservé)
+let caseContents = {}; // { [numéro de case]: texte }
+let selectedCase = null;
+
+/* ---------- Utilitaires ---------- */
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function specialFor(pos){
+  if(GOOSE_SQUARES.indexOf(pos) !== -1) return { key:'oie', short:'Oie', label:'Oie', rule:'Le pion rejoue le nombre de points obtenus au dernier lancer.' };
+  return SPECIAL_CASES[pos] || null;
+}
+
+function logEvent(text){
+  lastEvent = text;
+}
+
+/* ---------- Pions ---------- */
+function addPawn(){
+  if(pawns.length >= MAX_PAWNS) return;
+  const input = document.getElementById('pawnInput');
+  const name = input.value.trim();
+  if(!name) return;
+  const colorIndex = (nextPawnId - 1) % PAWN_PALETTE.length;
+  pawns.push({ id: nextPawnId++, name: name, colorIndex: colorIndex, position: 0, stuck: null, skipNext: false, finished: false });
+  input.value = '';
+  input.focus();
+  renderAll();
+}
+
+function removePawn(id){
+  const idx = pawns.findIndex(function(p){ return p.id === id; });
+  if(idx === -1) return;
+  pawns.splice(idx, 1);
+  if(pawns.length === 0){
+    currentIndex = 0;
+  } else if(currentIndex >= pawns.length){
+    currentIndex = 0;
+  }
+  renderAll();
+}
+
+function currentPawn(){
+  if(pawns.length === 0) return null;
+  return pawns[currentIndex] || null;
+}
+
+function pawnStatusLabel(p){
+  if(p.finished) return 'Arrivée';
+  if(p.stuck && p.stuck.type === 'puits') return 'Puits';
+  if(p.stuck && p.stuck.type === 'prison') return 'Prison';
+  if(p.skipNext) return 'Passe';
+  return null;
+}
+
+/* ---------- Moteur de jeu ---------- */
+function rollDie(){
+  return 1 + Math.floor(Math.random() * 6);
+}
+
+function triggerDiceAnimation(){
+  const face = document.getElementById('diceFace');
+  if(!face) return;
+  face.classList.remove('rolling');
+  void face.offsetWidth; // force le reflow pour pouvoir rejouer l'animation
+  face.classList.add('rolling');
+}
+
+function rollDice(){
+  if(winnerId) return;
+  if(pawns.length === 0){
+    alert('Ajoutez au moins un pion avant de lancer le dé.');
+    return;
+  }
+  const pawn = currentPawn();
+  if(!pawn) return;
+  triggerDiceAnimation();
+
+  if(pawn.skipNext){
+    pawn.skipNext = false;
+    logEvent(pawn.name + ' passe son tour (Auberge).');
+    diceValue = null;
+    advanceTurn();
+    renderAll();
+    return;
+  }
+
+  if(pawn.stuck && pawn.stuck.type === 'puits'){
+    logEvent(pawn.name + " reste dans le Puits, en attente d'être délivré(e) par un autre pion.");
+    diceValue = null;
+    advanceTurn();
+    renderAll();
+    return;
+  }
+
+  if(pawn.stuck && pawn.stuck.type === 'prison'){
+    const roll = rollDie();
+    diceValue = roll;
+    if(roll === 6){
+      pawn.stuck = null;
+      logEvent(pawn.name + ' fait 6 et sort de Prison (reste en case 52).');
+    } else {
+      logEvent(pawn.name + ' fait ' + roll + ' : toujours en Prison (il faut un 6 pour sortir).');
+    }
+    advanceTurn();
+    renderAll();
+    return;
+  }
+
+  const roll = rollDie();
+  diceValue = roll;
+  movePawn(pawn, roll);
+  advanceTurn();
+  renderAll();
+}
+
+function rebound(target){
+  if(target > BOARD_SIZE) return BOARD_SIZE - (target - BOARD_SIZE);
+  return target;
+}
+
+function movePawn(pawn, steps){
+  const target = rebound(pawn.position + steps);
+  pawn.position = target;
+  logEvent(pawn.name + ' lance le dé : ' + steps + '. Avance en case ' + target + '.');
+  resolveSquare(pawn, steps, 0);
+}
+
+function resolveSquare(pawn, lastRoll, depth){
+  if(depth > 10) return; // sécurité anti-boucle (cascade de cases Oie)
+  const pos = pawn.position;
+
+  if(pos === BOARD_SIZE){
+    pawn.finished = true;
+    winnerId = pawn.id;
+    logEvent(pawn.name + ' atteint la case ' + BOARD_SIZE + ' : victoire !');
+    return;
+  }
+
+  if(GOOSE_SQUARES.indexOf(pos) !== -1){
+    logEvent(pawn.name + ' tombe sur une Oie (case ' + pos + ') : elle rejoue ' + lastRoll + ' case(s).');
+    pawn.position = rebound(pos + lastRoll);
+    resolveSquare(pawn, lastRoll, depth + 1);
+    return;
+  }
+
+  const special = SPECIAL_CASES[pos];
+  if(!special) return;
+
+  if(special.key === 'pont'){
+    const dest = 8;
+    logEvent(pawn.name + ' emprunte le Pont : direction case ' + dest + '.');
+    pawn.position = dest;
+    resolveSquare(pawn, lastRoll, depth + 1);
+    return;
+  }
+  if(special.key === 'auberge'){
+    pawn.skipNext = true;
+    logEvent(pawn.name + " s'arrête à l'Auberge : elle passera son prochain tour.");
+    return;
+  }
+  if(special.key === 'puits'){
+    const other = pawns.find(function(p){
+      return p.id !== pawn.id && p.stuck && p.stuck.type === 'puits' && p.position === pos;
+    });
+    if(other){
+      other.stuck = null;
+      pawn.stuck = { type: 'puits' };
+      logEvent(pawn.name + ' tombe dans le Puits et y délivre ' + other.name + '.');
+    } else {
+      pawn.stuck = { type: 'puits' };
+      logEvent(pawn.name + " tombe dans le Puits : bloqué(e) jusqu'à ce qu'un autre pion l'y rejoigne.");
+    }
+    return;
+  }
+  if(special.key === 'labyrinthe'){
+    const dest = 19;
+    logEvent(pawn.name + " s'égare dans le Labyrinthe : retour en case " + dest + ".");
+    pawn.position = dest;
+    return;
+  }
+  if(special.key === 'prison'){
+    pawn.stuck = { type: 'prison' };
+    logEvent(pawn.name + " est envoyé(e) en Prison : il faudra un 6 pour en sortir.");
+    return;
+  }
+  if(special.key === 'mort'){
+    pawn.position = 1;
+    logEvent(pawn.name + ' tombe sur la Mort : retour à la case 1.');
+    return;
+  }
+}
+
+function advanceTurn(){
+  if(winnerId) return;
+  if(pawns.length === 0) return;
+  currentIndex = (currentIndex + 1) % pawns.length;
+}
+
+/* ---------- Contenu des cases ---------- */
+function selectCase(n){
+  selectedCase = (selectedCase === n) ? null : n;
+  renderBoard();
+  renderCaseEdit();
+}
+
+/* Mise à jour pure des données, sans re-rendu — utilisée pour le retour
+   visuel en direct pendant la frappe (voir bulkEditLiveUpdate ci-dessous),
+   où reconstruire toute la liste ferait perdre le focus du champ en cours
+   de saisie. */
+function applyCaseContent(n, text){
+  const trimmed = (text || '').trim();
+  if(trimmed) caseContents[n] = trimmed;
+  else delete caseContents[n];
+}
+
+function saveCaseContent(n, text){
+  applyCaseContent(n, text);
+  renderBoard();
+  renderCaseEdit();
+  renderBulkEdit();
+}
+
+/* Retour en direct pendant la frappe dans la vue liste : met à jour le
+   pastille de contenu sur le plateau à chaque caractère, sans reconstruire
+   la liste elle-même (qui ferait perdre le focus du champ actif). La
+   synchronisation complète (retrait si le champ est vidé, panneau de case,
+   liste normalisée) se fait au blur via onchange -> saveCaseContent. */
+function bulkEditLiveUpdate(n, text){
+  applyCaseContent(n, text);
+  renderBoard();
+}
+
+function clearAllCaseContents(){
+  if(Object.keys(caseContents).length === 0) return;
+  if(!confirm('Effacer le contenu personnalisé de toutes les cases ?')) return;
+  caseContents = {};
+  renderBoard();
+  renderCaseEdit();
+  renderBulkEdit();
+}
+
+/* ---------- Remplissage sélectif de plusieurs cases ----------
+   Le plateau reste générique : rien n'est pré-rempli. Cette vue liste
+   permet simplement d'ajouter du contenu à autant de cases qu'on le
+   souhaite — pas forcément toutes, pas dans un ordre imposé — sans avoir
+   à cliquer sur chaque case une à une. Elle réutilise saveCaseContent(),
+   donc reste toujours synchronisée avec le clic direct sur le plateau. */
+let bulkEditOpen = false;
+
+function toggleBulkEdit(){
+  bulkEditOpen = !bulkEditOpen;
+  renderBulkEdit();
+}
+
+function renderBulkEdit(){
+  const zone = document.getElementById('bulkEditZone');
+  const btn = document.getElementById('bulkEditToggleBtn');
+  if(!zone || !btn) return;
+  btn.textContent = bulkEditOpen ? 'Fermer la vue liste' : 'Remplir plusieurs cases';
+  btn.setAttribute('aria-expanded', bulkEditOpen ? 'true' : 'false');
+
+  if(!bulkEditOpen){
+    zone.innerHTML = '';
+    return;
+  }
+
+  let rows = '';
+  for(let n = 1; n <= BOARD_SIZE; n++){
+    const special = specialFor(n);
+    const content = caseContents[n] || '';
+    rows += '' +
+      '<div class="bulk-edit-row">' +
+        '<span class="bulk-edit-num">' + n + '</span>' +
+        '<span class="bulk-edit-special-label' + (special ? '' : ' bulk-edit-special-label--empty') + '">' + (special ? escapeHtml(special.short) : '') + '</span>' +
+        '<input type="text" class="bulk-edit-input" maxlength="200" value="' + escapeHtml(content) + '" ' +
+          'placeholder="Question, défi, consigne…" ' +
+          'oninput="bulkEditLiveUpdate(' + n + ', this.value)" ' +
+          'onchange="saveCaseContent(' + n + ', this.value)">' +
+      '</div>';
+  }
+
+  zone.innerHTML = '' +
+    '<div class="bulk-edit">' +
+      '<p class="panel-sub" style="margin:0 0 12px;">Ajoutez un contenu à autant de cases que vous le souhaitez pour votre thématique du jour — les autres restent vides et suivent uniquement les règles du plateau.</p>' +
+      '<div class="bulk-edit-list">' + rows + '</div>' +
+    '</div>';
+}
+
+/* ---------- Rendu : pions ---------- */
+function renderPawns(){
+  const wrap = document.getElementById('pawnList');
+  if(pawns.length === 0){
+    wrap.innerHTML = '<span class="pawn-empty">Aucun pion pour le moment.</span>';
+  } else {
+    wrap.innerHTML = pawns.map(function(p, i){
+      const status = pawnStatusLabel(p);
+      const activeClass = (i === currentIndex && !winnerId) ? ' active' : '';
+      return '' +
+        '<span class="pawn-chip' + activeClass + '">' +
+          '<span class="pawn-icon-circle">' + pawnIconMarkup(p, 17) + '</span>' +
+          escapeHtml(p.name) +
+          ' <span class="pawn-status">(case ' + p.position + (status ? ' — ' + status : '') + ')</span>' +
+          '<button onclick="removePawn(' + p.id + ')" title="Retirer ce pion">&times;</button>' +
+        '</span>';
+    }).join('');
+  }
+
+  const input = document.getElementById('pawnInput');
+  const btn = document.getElementById('addPawnBtn');
+  const note = document.getElementById('pawnLimitNote');
+  const atLimit = pawns.length >= MAX_PAWNS;
+  input.disabled = atLimit;
+  btn.disabled = atLimit;
+  note.textContent = atLimit
+    ? 'Limite de ' + MAX_PAWNS + ' pions atteinte.'
+    : pawns.length + ' / ' + MAX_PAWNS + ' pions.';
+
+  const strip = document.getElementById('boardPawnsStrip');
+  if(pawns.length === 0){
+    strip.innerHTML = '';
+  } else {
+    strip.innerHTML = pawns.map(function(p, i){
+      const activeClass = (i === currentIndex && !winnerId) ? ' active' : '';
+      return '' +
+        '<span class="board-pawn-tag' + activeClass + '">' +
+          '<span class="pawn-icon-circle">' + pawnIconMarkup(p, 13) + '</span>' +
+          escapeHtml(p.name) +
+        '</span>';
+    }).join('');
+  }
+}
+
+/* ---------- Info-bulle du plateau ----------
+   Implémentée en HTML/JS plutôt qu'avec le <title> SVG natif : ce dernier
+   dépend trop du navigateur (délai variable, parfois absent) pour être un
+   moyen d'accès fiable au contenu d'une case. */
+function showBoardTooltip(evt, n){
+  const tip = document.getElementById('boardTooltip');
+  if(!tip) return;
+  const special = specialFor(n);
+  const content = caseContents[n];
+  let text = 'Case ' + n + (special ? ' — ' + special.label : '');
+  if(content) text += ' : ' + content;
+  tip.textContent = text;
+  tip.style.display = 'block';
+  positionBoardTooltip(evt);
+}
+
+function positionBoardTooltip(evt){
+  const tip = document.getElementById('boardTooltip');
+  const wrap = document.getElementById('illustratedBoard');
+  if(!tip || !wrap || tip.style.display === 'none') return;
+  const rect = wrap.getBoundingClientRect();
+  let x, y;
+  if(evt && typeof evt.clientX === 'number' && (evt.clientX !== 0 || evt.clientY !== 0)){
+    x = evt.clientX - rect.left;
+    y = evt.clientY - rect.top;
+  } else if(evt && evt.target && evt.target.getBoundingClientRect){
+    const cr = evt.target.getBoundingClientRect();
+    x = (cr.left + cr.right) / 2 - rect.left;
+    y = cr.top - rect.top;
+  } else {
+    return;
+  }
+  tip.style.left = x + 'px';
+  tip.style.top = y + 'px';
+}
+
+function hideBoardTooltip(){
+  const tip = document.getElementById('boardTooltip');
+  if(tip) tip.style.display = 'none';
+}
+
+/* ---------- Rendu : plateau illustré ----------
+   Le plateau est une image de fond (brand_assets/jeu_de_oie/plateau_illustre.svg,
+   40 cases, recolorée à la charte) surmontée d'un calque SVG interactif qui
+   partage exactement le même viewBox : les coordonnées de BOARD_COORDS
+   s'alignent donc pixel pour pixel sur l'illustration quel que soit
+   l'agrandissement, sans aucun recalcul JS au redimensionnement — la mise à
+   l'échelle est intégralement déléguée au SVG lui-même (contrairement à
+   l'ancien plateau en spirale, qui devait recalculer sa taille en JS pour
+   tenir dans la colonne disponible). */
+function renderBoard(){
+  const svg = document.getElementById('boardOverlay');
+  if(!svg) return;
+  const r = BOARD_CELL_HIT_RADIUS;
+  let html = '';
+
+  for(let n = 1; n <= BOARD_SIZE; n++){
+    const c = BOARD_COORDS[n];
+    const special = specialFor(n);
+    const pawnsHere = pawns.filter(function(pw){ return pw.position === n; });
+
+    html += '<g class="cell-group" data-case="' + n + '">';
+
+    if(special){
+      html += specialIconSvgMarkup(special.key, c.x, c.y);
+    }
+
+    if(caseContents[n]){
+      html += '<circle class="cell-content-dot" cx="' + (c.x + 74) + '" cy="' + (c.y - 74) + '" r="17" pointer-events="none"></circle>';
+    }
+
+    html += pawnsHere.map(function(pw, i){ return pawnDotSvgMarkup(pw, c.x, c.y, i, pawnsHere.length); }).join('');
+
+    if(selectedCase === n){
+      html += '<circle class="cell-select-ring" cx="' + c.x + '" cy="' + c.y + '" r="' + (r + 7) + '"></circle>';
+    }
+
+    /* Info-bulle au survol : gérée en JS (voir showBoardTooltip) plutôt que
+       via le <title> SVG natif, dont l'affichage s'est révélé peu fiable
+       selon les navigateurs. Le clic reste le seul accès garanti en
+       vidéoprojection tactile, où il n'y a pas de survol. */
+    const title = 'Case ' + n + (special ? ' — ' + special.label : '') + (caseContents[n] ? ' : ' + caseContents[n] : '');
+    html += '' +
+      '<circle class="cell-hit" cx="' + c.x + '" cy="' + c.y + '" r="' + r + '" tabindex="0" role="button" ' +
+        'aria-label="' + escapeHtml(title) + '" onclick="selectCase(' + n + ')" ' +
+        'onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();selectCase(' + n + ');}" ' +
+        'onmouseenter="showBoardTooltip(event,' + n + ')" onmousemove="positionBoardTooltip(event)" ' +
+        'onmouseleave="hideBoardTooltip()" onfocus="showBoardTooltip(event,' + n + ')" onblur="hideBoardTooltip()">' +
+      '</circle>';
+
+    html += '</g>';
+  }
+  svg.innerHTML = html;
+}
+
+function renderLegend(){
+  const items = [
+    { key:'oie', label:'Oie', rule:'Rejoue le nombre de points obtenus.' },
+    { key:'pont', label:'Pont', rule:'Direction case 8.' },
+    { key:'auberge', label:'Auberge', rule:'Passe un tour.' },
+    { key:'puits', label:'Puits', rule:"Bloqué jusqu'à délivrance." },
+    { key:'labyrinthe', label:'Labyrinthe', rule:'Recule en case 19.' },
+    { key:'prison', label:'Prison', rule:"Bloqué jusqu'à un 6." },
+    { key:'mort', label:'Mort', rule:'Retour en case 1.' },
+    { key:'arrivee', label:'Arrivée', rule:'Case 40 exacte pour gagner.' }
+  ];
+  document.getElementById('boardLegend').innerHTML = items.map(function(it){
+    return '' +
+      '<span class="legend-item">' +
+        specialIconMarkup(it.key) +
+        '<span><b>' + it.label + '</b> — ' + it.rule + '</span>' +
+      '</span>';
+  }).join('');
+}
+
+function renderCaseEdit(){
+  const zone = document.getElementById('caseEditZone');
+  if(selectedCase === null){
+    zone.innerHTML = '';
+    return;
+  }
+  const n = selectedCase;
+  const special = specialFor(n);
+  const content = caseContents[n] || '';
+  zone.innerHTML = '' +
+    '<div class="case-edit">' +
+      '<div class="case-edit-head">' +
+        '<span class="case-edit-title">' + (special ? specialIconMarkup(special.key) : '') + ' Case ' + n + (special ? ' <span>— ' + special.label + '</span>' : '') + '</span>' +
+        '<button class="case-btn-close" onclick="selectCase(' + n + ')" title="Fermer">&times;</button>' +
+      '</div>' +
+      (special ? '<p class="panel-sub" style="margin:0 0 10px;">' + special.rule + '</p>' : '') +
+      (special && special.key === 'labyrinthe' ? '<img class="case-edit-illus" src="brand_assets/jeu_de_oie/labyrinthe_detail.jpg" alt="Illustration de la case Labyrinthe">' : '') +
+      '<textarea id="caseContentInput" placeholder="Ajoutez ici une question, un défi ou une consigne pour cette case…">' + escapeHtml(content) + '</textarea>' +
+      '<div class="case-edit-actions">' +
+        '<button class="case-btn-primary" onclick="saveCaseContent(' + n + ', document.getElementById(\'caseContentInput\').value)">Enregistrer</button>' +
+        '<button class="case-btn-ghost" onclick="saveCaseContent(' + n + ', \'\')">Effacer le contenu</button>' +
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- Rendu : dé et tour de jeu ---------- */
+function renderDice(){
+  const face = document.getElementById('diceFace');
+  face.textContent = diceValue === null ? '–' : String(diceValue);
+
+  const turnEl = document.getElementById('turnIndicator');
+  const rollBtn = document.getElementById('rollBtn');
+  const winnerZone = document.getElementById('winnerZone');
+
+  if(winnerId){
+    const winner = pawns.find(function(p){ return p.id === winnerId; });
+    winnerZone.innerHTML = '<div class="winner-banner">' + (winner ? escapeHtml(winner.name) : '') + ' remporte la partie !</div>';
+    turnEl.innerHTML = '<span class="turn-sub">Partie terminée.</span>';
+    rollBtn.textContent = 'Lancer le dé';
+    rollBtn.disabled = true;
+  } else if(pawns.length === 0){
+    winnerZone.innerHTML = '';
+    turnEl.innerHTML = '<span class="turn-sub">Ajoutez au moins un pion pour commencer.</span>';
+    rollBtn.textContent = 'Lancer le dé';
+    rollBtn.disabled = true;
+  } else {
+    winnerZone.innerHTML = '';
+    const pawn = currentPawn();
+    let sub = 'Lancez le dé pour avancer.';
+    let btnLabel = 'Lancer le dé';
+    if(pawn.skipNext){
+      sub = "S'arrête à l'Auberge : ce tour est passé.";
+      btnLabel = 'Passer le tour';
+    } else if(pawn.stuck && pawn.stuck.type === 'puits'){
+      sub = "Bloqué(e) dans le Puits, en attente d'un autre pion.";
+      btnLabel = 'Passer le tour';
+    } else if(pawn.stuck && pawn.stuck.type === 'prison'){
+      sub = 'En Prison : il faut faire 6 pour sortir.';
+      btnLabel = 'Tenter un 6';
+    }
+    turnEl.innerHTML = '<span class="turn-name">' + escapeHtml(pawn ? pawn.name : '') + '</span><span class="turn-sub">' + escapeHtml(sub) + '</span>';
+    rollBtn.textContent = btnLabel;
+    rollBtn.disabled = false;
+  }
+
+  const eventEl = document.getElementById('turnEvent');
+  eventEl.textContent = lastEvent;
+}
+
+/* ---------- Réinitialisation ---------- */
+function resetGame(){
+  if(!confirm('Remettre tous les pions au départ et effacer le journal de partie ?')) return;
+  pawns.forEach(function(p){
+    p.position = 0;
+    p.stuck = null;
+    p.skipNext = false;
+    p.finished = false;
+  });
+  currentIndex = 0;
+  diceValue = null;
+  winnerId = null;
+  lastEvent = '';
+  renderAll();
+}
+
+/* ---------- Rendu global ---------- */
+function renderAll(){
+  renderPawns();
+  renderBoard();
+  renderCaseEdit();
+  renderDice();
+}
+
+renderLegend();
+renderAll();
+renderBulkEdit();
+</script>
+
+</body>
+</html>

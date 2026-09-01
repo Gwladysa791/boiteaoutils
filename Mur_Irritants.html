@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mur des irritants — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:1060px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{
+    display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;
+  }
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Barre d'action du tableau ---------- */
+  .board-toolbar{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:14px;
+  }
+  .board-add-col-btn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:10px 20px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .board-add-col-btn:hover{background:#006f87;}
+
+  /* ---------- Tableau de colonnes ---------- */
+  .board-wrap{
+    overflow-x:auto;
+    padding-bottom:10px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .board{
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    min-height:160px;
+  }
+  .board-empty-msg{
+    font-size:13.5px;
+    color:var(--gris-moyen);
+    font-style:italic;
+    text-align:center;
+    padding:30px 10px;
+    width:100%;
+  }
+  .board-col{
+    background:var(--gris-fond2);
+    border-radius:10px;
+    width:250px;
+    flex:0 0 250px;
+    display:flex;
+    flex-direction:column;
+    max-height:640px;
+  }
+  .col-head{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:13px 10px 13px 14px;
+    border-radius:10px 10px 0 0;
+    background:var(--col-accent, var(--bleu-fonce));
+  }
+  .col-name-input{
+    flex:1;
+    min-width:0;
+    border:none;
+    background:transparent;
+    font-size:14.5px;
+    font-weight:700;
+    letter-spacing:.15px;
+    color:#fff;
+    font-family:inherit;
+    padding:4px 6px;
+    border-radius:4px;
+  }
+  .col-name-input::placeholder{color:rgba(255,255,255,0.75);font-weight:600;}
+  .col-name-input:focus{outline:none;background:rgba(255,255,255,0.18);}
+  .col-count{
+    font-size:11px;
+    font-weight:700;
+    color:#fff;
+    background:rgba(255,255,255,0.28);
+    border-radius:10px;
+    padding:2px 8px;
+    flex-shrink:0;
+  }
+  .col-del-btn{
+    background:none;
+    border:none;
+    color:rgba(255,255,255,0.75);
+    font-size:16px;
+    cursor:pointer;
+    padding:2px 4px;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .col-del-btn:hover{color:#fff;}
+  .col-body{
+    flex:1;
+    padding:12px 12px 6px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-height:100px;
+    overflow-y:auto;
+    transition:background .12s ease;
+  }
+  .col-body.drag-over{background:#e3f3f8;}
+  .col-empty{
+    font-size:12px;
+    color:var(--gris-moyen);
+    font-style:italic;
+    text-align:center;
+    padding:16px 4px;
+    margin:0;
+  }
+  .col-add-postit{
+    padding:10px 12px 14px;
+  }
+  .col-add-btn{
+    width:100%;
+    border:1.5px dashed var(--gris-moyen);
+    background:transparent;
+    color:var(--gris);
+    padding:9px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .col-add-btn:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+
+  /* ---------- Post-it ---------- */
+  .postit{
+    border-radius:5px;
+    padding:10px 10px 8px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.12);
+    cursor:grab;
+  }
+  .postit:active{cursor:grabbing;}
+  .postit.dragging{opacity:0.35;}
+  .postit-text{
+    display:block;
+    width:100%;
+    border:none;
+    background:transparent;
+    resize:none;
+    font-family:inherit;
+    font-size:13px;
+    color:#33393b;
+    line-height:1.4;
+    min-height:48px;
+    padding:0;
+    overflow:hidden;
+  }
+  .postit-text:focus{outline:none;}
+  .postit-footer{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:6px;
+    flex-wrap:wrap;
+  }
+  .postit-colors{display:flex;gap:4px;}
+  .postit-colors .dot{
+    width:13px;height:13px;
+    border-radius:50%;
+    cursor:pointer;
+    border:1.5px solid rgba(0,0,0,0.15);
+  }
+  .postit-colors .dot.active{
+    border-color:#20282b;
+    box-shadow:0 0 0 1.5px #fff inset;
+  }
+  .postit-move{
+    border:none;
+    background:rgba(255,255,255,0.65);
+    border-radius:10px;
+    font-size:10px;
+    color:#33393b;
+    font-family:inherit;
+    padding:3px 4px;
+    flex:1;
+    min-width:60px;
+  }
+  .postit-move:focus{outline:none;}
+  .postit-del{
+    background:none;
+    border:none;
+    color:rgba(0,0,0,0.35);
+    font-size:15px;
+    cursor:pointer;
+    padding:0 2px;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .postit-del:hover{color:var(--rouge);}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  .next-step{
+    background:#eafbf4;
+    border-left:4px solid var(--vert);
+    border-radius:6px;
+    padding:16px 20px;
+    margin-top:20px;
+    font-size:13.5px;
+  }
+  .next-step strong{color:#0c7d55;}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media (max-width:640px){
+    .board-col{width:210px;flex:0 0 210px;}
+    .board-toolbar{justify-content:center;}
+  }
+
+  @media print{
+    .hero-header, .back-link, .board-toolbar, .col-add-postit, .col-del-btn, .postit-move, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .board-col{background:#fff;border:1px solid var(--gris-fond2);}
+    .board-wrap{overflow:visible;}
+    .board{flex-wrap:wrap;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Mur des irritants<span>Faire remonter ce qui pèse au quotidien, avant que cela ne s'installe</span></h1>
+      <p class="hero-desc">Un espace de collecte collective où chacun dépose, sur un post-it, ce qui vient perturber le travail au quotidien — un process, une information qui manque, un outil inadapté, une tension relationnelle. À classer et regrouper en séance.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          20-40 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          4 catégories pré-remplies, modifiables
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('boardPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer la collecte &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- mur de briques stylisé -->
+        <g transform="translate(50,45)" opacity="0.5">
+          <rect x="0" y="0" width="140" height="14" fill="#fff"/>
+          <rect x="0" y="18" width="140" height="14" fill="#fff"/>
+          <rect x="0" y="36" width="140" height="14" fill="#fff"/>
+          <line x1="0" y1="0" x2="0" y2="50" stroke="var(--gris-clair)" stroke-width="1"/>
+          <line x1="35" y1="0" x2="35" y2="18" stroke="var(--gris-clair)" stroke-width="1"/>
+          <line x1="70" y1="0" x2="70" y2="18" stroke="var(--gris-clair)" stroke-width="1"/>
+          <line x1="105" y1="0" x2="105" y2="18" stroke="var(--gris-clair)" stroke-width="1"/>
+          <line x1="17" y1="18" x2="17" y2="36" stroke="var(--gris-clair)" stroke-width="1"/>
+          <line x1="52" y1="18" x2="52" y2="36" stroke="var(--gris-clair)" stroke-width="1"/>
+          <line x1="87" y1="18" x2="87" y2="36" stroke="var(--gris-clair)" stroke-width="1"/>
+          <line x1="122" y1="18" x2="122" y2="36" stroke="var(--gris-clair)" stroke-width="1"/>
+        </g>
+
+        <!-- post-it colorés, légèrement pivotés -->
+        <g transform="translate(56,60) rotate(-6)"><rect width="30" height="30" rx="3" fill="#FDEED6"/><line x1="5" y1="10" x2="25" y2="10" stroke="#F5AB33" stroke-width="2"/><line x1="5" y1="17" x2="20" y2="17" stroke="#F5AB33" stroke-width="2"/></g>
+        <g transform="translate(58,100) rotate(4)"><rect width="30" height="30" rx="3" fill="#F8DEDE"/><line x1="5" y1="10" x2="25" y2="10" stroke="#DE5C5C" stroke-width="2"/><line x1="5" y1="17" x2="20" y2="17" stroke="#DE5C5C" stroke-width="2"/></g>
+        <g transform="translate(108,65) rotate(5)"><rect width="30" height="30" rx="3" fill="#CBFAE9"/><line x1="5" y1="10" x2="25" y2="10" stroke="#15CA88" stroke-width="2"/><line x1="5" y1="17" x2="20" y2="17" stroke="#15CA88" stroke-width="2"/></g>
+        <g transform="translate(160,58) rotate(-5)"><rect width="30" height="30" rx="3" fill="#E7DCF3"/><line x1="5" y1="10" x2="25" y2="10" stroke="#884EC2" stroke-width="2"/><line x1="5" y1="17" x2="20" y2="17" stroke="#884EC2" stroke-width="2"/></g>
+        <g transform="translate(110,105) rotate(-4)"><rect width="30" height="30" rx="3" fill="#ECEDED"/><line x1="5" y1="10" x2="25" y2="10" stroke="#5D6160" stroke-width="2"/><line x1="5" y1="17" x2="20" y2="17" stroke="#5D6160" stroke-width="2"/></g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Mur des irritants</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> formulez chaque irritant en une phrase courte et factuelle, sur un post-it, puis rangez-le dans la catégorie qui lui correspond le mieux. Quatre catégories sont proposées pour démarrer — vous pouvez les renommer, les supprimer ou en créer d'autres.</p>
+    <span class="note-dev">Version atelier local, projetée ou partagée à l'écran.</span>
+  </div>
+
+  <div class="panel" id="boardPanel">
+    <h2>Votre mur des irritants</h2>
+    <p class="panel-sub">Chaque participant dépose ses irritants, choisit une couleur, puis peut le faire glisser d'une colonne à l'autre au fil de la discussion (un menu déroulant de secours est aussi disponible sur chaque post-it, pratique sur écran tactile).</p>
+
+    <div class="board-toolbar">
+      <button class="board-add-col-btn" onclick="addColumn()">+ Ajouter une colonne</button>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board" id="board"></div>
+    </div>
+  </div>
+
+  <div class="next-step">
+    <strong>Et après la collecte ?</strong> Une fois le mur rempli, l'étape suivante consiste généralement à regrouper les irritants proches, puis à prioriser ceux à traiter en premier selon leur effort de résolution et leur impact sur le collectif — c'est précisément l'objet de la matrice effort-impact disponible dans la boîte à outils.
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation collective en prévention des risques psychosociaux. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+const POSTIT_COLORS = [
+  {key:'jaune',  bg:'#FDEED6', accent:'#F5AB33'},
+  {key:'violet', bg:'#E7DCF3', accent:'#884EC2'},
+  {key:'vert',   bg:'#CBFAE9', accent:'#15CA88'},
+  {key:'rose',   bg:'#F8DEDE', accent:'#DE5C5C'},
+  {key:'bleu',   bg:'#E3F2F7', accent:'#0088A9'},
+  {key:'gris',   bg:'#ECEDED', accent:'#5D6160'}
+];
+const DEFAULT_COLOR = 'jaune';
+
+const COL_ACCENTS = ['#0088A9', '#884EC2', '#F5AB33', '#15CA88', '#DE5C5C', '#5D6160'];
+function colAccent(id){
+  return COL_ACCENTS[(id - 1) % COL_ACCENTS.length];
+}
+
+let columns = [
+  {id:1, name:'Organisation & process'},
+  {id:2, name:'Communication & information'},
+  {id:3, name:'Outils & moyens'},
+  {id:4, name:'Relationnel & collectif'}
+];
+let postits = [];
+let nextColId = 5;
+let nextPostitId = 1;
+let draggedId = null;
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function findColorDef(key){
+  return POSTIT_COLORS.find(c => c.key === key) || POSTIT_COLORS[0];
+}
+
+/* ---------- Colonnes ---------- */
+
+function addColumn(){
+  const id = nextColId++;
+  columns.push({id: id, name: ''});
+  renderBoard();
+  const input = document.getElementById('colname-' + id);
+  if(input){ input.focus(); }
+}
+
+function renameColumn(id, val){
+  const col = columns.find(c => c.id === id);
+  if(col) col.name = val;
+}
+
+function deleteColumn(id){
+  const hasItems = postits.some(p => p.colId === id);
+  if(hasItems){
+    if(!confirm('Cette colonne contient des post-it. Les supprimer avec la colonne ?')) return;
+  }
+  postits = postits.filter(p => p.colId !== id);
+  columns = columns.filter(c => c.id !== id);
+  renderBoard();
+}
+
+/* ---------- Post-it ---------- */
+
+function addPostit(colId){
+  const id = nextPostitId++;
+  postits.push({id: id, colId: colId, text: '', color: DEFAULT_COLOR});
+  renderBoard();
+  const ta = document.getElementById('postit-text-' + id);
+  if(ta){ ta.focus(); }
+}
+
+function removePostit(id){
+  postits = postits.filter(p => p.id !== id);
+  renderBoard();
+}
+
+function onPostitInput(id, val){
+  const p = postits.find(p => p.id === id);
+  if(p) p.text = val;
+}
+
+function setPostitColor(id, colorKey){
+  const p = postits.find(p => p.id === id);
+  if(p) p.color = colorKey;
+  renderBoard();
+}
+
+function movePostit(id, newColId){
+  if(newColId === '') return;
+  const p = postits.find(p => p.id === id);
+  if(p) p.colId = parseInt(newColId, 10);
+  renderBoard();
+}
+
+/* ---------- Glisser-déposer (bureau) ---------- */
+
+function onDragStart(e, id){
+  draggedId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain', String(id)); }catch(err){}
+  if(e.target && e.target.classList) e.target.classList.add('dragging');
+}
+
+function onDragEnd(e){
+  draggedId = null;
+  if(e.target && e.target.classList) e.target.classList.remove('dragging');
+}
+
+function onColDragOver(e, colId){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const body = e.currentTarget;
+  if(body && body.classList) body.classList.add('drag-over');
+}
+
+function onColDragLeave(e){
+  const body = e.currentTarget;
+  if(body && body.classList) body.classList.remove('drag-over');
+}
+
+function onColDrop(e, colId){
+  e.preventDefault();
+  const body = e.currentTarget;
+  if(body && body.classList) body.classList.remove('drag-over');
+  let id = draggedId;
+  if(id === null){
+    const raw = e.dataTransfer.getData('text/plain');
+    id = raw ? parseInt(raw, 10) : null;
+  }
+  if(id === null || isNaN(id)) return;
+  const p = postits.find(p => p.id === id);
+  if(p){ p.colId = colId; }
+  draggedId = null;
+  renderBoard();
+}
+
+/* ---------- Rendu ---------- */
+
+function autoResize(el){
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+function renderPostit(p){
+  const colorDef = findColorDef(p.color);
+  const otherCols = columns.filter(c => c.id !== p.colId);
+  const moveOptions = otherCols.map(c =>
+    '<option value="' + c.id + '">' + escapeHtml(c.name || 'Sans nom') + '</option>'
+  ).join('');
+  const rotation = ((p.id % 5) - 2) * 1.3;
+
+  return '' +
+    '<div class="postit" style="background:' + colorDef.bg + ';transform:rotate(' + rotation + 'deg);" draggable="true" data-id="' + p.id + '" ondragstart="onDragStart(event,' + p.id + ')" ondragend="onDragEnd(event)">' +
+      '<textarea class="postit-text" id="postit-text-' + p.id + '" placeholder="Ex : les comptes rendus de réunion arrivent trop tard pour être utiles…" oninput="onPostitInput(' + p.id + ', this.value); autoResize(this);">' + escapeHtml(p.text) + '</textarea>' +
+      '<div class="postit-footer">' +
+        '<div class="postit-colors">' +
+          POSTIT_COLORS.map(c =>
+            '<span class="dot' + (c.key === p.color ? ' active' : '') + '" style="background:' + c.bg + ';border-color:' + c.accent + ';" title="' + c.key + '" onclick="setPostitColor(' + p.id + ', \'' + c.key + '\')"></span>'
+          ).join('') +
+        '</div>' +
+        '<select class="postit-move" onchange="movePostit(' + p.id + ', this.value)">' +
+          '<option value="">Déplacer vers…</option>' +
+          moveOptions +
+        '</select>' +
+        '<button class="postit-del" onclick="removePostit(' + p.id + ')" title="Supprimer">&times;</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderColumn(col){
+  const colPostits = postits.filter(p => p.colId === col.id);
+  const body = colPostits.length
+    ? colPostits.map(renderPostit).join('')
+    : '<p class="col-empty">Aucun irritant pour le moment.</p>';
+
+  return '' +
+    '<div class="board-col">' +
+      '<div class="col-head" style="--col-accent:' + colAccent(col.id) + ';">' +
+        '<input type="text" class="col-name-input" id="colname-' + col.id + '" value="' + escapeHtml(col.name) + '" placeholder="Nom de la colonne…" oninput="renameColumn(' + col.id + ', this.value)">' +
+        '<span class="col-count">' + colPostits.length + '</span>' +
+        '<button class="col-del-btn" onclick="deleteColumn(' + col.id + ')" title="Supprimer la colonne">&times;</button>' +
+      '</div>' +
+      '<div class="col-body" data-col-id="' + col.id + '" ondragover="onColDragOver(event,' + col.id + ')" ondragleave="onColDragLeave(event)" ondrop="onColDrop(event,' + col.id + ')">' +
+        body +
+      '</div>' +
+      '<div class="col-add-postit">' +
+        '<button class="col-add-btn" onclick="addPostit(' + col.id + ')">+ Ajouter un irritant</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderBoard(){
+  const board = document.getElementById('board');
+  if(columns.length === 0){
+    board.innerHTML = '<p class="board-empty-msg">Aucune colonne pour le moment. Cliquez sur « + Ajouter une colonne » pour commencer.</p>';
+  } else {
+    board.innerHTML = columns.map(renderColumn).join('');
+  }
+  document.querySelectorAll('.postit-text').forEach(autoResize);
+}
+
+function resetAll(){
+  if(columns.length > 0 || postits.length > 0){
+    if(!confirm('Effacer tout le mur (colonnes et post-it) et repartir de zéro ?')) return;
+  }
+  columns = [
+    {id:1, name:'Organisation & process'},
+    {id:2, name:'Communication & information'},
+    {id:3, name:'Outils & moyens'},
+    {id:4, name:'Relationnel & collectif'}
+  ];
+  postits = [];
+  nextColId = 5;
+  renderBoard();
+}
+
+renderBoard();
+</script>
+
+</body>
+</html>

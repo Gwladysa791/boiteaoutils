@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le stress — Vrai ou Faux — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vrai: #15CA88;
+    --faux: #DE5C5C;
+    --nuance: #F5AB33;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 380px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:33px;font-weight:700;line-height:1.16;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:400px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:760px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .progress-wrap{
+    position:sticky;
+    top:0;
+    background:var(--fond);
+    padding:10px 0 14px;
+    z-index:10;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--gris-fond2);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:var(--bleu);
+    transition:width .25s ease;
+  }
+  .progress-label{
+    font-size:12px;
+    color:var(--gris-moyen);
+    text-align:right;
+    margin-top:4px;
+  }
+  .question{
+    background:#fff;
+    border-radius:8px;
+    padding:10px 16px;
+    margin-bottom:7px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .question .qtext-wrap{flex:1 1 320px;min-width:0;}
+  .question .qnum{
+    display:inline-block;
+    min-width:22px;
+    font-weight:700;
+    color:var(--bleu-fonce);
+    margin-right:6px;
+  }
+  .question .qtext{font-size:14px;color:#2f3130;}
+  .options{display:flex;gap:16px;flex-shrink:0;}
+  .options .check-opt{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--gris);
+    cursor:pointer;
+    user-select:none;
+  }
+  .options .check-opt input[type=checkbox]{
+    width:16px;
+    height:16px;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .options .check-opt.vrai input[type=checkbox]{accent-color:var(--vrai);}
+  .options .check-opt.faux input[type=checkbox]{accent-color:var(--faux);}
+  .options .check-opt.vrai.selected{color:var(--vrai);}
+  .options .check-opt.faux.selected{color:var(--faux);}
+  @media (max-width:560px){
+    .question{flex-direction:column;align-items:flex-start;}
+  }
+  .cta-wrap{text-align:center;margin-top:30px;}
+  button#submitBtn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:14px 34px;
+    font-size:15px;
+    font-weight:700;
+    border-radius:30px;
+    cursor:pointer;
+    font-family:inherit;
+    letter-spacing:0.5px;
+  }
+  button#submitBtn:hover{background:#006f87;}
+  .missing-note{
+    text-align:center;
+    color:var(--faux);
+    font-size:13px;
+    margin-top:10px;
+    min-height:18px;
+  }
+  #resultsSection{display:none;}
+  .results-card{
+    background:#fff;
+    border-radius:8px;
+    padding:26px 22px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.08);
+  }
+  .results-card h2{color:var(--bleu-fonce);margin-top:0;font-size:20px;}
+  .score-display{
+    text-align:center;
+    margin:18px 0 24px;
+  }
+  .score-display .snum{font-size:38px;font-weight:700;color:var(--bleu-fonce);}
+  .score-display .slabel{font-size:13px;color:var(--gris-moyen);}
+  .corrige-item{
+    border-left:4px solid var(--gris-clair);
+    padding:12px 16px;
+    margin-bottom:12px;
+    border-radius:4px;
+    background:var(--gris-fond2);
+  }
+  .corrige-item.correct{border-left-color:var(--vrai);}
+  .corrige-item.incorrect{border-left-color:var(--faux);}
+  .corrige-item.nuance{border-left-color:var(--nuance);}
+  .corrige-item h3{margin:0 0 6px;font-size:14px;color:#2f3130;}
+  .corrige-item .tag{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:700;
+    padding:2px 9px;
+    border-radius:10px;
+    color:#fff;
+    margin-left:6px;
+    vertical-align:middle;
+  }
+  .tag.correct{background:var(--vrai);}
+  .tag.incorrect{background:var(--faux);}
+  .tag.nuance{background:var(--nuance);}
+  .corrige-item p{margin:0 0 4px;font-size:13px;color:var(--gris);}
+  .corrige-item p:last-child{margin-bottom:0;}
+  .corrige-item .your-answer{font-size:12px;color:var(--gris-moyen);margin-bottom:6px;}
+  .actions-row{text-align:center;margin-top:24px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px;
+  }
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+  @media print{
+    .hero-header, .back-link, .intro, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Le stress<span>Vrai ou faux ?</span></h1>
+      <p class="hero-desc">10 affirmations pour distinguer ce que l'on sait vraiment du stress de ce qu'on lui prête à tort — avec, pour certaines réponses, la nuance qu'elles méritent.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          4 minutes chrono
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke-width="2"/></svg></span>
+          10 questions, réponses immédiates
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('questionsList').scrollIntoView({behavior:'smooth',block:'start'})">
+        Commencer le quiz &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+
+        <!-- silhouette sous tension -->
+        <path d="M118,168 C88,168 74,150 76,128 C64,120 60,102 68,86 C64,70 72,50 92,42 C104,30 132,30 146,42 C166,50 174,70 170,86 C178,102 174,120 162,128 C164,150 148,168 118,168 Z" fill="var(--bleu-fonce)"/>
+        <path d="M96,150 C90,164 88,182 92,198 L144,198 C148,182 146,164 140,150 Z" fill="none" stroke="var(--bleu-fonce)" stroke-width="2.4"/>
+
+        <!-- ondes de tension -->
+        <g stroke="#F5AB33" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.9">
+          <path d="M50,52 C58,44 58,34 50,26"/>
+          <path d="M38,68 C48,60 48,48 38,40"/>
+        </g>
+        <g stroke="var(--faux)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.9">
+          <path d="M188,52 C180,44 180,34 188,26"/>
+          <path d="M200,68 C190,60 190,48 200,40"/>
+        </g>
+        <g transform="translate(120,44)">
+          <circle r="13" fill="#F5AB33"/>
+          <rect x="-1.6" y="-6" width="3.2" height="8" rx="1.6" fill="#fff"/>
+          <circle cx="0" cy="6" r="1.8" fill="#fff"/>
+        </g>
+
+        <!-- floating badges -->
+        <g transform="translate(4,150) rotate(-8)">
+          <rect x="0" y="0" width="62" height="24" rx="12" fill="#ffffff" style="filter:drop-shadow(0 2px 5px rgba(0,0,0,0.12));"/>
+          <text x="31" y="16" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--vrai)" font-family="inherit">&#10003; VRAI</text>
+        </g>
+        <g transform="translate(172,178) rotate(6)">
+          <rect x="0" y="0" width="62" height="24" rx="12" fill="#ffffff" style="filter:drop-shadow(0 2px 5px rgba(0,0,0,0.12));"/>
+          <text x="31" y="16" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--faux)" font-family="inherit">&#10007; FAUX</text>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Le stress — Vrai ou Faux</span>
+  </nav>
+
+  <div id="formSection">
+    <div class="intro">
+      <strong>Consigne :</strong> pour chacune des affirmations suivantes, indiquez si elle vous paraît vraie ou fausse. Ce n'est pas un test de personnalité mais un point de connaissances — le corrigé, à la fin, explique chaque réponse et, pour certaines affirmations, pourquoi la question mérite d'être nuancée plutôt que tranchée.
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 10 questions répondues</div>
+    </div>
+
+    <div id="questionsList"></div>
+
+    <div class="cta-wrap">
+      <button id="submitBtn" onclick="calculerResultats()">Voir les résultats</button>
+      <div class="missing-note" id="missingNote"></div>
+    </div>
+  </div>
+
+  <div id="resultsSection">
+    <div class="results-card">
+      <h2>Corrigé</h2>
+      <div class="score-display">
+        <div class="snum" id="scoreNum">0/10</div>
+        <div class="slabel">bonnes réponses</div>
+      </div>
+      <div id="corrigeArea"></div>
+      <div class="actions-row">
+        <button onclick="window.print()">Imprimer / exporter</button>
+        <button onclick="recommencer()">Recommencer</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique de sensibilisation. Les données saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+const questions = [
+  {
+    n:1,
+    t:"Le stress est une maladie",
+    correct:["faux"],
+    explication:"Le stress est une réaction naturelle de l'organisme face à une situation perçue comme exigeante ou menaçante — un mécanisme d'adaptation, pas une pathologie en soi. C'est son intensité, sa durée ou sa récurrence qui peuvent, à terme, favoriser l'apparition de troubles de santé."
+  },
+  {
+    n:2,
+    t:"Certaines personnes ne sont jamais stressées",
+    correct:["faux"],
+    explication:"Le stress est une réaction universelle face à une situation vécue comme dépassant ses ressources du moment. Ce qui varie d'une personne à l'autre, c'est le seuil de déclenchement et la façon de le gérer — pas son existence."
+  },
+  {
+    n:3,
+    t:"Le stress rend les individus plus performants et plus efficaces",
+    correct:["vrai","faux"],
+    nuance:true,
+    explication:"À dose modérée et ponctuelle, le stress peut mobiliser l'attention et l'énergie — c'est ce qu'on appelle parfois le « bon stress » ou eustress. Mais au-delà d'un certain seuil, ou lorsqu'il s'installe dans la durée, il dégrade au contraire la concentration, le jugement et la performance. Tout est affaire d'intensité et de durée : les deux réponses se défendent selon le contexte."
+  },
+  {
+    n:4,
+    t:"Les individus sont inégaux face au stress",
+    correct:["vrai"],
+    explication:"La perception d'une situation comme stressante, les ressources pour y faire face et les mécanismes de régulation varient fortement d'une personne à l'autre, selon l'histoire personnelle, le contexte, la santé, l'entourage."
+  },
+  {
+    n:5,
+    t:"Notre société génère plus de stress qu'autrefois",
+    correct:["vrai","faux"],
+    nuance:true,
+    explication:"Certains facteurs de stress se sont indéniablement multipliés ou intensifiés (hyperconnexion, intensification du travail, incertitude économique). Mais les sociétés passées ont connu d'autres formes de stress tout aussi importantes. Il ne s'agit pas forcément de « plus » de stress qu'avant, mais souvent d'un stress de nature différente — les deux réponses se défendent selon l'angle retenu."
+  },
+  {
+    n:6,
+    t:"Le stress peut avoir des effets néfastes sur notre équilibre psychologique",
+    correct:["vrai"],
+    explication:"Un stress intense ou chronique peut favoriser troubles du sommeil, anxiété, irritabilité, épuisement, voire des troubles plus sévères s'il n'est pas régulé dans la durée."
+  },
+  {
+    n:7,
+    t:"Le stress peut se traiter par des médicaments",
+    correct:["faux"],
+    explication:"Le stress n'est pas une maladie et ne se « traite » donc pas à proprement parler par un médicament. Certains traitements peuvent atténuer des symptômes associés (troubles du sommeil, anxiété), sur prescription médicale, mais ils n'agissent pas sur les causes."
+  },
+  {
+    n:8,
+    t:"Se mettre souvent en colère est un très bon moyen d'évacuer son stress",
+    correct:["faux"],
+    explication:"La colère répétée entretient l'activation physiologique du stress plutôt qu'elle ne la réduit, et elle dégrade souvent les relations qui pourraient constituer une ressource de soutien."
+  },
+  {
+    n:9,
+    t:"Le stress est un phénomène essentiellement physiologique",
+    correct:["faux"],
+    explication:"Le stress mobilise conjointement des dimensions physiologiques, psychologiques et comportementales — c'est d'ailleurs exactement ce que distingue le Test RS (Réactivité au Stress) disponible dans le sommaire des outils."
+  },
+  {
+    n:10,
+    t:"Il existe des professions qui engendrent plus de stress que d'autres",
+    correct:["vrai"],
+    explication:"Certains métiers cumulent davantage de facteurs de risque reconnus — exigences émotionnelles, responsabilités, exposition au public, imprévisibilité, enjeux vitaux — sans que cela efface les variations individuelles au sein d'un même métier."
+  }
+];
+
+const answers = {};
+
+function buildQuestions(){
+  const list = document.getElementById('questionsList');
+  const frag = document.createDocumentFragment();
+  questions.forEach(q=>{
+    const div = document.createElement('div');
+    div.className='question';
+    div.innerHTML = `
+      <div class="qtext-wrap"><span class="qnum">${q.n}.</span><span class="qtext">${q.t}</span></div>
+      <div class="options">
+        <label class="check-opt vrai" id="lbl-${q.n}-vrai">
+          <input type="checkbox" id="chk-${q.n}-vrai" onchange="setAnswer(${q.n},'vrai',this)">
+          Vrai
+        </label>
+        <label class="check-opt faux" id="lbl-${q.n}-faux">
+          <input type="checkbox" id="chk-${q.n}-faux" onchange="setAnswer(${q.n},'faux',this)">
+          Faux
+        </label>
+      </div>
+    `;
+    frag.appendChild(div);
+  });
+  list.appendChild(frag);
+}
+
+function setAnswer(n, val, el){
+  const other = val === 'vrai' ? 'faux' : 'vrai';
+  if(el.checked){
+    answers[n] = val;
+    document.getElementById(`chk-${n}-${other}`).checked = false;
+    document.getElementById(`lbl-${n}-${other}`).classList.remove('selected');
+    document.getElementById(`lbl-${n}-${val}`).classList.add('selected');
+  } else {
+    delete answers[n];
+    document.getElementById(`lbl-${n}-${val}`).classList.remove('selected');
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const count = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (count/10*100)+'%';
+  document.getElementById('progressLabel').textContent = `${count} / 10 questions répondues`;
+}
+
+function calculerResultats(){
+  const count = Object.keys(answers).length;
+  if(count < 10){
+    document.getElementById('missingNote').textContent = `Il reste ${10-count} question(s) sans réponse. Merci de compléter le test avant de voir le corrigé.`;
+    const firstMissing = questions.find(q=>!answers[q.n]);
+    if(firstMissing){
+      document.querySelector(`label[id="lbl-${firstMissing.n}-vrai"]`).closest('.question').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    return;
+  }
+  document.getElementById('missingNote').textContent='';
+
+  let score = 0;
+  questions.forEach(q=>{
+    if(q.correct.includes(answers[q.n])) score++;
+  });
+
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('resultsSection').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('scoreNum').textContent = `${score}/10`;
+  renderCorrige();
+}
+
+function renderCorrige(){
+  const area = document.getElementById('corrigeArea');
+  area.innerHTML='';
+  questions.forEach(q=>{
+    const userAnswer = answers[q.n];
+    const isCorrect = q.correct.includes(userAnswer);
+    const div = document.createElement('div');
+    let cls = 'corrige-item ' + (q.nuance ? 'nuance' : (isCorrect ? 'correct' : 'incorrect'));
+    div.className = cls;
+    const tagHtml = q.nuance
+      ? '<span class="tag nuance">réponse nuancée</span>'
+      : (isCorrect ? '<span class="tag correct">bonne réponse</span>' : '<span class="tag incorrect">à revoir</span>');
+    const correctLabel = q.correct.map(c=>c==='vrai'?'Vrai':'Faux').join(' et ');
+    div.innerHTML = `
+      <h3>${q.n}. ${q.t} ${tagHtml}</h3>
+      <div class="your-answer">Votre réponse : <b>${userAnswer==='vrai'?'Vrai':'Faux'}</b> — Réponse attendue : <b>${correctLabel}</b></div>
+      <p>${q.explication}</p>
+    `;
+    area.appendChild(div);
+  });
+}
+
+function recommencer(){
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  document.querySelectorAll('.options .check-opt').forEach(l=>l.classList.remove('selected'));
+  document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
+  updateProgress();
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('formSection').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuestions();
+</script>
+
+</body>
+</html>

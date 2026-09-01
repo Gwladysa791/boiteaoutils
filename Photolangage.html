@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photolangage — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:1100px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:1100px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:16px 20px;
+    margin-bottom:18px;
+    font-size:14px;
+  }
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:16px 20px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .consigne-row{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .consigne-row label{
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .consigne-row input{
+    flex:1;
+    min-width:220px;
+    padding:10px 14px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:20px;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .consigne-row input:focus{outline:none;border-color:var(--bleu);}
+  .consigne-display{
+    display:none;
+    margin-top:12px;
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:12px 16px;
+    font-size:15px;
+    font-weight:700;
+    color:var(--bleu-fonce);
+    text-align:center;
+  }
+  .consigne-display.show{display:block;}
+
+  .selection-banner{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    background:#fff;
+    border-radius:8px;
+    padding:14px 18px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    border:2px solid var(--gris-clair);
+  }
+  .selection-banner.has-selection{border-color:var(--vert);}
+  .selection-banner .thumb{
+    width:64px;height:64px;
+    border-radius:8px;
+    object-fit:cover;
+    flex-shrink:0;
+    background:var(--gris-fond2);
+  }
+  .selection-banner .txt{flex:1;font-size:13.5px;color:var(--gris-moyen);}
+  .selection-banner .txt b{display:block;color:var(--gris);font-size:14.5px;margin-bottom:2px;}
+  .selection-banner button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:8px 16px;
+    border-radius:18px;
+    font-size:12.5px;
+    cursor:pointer;
+    font-family:inherit;
+    white-space:nowrap;
+  }
+
+  .gallery-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .gallery-head h2{margin:0;font-size:16px;color:var(--bleu-fonce);}
+  .gallery-count{font-size:12.5px;color:var(--gris-moyen);}
+
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(110px, 1fr));
+    gap:10px;
+  }
+  .gallery .cell{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:8px;
+    overflow:hidden;
+    cursor:pointer;
+    border:3px solid transparent;
+    background:var(--gris-fond2);
+  }
+  .gallery .cell img{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .2s ease;
+  }
+  .gallery .cell:hover img{transform:scale(1.06);}
+  .cell-number{
+    position:absolute;
+    bottom:6px;left:6px;
+    min-width:22px;height:22px;padding:0 6px;
+    background:rgba(32,40,43,0.72);
+    color:#fff;
+    border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;
+    font-weight:700;
+    pointer-events:none;
+  }
+  .gallery .cell.selected{border-color:var(--vert);}
+  .gallery .cell.selected::after{
+    content:"✓";
+    position:absolute;
+    top:6px;right:6px;
+    width:22px;height:22px;
+    background:var(--vert);
+    color:#fff;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;
+    font-weight:700;
+  }
+
+  /* Lightbox */
+  .lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(30,32,32,0.92);
+    z-index:100;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox-inner{
+    max-width:600px;
+    width:100%;
+    text-align:center;
+  }
+  .lightbox-inner img{
+    max-width:100%;
+    max-height:62vh;
+    border-radius:10px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  }
+  .lightbox-nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:16px;
+    gap:10px;
+  }
+  .lightbox-nav .side-btns{display:flex;gap:8px;}
+  .lightbox button{
+    font-family:inherit;
+    cursor:pointer;
+    border-radius:20px;
+    font-size:13px;
+    padding:9px 16px;
+    border:1.5px solid rgba(255,255,255,0.4);
+    background:transparent;
+    color:#fff;
+  }
+  .lightbox button.choose-btn{
+    background:var(--vert);
+    border-color:var(--vert);
+    font-weight:700;
+    padding:9px 22px;
+  }
+  .lightbox button.close-btn{
+    position:absolute;
+    top:18px;right:22px;
+    font-size:22px;
+    border:none;
+    background:none;
+    color:#fff;
+    line-height:1;
+  }
+  .lightbox-index{color:#cfcfcf;font-size:12.5px;margin-top:10px;}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media(max-width:480px){
+    .gallery{grid-template-columns:repeat(auto-fill, minmax(84px, 1fr));}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Dire ce qui est difficile<span>à mettre en mots</span></h1>
+      <p class="hero-desc">Face à une consigne donnée à l'oral, chacun choisit dans la banque d'images celle qui, pour lui, y répond le mieux — puis explique son choix au groupe. Le détour par l'image débloque souvent ce qu'une question frontale figerait.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" stroke-width="2"/><circle cx="9" cy="10" r="1.6" stroke-width="2"/><path d="M5 16l4.5-4.5L13 15l2-2 4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          67 images
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          5-10 min par tour
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth',block:'start'})">
+        Découvrir la galerie &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+
+        <!-- éventail de cartes-photos -->
+        <g transform="translate(120,108)">
+          <g transform="rotate(-14) translate(-38,-46)">
+            <rect width="76" height="92" rx="8" fill="#fff" stroke="var(--gris-clair)" stroke-width="2"/>
+            <rect x="8" y="8" width="60" height="60" rx="4" fill="var(--bleu)" opacity="0.35"/>
+          </g>
+          <g transform="rotate(10) translate(-38,-46)">
+            <rect width="76" height="92" rx="8" fill="#fff" stroke="var(--gris-clair)" stroke-width="2"/>
+            <rect x="8" y="8" width="60" height="60" rx="4" fill="#F5AB33" opacity="0.35"/>
+          </g>
+          <g transform="rotate(-2) translate(-40,-50)">
+            <rect width="80" height="98" rx="9" fill="var(--bleu-fonce)"/>
+            <rect x="9" y="9" width="62" height="62" rx="4" fill="#fff" opacity="0.18"/>
+            <circle cx="70" cy="10" r="12" fill="#15CA88"/>
+            <path d="M64.5,10 l4,4 l7,-8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </g>
+        <g transform="translate(178,168) rotate(6)">
+          <rect x="0" y="0" width="58" height="24" rx="12" fill="#ffffff" style="filter:drop-shadow(0 2px 5px rgba(0,0,0,0.12));"/>
+          <text x="29" y="16" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--bleu-fonce)" font-family="inherit">67 photos</text>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Photolangage</span>
+  </nav>
+
+  <div class="intro">
+    <strong>Consigne :</strong> parcourez la galerie ci-dessous, cliquez sur une image pour l'agrandir, et choisissez celle qui répond le mieux à la question posée. C'est cette image que vous présenterez ensuite au groupe.
+  </div>
+
+  <div class="panel">
+    <div class="consigne-row">
+      <label for="consigneInput">Rappel de la consigne (facultatif) :</label>
+      <input type="text" id="consigneInput" placeholder="Ex : la météo intérieure du moment…" oninput="updateConsigneDisplay()">
+    </div>
+    <div class="consigne-display" id="consigneDisplay"></div>
+  </div>
+
+  <div class="selection-banner" id="selectionBanner">
+    <img class="thumb" id="selectionThumb" src="" alt="" style="display:none;">
+    <div class="txt" id="selectionTxt">Aucune image sélectionnée pour l'instant — cliquez sur une image de la galerie pour la choisir.</div>
+    <button id="clearBtn" onclick="clearSelection()" style="display:none;">Changer d'image</button>
+  </div>
+
+  <div class="panel">
+    <div class="gallery-head">
+      <h2>Banque d'images</h2>
+      <span class="gallery-count">67 images</span>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+
+  <div class="actions-row" style="text-align:center;margin-top:10px;">
+    <button onclick="nouveauTour()" style="background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:10px 22px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;">Nouveau tour (nouvelle consigne)</button>
+  </div>
+
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="close-btn" onclick="closeLightbox()">×</button>
+  <div class="lightbox-inner">
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-index" id="lightboxIndex"></div>
+    <div class="lightbox-nav">
+      <div class="side-btns">
+        <button onclick="navLightbox(-1)">← Précédente</button>
+        <button onclick="navLightbox(1)">Suivante →</button>
+      </div>
+      <button class="choose-btn" onclick="chooseCurrent()">Choisir cette image</button>
+    </div>
+  </div>
+</div>
+
+<footer>AXIS MUNDI — Banque d'images issue du support Photolangage AXIS MUNDI. Aucune sélection n'est enregistrée ni transmise : chaque participant utilise cette page depuis son propre appareil, pour un usage personnel pendant l'animation.</footer>
+
+<script>
+const TOTAL_IMAGES = 67;
+let selectedIndex = null;
+let lightboxIndex = null;
+
+function imgSrc(i){
+  const n = String(i).padStart(2,'0');
+  return `photolangage_images/photo_${n}.jpg`;
+}
+
+function buildGallery(){
+  const gallery = document.getElementById('gallery');
+  const frag = document.createDocumentFragment();
+  for(let i=1;i<=TOTAL_IMAGES;i++){
+    const cell = document.createElement('div');
+    cell.className='cell';
+    cell.dataset.index = i;
+    cell.innerHTML = `<img src="${imgSrc(i)}" alt="Image ${i}" loading="lazy"><span class="cell-number">${i}</span>`;
+    cell.addEventListener('click', ()=> openLightbox(i));
+    gallery.appendChild(cell);
+  }
+}
+
+function openLightbox(i){
+  lightboxIndex = i;
+  document.getElementById('lightboxImg').src = imgSrc(i);
+  document.getElementById('lightboxIndex').textContent = `Image ${i} / ${TOTAL_IMAGES}`;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+function navLightbox(delta){
+  let next = lightboxIndex + delta;
+  if(next < 1) next = TOTAL_IMAGES;
+  if(next > TOTAL_IMAGES) next = 1;
+  openLightbox(next);
+}
+
+document.addEventListener('keydown', (e)=>{
+  if(!document.getElementById('lightbox').classList.contains('open')) return;
+  if(e.key==='Escape') closeLightbox();
+  if(e.key==='ArrowLeft') navLightbox(-1);
+  if(e.key==='ArrowRight') navLightbox(1);
+});
+
+function chooseCurrent(){
+  selectedIndex = lightboxIndex;
+  renderSelection();
+  closeLightbox();
+  const banner = document.getElementById('selectionBanner');
+  if(typeof banner.scrollIntoView === 'function'){
+    banner.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+function renderSelection(){
+  document.querySelectorAll('.gallery .cell').forEach(c=>{
+    c.classList.toggle('selected', Number(c.dataset.index)===selectedIndex);
+  });
+  const banner = document.getElementById('selectionBanner');
+  const thumb = document.getElementById('selectionThumb');
+  const txt = document.getElementById('selectionTxt');
+  const clearBtn = document.getElementById('clearBtn');
+  if(selectedIndex){
+    banner.classList.add('has-selection');
+    thumb.src = imgSrc(selectedIndex);
+    thumb.style.display='block';
+    txt.innerHTML = `<b>Image sélectionnée : n°${selectedIndex}</b>C'est celle-ci que vous présenterez au groupe.`;
+    clearBtn.style.display='inline-block';
+  } else {
+    banner.classList.remove('has-selection');
+    thumb.style.display='none';
+    txt.textContent = "Aucune image sélectionnée pour l'instant — cliquez sur une image de la galerie pour la choisir.";
+    clearBtn.style.display='none';
+  }
+}
+
+function clearSelection(){
+  selectedIndex = null;
+  renderSelection();
+}
+
+function updateConsigneDisplay(){
+  const val = document.getElementById('consigneInput').value.trim();
+  const el = document.getElementById('consigneDisplay');
+  if(val){
+    el.textContent = '« ' + val + ' »';
+    el.classList.add('show');
+  } else {
+    el.classList.remove('show');
+  }
+}
+
+function nouveauTour(){
+  clearSelection();
+  document.getElementById('consigneInput').value='';
+  updateConsigneDisplay();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+buildGallery();
+</script>
+
+</body>
+</html>

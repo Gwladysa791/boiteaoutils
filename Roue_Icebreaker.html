@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roue des questions — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:900px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Questions éditables ---------- */
+  .question-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .q-badge{
+    flex-shrink:0;
+    width:30px;height:30px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+  }
+  .q-input{
+    flex:1;
+    min-width:0;
+    border:1.5px solid var(--gris-clair);
+    border-radius:8px;
+    padding:9px 14px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--gris);
+    background:#fff;
+  }
+  .q-input:focus{outline:none;border-color:var(--bleu);}
+
+  /* ---------- La roue ---------- */
+  .wheel-section{text-align:center;position:relative;}
+  .wheel-fs-btn{
+    position:absolute;top:18px;right:18px;z-index:3;
+    background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);
+    padding:7px 14px;border-radius:16px;font-size:11.5px;cursor:pointer;font-family:inherit;
+  }
+  .wheel-fs-btn:hover{background:var(--gris-fond2);}
+  .wheel-section:fullscreen, .wheel-section:-webkit-full-screen{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:#fff;min-height:100vh;padding:40px;border-radius:0;
+  }
+  .wheel-section:fullscreen .wheel-stage, .wheel-section:-webkit-full-screen .wheel-stage{
+    width:min(62vh,560px);height:min(62vh,560px);margin:10px auto 30px;
+  }
+  .wheel-section:fullscreen .panel-sub, .wheel-section:-webkit-full-screen .panel-sub{display:none;}
+  .wheel-section:fullscreen .history-block, .wheel-section:-webkit-full-screen .history-block{display:none;}
+  .wheel-section:fullscreen h2, .wheel-section:-webkit-full-screen h2{font-size:24px;}
+  .wheel-section:fullscreen .result-card, .wheel-section:-webkit-full-screen .result-card{max-width:760px;}
+  .wheel-section:fullscreen .result-text, .wheel-section:-webkit-full-screen .result-text{font-size:32px;}
+  .wheel-section:fullscreen .spin-btn, .wheel-section:-webkit-full-screen .spin-btn{font-size:16px;padding:16px 38px;}
+  .wheel-stage{position:relative;width:280px;height:280px;margin:6px auto 26px;}
+  .wheel-pointer{
+    position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+    width:0;height:0;
+    border-left:13px solid transparent;
+    border-right:13px solid transparent;
+    border-top:22px solid var(--bleu-fonce);
+    z-index:3;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+  }
+  .wheel-spinner{
+    width:100%;height:100%;
+    transition:transform 4.4s cubic-bezier(0.15,0.7,0.1,1);
+  }
+  .wheel-spinner svg{
+    width:100%;height:100%;display:block;
+    filter:drop-shadow(0 6px 16px rgba(0,0,0,0.18));
+  }
+
+  .spin-btn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:13px 32px;
+    font-size:14px;
+    font-weight:700;
+    border-radius:26px;
+    cursor:pointer;
+    font-family:inherit;
+    box-shadow:0 8px 18px rgba(0,136,169,0.25);
+    transition:background .15s ease;
+  }
+  .spin-btn:hover{background:#006f87;}
+  .spin-btn:disabled{opacity:0.45;cursor:not-allowed;box-shadow:none;}
+
+  .result-card{
+    background:var(--gris-fond2);
+    border-radius:12px;
+    padding:30px 22px;
+    text-align:center;
+    margin:24px 0;
+  }
+  .result-label{font-size:12px;font-weight:700;color:var(--gris-moyen);text-transform:uppercase;letter-spacing:0.4px;margin:0 0 10px;}
+  .result-text{font-size:20px;font-weight:700;color:var(--bleu-fonce);min-height:30px;}
+  .result-card.result-placeholder .result-text{font-size:13.5px;font-weight:600;color:var(--gris-moyen);font-style:italic;}
+  .result-card.result-spinning .result-text{color:var(--gris-moyen);font-style:italic;font-size:14px;}
+  .result-card.result-final .result-text{animation:drawPop .3s ease;}
+  @keyframes drawPop{0%{transform:scale(0.92);}60%{transform:scale(1.05);}100%{transform:scale(1);}}
+
+  .history-block h3{font-size:13.5px;color:var(--gris);margin:0 0 10px;text-align:left;}
+  .history-list{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-direction:column;gap:6px;}
+  .history-list li{
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:8px 14px;
+    font-size:12.5px;
+    color:var(--gris);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    text-align:left;
+  }
+  .history-list li span.hn{font-weight:700;color:var(--bleu-fonce);flex-shrink:0;}
+  .history-empty{font-size:12px;color:var(--gris-moyen);font-style:italic;}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .spin-btn, .wheel-pointer, .actions-row, footer, .wheel-fs-btn{display:none !important;}
+    body{background:#fff;}
+    .result-card{box-shadow:none;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Roue des questions<span>Icebreaker : chacun se dévoile en quelques mots</span></h1>
+      <p class="hero-desc">Faites tourner la roue : chaque participant tombe sur une question à répondre à voix haute, pour se découvrir autrement qu'à travers son poste ou son ancienneté.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          5-10 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 20c4.4 0 8-3.6 8-8s-3.6-8-8-8-8 3.6-8 8 3.6 8 8 8Z" stroke-width="2"/><path d="M12 4v16M4 12h16" stroke-width="1.6"/></svg></span>
+          6 questions personnalisables
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('toolPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Faire tourner la roue &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- roue à 6 questions -->
+        <g>
+          <path d="M120,108 L120,50 A58,58 0 0,1 170,79 Z" fill="#F5AB33"/>
+          <path d="M120,108 L170,79 A58,58 0 0,1 170,137 Z" fill="#884EC2"/>
+          <path d="M120,108 L170,137 A58,58 0 0,1 120,166 Z" fill="#15CA88"/>
+          <path d="M120,108 L120,166 A58,58 0 0,1 70,137 Z" fill="#DE5C5C"/>
+          <path d="M120,108 L70,137 A58,58 0 0,1 70,79 Z" fill="#0088A9"/>
+          <path d="M120,108 L70,79 A58,58 0 0,1 120,50 Z" fill="#5D6160"/>
+          <circle cx="120" cy="108" r="10" fill="#fff"/>
+          <path d="M120,32 L112,46 L128,46 Z" fill="#20282b"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Roue des questions</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> personnalisez les six questions ci-dessous si besoin, puis faites tourner la roue à tour de rôle. Chaque participant répond à voix haute à la question sur laquelle il tombe.</p>
+  </div>
+
+  <div class="panel" id="toolPanel">
+    <h2>Vos 6 questions</h2>
+    <p class="panel-sub">Chaque question est associée à un secteur coloré de la roue. Modifiez-les librement avant de démarrer.</p>
+
+    <div class="question-row">
+      <span class="q-badge" style="background:#F5AB33;">1</span>
+      <input type="text" class="q-input" id="q0" oninput="onQuestionInput(0,this.value)">
+    </div>
+    <div class="question-row">
+      <span class="q-badge" style="background:#884EC2;">2</span>
+      <input type="text" class="q-input" id="q1" oninput="onQuestionInput(1,this.value)">
+    </div>
+    <div class="question-row">
+      <span class="q-badge" style="background:#15CA88;">3</span>
+      <input type="text" class="q-input" id="q2" oninput="onQuestionInput(2,this.value)">
+    </div>
+    <div class="question-row">
+      <span class="q-badge" style="background:#DE5C5C;">4</span>
+      <input type="text" class="q-input" id="q3" oninput="onQuestionInput(3,this.value)">
+    </div>
+    <div class="question-row">
+      <span class="q-badge" style="background:#0088A9;">5</span>
+      <input type="text" class="q-input" id="q4" oninput="onQuestionInput(4,this.value)">
+    </div>
+    <div class="question-row">
+      <span class="q-badge" style="background:#5D6160;">6</span>
+      <input type="text" class="q-input" id="q5" oninput="onQuestionInput(5,this.value)">
+    </div>
+  </div>
+
+  <div class="panel wheel-section" id="wheelSection">
+    <button class="wheel-fs-btn" id="wheelFsBtn" onclick="toggleWheelFullscreen()">Plein écran</button>
+    <h2>La roue</h2>
+    <p class="panel-sub">Cliquez sur « Faire tourner la roue » — le participant répond à la question désignée par le pointeur.</p>
+
+    <div class="wheel-stage">
+      <div class="wheel-pointer" aria-hidden="true"></div>
+      <div class="wheel-spinner" id="wheelSpinner">
+        <svg viewBox="0 0 300 300" id="wheelSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+
+    <button class="spin-btn" id="spinBtn" onclick="spin()">Faire tourner la roue</button>
+
+    <div class="result-card result-placeholder" id="resultCard">
+      <p class="result-label">Question tirée</p>
+      <div class="result-text" id="resultText">Faites tourner la roue pour tirer une question.</div>
+    </div>
+
+    <div class="history-block">
+      <h3>Questions déjà tirées</h3>
+      <ul class="history-list" id="historyList"></ul>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+/* ---------- État ---------- */
+const WHEEL_COLORS = ['#F5AB33','#884EC2','#15CA88','#DE5C5C','#0088A9','#5D6160'];
+const DEFAULT_QUESTIONS = [
+  "Quel métier rêvais-tu de faire enfant ?",
+  "Ton plat ou dessert préféré ?",
+  "Une passion ou un loisir qui te ressource ?",
+  "La dernière série ou film que tu as adoré ?",
+  "Un lieu où tu as toujours envie de retourner ?",
+  "Une compétence ou un talent caché que peu de gens connaissent chez toi ?"
+];
+let questions = DEFAULT_QUESTIONS.slice();
+let history = [];
+let currentRotation = 0;
+let isSpinning = false;
+let lastIndex = null;
+
+/* ---------- Utilitaires ---------- */
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function polar(cx, cy, r, angleDeg){
+  const rad = angleDeg * Math.PI / 180;
+  return { x: cx + r * Math.sin(rad), y: cy - r * Math.cos(rad) };
+}
+
+/* ---------- Questions ---------- */
+function onQuestionInput(index, val){
+  questions[index] = val;
+}
+
+function fillQuestionInputs(){
+  for(let i = 0; i < 6; i++){
+    const input = document.getElementById('q' + i);
+    if(input) input.value = questions[i];
+  }
+}
+
+/* ---------- Construction de la roue (géométrie fixe, 6 secteurs de 60°) ---------- */
+function renderWheel(){
+  const cx = 150, cy = 150, r = 148;
+  let svg = '';
+  for(let i = 0; i < 6; i++){
+    const start = i * 60, end = (i + 1) * 60;
+    const p1 = polar(cx, cy, r, start);
+    const p2 = polar(cx, cy, r, end);
+    svg += '<path d="M' + cx + ',' + cy + ' L' + p1.x.toFixed(2) + ',' + p1.y.toFixed(2) +
+      ' A' + r + ',' + r + ' 0 0,1 ' + p2.x.toFixed(2) + ',' + p2.y.toFixed(2) + ' Z" fill="' + WHEEL_COLORS[i] + '"/>';
+  }
+  for(let i = 0; i < 6; i++){
+    const mid = i * 60 + 30;
+    const lp = polar(cx, cy, r * 0.62, mid);
+    let rot = mid;
+    if(rot > 90 && rot < 270) rot += 180;
+    svg += '<text x="' + lp.x.toFixed(2) + '" y="' + lp.y.toFixed(2) + '" transform="rotate(' + rot.toFixed(2) + ' ' + lp.x.toFixed(2) + ' ' + lp.y.toFixed(2) + ')" text-anchor="middle" dominant-baseline="middle" font-size="30" font-weight="700" fill="#fff">' + (i + 1) + '</text>';
+  }
+  svg += '<circle cx="' + cx + '" cy="' + cy + '" r="22" fill="#fff"/>';
+  document.getElementById('wheelSvg').innerHTML = svg;
+}
+
+/* ---------- Historique ---------- */
+function renderHistory(){
+  const list = document.getElementById('historyList');
+  if(history.length === 0){
+    list.innerHTML = '<li class="history-empty">Aucune question tirée pour le moment.</li>';
+  } else {
+    list.innerHTML = history.map(function(h){
+      return '<li><span class="hn">#' + h.n + '</span><span>' + escapeHtml(h.q) + '</span></li>';
+    }).join('');
+  }
+}
+
+/* ---------- Rotation ---------- */
+function spin(){
+  if(isSpinning) return;
+
+  const validIdx = [];
+  for(let i = 0; i < 6; i++){ if(questions[i] && questions[i].trim()) validIdx.push(i); }
+  if(validIdx.length === 0){
+    alert('Renseignez au moins une question avant de faire tourner la roue.');
+    return;
+  }
+
+  let pool = validIdx;
+  if(pool.length > 1 && lastIndex !== null && pool.indexOf(lastIndex) !== -1){
+    const filtered = pool.filter(function(i){ return i !== lastIndex; });
+    if(filtered.length > 0) pool = filtered;
+  }
+  const chosen = pool[Math.floor(Math.random() * pool.length)];
+
+  isSpinning = true;
+  document.getElementById('spinBtn').disabled = true;
+
+  const resultCard = document.getElementById('resultCard');
+  resultCard.classList.remove('result-placeholder', 'result-final');
+  resultCard.classList.add('result-spinning');
+  document.getElementById('resultText').textContent = 'La roue tourne…';
+
+  const segCenter = chosen * 60 + 30;
+  const jitter = (Math.random() - 0.5) * 36; // reste à ±18° du centre, largement dans le secteur de 60°
+  const targetAbsolute = segCenter + jitter;
+  const extraSpins = 5 + Math.floor(Math.random() * 2); // 5 ou 6 tours complets, pour l'effet
+  const currentMod = ((currentRotation % 360) + 360) % 360;
+  const delta = (360 - ((targetAbsolute + currentMod) % 360)) % 360;
+  const newRotation = currentRotation + extraSpins * 360 + delta;
+
+  document.getElementById('wheelSpinner').style.transform = 'rotate(' + newRotation + 'deg)';
+  currentRotation = newRotation;
+  lastIndex = chosen;
+
+  setTimeout(function(){
+    isSpinning = false;
+    document.getElementById('spinBtn').disabled = false;
+    resultCard.classList.remove('result-spinning');
+    resultCard.classList.add('result-final');
+    document.getElementById('resultText').textContent = questions[chosen];
+    history.unshift({ n: history.length + 1, q: questions[chosen] });
+    renderHistory();
+  }, 4500);
+}
+
+/* ---------- Réinitialisation ---------- */
+function resetAll(){
+  const hasContent = history.length > 0 || questions.some(function(q, i){ return q !== DEFAULT_QUESTIONS[i]; });
+  if(hasContent){
+    if(!confirm('Réinitialiser les questions et effacer l\'historique ?')) return;
+  }
+  questions = DEFAULT_QUESTIONS.slice();
+  history = [];
+  lastIndex = null;
+  isSpinning = false;
+  currentRotation = 0;
+
+  const spinner = document.getElementById('wheelSpinner');
+  spinner.style.transition = 'none';
+  spinner.style.transform = 'rotate(0deg)';
+  void spinner.offsetWidth; // force reflow avant de rétablir la transition
+  spinner.style.transition = '';
+
+  document.getElementById('spinBtn').disabled = false;
+  const resultCard = document.getElementById('resultCard');
+  resultCard.classList.remove('result-final', 'result-spinning');
+  resultCard.classList.add('result-placeholder');
+  document.getElementById('resultText').textContent = 'Faites tourner la roue pour tirer une question.';
+
+  fillQuestionInputs();
+  renderHistory();
+}
+
+/* ---------- Plein écran ---------- */
+function toggleWheelFullscreen(){
+  const section = document.getElementById('wheelSection');
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if(!isFs){
+    if(section.requestFullscreen) section.requestFullscreen();
+    else if(section.webkitRequestFullscreen) section.webkitRequestFullscreen();
+  } else {
+    if(document.exitFullscreen) document.exitFullscreen();
+    else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+
+function updateWheelFsBtn(){
+  const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  const btn = document.getElementById('wheelFsBtn');
+  if(btn) btn.textContent = isFs ? 'Quitter le plein écran' : 'Plein écran';
+}
+document.addEventListener('fullscreenchange', updateWheelFsBtn);
+document.addEventListener('webkitfullscreenchange', updateWheelFsBtn);
+
+fillQuestionInputs();
+renderWheel();
+renderHistory();
+</script>
+
+</body>
+</html>

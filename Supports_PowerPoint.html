@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supports PowerPoint — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:920px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:22px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro strong{color:var(--bleu-fonce);}
+
+  .library-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:16px;
+  }
+  .support-card{
+    background:#fff;
+    border-radius:10px;
+    padding:20px 20px 18px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    display:flex;
+    flex-direction:column;
+    border-top:4px solid var(--orange);
+  }
+  .support-card .icon-pptx{
+    width:40px;height:40px;border-radius:9px;background:var(--orange);
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  }
+  .support-card .icon-pptx svg{width:20px;height:20px;color:#fff;}
+  .support-card h3{margin:0 0 8px;font-size:15.5px;color:var(--bleu-fonce);}
+  .support-card p.desc{margin:0 0 14px;font-size:13px;color:var(--gris);flex:1;}
+  .support-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .support-tags span{
+    background:var(--gris-fond2);color:var(--gris);font-size:10.5px;font-weight:700;
+    padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:0.3px;
+  }
+  .support-footer{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--gris-moyen);margin-bottom:12px;}
+  .btn-download{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--bleu-fonce);color:#fff;text-decoration:none;
+    padding:10px 16px;border-radius:20px;font-size:13px;font-weight:700;
+    transition:background .15s ease;
+  }
+  .btn-download:hover{background:#006f87;}
+  .btn-download svg{width:15px;height:15px;}
+
+  .empty-state{
+    grid-column:1/-1;
+    background:#fff;
+    border-radius:10px;
+    padding:44px 24px;
+    text-align:center;
+    color:var(--gris-moyen);
+    font-size:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .empty-state .empty-icon{
+    width:52px;height:52px;border-radius:50%;background:var(--gris-fond2);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--gris-moyen);
+  }
+  .empty-state .empty-icon svg{width:26px;height:26px;}
+  .empty-state p{margin:0 auto;max-width:440px;}
+
+  .howto-box{
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:24px;
+    font-size:12.5px;
+    color:var(--gris);
+  }
+  .howto-box strong{color:var(--bleu-fonce);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Supports PowerPoint<span>À télécharger pour vos formations</span></h1>
+      <p class="hero-desc">Une bibliothèque de supports PowerPoint prêts à être réutilisés ou adaptés pour vos sessions — trames de formation, visuels d'animation, supports de restitution.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 3v13m0 0l-4-4m4 4l4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Téléchargement direct
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span id="statCount">Aucun support disponible</span>
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('library').scrollIntoView({behavior:'smooth',block:'start'})">
+        Voir les supports &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.14">
+          <circle cx="20" cy="35" r="2.2"/><circle cx="44" cy="18" r="1.8"/><circle cx="12" cy="75" r="1.8"/>
+          <circle cx="215" cy="28" r="2.2"/><circle cx="226" cy="60" r="1.8"/><circle cx="60" cy="192" r="1.8"/>
+        </g>
+        <rect x="55" y="40" width="130" height="98" rx="8" fill="#fff" stroke="#0088A9" stroke-width="2.4"/>
+        <rect x="55" y="40" width="130" height="24" rx="8" fill="#F5AB33"/>
+        <rect x="70" y="76" width="46" height="10" rx="3" fill="#D7D3CE"/>
+        <rect x="70" y="94" width="80" height="8" rx="3" fill="#ECEDED"/>
+        <rect x="70" y="108" width="65" height="8" rx="3" fill="#ECEDED"/>
+        <circle cx="150" cy="86" r="14" fill="#00B5E2" opacity="0.85"/>
+        <rect x="40" y="150" width="160" height="14" rx="7" fill="#0088A9" opacity="0.9"/>
+        <path d="M112 157l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Supports PowerPoint</span>
+  </nav>
+
+  <div class="intro">
+    <strong>À propos de cette page :</strong> les supports PowerPoint référencés ici peuvent être téléchargés puis adaptés librement pour vos propres animations. Chaque fiche précise le contenu, la durée indicative de la séquence associée et la thématique couverte.
+  </div>
+
+  <div id="library">
+    <div class="library-grid" id="libraryGrid"></div>
+  </div>
+
+  <div class="howto-box">
+    <strong>Constitution de la bibliothèque :</strong> aucun support n'est publié pour l'instant. Dès que des fichiers PowerPoint seront prêts à être partagés, ils apparaîtront ici avec leur titre, leur thématique et un bouton de téléchargement direct.
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Les supports proposés sur cette page sont destinés à un usage interne aux formateurs et intervenants AXIS MUNDI.</footer>
+
+<script>
+/*
+  Pour ajouter un support à cette bibliothèque, ajouter un objet à ce tableau :
+  {
+    titre: "Nom du support",
+    description: "Description courte de son contenu et de son usage.",
+    fichier: "Supports PowerPoint/nom-du-fichier.pptx",
+    themes: ["Thématique 1", "Thématique 2"],
+    taille: "2,4 Mo",
+    date: "AAAA-MM-JJ"
+  }
+*/
+const SUPPORTS = [];
+
+function formatDate(iso){
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function supportCardHtml(s){
+  return `
+    <div class="support-card">
+      <span class="icon-pptx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="16" height="18" rx="2" stroke-width="2"/><path d="M9 8h3.5a2.5 2.5 0 0 1 0 5H9v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <h3>${s.titre}</h3>
+      <p class="desc">${s.description}</p>
+      <div class="support-tags">${s.themes.map(t=>`<span>${t}</span>`).join('')}</div>
+      <div class="support-footer">
+        <span>${s.taille}</span>
+        <span>Ajouté le ${formatDate(s.date)}</span>
+      </div>
+      <a class="btn-download" href="${encodeURI(s.fichier)}" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke-linecap="round"/></svg>
+        Télécharger
+      </a>
+    </div>
+  `;
+}
+
+function renderLibrary(){
+  const grid = document.getElementById('libraryGrid');
+  if(SUPPORTS.length === 0){
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg></div>
+        <p>Aucun support disponible pour le moment.</p>
+      </div>
+    `;
+    document.getElementById('statCount').textContent = 'Aucun support disponible';
+    return;
+  }
+  grid.innerHTML = SUPPORTS.map(supportCardHtml).join('');
+  document.getElementById('statCount').textContent = SUPPORTS.length + (SUPPORTS.length > 1 ? ' supports disponibles' : ' support disponible');
+}
+
+renderLibrary();
+</script>
+
+</body>
+</html>

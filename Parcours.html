@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votre parcours — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 60px;position:relative;z-index:2;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 10px;font-size:27px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-desc{margin:0;font-size:14px;color:var(--gris);max-width:560px;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:640px){input,select,textarea{font-size:16px;}
+    .hero-inner{padding:36px 22px 50px;}
+  }
+  .container{max-width:760px;margin:0 auto;padding:26px 20px 60px;}
+
+  /* ---------- Étapes ---------- */
+  .step-card{
+    background:#fff;
+    border-radius:10px;
+    padding:18px 20px 20px;
+    margin-bottom:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+  }
+  .step-card.marker-card{
+    background:#fdf6e8;
+    box-shadow:none;
+    padding:14px 20px;
+  }
+  .step-card.missing-card{
+    background:#fdeeee;
+    box-shadow:none;
+  }
+  .step-num{
+    flex-shrink:0;
+    width:32px;height:32px;
+    border-radius:50%;
+    background:var(--bleu-fonce);
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .marker-card .step-num{background:var(--orange);}
+  .missing-card .step-num{background:var(--rouge);}
+  .step-body{flex:1;min-width:0;}
+  .step-body h3{margin:0 0 6px;font-size:16px;color:#20282b;}
+  .step-body p{margin:0 0 12px;font-size:13.5px;color:var(--gris);}
+  .step-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--bleu-fonce);
+    color:#fff;
+    text-decoration:none;
+    padding:9px 18px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+  }
+  .step-cta:hover{background:#006f87;}
+  .marker-card h3{margin:0;font-size:14.5px;color:#8a6a1a;font-weight:700;}
+
+  .empty-state{
+    background:#fff;
+    border-radius:10px;
+    padding:40px 24px;
+    text-align:center;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .empty-state p{margin:0 0 16px;font-size:14px;color:var(--gris);}
+  .empty-state a{color:var(--bleu-fonce);font-weight:700;text-decoration:none;}
+  .empty-state a:hover{text-decoration:underline;}
+
+  .actions-row{text-align:center;margin-top:24px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .step-cta, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .step-card{box-shadow:none;border:1px solid var(--gris-fond2);}
+  }
+
+/* =========================================================
+   BANDEAU DE NAVIGATION COMMUN (onglets + méga-menus)
+   ========================================================= */
+header.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.94);backdrop-filter:blur(8px);border-bottom:1px solid #D7D3CE;}
+.header-inner{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:40px;}
+.brand-mark{display:flex;align-items:center;gap:16px;text-decoration:none;flex-shrink:0;}
+.brand-mark img{height:28px;width:auto;}
+nav.main-nav{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap;}
+nav.main-nav > a{font-size:13.5px;font-weight:700;color:#5D6160;text-decoration:none;padding:9px 16px;border-radius:8px;transition:background .15s ease,color .15s ease;white-space:nowrap;}
+nav.main-nav > a:hover, nav.main-nav > a:focus-visible{background:#EAF7FB;color:#0088A9;}
+.header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.header-actions .btn-nav{display:inline-flex;align-items:center;gap:8px;background:#0088A9;color:#fff;border:none;padding:9px 18px;font-size:13px;font-weight:700;border-radius:24px;text-decoration:none;white-space:nowrap;transition:background .15s ease;}
+.header-actions .btn-nav:hover{background:#00708a;}
+.header-burger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:#464948;}
+.nav-item{position:relative;}
+.nav-link-btn{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:#5D6160;text-decoration:none;padding:7px 13px;border-radius:8px;transition:background .15s ease,color .15s ease;white-space:nowrap;background:none;border:none;cursor:pointer;font-family:inherit;}
+.nav-link-btn:hover, .nav-link-btn:focus-visible, .nav-item.open .nav-link-btn{background:#EAF7FB;color:#0088A9;}
+.nav-link-btn .chevron{width:9px;height:9px;flex-shrink:0;transition:transform .18s ease;}
+.nav-item.open .nav-link-btn .chevron{transform:rotate(180deg);}
+.nav-dropdown{position:absolute;top:calc(100% + 10px);left:0;min-width:600px;background:#fff;border-radius:14px;box-shadow:0 16px 40px rgba(70,73,72,0.16);border:1px solid #D7D3CE;padding:22px 26px;display:none;grid-template-columns:repeat(4,1fr);gap:24px;z-index:110;}
+.nav-dropdown.simple{min-width:280px;grid-template-columns:1fr;gap:2px;padding:14px;}
+.nav-item.open .nav-dropdown{display:grid;}
+.nav-dropdown-col{display:flex;flex-direction:column;gap:2px;}
+.nav-dropdown-col .col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#A2A5A4;margin:0 0 8px;padding:0 8px;}
+.nav-dropdown-col a{font-size:13.5px;color:#464948;text-decoration:none;padding:7px 8px;border-radius:7px;transition:background .15s ease,color .15s ease;line-height:1.3;}
+.nav-dropdown-col a:hover, .nav-dropdown-col a:focus-visible{background:#F0EBE5;color:#0088A9;}
+@media (max-width:920px){
+  nav.main-nav{position:fixed;top:60px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;padding:10px 20px 20px;border-bottom:1px solid #D7D3CE;box-shadow:0 12px 20px rgba(0,0,0,0.06);display:none;max-height:calc(100vh - 60px);overflow-y:auto;}
+  nav.main-nav.open{display:flex;}
+  .header-burger{display:block;}
+  .header-actions .btn-nav span{display:none;}
+  .nav-item{width:100%;}
+  .nav-link-btn{width:100%;justify-content:space-between;padding:12px 8px;}
+  .nav-dropdown, .nav-dropdown.simple{position:static;box-shadow:none;border:none;border-left:2px solid #EAF7FB;padding:2px 6px 8px 16px;margin:0 0 6px;min-width:0;display:none;grid-template-columns:1fr;gap:0;}
+  .nav-item.open .nav-dropdown{display:grid;}
+  .nav-dropdown-col{margin-top:8px;}
+  .nav-dropdown-col:first-child{margin-top:2px;}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand-mark" href="index.html">
+      <img src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+    </a>
+    <button class="header-burger" onclick="toggleNav()" aria-label="Ouvrir le menu" aria-expanded="false" id="burgerBtn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Accueil</a>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Outils pédagogiques
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-col">
+            <p class="col-title">Découvrir</p>
+            <a href="Sommaire.html">Tous les outils</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Démarrer &amp; animer</p>
+            <a href="Sommaire.html?cat=icebreakers">Icebreakers</a>
+            <a href="Sommaire.html?cat=animation-collective">Animation collective</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Comprendre &amp; diagnostiquer</p>
+            <a href="Sommaire.html?cat=questionnaires-auto-positionnement">Questionnaires</a>
+            <a href="Sommaire.html?cat=diagnostics-cadres-methodo">Diagnostics &amp; cadres</a>
+            <a href="Sommaire.html?cat=etude-de-cas">Études de cas</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Tester &amp; débriefer</p>
+            <a href="Sommaire.html?cat=quiz-connaissances">Quiz de connaissances</a>
+            <a href="Sommaire.html?cat=jeu-serieux">Jeu pédagogique</a>
+            <a href="Sommaire.html?cat=outils-debrief">Outils de débrief</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Ressources
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown simple">
+          <div class="nav-dropdown-col">
+            <a href="Pedagogie.html">Blog Pédagogie &amp; Animations</a>
+            <a href="Videotheque.html">Vidéothèque</a>
+            <a href="Supports_PowerPoint.html">Supports PowerPoint</a>
+            <a href="Fiches_Memos.html">Fiches mémos</a>
+            <a href="Bibliotheque_IA.html">Bibliothèque d'IA</a>
+            <a href="Glossaire.html">Glossaire</a>
+          </div>
+        </div>
+      </div>
+      <a href="https://regardsperspectivesaxismundi-gwladysguerin-9131s-projects.vercel.app/" target="_blank" rel="noopener">Actualités</a>
+      <a href="A_Propos.html">À propos</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn-nav" href="Espace_Formateur.html"><span>Mon espace formateur</span></a>
+
+    </div>
+  </div>
+</header>
+
+
+
+<div class="hero-header">
+  <div class="hero-inner">
+    <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+    <div class="hero-rule"></div>
+    <h1 class="hero-title" id="parcoursTitle">Votre parcours de formation</h1>
+    <p class="hero-desc">Suivez les étapes ci-dessous dans l'ordre : chaque outil s'ouvre dans un nouvel onglet, revenez ici pour passer à la suite.</p>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+  <div id="stepsWrap"></div>
+
+  <div class="actions-row" id="actionsRow" style="display:none;">
+    <button onclick="window.print()">Imprimer ce parcours</button>
+  </div>
+</div>
+
+<footer>AXIS MUNDI — Ce parcours est un simple guide de navigation : chaque outil reste indépendant, aucune réponse n'est collectée ni transmise entre les étapes. <a href="index.html#suggestion" style="color:var(--bleu-fonce);font-weight:700;">Proposer une idée / signaler un besoin</a></footer>
+
+<script>
+/* =========================================================
+   NAVIGATION — bandeau commun (onglets + méga-menus)
+   ========================================================= */
+function toggleNav(){
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('burgerBtn');
+  const open = nav.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function initNavDropdowns(){
+  const items = Array.from(document.querySelectorAll('.nav-item.has-dropdown'));
+  function closeAll(){
+    items.forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.nav-link-btn').setAttribute('aria-expanded','false');
+    });
+  }
+  items.forEach(item=>{
+    const btn = item.querySelector('.nav-link-btn');
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const wasOpen = item.classList.contains('open');
+      closeAll();
+      if(!wasOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+  document.addEventListener('click', (e)=>{
+    if(!e.target.closest('.nav-item.has-dropdown')) closeAll();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeAll();
+  });
+}
+initNavDropdowns();
+
+
+const CATALOG = [
+  {id:"assertivite", titre:"Questionnaire d'assertivité", fichier:"Questionnaire_Assertivite_Gordon.html", description:"Auto-positionnement individuel sur 60 items, inspiré des travaux de Thomas Gordon. Restitue un score sur 4 attitudes : fuite, attaque, manipulation, assertivité."},
+  {id:"autonomie", titre:"Cartographier l'autonomie de mes collaborateurs", fichier:"Outil_Positionnement_Autonomie.html", description:"Positionnement d'une équipe sur le cycle de l'autonomie, avec repères comportementaux et posture managériale associée."},
+  {id:"maturite", titre:"Questionnaire Maturité d'Équipe", fichier:"Questionnaire_Maturite_Equipe.html", description:"Diagnostic collectif sur 24 items observables, restituant la phase de développement dominante d'une équipe parmi 6."},
+  {id:"diagramme", titre:"Diagramme relationnel d'équipe", fichier:"Diagramme_Relationnel_Equipe.html", description:"Cartographie interactive des relations perçues au sein d'une équipe : diagramme cliquable, liens qualifiables et légende personnalisable."},
+  {id:"testrs", titre:"Test RS — Réactivité au Stress", fichier:"Test_RS_Reactivite_Stress.html", description:"Auto-positionnement sur 39 manifestations du stress, avec score global, niveau de réactivité et registre prédominant."},
+  {id:"photolangage", titre:"Photolangage", fichier:"Photolangage.html", description:"Banque de 82 images pour animation par le détour projectif : chaque participant choisit l'image qui répond à la consigne donnée à l'oral."},
+  {id:"quizstress", titre:"Le stress — Vrai ou Faux", fichier:"Quiz_VraiFaux_Stress.html", description:"Quiz de connaissances en 10 affirmations sur le stress, avec corrigé argumenté."},
+  {id:"quizcerveau", titre:"Le cerveau — Vrai ou Faux", fichier:"Quiz_VraiFaux_Cerveau.html", description:"Quiz de connaissances en 8 affirmations sur le fonctionnement du cerveau et les neuromythes les plus répandus."},
+  {id:"cerveauzones", titre:"Un cerveau puissant — zones et fonctions", fichier:"Exercice_Cerveau_Zones.html", description:"Exercice interactif : associer chaque nom de zone cérébrale à sa localisation sur un schéma, puis explorer les fonctions associées."},
+  {id:"meteo", titre:"Ma météo du jour", fichier:"Meteo_Du_Jour.html", description:"Activité d'ouverture et de clôture : chaque participant choisit l'image météo qui symbolise le mieux son état du moment."},
+  {id:"nasa", titre:"Perdus sur la Lune — L'exercice NASA", fichier:"Exercice_NASA.html", description:"Grand classique de la dynamique de groupe : classer par glisser-déposer 15 objets rescapés d'un crash lunaire."},
+  {id:"videotheque", titre:"Vidéothèque", fichier:"Videotheque.html", description:"Une sélection de vidéos courtes à diffuser en formation — animations pédagogiques et ressources de sensibilisation."},
+  {id:"cartementale", titre:"Carte mentale", fichier:"Carte_Mentale.html", description:"Outil de structuration visuelle : placez une notion clé au centre puis développez-la en branches éditables."},
+  {id:"supportsppt", titre:"Supports PowerPoint", fichier:"Supports_PowerPoint.html", description:"Bibliothèque de supports PowerPoint téléchargeables et réutilisables pour vos sessions de formation."},
+  {id:"portraitchinois", titre:"Portrait chinois", fichier:"Portrait_Chinois.html", description:"Activité brise-glace en six questions par analogie, pour faciliter la prise de parole."},
+  {id:"nuagedemots", titre:"Nuage de mots", fichier:"Nuage_De_Mots.html", description:"Saisie libre de mots-clés en réponse à une consigne donnée à l'oral : plus un mot revient, plus il apparaît grand dans le nuage."},
+  {id:"etudecasreunion", titre:"Étude de cas — Un dérapage en réunion d'équipe", fichier:"Etude_De_Cas_Reunion_Equipe.html", description:"Un même incident managérial raconté par quatre points de vue, à découvrir progressivement."},
+  {id:"matriceswot", titre:"Matrice SWOT", fichier:"Matrice_SWOT.html", description:"Diagnostic croisant facteurs internes et externes sur quatre cadrans, avec synthèse finale."},
+  {id:"leblason", titre:"Le Blason", fichier:"Le_Blason.html", description:"Support métaphorique pour construire l'identité collective d'une équipe en quatre étapes."},
+  {id:"brainstorming", titre:"Brainstorming", fichier:"Brainstorming.html", description:"Espace de brainstorming collaboratif : colonnes nommées librement, post-it de couleur déplaçables."},
+  {id:"tirageausort", titre:"Tirage au sort", fichier:"Tirage_Au_Sort.html", description:"Sélection aléatoire pour vos animations : tirage simple ou répartition en groupes équilibrés."},
+  {id:"ishikawa", titre:"Diagramme d'Ishikawa", fichier:"Ishikawa.html", description:"Analyse causes-effet en 5M/6M : effet observé et causes possibles classées par catégorie, diagramme fishbone en direct."},
+  {id:"les4c", titre:"Les 4C — Continuer, Cesser, Commencer, Changer", fichier:"Les_4C.html", description:"Exercice de clôture en fin de session : quatre questions pour transformer les apprentissages en décisions concrètes."},
+  {id:"roti", titre:"ROTI — Return On Time Invested", fichier:"ROTI.html", description:"Évaluation de clôture : chaque participant note de 1 à 5 la valeur du temps investi, puis explique sa note."},
+  {id:"evaluation", titre:"Évaluation", fichier:"Evaluation.html", description:"Questionnaire de satisfaction en fin de session : cinq critères notés de 1 à 5 étoiles et un commentaire libre."},
+  {id:"roueicebreaker", titre:"Roue des questions", fichier:"Roue_Icebreaker.html", description:"Roue à 6 secteurs colorés associés à des questions personnalisables : le participant la fait tourner et répond à voix haute à la question désignée."},
+  {id:"timelinecollaborative", titre:"Timeline collaborative", fichier:"Timeline_Collaborative.html", description:"Frise chronologique de l'équipe : chaque participant ajoute un événement marquant (date, texte court, image facultative), triée automatiquement."},
+  {id:"classementvaleurs", titre:"Classement collectif des valeurs", fichier:"Classement_Valeurs.html", description:"Chaque participant classe ses 10 valeurs les plus importantes parmi 65 ; les classements se cumulent en direct pour faire émerger les valeurs partagées par le collectif."},
+  {id:"motscroises", titre:"Générateur de mots croisés", fichier:"Mots_Croises.html", description:"Le formateur saisit des mots-clés et leur définition, l'outil construit automatiquement une grille de mots croisés — pour ancrer un vocabulaire ou un lexique métier en fin de session."},
+  {id:"fichesmemos", titre:"Fiches mémos", fichier:"Fiches_Memos.html", description:"Bibliothèque de fiches synthétiques à sélectionner pour vos sessions : prévention des RPS, posture managériale, cadre légal, gestion du stress."},
+  {id:"bibliothequeia", titre:"Bibliothèque d'IA", fichier:"Bibliotheque_IA.html", description:"Sélection commentée d'IA utiles à la conception pédagogique, classées par catégorie d'usage avec cas concret et tarifs indicatifs."},
+  {id:"glossaire", titre:"Glossaire", fichier:"Glossaire.html", description:"70 mots-clés de la formation, de la pédagogie, de l'accompagnement des adultes et des neurosciences appliquées, classés par ordre alphabétique."},
+  {id:"securitepsy", titre:"Échelle de sécurité psychologique", fichier:"Echelle_Securite_Psychologique.html", description:"Auto-positionnement sur l'échelle de sécurité psychologique d'Amy Edmondson (1999) : droit à l'erreur, prise de risque et entraide au sein d'une équipe."},
+  {id:"valeursschwartz", titre:"Questionnaire des valeurs de Schwartz", fichier:"Questionnaire_Valeurs_Schwartz.html", description:"Auto-positionnement sur les 10 valeurs de base de Schwartz, restitué en cartographie circulaire, avec repérage des tensions entre valeurs opposées."},
+  {id:"murirritants", titre:"Mur des irritants", fichier:"Mur_Irritants.html", description:"Collecte collective de ce qui pèse au quotidien, sur le même système de post-it que le Brainstorming. Quatre catégories pré-remplies, modifiables."},
+  {id:"matriceeffortimpact", titre:"Matrice effort-impact", fichier:"Matrice_Effort_Impact.html", description:"Priorisation d'actions selon effort de mise en œuvre et impact attendu, répartition automatique en quatre cadrans."},
+  {id:"rouedevie", titre:"Roue de la vie", fichier:"Roue_de_Vie.html", description:"Auto-positionnement sur 8 domaines personnalisables restitué en graphique toile d'araignée, pour visualiser les déséquilibres et priorités d'intervention."},
+  {id:"scenarioroseNoir", titre:"Scénario rose, scénario noir", fichier:"Scenario_Rose_Noir.html", description:"Exercice de projection individuelle : explorer le meilleur et le pire scénario face à une situation, pour distinguer craintes, aspirations, et en tirer un plan d'action réaliste."},
+  {id:"outilsondage", titre:"Outil de sondage", fichier:"Outil_Sondage.html", description:"Le formateur rédige une question et ses réponses possibles, les participants votent à tour de rôle, résultat en direct sous forme de camembert ou d'histogramme."},
+  {id:"createurquiz", titre:"Créateur de quiz", fichier:"Createur_Quiz.html", description:"Construisez un quiz sur mesure — réponse unique ou multiple, bonnes réponses définies par vos soins — puis faites-le passer aux participants avec score et corrigé."}
+];
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function findTool(toolId){
+  return CATALOG.find(function(t){ return t.id === toolId; }) || null;
+}
+
+function parseStepsString(str){
+  if(!str) return [];
+  return str.split('|').map(function(tok){
+    const idx = tok.indexOf(':');
+    if(idx === -1) return null;
+    const kind = tok.slice(0, idx);
+    const payload = decodeURIComponent(tok.slice(idx + 1));
+    if(kind === 't'){
+      const tool = findTool(payload);
+      return {kind: 'tool', tool: tool, toolId: payload};
+    }
+    if(kind === 'm'){
+      return {kind: 'marker', label: payload};
+    }
+    return null;
+  }).filter(Boolean);
+}
+
+function renderStepCard(step, index){
+  if(step.kind === 'marker'){
+    return '<div class="step-card marker-card">' +
+      '<span class="step-num">' + (index + 1) + '</span>' +
+      '<div class="step-body"><h3>' + escapeHtml(step.label || 'Repère') + '</h3></div>' +
+    '</div>';
+  }
+  if(!step.tool){
+    return '<div class="step-card missing-card">' +
+      '<span class="step-num">' + (index + 1) + '</span>' +
+      '<div class="step-body"><h3>Outil introuvable</h3><p>Identifiant « ' + escapeHtml(step.toolId) + ' » non reconnu dans le catalogue. Vérifiez le lien auprès du formateur.</p></div>' +
+    '</div>';
+  }
+  return '<div class="step-card">' +
+    '<span class="step-num">' + (index + 1) + '</span>' +
+    '<div class="step-body">' +
+      '<h3>' + escapeHtml(step.tool.titre) + '</h3>' +
+      '<p>' + escapeHtml(step.tool.description) + '</p>' +
+      '<a class="step-cta" href="' + escapeHtml(step.tool.fichier) + '" target="_blank" rel="noopener">Ouvrir l\'outil &rarr;</a>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderParcours(){
+  const params = new URLSearchParams(window.location.search);
+  const nom = params.get('nom');
+  const etapesRaw = params.get('etapes') || '';
+  const steps = parseStepsString(etapesRaw);
+
+  if(nom && nom.trim()){
+    document.getElementById('parcoursTitle').textContent = nom.trim();
+    document.title = nom.trim() + ' — AXIS MUNDI';
+  }
+
+  const wrap = document.getElementById('stepsWrap');
+  const actionsRow = document.getElementById('actionsRow');
+
+  if(steps.length === 0){
+    wrap.innerHTML = '<div class="empty-state">' +
+      '<p>Aucun parcours n\'a été transmis avec ce lien.</p>' +
+      '<p>Demandez au formateur le lien complet de la session.</p>' +
+    '</div>';
+    actionsRow.style.display = 'none';
+    return;
+  }
+
+  wrap.innerHTML = steps.map(renderStepCard).join('');
+  actionsRow.style.display = 'block';
+}
+
+renderParcours();
+</script>
+
+</body>
+</html>

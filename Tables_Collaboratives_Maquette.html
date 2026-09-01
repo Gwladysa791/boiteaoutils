@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tables collaboratives — Maquette d'interface — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.5;
+  }
+  button, input, textarea, select{font-family:inherit;}
+  a{color:inherit;}
+
+  /* ---------- Bandeau maquette ---------- */
+  .demo-bar{position:sticky;top:0;z-index:200;background:#20282b;color:#fff;display:flex;align-items:center;gap:14px;padding:9px 18px;flex-wrap:wrap;}
+  .demo-bar .demo-tag{background:var(--orange);color:#20282b;font-weight:800;font-size:11px;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:20px;flex-shrink:0;}
+  .demo-bar .demo-note{font-size:12px;color:#C9CDCC;flex:1;min-width:220px;}
+  .demo-bar .back-link{font-size:12px;font-weight:700;color:#fff;text-decoration:none;flex-shrink:0;}
+  .demo-bar .back-link:hover{text-decoration:underline;}
+  .view-switch{display:flex;gap:4px;background:rgba(255,255,255,0.08);border-radius:24px;padding:3px;flex-shrink:0;}
+  .view-switch button{border:none;background:none;color:#C9CDCC;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;}
+  .view-switch button.active{background:#fff;color:#20282b;}
+
+  .view-root{display:none;}
+  .view-root.active{display:block;}
+
+  /* =========================================================
+     VUE FORMATEUR
+     ========================================================= */
+  .fmt-shell{max-width:1280px;margin:0 auto;padding:22px 24px 60px;}
+  .fmt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px;}
+  .fmt-head h1{margin:0 0 6px;font-size:22px;color:#20282b;}
+  .fmt-head .fmt-consigne{margin:0;font-size:13px;color:var(--gris);max-width:640px;}
+  .fmt-head .fmt-consigne strong{color:#20282b;}
+  .fmt-head-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0;}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--gris-clair);background:#fff;color:var(--gris);padding:7px 13px;border-radius:9px;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+  .btn:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .btn.primary{background:var(--bleu-fonce);border-color:var(--bleu-fonce);color:#fff;}
+  .btn.primary:hover{background:#00708a;}
+  .btn.ghost{border-style:dashed;}
+  .btn.small{padding:6px 12px;font-size:11.5px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn[disabled]:hover{border-color:var(--gris-clair);color:var(--gris);}
+
+  .fmt-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--gris-clair);border-radius:14px;padding:14px 16px;margin-bottom:20px;}
+  .fmt-toolbar .sep{width:1px;align-self:stretch;background:var(--gris-clair);}
+  .stepper{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#20282b;}
+  .stepper button{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--gris-clair);background:#fff;cursor:pointer;font-size:14px;line-height:1;}
+  .stepper button:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .giant-timer{display:flex;align-items:center;gap:10px;background:#20282b;color:#fff;padding:8px 16px;border-radius:20px;font-weight:800;font-variant-numeric:tabular-nums;font-size:16px;}
+  .giant-timer button{border:none;background:rgba(255,255,255,0.14);color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:12px;}
+  .giant-timer button:hover{background:rgba(255,255,255,0.26);}
+
+  .fmt-help-banner{display:flex;align-items:center;gap:10px;background:#FBEAEA;border-left:4px solid var(--rouge);color:#8A1F1F;border-radius:8px;padding:11px 16px;margin-bottom:18px;font-size:13px;font-weight:700;}
+  .fmt-help-banner button{margin-left:auto;flex-shrink:0;}
+
+  .salle-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .salle-label h2{margin:0;font-size:14px;color:#20282b;text-transform:uppercase;letter-spacing:.4px;}
+  .salle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-bottom:26px;}
+  .table-tile{position:relative;background:#fff;border:1.5px solid var(--gris-clair);border-radius:16px;padding:16px;cursor:pointer;transition:box-shadow .15s ease, transform .15s ease;}
+  .table-tile:hover{box-shadow:0 10px 26px rgba(20,30,35,0.12);transform:translateY(-2px);}
+  .table-tile.has-help{border-color:var(--rouge);}
+  .table-tile.locked{opacity:.72;}
+  .tile-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .tile-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .tile-name{font-weight:800;color:#20282b;font-size:14.5px;flex:1;min-width:0;}
+  .tile-lock{font-size:13px;opacity:.6;}
+  .tile-stats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .tile-stat{font-size:11.5px;font-weight:700;color:var(--gris);background:var(--gris-fond2);border-radius:12px;padding:4px 9px;display:inline-flex;align-items:center;gap:4px;}
+  .tile-activity{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;margin-bottom:8px;}
+  .activity-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .activity-eleve{color:#0F8A57;} .activity-eleve .activity-dot{background:var(--vert);}
+  .activity-moyen{color:#8A6A16;} .activity-moyen .activity-dot{background:var(--orange);}
+  .activity-faible{color:#8A1F1F;} .activity-faible .activity-dot{background:var(--rouge);}
+  .tile-status{display:inline-block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:3px 9px;border-radius:10px;}
+  .status-encours{background:#EAF7FB;color:var(--bleu-fonce);}
+  .status-termine{background:#E9F9F1;color:#0F8A57;}
+  .status-bloque{background:#FBEAEA;color:#8A1F1F;}
+  .tile-help-flag{margin-top:10px;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:var(--rouge);}
+
+  .fmt-panel-overlay{display:none;position:fixed;inset:0;background:rgba(20,25,28,0.5);z-index:300;align-items:center;justify-content:center;padding:20px;}
+  .fmt-panel-overlay.open{display:flex;}
+  .fmt-panel{background:#fff;border-radius:18px;max-width:760px;width:100%;max-height:88vh;overflow-y:auto;padding:24px 26px;}
+  .fmt-panel-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .fmt-panel-head .tile-icon{width:42px;height:42px;font-size:20px;}
+  .fmt-panel-head h3{margin:0;font-size:18px;color:#20282b;flex:1;}
+  .fmt-panel-close{border:none;background:var(--gris-fond2);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px;color:var(--gris);}
+  .fmt-panel-section{margin-bottom:18px;}
+  .fmt-panel-section h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--gris-moyen);}
+  .participant-chip{display:inline-flex;align-items:center;gap:6px;background:var(--gris-fond2);border-radius:16px;padding:5px 11px 5px 5px;font-size:12px;font-weight:700;color:#20282b;margin:0 6px 6px 0;cursor:pointer;border:1.5px solid transparent;}
+  .participant-chip.selected{border-color:var(--bleu-fonce);background:#EAF7FB;}
+  .participant-chip .avatar{width:20px;height:20px;border-radius:50%;background:var(--bleu-fonce);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;}
+  .postit-list{display:flex;flex-direction:column;gap:8px;}
+  .postit{background:#FDEED6;border-radius:10px;padding:10px 12px;font-size:13px;color:#20282b;position:relative;}
+  .postit .postit-auteur{display:block;font-size:10.5px;font-weight:800;color:var(--orange);margin-top:5px;}
+  .fmt-panel-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:6px;border-top:1px solid var(--gris-clair);}
+
+  .repartition-modal .repart-modes{display:flex;gap:8px;margin-bottom:16px;}
+  .repart-mode-btn{flex:1;border:1.5px solid var(--gris-clair);background:#fff;border-radius:8px;padding:9px 8px;cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:var(--gris);}
+  .repart-mode-btn.active{border-color:var(--bleu-fonce);background:#EAF7FB;color:var(--bleu-fonce);}
+  .repart-pool{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;padding:12px;background:var(--gris-fond2);border-radius:10px;min-height:44px;}
+  .repart-tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+  .repart-target{border:1.5px dashed var(--gris-clair);border-radius:10px;padding:10px;min-height:70px;}
+  .repart-target-name{font-size:11.5px;font-weight:800;margin-bottom:6px;}
+  .repart-hint{font-size:11.5px;color:var(--gris-moyen);margin:0 0 12px;font-style:italic;}
+
+  .restit-cols{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);gap:14px;overflow-x:auto;padding-bottom:8px;}
+  .restit-col{background:#fff;border:1.5px solid var(--gris-clair);border-radius:14px;padding:14px;}
+  .restit-col-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-weight:800;color:#20282b;font-size:13px;}
+
+  .vote-row{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--gris-clair);border-radius:10px;padding:10px 14px;margin-bottom:8px;}
+  .vote-rank{width:26px;height:26px;border-radius:50%;background:var(--gris-fond2);color:#20282b;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .vote-rank.top{background:var(--orange);color:#fff;}
+  .vote-text{flex:1;font-size:13px;color:#20282b;}
+  .vote-bar-wrap{width:140px;height:8px;background:var(--gris-fond2);border-radius:6px;overflow:hidden;flex-shrink:0;}
+  .vote-bar{height:100%;background:var(--bleu-fonce);}
+  .vote-count{font-size:12px;font-weight:800;color:var(--bleu-fonce);width:34px;text-align:right;flex-shrink:0;}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#20282b;color:#fff;font-size:12.5px;font-weight:700;padding:10px 20px;border-radius:22px;z-index:400;box-shadow:0 10px 26px rgba(0,0,0,0.24);opacity:0;pointer-events:none;transition:opacity .2s ease;}
+  .toast.show{opacity:1;}
+
+  /* =========================================================
+     VUE PARTICIPANT
+     ========================================================= */
+  .part-shell{max-width:640px;margin:0 auto;padding:20px 20px 60px;}
+  .part-preview-select{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gris-moyen);margin-bottom:16px;flex-wrap:wrap;}
+  .part-preview-select select{border:1.5px solid var(--gris-clair);border-radius:8px;padding:5px 8px;font-size:12px;}
+  .part-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 22px rgba(20,30,35,0.08);}
+  .part-head{padding:20px 22px;color:#fff;}
+  .part-head-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .part-head .tile-icon{background:rgba(255,255,255,0.22);width:38px;height:38px;font-size:18px;}
+  .part-head h2{margin:0;font-size:17px;}
+  .part-head p{margin:0;font-size:12.5px;opacity:.92;}
+  .part-body{padding:20px 22px;}
+  .part-consigne{background:var(--gris-fond2);border-radius:10px;padding:12px 14px;font-size:13px;color:#20282b;margin-bottom:16px;}
+  .part-timer{display:flex;align-items:center;justify-content:center;gap:8px;font-size:30px;font-weight:800;color:#20282b;font-variant-numeric:tabular-nums;margin-bottom:16px;}
+  .part-tools{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .tool-btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--gris-clair);background:#fff;border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700;color:var(--gris);cursor:pointer;}
+  .tool-btn:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .part-add-row{display:flex;gap:8px;margin-bottom:16px;}
+  .part-add-row input{flex:1;border:1.5px solid var(--gris-clair);border-radius:10px;padding:10px 12px;font-size:13px;}
+  .part-add-row input:disabled{background:var(--gris-fond2);}
+  .part-locked-note{font-size:12px;color:var(--rouge);font-weight:700;margin:-8px 0 14px;}
+  .part-help-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;background:var(--rouge);color:#fff;padding:13px;border-radius:14px;font-size:13.5px;font-weight:800;cursor:pointer;margin-top:6px;}
+  .part-help-btn:hover{background:#c94848;}
+  .part-help-btn.sent{background:#8A1F1F;cursor:default;}
+  .part-scope-note{text-align:center;font-size:11px;color:var(--gris-moyen);margin-top:14px;}
+
+  /* =========================================================
+     VUE PROJECTION
+     ========================================================= */
+  .proj-picker{max-width:900px;margin:0 auto;padding:16px 20px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--gris-moyen);}
+  .proj-picker select{border:1.5px solid var(--gris-clair);border-radius:8px;padding:6px 9px;font-size:12.5px;}
+  .proj-stage{margin:16px auto 40px;max-width:1160px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(20,30,35,0.22);background:linear-gradient(150deg,#0c1114 0%,#1b2529 100%);color:#fff;}
+  .proj-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:6% 8%;}
+  .proj-empty{display:flex;align-items:center;justify-content:center;height:100%;color:#8b969a;font-size:15px;}
+  .proj-single .proj-table-name{display:flex;align-items:center;gap:12px;font-size:1.6em;font-weight:800;margin-bottom:.5em;}
+  .proj-single .tile-icon{width:1.4em;height:1.4em;font-size:1em;}
+  .proj-single .proj-consigne{font-size:.85em;color:#c9cfd1;margin-bottom:1em;}
+  .proj-postits{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+  .proj-postits .postit{background:#FDEED6;color:#20282b;font-size:.85em;}
+  .proj-multi{display:grid;grid-template-columns:repeat(2,1fr);gap:3%;height:100%;padding:4%;}
+  .proj-multi-cell{background:rgba(255,255,255,0.06);border-radius:12px;padding:3%;overflow:hidden;}
+  .proj-multi-cell h4{margin:0 0 .5em;font-size:1.1em;display:flex;align-items:center;gap:8px;}
+  .proj-multi-cell .postit{font-size:.7em;margin-bottom:6px;}
+  .proj-synthese h3, .proj-votes h3{font-size:1.5em;margin:0 0 .8em;}
+  .proj-votes .vote-row{background:rgba(255,255,255,0.06);border:none;color:#fff;}
+  .proj-votes .vote-text{color:#fff;}
+
+  @media (max-width:720px){
+    .repart-tables{grid-template-columns:1fr;}
+    .restit-cols{grid-auto-columns:82vw;}
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-bar" id="demoBar">
+  <span class="demo-tag">Maquette</span>
+  <span class="demo-note">Interface de démonstration — données factices, aucune synchronisation réelle entre appareils. Objectif : valider l'ergonomie.</span>
+  <div class="view-switch" id="viewSwitch"></div>
+  <a class="back-link" href="Sommaire.html">&larr; Boîte à outils</a>
+</div>
+
+<!-- ========================= VUE FORMATEUR ========================= -->
+<div class="view-root" id="viewFormateur">
+  <div class="fmt-shell">
+
+    <div id="fmtHelpBanner"></div>
+
+    <div class="fmt-head">
+      <div>
+        <h1 id="fmtTitre"></h1>
+        <p class="fmt-consigne"><strong>Consigne :</strong> <span id="fmtConsigne"></span></p>
+      </div>
+      <div class="fmt-head-actions">
+        <button class="btn ghost" onclick="toast('Restitution ouverte ci-dessous')" id="btnRestitution">📊 Restitution</button>
+        <button class="btn ghost" onclick="openVotes()">🗳️ Votes</button>
+        <div style="position:relative;display:inline-block;">
+          <button class="btn ghost" onclick="toggleExportMenu()">⬇️ Exporter</button>
+          <div id="exportMenu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--gris-clair);border-radius:12px;box-shadow:0 14px 32px rgba(20,30,35,0.16);padding:8px;min-width:190px;z-index:50;">
+            <button class="btn small" style="width:100%;justify-content:flex-start;border:none;" onclick="exportAs('PDF — toutes les tables')">📄 PDF — toutes les tables</button>
+            <button class="btn small" style="width:100%;justify-content:flex-start;border:none;" onclick="exportAs('PowerPoint — synthèse')">📊 PowerPoint — synthèse</button>
+            <button class="btn small" style="width:100%;justify-content:flex-start;border:none;" onclick="exportAs('Excel — votes')">📈 Excel — votes</button>
+            <button class="btn small" style="width:100%;justify-content:flex-start;border:none;" onclick="exportAs('Compte-rendu')">📝 Compte-rendu</button>
+          </div>
+        </div>
+        <button class="btn primary" onclick="toast('Nouvelle activité — à cadrer (titre, consigne, outils autorisés)')">＋ Créer une activité</button>
+      </div>
+    </div>
+
+    <div class="fmt-toolbar">
+      <div class="stepper">
+        Tables
+        <button onclick="changeTableCount(-1)">−</button>
+        <span id="tableCountLabel"></span>
+        <button onclick="changeTableCount(1)">+</button>
+      </div>
+      <div class="sep"></div>
+      <button class="btn small" onclick="openRepartition()">🔀 Répartir les participants</button>
+      <div class="sep"></div>
+      <button class="btn small" id="btnLockAll" onclick="toggleLockAll()"></button>
+      <div class="sep"></div>
+      <span style="font-size:11.5px;font-weight:700;color:var(--gris-moyen);">Outils autorisés :</span>
+      <span id="outilsAutorisesLabel" style="font-size:11.5px;font-weight:700;color:#20282b;"></span>
+      <div class="sep"></div>
+      <button class="btn small" disabled title="Assistants IA — architecture prévue, développement en phase 2">🤖 Regrouper avec l'IA</button>
+      <div style="flex:1;"></div>
+      <div class="giant-timer">
+        ⏱️ <span id="giantTimerDisplay"></span>
+        <button onclick="timerToggle()" id="giantTimerBtn">▶</button>
+        <button onclick="timerReset()">↺</button>
+      </div>
+    </div>
+
+    <div class="salle-label">
+      <h2>Vue Salle</h2>
+      <span style="font-size:11.5px;color:var(--gris-moyen);"><span id="salleCountSummary"></span></span>
+    </div>
+    <div class="salle-grid" id="salleGrid"></div>
+
+  </div>
+</div>
+
+<!-- ========================= VUE PARTICIPANT ========================= -->
+<div class="view-root" id="viewParticipant">
+  <div class="part-shell">
+    <div class="part-preview-select">
+      👁️ Aperçu formateur — se placer à la table :
+      <select id="partTableSelect" onchange="setParticipantPreviewTable(this.value)"></select>
+    </div>
+    <div class="part-card" id="partCard"></div>
+    <p class="part-scope-note">Ce participant ne voit jamais les autres tables, les paramètres, ni les notes du formateur.</p>
+  </div>
+</div>
+
+<!-- ========================= VUE PROJECTION ========================= -->
+<div class="view-root" id="viewProjection">
+  <div class="proj-picker">
+    📽️ Simuler la sélection du formateur :
+    <select id="projSelect" onchange="setProjectionSelection(this.value)"></select>
+  </div>
+  <div class="proj-stage" id="projStage"></div>
+</div>
+
+<div class="fmt-panel-overlay" id="tablePanelOverlay" onclick="if(event.target===this) closeTablePanel()">
+  <div class="fmt-panel" id="tablePanelContent"></div>
+</div>
+
+<div class="fmt-panel-overlay" id="repartOverlay" onclick="if(event.target===this) closeRepartition()">
+  <div class="fmt-panel repartition-modal" id="repartContent"></div>
+</div>
+
+<div class="fmt-panel-overlay" id="votesOverlay" onclick="if(event.target===this) closeVotes()">
+  <div class="fmt-panel" id="votesContent"></div>
+</div>
+
+<div class="fmt-panel-overlay" id="restitOverlay" onclick="if(event.target===this) closeRestit()">
+  <div class="fmt-panel" style="max-width:1040px;" id="restitContent"></div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+/* =========================================================
+   DONNÉES DE DÉMONSTRATION
+   Cette maquette ne se connecte à rien : tout vit en mémoire, dans cet
+   onglet. Elle sert à valider l'ergonomie des trois interfaces avant
+   d'investir dans une infrastructure temps réel (backend + sync multi-appareils).
+   ========================================================= */
+const TABLE_PALETTE = [
+  {couleur:'#00B5E2', icone:'🌅'},
+  {couleur:'#F5AB33', icone:'☀️'},
+  {couleur:'#15CA88', icone:'🧭'},
+  {couleur:'#884EC2', icone:'🧩'},
+  {couleur:'#DE5C5C', icone:'🌊'},
+  {couleur:'#5D6160', icone:'🔮'}
+];
+const NOMS_POOL = ['Aurore','Horizon','Boussole','Sextant','Vigie','Cap'];
+const PARTICIPANTS_POOL = ['Claire M.','Yanis B.','Malika T.','Sofia L.','Karim D.','Antoine R.','Léa F.','Hugo P.','Nadia S.','Bastien G.','Inès C.','Tom V.'];
+const POSTITS_POOL = [
+  "Les injonctions contradictoires entre deux managers",
+  "Le manque de retour après les entretiens annuels",
+  "La charge qui augmente sans moyens supplémentaires",
+  "Les réunions qui débordent systématiquement",
+  "Le sentiment de ne jamais être vraiment déconnecté",
+  "Les objectifs qui changent en cours de trimestre",
+  "L'isolement des équipes en télétravail",
+  "Le manque de reconnaissance du travail bien fait",
+  "La pression des délais clients",
+  "Le turnover qui fragilise les équipes",
+  "Les arbitrages jamais expliqués",
+  "Le flou sur les priorités de la semaine"
+];
+
+const activite = {
+  titre: "Diagnostic RPS — Ce qui pèse sur nos équipes",
+  consigne: "En 10 minutes, listez sur des post-it les situations concrètes qui génèrent le plus de tension dans votre quotidien professionnel. Une idée par post-it, formulée simplement.",
+  dureeSec: 10 * 60,
+  outilsAutorises: ['postit','vote','liste']
+};
+
+let tables = [];
+let lockAll = false;
+let repartMode = 'auto';
+let repartSelectedParticipant = null;
+let timerRunning = false;
+let timerRemaining = activite.dureeSec;
+let timerIntervalId = null;
+let participantPreviewTableId = null;
+let projectionSelection = { type:'table', tableId:null };
+let currentView = 'formateur';
+
+function uid(prefix){ return prefix + '_' + Math.random().toString(36).slice(2,9); }
+
+function buildTable(index){
+  const pal = TABLE_PALETTE[index % TABLE_PALETTE.length];
+  const nParticipants = 2 + (index % 3);
+  const participants = [];
+  for(let i=0;i<nParticipants;i++) participants.push(PARTICIPANTS_POOL[(index*3 + i) % PARTICIPANTS_POOL.length]);
+  const nPostits = (index === 3) ? 2 : (2 + (index % 3));
+  const contributions = [];
+  for(let i=0;i<nPostits;i++){
+    contributions.push({ id: uid('postit'), texte: POSTITS_POOL[(index*4 + i) % POSTITS_POOL.length], auteur: participants[i % participants.length] });
+  }
+  const activites = ['eleve','moyen','faible'];
+  return {
+    id: uid('table'),
+    nom: 'Table ' + NOMS_POOL[index % NOMS_POOL.length],
+    couleur: pal.couleur,
+    icone: pal.icone,
+    participants: participants,
+    contributions: contributions,
+    activite: activites[index % activites.length],
+    tempsRestantSec: activite.dureeSec - (index * 40),
+    demandeAide: index === 1,
+    statut: index === 3 ? 'Terminé' : (index === 1 ? 'Bloqué' : 'En cours'),
+    verrouillee: index === 3
+  };
+}
+function initTables(n){
+  tables = [];
+  for(let i=0;i<n;i++) tables.push(buildTable(i));
+}
+initTables(4);
+
+function findTable(id){ return tables.find(function(t){ return t.id === id; }) || null; }
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+  });
+}
+function fmtTime(sec){
+  sec = Math.max(0, Math.round(sec));
+  const m = Math.floor(sec/60), s = sec % 60;
+  return (m<10?'0':'')+m + ':' + (s<10?'0':'')+s;
+}
+function toast(msg){
+  const el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+}
+
+/* =========================================================
+   SWITCHER DE VUES
+   ========================================================= */
+const VIEWS = [
+  {key:'formateur', label:'🧑‍🏫 Vue Formateur'},
+  {key:'participant', label:'🙋 Vue Participant'},
+  {key:'projection', label:'📽️ Vue Projection'}
+];
+function renderViewSwitch(){
+  document.getElementById('viewSwitch').innerHTML = VIEWS.map(function(v){
+    return '<button type="button" class="' + (currentView === v.key ? 'active' : '') + '" onclick="setView(\'' + v.key + '\')">' + v.label + '</button>';
+  }).join('');
+}
+function setView(key){
+  currentView = key;
+  ['Formateur','Participant','Projection'].forEach(function(v){
+    document.getElementById('view' + v).classList.toggle('active', 'view' + v === 'view' + (key.charAt(0).toUpperCase()+key.slice(1)));
+  });
+  renderViewSwitch();
+  if(key === 'participant') renderParticipantView();
+  if(key === 'projection') renderProjectionView();
+}
+
+/* =========================================================
+   VUE FORMATEUR
+   ========================================================= */
+function renderFormateur(){
+  document.getElementById('fmtTitre').textContent = activite.titre;
+  document.getElementById('fmtConsigne').textContent = activite.consigne;
+  document.getElementById('tableCountLabel').textContent = tables.length;
+  document.getElementById('outilsAutorisesLabel').textContent = activite.outilsAutorises.map(function(o){
+    return ({postit:'Post-it', texte:'Texte', vote:'Vote', liste:'Liste', matrice:'Matrice', image:'Image', dessin:'Dessin'})[o] || o;
+  }).join(' · ');
+  const btnLock = document.getElementById('btnLockAll');
+  btnLock.textContent = lockAll ? '🔓 Déverrouiller tout' : '🔒 Verrouiller tout';
+
+  const helpTables = tables.filter(function(t){ return t.demandeAide; });
+  document.getElementById('fmtHelpBanner').innerHTML = helpTables.length ? helpTables.map(function(t){
+    return '<div class="fmt-help-banner">🚩 <strong>' + escapeHtml(t.nom) + '</strong> demande le formateur.<button class="btn small primary" onclick="openTablePanel(\'' + t.id + '\')">Rejoindre</button></div>';
+  }).join('') : '';
+
+  document.getElementById('salleCountSummary').textContent = tables.length + ' table' + (tables.length>1?'s':'') + ' · ' + tables.reduce(function(a,t){return a+t.participants.length;},0) + ' participants';
+
+  document.getElementById('salleGrid').innerHTML = tables.map(function(t){
+    const actLabel = ({eleve:'Activité élevée', moyen:'Activité moyenne', faible:'Activité faible'})[t.activite];
+    const statusClass = ({'En cours':'status-encours','Terminé':'status-termine','Bloqué':'status-bloque'})[t.statut];
+    return '<div class="table-tile' + (t.demandeAide?' has-help':'') + (t.verrouillee?' locked':'') + '" onclick="openTablePanel(\'' + t.id + '\')">' +
+      '<div class="tile-top">' +
+        '<div class="tile-icon" style="background:' + t.couleur + '22;color:' + t.couleur + ';">' + t.icone + '</div>' +
+        '<div class="tile-name">' + escapeHtml(t.nom) + '</div>' +
+        (t.verrouillee ? '<span class="tile-lock">🔒</span>' : '') +
+      '</div>' +
+      '<div class="tile-stats">' +
+        '<span class="tile-stat">👥 ' + t.participants.length + '</span>' +
+        '<span class="tile-stat">💬 ' + t.contributions.length + '</span>' +
+        '<span class="tile-stat">⏱️ ' + fmtTime(t.tempsRestantSec) + '</span>' +
+      '</div>' +
+      '<div class="tile-activity activity-' + t.activite + '"><span class="activity-dot"></span>' + actLabel + '</div>' +
+      '<span class="tile-status ' + statusClass + '">' + t.statut + '</span>' +
+      (t.demandeAide ? '<div class="tile-help-flag">🚩 Besoin du formateur</div>' : '') +
+    '</div>';
+  }).join('');
+}
+
+function changeTableCount(delta){
+  const n = Math.max(2, Math.min(6, tables.length + delta));
+  if(n === tables.length) return;
+  initTables(n);
+  // Les anciens identifiants de table ne survivent pas à la régénération : on
+  // réancre les vues Participant / Projection sur la nouvelle liste pour éviter
+  // toute référence orpheline.
+  participantPreviewTableId = tables[0].id;
+  if(projectionSelection.type === 'table') projectionSelection = { type:'table', tableId: tables[0].id };
+  renderFormateur();
+  toast(n + ' tables créées');
+}
+
+function toggleLockAll(){
+  lockAll = !lockAll;
+  tables.forEach(function(t){ t.verrouillee = lockAll; });
+  renderFormateur();
+  toast(lockAll ? 'Toutes les productions sont verrouillées' : 'Productions déverrouillées');
+}
+
+function toggleExportMenu(){
+  const m = document.getElementById('exportMenu');
+  m.style.display = m.style.display === 'block' ? 'none' : 'block';
+}
+function exportAs(label){
+  document.getElementById('exportMenu').style.display = 'none';
+  toast('Export "' + label + '" — maquette, moteur d\'export à activer une fois le mode connecté développé');
+}
+document.addEventListener('click', function(e){
+  if(!e.target.closest('#exportMenu') && !e.target.closest('[onclick="toggleExportMenu()"]')){
+    const m = document.getElementById('exportMenu');
+    if(m) m.style.display = 'none';
+  }
+});
+
+/* ---------- Panneau table (observer / rejoindre) ---------- */
+function openTablePanel(id){
+  const t = findTable(id);
+  if(!t) return;
+  document.getElementById('tablePanelContent').innerHTML =
+    '<div class="fmt-panel-head">' +
+      '<div class="tile-icon" style="background:' + t.couleur + '22;color:' + t.couleur + ';">' + t.icone + '</div>' +
+      '<h3>' + escapeHtml(t.nom) + '</h3>' +
+      '<button class="fmt-panel-close" onclick="closeTablePanel()">&times;</button>' +
+    '</div>' +
+    '<div class="fmt-panel-section"><h4>Participants</h4>' +
+      t.participants.map(function(p){ return '<span class="participant-chip"><span class="avatar">' + escapeHtml(p.charAt(0)) + '</span>' + escapeHtml(p) + '</span>'; }).join('') +
+    '</div>' +
+    '<div class="fmt-panel-section"><h4>Consigne</h4><p style="font-size:13px;margin:0;">' + escapeHtml(activite.consigne) + '</p></div>' +
+    '<div class="fmt-panel-section"><h4>Productions (' + t.contributions.length + ')</h4>' +
+      '<div class="postit-list">' + (t.contributions.length ? t.contributions.map(function(c){
+        return '<div class="postit">' + escapeHtml(c.texte) + '<span class="postit-auteur">' + escapeHtml(c.auteur) + '</span></div>';
+      }).join('') : '<p style="font-size:12.5px;color:var(--gris-moyen);margin:0;">Aucune contribution pour l\'instant.</p>') + '</div>' +
+    '</div>' +
+    '<div class="fmt-panel-actions">' +
+      '<button class="btn small primary" onclick="projectTableFromPanel(\'' + t.id + '\')">📽️ Projeter cette table</button>' +
+      '<button class="btn small" onclick="toggleTableLock(\'' + t.id + '\')">' + (t.verrouillee ? '🔓 Déverrouiller' : '🔒 Verrouiller') + '</button>' +
+      (t.demandeAide ? '<button class="btn small" onclick="clearHelp(\'' + t.id + '\')">✅ Marquer comme traité</button>' : '') +
+      '<button class="btn small" onclick="closeTablePanel()">Fermer</button>' +
+    '</div>';
+  document.getElementById('tablePanelOverlay').classList.add('open');
+}
+function closeTablePanel(){ document.getElementById('tablePanelOverlay').classList.remove('open'); }
+function toggleTableLock(id){
+  const t = findTable(id); if(!t) return;
+  t.verrouillee = !t.verrouillee;
+  renderFormateur(); openTablePanel(id);
+}
+function clearHelp(id){
+  const t = findTable(id); if(!t) return;
+  t.demandeAide = false;
+  if(t.statut === 'Bloqué') t.statut = 'En cours';
+  renderFormateur(); closeTablePanel();
+  toast('Demande d\'aide traitée pour ' + t.nom);
+}
+function projectTableFromPanel(id){
+  projectionSelection = { type:'table', tableId:id };
+  closeTablePanel();
+  setView('projection');
+  toast('Projection réglée sur ' + (findTable(id)||{nom:''}).nom);
+}
+
+/* ---------- Répartition ---------- */
+function openRepartition(){
+  repartMode = 'auto';
+  repartSelectedParticipant = null;
+  renderRepartition();
+  document.getElementById('repartOverlay').classList.add('open');
+}
+function closeRepartition(){ document.getElementById('repartOverlay').classList.remove('open'); }
+function setRepartMode(m){ repartMode = m; repartSelectedParticipant = null; renderRepartition(); }
+function renderRepartition(){
+  const modes = [
+    {key:'auto', label:'Automatique', desc:'Répartition équilibrée, en un clic.'},
+    {key:'manuelle', label:'Manuelle', desc:'Cliquez un participant puis la table de destination.'},
+    {key:'libre', label:'Libre', desc:'Chaque participant choisit sa table (verrouillable ensuite).'}
+  ];
+  let html = '<div class="fmt-panel-head"><h3>🔀 Répartir les participants</h3><button class="fmt-panel-close" onclick="closeRepartition()">&times;</button></div>';
+  html += '<div class="repart-modes">' + modes.map(function(m){
+    return '<button type="button" class="repart-mode-btn' + (repartMode===m.key?' active':'') + '" onclick="setRepartMode(\'' + m.key + '\')">' + m.label + '</button>';
+  }).join('') + '</div>';
+  const mode = modes.find(function(m){ return m.key === repartMode; });
+  html += '<p class="repart-hint">' + mode.desc + '</p>';
+
+  if(repartMode === 'auto'){
+    html += '<button class="btn primary" onclick="doAutoRepartition()">Lancer la répartition équilibrée</button>';
+  } else if(repartMode === 'libre'){
+    html += '<p style="font-size:12.5px;">En mode libre, les participants choisissent eux-mêmes leur table depuis leur écran. Vous pouvez ensuite verrouiller les affectations pour figer les groupes.</p>';
+    html += '<button class="btn" onclick="toast(\'Affectations verrouillées (maquette)\')">🔒 Verrouiller les affectations</button>';
+  } else {
+    const allParticipants = [];
+    tables.forEach(function(t){ t.participants.forEach(function(p){ allParticipants.push({nom:p, tableId:t.id}); }); });
+    html += '<div class="repart-pool">' + allParticipants.map(function(p){
+      const sel = repartSelectedParticipant === p.nom;
+      return '<span class="participant-chip' + (sel?' selected':'') + '" onclick="selectRepartParticipant(\'' + p.nom.replace(/'/g,"\\'") + '\')"><span class="avatar">' + escapeHtml(p.nom.charAt(0)) + '</span>' + escapeHtml(p.nom) + '</span>';
+    }).join('') + '</div>';
+    html += '<div class="repart-tables">' + tables.map(function(t){
+      return '<div class="repart-target" onclick="moveParticipantTo(\'' + t.id + '\')" style="border-color:' + t.couleur + ';">' +
+        '<div class="repart-target-name" style="color:' + t.couleur + ';">' + t.icone + ' ' + escapeHtml(t.nom) + '</div>' +
+        t.participants.map(function(p){ return '<span class="participant-chip"><span class="avatar">' + escapeHtml(p.charAt(0)) + '</span>' + escapeHtml(p) + '</span>'; }).join('') +
+      '</div>';
+    }).join('') + '</div>';
+  }
+  document.getElementById('repartContent').innerHTML = html;
+}
+function doAutoRepartition(){
+  const allParticipants = [];
+  tables.forEach(function(t){ t.participants.forEach(function(p){ allParticipants.push(p); }); });
+  tables.forEach(function(t){ t.participants = []; });
+  allParticipants.forEach(function(p, i){ tables[i % tables.length].participants.push(p); });
+  renderRepartition(); renderFormateur();
+  toast('Répartition équilibrée effectuée sur ' + tables.length + ' tables');
+}
+function selectRepartParticipant(nom){
+  repartSelectedParticipant = (repartSelectedParticipant === nom) ? null : nom;
+  renderRepartition();
+}
+function moveParticipantTo(tableId){
+  if(!repartSelectedParticipant) { toast('Sélectionnez d\'abord un participant'); return; }
+  tables.forEach(function(t){ t.participants = t.participants.filter(function(p){ return p !== repartSelectedParticipant; }); });
+  const dest = findTable(tableId);
+  dest.participants.push(repartSelectedParticipant);
+  const moved = repartSelectedParticipant;
+  repartSelectedParticipant = null;
+  renderRepartition(); renderFormateur();
+  toast(moved + ' déplacé(e) vers ' + dest.nom);
+}
+
+/* ---------- Restitution ---------- */
+document.getElementById('btnRestitution').addEventListener('click', function(){ openRestit(); });
+function openRestit(){
+  document.getElementById('restitContent').innerHTML =
+    '<div class="fmt-panel-head"><h3>📊 Restitution — comparer les tables</h3><button class="fmt-panel-close" onclick="closeRestit()">&times;</button></div>' +
+    '<div class="restit-cols">' + tables.map(function(t){
+      return '<div class="restit-col">' +
+        '<div class="restit-col-head" style="color:' + t.couleur + ';">' + t.icone + ' ' + escapeHtml(t.nom) + '</div>' +
+        '<div class="postit-list">' + (t.contributions.length ? t.contributions.map(function(c){
+          return '<div class="postit">' + escapeHtml(c.texte) + '<span class="postit-auteur">' + escapeHtml(c.auteur) + '</span></div>';
+        }).join('') : '<p style="font-size:12px;color:var(--gris-moyen);">Aucune production.</p>') + '</div>' +
+      '</div>';
+    }).join('') + '</div>';
+  document.getElementById('restitOverlay').classList.add('open');
+}
+function closeRestit(){ document.getElementById('restitOverlay').classList.remove('open'); }
+
+/* ---------- Votes ---------- */
+function computeVotes(){
+  const all = [];
+  tables.forEach(function(t){ t.contributions.forEach(function(c){ all.push(c); }); });
+  return all.map(function(c, i){ return { texte:c.texte, votes: Math.max(1, (all.length - i) % 7 + (i%3)) }; })
+    .sort(function(a,b){ return b.votes - a.votes; });
+}
+function openVotes(){
+  const ranked = computeVotes();
+  const max = ranked.length ? ranked[0].votes : 1;
+  document.getElementById('votesContent').innerHTML =
+    '<div class="fmt-panel-head"><h3>🗳️ Votes — priorisation collective</h3><button class="fmt-panel-close" onclick="closeVotes()">&times;</button></div>' +
+    '<p style="font-size:12.5px;color:var(--gris-moyen);margin-top:-6px;">Idées regroupées de toutes les tables, classées par nombre de votes.</p>' +
+    ranked.map(function(v, i){
+      return '<div class="vote-row"><div class="vote-rank' + (i===0?' top':'') + '">' + (i+1) + '</div>' +
+        '<div class="vote-text">' + escapeHtml(v.texte) + '</div>' +
+        '<div class="vote-bar-wrap"><div class="vote-bar" style="width:' + Math.round(v.votes/max*100) + '%;"></div></div>' +
+        '<div class="vote-count">' + v.votes + '</div></div>';
+    }).join('');
+  document.getElementById('votesOverlay').classList.add('open');
+}
+function closeVotes(){ document.getElementById('votesOverlay').classList.remove('open'); }
+
+/* ---------- Chronomètre géant ---------- */
+function timerToggle(){
+  timerRunning = !timerRunning;
+  document.getElementById('giantTimerBtn').textContent = timerRunning ? '⏸' : '▶';
+  if(timerRunning){
+    timerIntervalId = setInterval(function(){
+      timerRemaining = Math.max(0, timerRemaining - 1);
+      tables.forEach(function(t){ if(!t.verrouillee) t.tempsRestantSec = Math.max(0, t.tempsRestantSec - 1); });
+      document.getElementById('giantTimerDisplay').textContent = fmtTime(timerRemaining);
+      renderFormateur();
+      if(currentView === 'participant') renderParticipantView();
+      if(timerRemaining <= 0){ timerRunning = false; clearInterval(timerIntervalId); document.getElementById('giantTimerBtn').textContent = '▶'; }
+    }, 1000);
+  } else {
+    clearInterval(timerIntervalId);
+  }
+}
+function timerReset(){
+  timerRunning = false;
+  clearInterval(timerIntervalId);
+  timerRemaining = activite.dureeSec;
+  document.getElementById('giantTimerDisplay').textContent = fmtTime(timerRemaining);
+  document.getElementById('giantTimerBtn').textContent = '▶';
+}
+
+/* =========================================================
+   VUE PARTICIPANT
+   ========================================================= */
+function renderParticipantSelect(){
+  document.getElementById('partTableSelect').innerHTML = tables.map(function(t){
+    return '<option value="' + t.id + '">' + escapeHtml(t.nom) + (t.demandeAide?' (aide demandée)':'') + (t.statut==='Terminé'?' (terminé)':'') + '</option>';
+  }).join('');
+}
+function setParticipantPreviewTable(id){ participantPreviewTableId = id; renderParticipantView(); }
+function renderParticipantView(){
+  renderParticipantSelect();
+  if(!findTable(participantPreviewTableId)) participantPreviewTableId = tables[0].id;
+  document.getElementById('partTableSelect').value = participantPreviewTableId;
+  const t = findTable(participantPreviewTableId);
+  if(!t) return;
+  const toolsAvailable = activite.outilsAutorises;
+  const toolLabels = { postit:'✏️ Post-it', texte:'🔤 Texte', vote:'🗳️ Vote', liste:'📋 Liste', matrice:'▦ Matrice', image:'🖼️ Image', dessin:'✍️ Dessin' };
+  document.getElementById('partCard').innerHTML =
+    '<div class="part-head" style="background:' + t.couleur + ';">' +
+      '<div class="part-head-top"><div class="tile-icon">' + t.icone + '</div><h2>' + escapeHtml(t.nom) + '</h2></div>' +
+      '<p>' + t.participants.length + ' participants · ' + t.statut + '</p>' +
+    '</div>' +
+    '<div class="part-body">' +
+      '<div class="part-consigne"><strong>Consigne —</strong> ' + escapeHtml(activite.consigne) + '</div>' +
+      '<div class="part-timer">⏱️ ' + fmtTime(t.tempsRestantSec) + '</div>' +
+      '<div class="part-tools">' + toolsAvailable.map(function(k){ return '<span class="tool-btn">' + (toolLabels[k]||k) + '</span>'; }).join('') + '</div>' +
+      (t.verrouillee ? '<p class="part-locked-note">🔒 Le formateur a verrouillé cette table — production figée.</p>' : '') +
+      '<div class="part-add-row"><input type="text" id="partNewPostit" placeholder="Ajouter un post-it…"' + (t.verrouillee?' disabled':'') + ' onkeydown="if(event.key===\'Enter\') addParticipantPostit()"><button class="btn small primary" ' + (t.verrouillee?'disabled':'') + ' onclick="addParticipantPostit()">Ajouter</button></div>' +
+      '<div class="postit-list">' + (t.contributions.length ? t.contributions.map(function(c){
+        return '<div class="postit">' + escapeHtml(c.texte) + '<span class="postit-auteur">' + escapeHtml(c.auteur) + '</span></div>';
+      }).join('') : '<p style="font-size:12.5px;color:var(--gris-moyen);">Aucune contribution pour l\'instant — soyez le premier !</p>') + '</div>' +
+      '<button class="part-help-btn' + (t.demandeAide?' sent':'') + '" onclick="requestHelp(\'' + t.id + '\')">' + (t.demandeAide ? '✅ Le formateur a été prévenu' : '🆘 Besoin du formateur') + '</button>' +
+    '</div>';
+}
+function addParticipantPostit(){
+  const t = findTable(participantPreviewTableId);
+  if(!t || t.verrouillee) return;
+  const input = document.getElementById('partNewPostit');
+  const val = input.value.trim();
+  if(!val) return;
+  t.contributions.push({ id: uid('postit'), texte: val, auteur: 'Vous' });
+  input.value = '';
+  renderParticipantView();
+  renderFormateur();
+}
+function requestHelp(id){
+  const t = findTable(id);
+  if(!t || t.demandeAide) return;
+  t.demandeAide = true;
+  t.statut = 'Bloqué';
+  renderParticipantView();
+  renderFormateur();
+  toast('Demande envoyée au formateur');
+}
+
+/* =========================================================
+   VUE PROJECTION
+   ========================================================= */
+function renderProjectionSelect(){
+  const opts = [];
+  tables.forEach(function(t){ opts.push('<option value="table:' + t.id + '">Table — ' + escapeHtml(t.nom) + '</option>'); });
+  opts.push('<option value="multi">Toutes les tables (grille)</option>');
+  opts.push('<option value="synthese">Synthèse (restitution)</option>');
+  opts.push('<option value="votes">Votes</option>');
+  document.getElementById('projSelect').innerHTML = opts.join('');
+  const current = projectionSelection.type === 'table' ? ('table:' + projectionSelection.tableId) : projectionSelection.type;
+  document.getElementById('projSelect').value = current;
+}
+function setProjectionSelection(val){
+  if(val.indexOf('table:') === 0) projectionSelection = { type:'table', tableId: val.slice(6) };
+  else projectionSelection = { type: val };
+  renderProjectionView();
+}
+function renderProjectionView(){
+  renderProjectionSelect();
+  const stage = document.getElementById('projStage');
+  if(projectionSelection.type === 'table'){
+    const t = findTable(projectionSelection.tableId) || tables[0];
+    stage.innerHTML = '<div class="proj-inner proj-single">' +
+      '<div class="proj-table-name"><span class="tile-icon" style="background:' + t.couleur + '33;color:' + t.couleur + ';">' + t.icone + '</span>' + escapeHtml(t.nom) + '</div>' +
+      '<div class="proj-consigne">' + escapeHtml(activite.consigne) + '</div>' +
+      '<div class="proj-postits">' + (t.contributions.length ? t.contributions.map(function(c){ return '<div class="postit">' + escapeHtml(c.texte) + '</div>'; }).join('') : '<p style="opacity:.6;">Aucune production pour l\'instant.</p>') + '</div>' +
+    '</div>';
+  } else if(projectionSelection.type === 'multi'){
+    stage.innerHTML = '<div class="proj-multi">' + tables.map(function(t){
+      return '<div class="proj-multi-cell"><h4 style="color:' + t.couleur + ';">' + t.icone + ' ' + escapeHtml(t.nom) + '</h4>' +
+        t.contributions.slice(0,4).map(function(c){ return '<div class="postit">' + escapeHtml(c.texte) + '</div>'; }).join('') +
+      '</div>';
+    }).join('') + '</div>';
+  } else if(projectionSelection.type === 'synthese'){
+    stage.innerHTML = '<div class="proj-inner proj-synthese"><h3>📊 Synthèse — ' + escapeHtml(activite.titre) + '</h3><div class="proj-multi" style="padding:0;height:auto;">' +
+      tables.map(function(t){
+        return '<div class="proj-multi-cell"><h4 style="color:' + t.couleur + ';">' + t.icone + ' ' + escapeHtml(t.nom) + '</h4>' +
+          '<p style="font-size:.75em;opacity:.85;">' + t.contributions.length + ' contributions</p></div>';
+      }).join('') + '</div></div>';
+  } else if(projectionSelection.type === 'votes'){
+    const ranked = computeVotes();
+    const max = ranked.length ? ranked[0].votes : 1;
+    stage.innerHTML = '<div class="proj-inner proj-votes"><h3>🗳️ Résultats du vote</h3>' +
+      ranked.slice(0,6).map(function(v,i){
+        return '<div class="vote-row"><div class="vote-rank' + (i===0?' top':'') + '">' + (i+1) + '</div><div class="vote-text">' + escapeHtml(v.texte) + '</div><div class="vote-bar-wrap"><div class="vote-bar" style="width:' + Math.round(v.votes/max*100) + '%;"></div></div><div class="vote-count" style="color:#fff;">' + v.votes + '</div></div>';
+      }).join('') + '</div>';
+  } else {
+    stage.innerHTML = '<div class="proj-empty">Aucun contenu sélectionné pour la projection.</div>';
+  }
+}
+
+/* =========================================================
+   INITIALISATION
+   Cette page peut s'ouvrir seule (revue de la maquette, bandeau et switcher
+   visibles) ou être intégrée en iframe depuis une page "Tables collaboratives"
+   du Studio — dans ce cas le bandeau de démo se masque automatiquement et la
+   vue initiale est fixée par le Studio via #vue=formateur|participant|projection.
+   ========================================================= */
+function getInitialView(){
+  const m = /[#&]vue=(formateur|participant|projection)/.exec(location.hash || '');
+  return m ? m[1] : 'formateur';
+}
+if(window.self !== window.top){
+  const bar = document.getElementById('demoBar');
+  if(bar) bar.style.display = 'none';
+}
+renderViewSwitch();
+renderFormateur();
+document.getElementById('giantTimerDisplay').textContent = fmtTime(timerRemaining);
+participantPreviewTableId = tables[0].id;
+projectionSelection = { type:'table', tableId: tables[0].id };
+setView(getInitialView());
+</script>
+</body>
+</html>

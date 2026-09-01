@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur de mots croisés — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 340px;height:300px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:260px;height:230px;}
+  }
+  .container{max-width:960px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Constructeur de mots ---------- */
+  .word-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .w-badge{
+    flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;
+  }
+  .w-input, .d-input{
+    border:1.5px solid var(--gris-clair);border-radius:8px;padding:9px 12px;
+    font-family:inherit;font-size:13.5px;color:var(--gris);background:#fff;
+  }
+  .w-input{flex:0 0 150px;min-width:0;font-weight:700;text-transform:uppercase;}
+  .d-input{flex:1;min-width:0;}
+  .w-input:focus, .d-input:focus{outline:none;border-color:var(--bleu);}
+  .remove-row-btn{
+    flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--gris-clair);
+    background:#fff;color:var(--gris-moyen);cursor:pointer;font-size:15px;line-height:1;font-family:inherit;
+  }
+  .remove-row-btn:hover:not(:disabled){border-color:var(--rouge);color:var(--rouge);}
+  .remove-row-btn:disabled{opacity:0.35;cursor:not-allowed;}
+  .builder-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:14px;}
+  .add-word-btn{
+    background:none;border:1.5px dashed var(--gris-clair);color:var(--bleu-fonce);
+    padding:9px 18px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+  }
+  .add-word-btn:hover{border-color:var(--bleu-fonce);background:#eef8fb;}
+  .tool-panel-summary{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .tool-panel-summary p{margin:0;font-size:13px;color:var(--gris-moyen);}
+  .edit-words-btn{
+    background:none;border:1.5px dashed var(--gris-clair);color:var(--bleu-fonce);
+    padding:9px 18px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .edit-words-btn:hover{border-color:var(--bleu-fonce);background:#eef8fb;}
+  .generate-btn{
+    background:var(--bleu-fonce);color:#fff;border:none;padding:11px 26px;border-radius:22px;
+    font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 6px 16px rgba(0,136,169,0.24);
+    margin-left:auto;
+  }
+  .generate-btn:hover{background:#006f87;}
+  @media (max-width:620px){
+    .word-row{flex-wrap:wrap;}
+    .w-input{flex:1 1 100%;}
+    .d-input{flex:1 1 100%;}
+    .generate-btn{margin-left:0;width:100%;}
+  }
+
+  /* ---------- Grille de mots croisés ---------- */
+  #gridPanel{display:none;}
+  .grid-wrap{display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;}
+  .grid-scroll{overflow-x:auto;padding-bottom:6px;}
+  .crossword-grid{
+    display:grid;gap:2px;background:var(--gris-clair);padding:2px;border-radius:4px;
+    width:max-content;
+  }
+  .grid-cell{
+    width:34px;height:34px;background:transparent;position:relative;
+  }
+  .grid-cell.filled{background:#fff;}
+  .cell-number{
+    position:absolute;top:1px;left:2px;font-size:8.5px;font-weight:700;color:var(--bleu-fonce);
+    line-height:1;pointer-events:none;
+  }
+  .cell-input{
+    width:100%;height:100%;border:none;background:transparent;text-align:center;
+    font-family:inherit;font-size:16px;font-weight:700;color:#20282b;text-transform:uppercase;padding:0;
+  }
+  .cell-input:focus{outline:2px solid var(--bleu);outline-offset:-2px;}
+  .cell-input.correct{color:var(--vert);background:#eafbf4;}
+  .cell-input.incorrect{color:var(--rouge);background:#fdecec;}
+  .clues-columns{flex:1 1 260px;min-width:220px;display:flex;flex-direction:column;gap:20px;}
+  .clue-group h3{font-size:13px;font-weight:700;color:var(--bleu-fonce);text-transform:uppercase;letter-spacing:.4px;margin:0 0 10px;}
+  .clue-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .clue-list li{font-size:13px;color:var(--gris);line-height:1.5;}
+  .clue-list .clue-num{font-weight:700;color:var(--bleu-fonce);}
+  .clue-list .clue-len{color:var(--gris-moyen);font-size:11.5px;}
+  .clue-empty{font-style:italic;color:var(--gris-moyen);}
+  .grid-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+  .grid-actions button{
+    background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);
+    padding:9px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;
+  }
+  .grid-actions button:hover{background:var(--gris-fond2);}
+  .grid-actions button.primary{background:var(--bleu-fonce);color:#fff;border-color:var(--bleu-fonce);}
+  .grid-actions button.primary:hover{background:#006f87;}
+  .unplaced-note{font-size:12px;color:var(--gris-moyen);font-style:italic;margin-top:14px;}
+
+  /* ---------- Plein écran (vue projection, sans le panneau de construction) ---------- */
+  #gridPanel:fullscreen, #gridPanel:-webkit-full-screen{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:#fff;padding:40px;overflow:auto;
+  }
+  #gridPanel:fullscreen .grid-wrap, #gridPanel:-webkit-full-screen .grid-wrap{max-width:1400px;width:100%;justify-content:center;}
+  #gridPanel:fullscreen .grid-cell, #gridPanel:-webkit-full-screen .grid-cell{width:50px;height:50px;}
+  #gridPanel:fullscreen .cell-input, #gridPanel:-webkit-full-screen .cell-input{font-size:22px;}
+  #gridPanel:fullscreen .cell-number, #gridPanel:-webkit-full-screen .cell-number{font-size:12px;}
+  #gridPanel:fullscreen .clue-list li, #gridPanel:-webkit-full-screen .clue-list li{font-size:15px;}
+  #gridPanel:fullscreen .clue-group h3, #gridPanel:-webkit-full-screen .clue-group h3{font-size:15px;}
+  #gridPanel:fullscreen .fs-hide, #gridPanel:-webkit-full-screen .fs-hide{display:none !important;}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .panel:first-of-type, .builder-actions, .grid-actions, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Générateur de mots croisés<span>Une grille sur mesure, à partir de vos mots-clés</span></h1>
+      <p class="hero-desc">Renseignez des mots-clés et leur définition, l'outil construit automatiquement la grille en plaçant les mots selon leurs lettres communes — utile en clôture de session pour ancrer un vocabulaire ou un lexique métier.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          10-15 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/><path d="M4 10h16M10 4v16" stroke-width="1.6"/></svg></span>
+          Grille générée automatiquement
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('toolPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Construire ma grille &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+        <g>
+          <rect x="55" y="42" width="130" height="130" rx="4" fill="#fff" stroke="#0088A9" stroke-width="2"/>
+          <g stroke="#D7D3CE" stroke-width="1">
+            <path d="M55,68 H185 M55,94 H185 M55,120 H185 M55,146 H185"/>
+            <path d="M81,42 V172 M107,42 V172 M133,42 V172 M159,42 V172"/>
+          </g>
+          <rect x="81" y="68" width="26" height="26" fill="#F5AB33" opacity="0.85"/>
+          <rect x="107" y="94" width="26" height="26" fill="#15CA88" opacity="0.85"/>
+          <rect x="133" y="94" width="26" height="26" fill="#884EC2" opacity="0.85"/>
+          <rect x="107" y="120" width="26" height="26" fill="#DE5C5C" opacity="0.85"/>
+          <text x="94" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#20282b">E</text>
+          <text x="120" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">C</text>
+          <text x="146" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">O</text>
+          <text x="120" y="138" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">U</text>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Générateur de mots croisés</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> renseignez chaque mot-clé et sa définition, puis cliquez sur « Générer la grille ». L'outil place automatiquement les mots en cherchant leurs lettres communes — aucune définition n'est générée automatiquement : c'est vous qui gardez la main sur le contenu.</p>
+    <p>Trois mots minimum sont nécessaires pour obtenir une grille avec des intersections. Vingt mots maximum, pour garder une grille lisible en séance.</p>
+  </div>
+
+  <div class="panel" id="toolPanel">
+    <div id="toolPanelFields">
+      <h2>Vos mots-clés</h2>
+      <p class="panel-sub">Un mot par ligne, avec sa définition courte. Les accents et espaces sont automatiquement neutralisés dans la grille.</p>
+      <div id="wordRows"></div>
+      <div class="builder-actions">
+        <button class="add-word-btn" onclick="addRow()">+ Ajouter un mot</button>
+        <button class="generate-btn" onclick="generateGrid()">Générer la grille</button>
+      </div>
+    </div>
+    <div id="toolPanelSummary" class="tool-panel-summary" style="display:none;">
+      <p>Vos mots-clés et leurs définitions sont repliés — la grille ci-dessous est prête à être montrée au groupe.</p>
+      <button class="edit-words-btn" onclick="expandToolPanel()">✏️ Modifier mes mots-clés</button>
+    </div>
+  </div>
+
+  <div class="panel" id="gridPanel">
+    <h2>Votre grille</h2>
+    <p class="panel-sub">À faire remplir en individuel ou en équipe, à l'écran ou imprimée.</p>
+    <div class="grid-wrap">
+      <div class="grid-scroll">
+        <div class="crossword-grid" id="gridContainer"></div>
+      </div>
+      <div class="clues-columns">
+        <div class="clue-group">
+          <h3>Horizontalement</h3>
+          <ul class="clue-list" id="cluesAcross"></ul>
+        </div>
+        <div class="clue-group">
+          <h3>Verticalement</h3>
+          <ul class="clue-list" id="cluesDown"></ul>
+        </div>
+      </div>
+    </div>
+    <p class="unplaced-note fs-hide" id="unplacedNote" style="display:none;"></p>
+    <div class="grid-actions">
+      <button class="primary" onclick="checkGrid()">Vérifier mes réponses</button>
+      <button onclick="revealGrid()">Révéler la grille</button>
+      <button onclick="resetGridInputs()">Effacer les réponses</button>
+      <button id="gridFsBtn" onclick="toggleGridFullscreen()">Plein écran</button>
+      <button class="fs-hide" onclick="window.print()">Imprimer / exporter</button>
+      <button class="fs-hide" onclick="exportToPptx()">Exporter en PowerPoint</button>
+    </div>
+    <p class="unplaced-note fs-hide" id="pptxNote">Export : une diapositive avec la grille vide et les définitions, puis une diapositive avec la grille complète — à faire avancer au clic pendant la séance.</p>
+  </div>
+
+  <div class="actions-row" style="text-align:center;margin-top:6px;">
+    <button onclick="resetAll()" style="background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:9px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;">Recommencer depuis le début</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil de conception. Les mots, définitions et réponses restent dans votre navigateur (aucun enregistrement, aucun envoi, aucun partage automatique). L'export PowerPoint est généré localement, sans envoi de données à un serveur.</footer>
+
+<script src="libs/pptxgen.bundle.js"></script>
+<script>
+/* =========================================================
+   ALGORITHME DE GÉNÉRATION DE GRILLE (aucun appel réseau, aucune IA)
+   ========================================================= */
+function stripAccents(str){
+  return str.normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+function cleanWord(raw){
+  return stripAccents(String(raw || '').toUpperCase()).replace(/[^A-Z]/g, '');
+}
+
+function generateCrossword(rawWords){
+  const words = [];
+  const seen = new Set();
+  rawWords.forEach(function(w){
+    const c = cleanWord(w);
+    if(c.length >= 2 && !seen.has(c)){
+      seen.add(c);
+      words.push(c);
+    }
+  });
+  if(words.length === 0) return null;
+
+  words.sort(function(a,b){ return b.length - a.length; });
+
+  const grid = new Map();
+  const placements = [];
+  function key(r,c){ return r + ',' + c; }
+
+  function canPlace(word, row, col, dir){
+    const dr = dir === 'V' ? 1 : 0;
+    const dc = dir === 'H' ? 1 : 0;
+    const beforeR = row - dr, beforeC = col - dc;
+    if(grid.has(key(beforeR, beforeC))) return null;
+    const afterR = row + dr*word.length, afterC = col + dc*word.length;
+    if(grid.has(key(afterR, afterC))) return null;
+
+    let hasIntersection = false;
+    for(let i = 0; i < word.length; i++){
+      const r = row + dr*i, c = col + dc*i;
+      const existing = grid.get(key(r,c));
+      if(existing !== undefined){
+        if(existing !== word[i]) return null;
+        hasIntersection = true;
+      } else {
+        if(dir === 'H'){
+          if(grid.has(key(r-1,c)) || grid.has(key(r+1,c))) return null;
+        } else {
+          if(grid.has(key(r,c-1)) || grid.has(key(r,c+1))) return null;
+        }
+      }
+    }
+    return { hasIntersection: hasIntersection };
+  }
+
+  function place(word, row, col, dir){
+    const dr = dir === 'V' ? 1 : 0;
+    const dc = dir === 'H' ? 1 : 0;
+    for(let i = 0; i < word.length; i++){
+      grid.set(key(row + dr*i, col + dc*i), word[i]);
+    }
+    placements.push({ word: word, row: row, col: col, dir: dir });
+  }
+
+  function boundingBoxGrowth(row, col, dir, wordLen){
+    if(placements.length === 0) return 0;
+    let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
+    grid.forEach(function(_, k){
+      const parts = k.split(',');
+      const r = Number(parts[0]), c = Number(parts[1]);
+      if(r < minR) minR = r; if(r > maxR) maxR = r;
+      if(c < minC) minC = c; if(c > maxC) maxC = c;
+    });
+    const dr = dir === 'V' ? 1 : 0;
+    const dc = dir === 'H' ? 1 : 0;
+    const endR = row + dr*(wordLen-1), endC = col + dc*(wordLen-1);
+    const newMinR = Math.min(minR, row, endR), newMaxR = Math.max(maxR, row, endR);
+    const newMinC = Math.min(minC, col, endC), newMaxC = Math.max(maxC, col, endC);
+    const oldArea = (maxR-minR+1)*(maxC-minC+1);
+    const newArea = (newMaxR-newMinR+1)*(newMaxC-newMinC+1);
+    return newArea - oldArea;
+  }
+
+  place(words[0], 0, 0, 'H');
+  const unplaced = [];
+
+  for(let w = 1; w < words.length; w++){
+    const word = words[w];
+    const candidates = [];
+    for(let pi = 0; pi < placements.length; pi++){
+      const p = placements[pi];
+      for(let i = 0; i < word.length; i++){
+        for(let j = 0; j < p.word.length; j++){
+          if(word[i] !== p.word[j]) continue;
+          const perpDir = p.dir === 'H' ? 'V' : 'H';
+          let row, col;
+          if(perpDir === 'V'){
+            row = p.row - i;
+            col = p.col + j;
+          } else {
+            row = p.row + j;
+            col = p.col - i;
+          }
+          const res = canPlace(word, row, col, perpDir);
+          if(res && res.hasIntersection){
+            candidates.push({ row: row, col: col, dir: perpDir, growth: boundingBoxGrowth(row, col, perpDir, word.length) });
+          }
+        }
+      }
+    }
+    if(candidates.length > 0){
+      candidates.sort(function(a,b){ return a.growth - b.growth; });
+      const bestGrowth = candidates[0].growth;
+      const best = candidates.filter(function(c){ return c.growth === bestGrowth; });
+      const chosen = best[Math.floor(Math.random() * best.length)];
+      place(word, chosen.row, chosen.col, chosen.dir);
+    } else {
+      unplaced.push(word);
+    }
+  }
+
+  if(unplaced.length > 0){
+    let minR = Infinity, maxR = -Infinity, minC = Infinity;
+    grid.forEach(function(_, k){
+      const parts = k.split(',');
+      const r = Number(parts[0]), c = Number(parts[1]);
+      if(r < minR) minR = r; if(r > maxR) maxR = r; if(c < minC) minC = c;
+    });
+    let nextRow = maxR + 2;
+    unplaced.forEach(function(word){
+      place(word, nextRow, minC, 'H');
+      nextRow += 2;
+    });
+  }
+
+  let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
+  grid.forEach(function(_, k){
+    const parts = k.split(',');
+    const r = Number(parts[0]), c = Number(parts[1]);
+    if(r < minR) minR = r; if(r > maxR) maxR = r;
+    if(c < minC) minC = c; if(c > maxC) maxC = c;
+  });
+  const offsetR = -minR + 1, offsetC = -minC + 1;
+  const normalizedPlacements = placements.map(function(p){
+    return { word: p.word, dir: p.dir, row: p.row + offsetR, col: p.col + offsetC };
+  });
+  const width = (maxC - minC + 1) + 2;
+  const height = (maxR - minR + 1) + 2;
+
+  const filledSet = new Set();
+  normalizedPlacements.forEach(function(p){
+    const dr = p.dir === 'V' ? 1 : 0, dc = p.dir === 'H' ? 1 : 0;
+    for(let i=0;i<p.word.length;i++){
+      filledSet.add(key(p.row+dr*i, p.col+dc*i));
+    }
+  });
+  let counter = 1;
+  const cellNumbers = new Map();
+  for(let r = 0; r < height; r++){
+    for(let c = 0; c < width; c++){
+      if(!filledSet.has(key(r,c))) continue;
+      const startsH = !filledSet.has(key(r,c-1)) && filledSet.has(key(r,c+1));
+      const startsV = !filledSet.has(key(r-1,c)) && filledSet.has(key(r+1,c));
+      if(startsH || startsV){
+        cellNumbers.set(key(r,c), counter++);
+      }
+    }
+  }
+  const finalPlacements = normalizedPlacements.map(function(p){
+    return { word: p.word, dir: p.dir, row: p.row, col: p.col, number: cellNumbers.get(key(p.row, p.col)) };
+  });
+
+  return {
+    placements: finalPlacements,
+    width: width, height: height,
+    unplacedCount: unplaced.length
+  };
+}
+
+/* =========================================================
+   ÉTAT
+   ========================================================= */
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+const DEFAULT_WORDS = [
+  { word: "ECOUTE", def: "Capacité à recevoir la parole de l'autre sans jugement immédiat." },
+  { word: "STRESS", def: "Réaction de l'organisme face à une pression perçue comme excessive." },
+  { word: "FEEDBACK", def: "Retour donné à quelqu'un sur une action ou un comportement observé." },
+  { word: "COHESION", def: "Force qui maintient un groupe uni autour d'un objectif commun." },
+  { word: "BURNOUT", def: "Épuisement professionnel lié à une exposition prolongée au stress au travail." },
+  { word: "CONFIANCE", def: "Sentiment de sécurité qui permet de s'appuyer sur autrui." }
+];
+let wordDefs = DEFAULT_WORDS.map(function(w){ return { word: w.word, def: w.def }; });
+let currentPuzzle = null;
+let defsByWord = {};
+
+/* =========================================================
+   CONSTRUCTEUR DE MOTS
+   ========================================================= */
+function renderWordRows(){
+  const wrap = document.getElementById('wordRows');
+  wrap.innerHTML = wordDefs.map(function(wd, i){
+    return '<div class="word-row">' +
+      '<span class="w-badge">' + (i+1) + '</span>' +
+      '<input type="text" class="w-input" placeholder="Mot-clé" value="' + escapeHtml(wd.word) + '" oninput="onWordInput(' + i + ', this.value)">' +
+      '<input type="text" class="d-input" placeholder="Définition courte" value="' + escapeHtml(wd.def) + '" oninput="onDefInput(' + i + ', this.value)">' +
+      '<button class="remove-row-btn" onclick="removeRow(' + i + ')" aria-label="Supprimer ce mot" ' + (wordDefs.length<=2?'disabled':'') + '>&times;</button>' +
+    '</div>';
+  }).join('');
+}
+function onWordInput(i,val){ wordDefs[i].word = val; }
+function onDefInput(i,val){ wordDefs[i].def = val; }
+function addRow(){
+  if(wordDefs.length >= 20){ alert('20 mots maximum, pour garder une grille lisible.'); return; }
+  wordDefs.push({ word:'', def:'' });
+  renderWordRows();
+  const inputs = document.querySelectorAll('#wordRows .w-input');
+  if(inputs.length) inputs[inputs.length-1].focus();
+}
+function removeRow(i){
+  if(wordDefs.length <= 2) return;
+  wordDefs.splice(i,1);
+  renderWordRows();
+}
+
+/* =========================================================
+   GÉNÉRATION + RENDU DE LA GRILLE
+   ========================================================= */
+function generateGrid(){
+  const valid = wordDefs.filter(function(wd){ return wd.word.trim() && wd.def.trim(); });
+  if(valid.length < 3){
+    alert('Renseignez au moins 3 mots avec leur définition avant de générer la grille.');
+    return;
+  }
+  defsByWord = {};
+  valid.forEach(function(wd){ defsByWord[cleanWord(wd.word)] = wd.def.trim(); });
+
+  const result = generateCrossword(valid.map(function(wd){ return wd.word; }));
+  if(!result || result.placements.length === 0){
+    alert("Impossible de générer une grille à partir de ces mots — vérifiez qu'ils contiennent au moins deux lettres.");
+    return;
+  }
+  currentPuzzle = result;
+  renderGrid();
+  renderClues();
+
+  const note = document.getElementById('unplacedNote');
+  if(result.unplacedCount > 0){
+    note.style.display = '';
+    note.textContent = result.unplacedCount + ' mot' + (result.unplacedCount>1?'s':'') + ' n\'aviez pas de lettre commune avec les autres et ' + (result.unplacedCount>1?'ont':'a') + ' été placé' + (result.unplacedCount>1?'s':'') + ' isolément, en bas de grille.';
+  } else {
+    note.style.display = 'none';
+  }
+
+  document.getElementById('gridPanel').style.display = 'block';
+  collapseToolPanel();
+  document.getElementById('gridPanel').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* Une fois la grille générée, le panneau des mots-clés (le corrigé) se replie par défaut :
+   la page est alors déjà prête à être montrée au groupe, sans avoir besoin du plein écran
+   pour masquer le corrigé. Le plein écran (voir plus bas) reste utile pour agrandir la
+   grille elle-même en projection. */
+function collapseToolPanel(){
+  document.getElementById('toolPanelFields').style.display = 'none';
+  document.getElementById('toolPanelSummary').style.display = 'flex';
+}
+function expandToolPanel(){
+  document.getElementById('toolPanelFields').style.display = 'block';
+  document.getElementById('toolPanelSummary').style.display = 'none';
+}
+
+function computeGridMaps(puzzle){
+  const numberAt = {};
+  const letterAt = {};
+  puzzle.placements.forEach(function(p){
+    if(p.number) numberAt[p.row+','+p.col] = p.number;
+    const dr = p.dir==='V'?1:0, dc = p.dir==='H'?1:0;
+    for(let i=0;i<p.word.length;i++){
+      letterAt[(p.row+dr*i)+','+(p.col+dc*i)] = p.word[i];
+    }
+  });
+  return { numberAt: numberAt, letterAt: letterAt };
+}
+
+function renderGrid(){
+  const width = currentPuzzle.width, height = currentPuzzle.height;
+  const maps = computeGridMaps(currentPuzzle);
+  const numberAt = maps.numberAt;
+  const letterAt = maps.letterAt;
+  let html = '';
+  html += '<div class="crossword-grid" style="grid-template-columns:repeat(' + width + ', 1fr);">';
+  for(let r=0;r<height;r++){
+    for(let c=0;c<width;c++){
+      const k = r+','+c;
+      if(letterAt[k]){
+        const num = numberAt[k] ? '<span class="cell-number">' + numberAt[k] + '</span>' : '';
+        html += '<div class="grid-cell filled">' + num + '<input class="cell-input" maxlength="1" data-letter="' + letterAt[k] + '" oninput="onCellInput(this)"></div>';
+      } else {
+        html += '<div class="grid-cell"></div>';
+      }
+    }
+  }
+  html += '</div>';
+  document.getElementById('gridContainer').innerHTML = html;
+}
+
+function onCellInput(input){
+  input.value = stripAccents(input.value.toUpperCase()).slice(0,1);
+  input.classList.remove('correct','incorrect');
+}
+
+function renderClues(){
+  const placements = currentPuzzle.placements;
+  const across = placements.filter(function(p){ return p.dir==='H'; }).sort(function(a,b){ return a.number-b.number; });
+  const down = placements.filter(function(p){ return p.dir==='V'; }).sort(function(a,b){ return a.number-b.number; });
+  function clueHtml(p){
+    const def = defsByWord[p.word] || '';
+    return '<li><span class="clue-num">' + p.number + '.</span> ' + escapeHtml(def) + ' <span class="clue-len">(' + p.word.length + ' lettres)</span></li>';
+  }
+  document.getElementById('cluesAcross').innerHTML = across.map(clueHtml).join('') || '<li class="clue-empty">—</li>';
+  document.getElementById('cluesDown').innerHTML = down.map(clueHtml).join('') || '<li class="clue-empty">—</li>';
+}
+
+/* =========================================================
+   VÉRIFICATION / RÉVÉLATION / RÉINITIALISATION DE LA GRILLE
+   ========================================================= */
+function checkGrid(){
+  const inputs = document.querySelectorAll('.cell-input');
+  let allFilled = true, allCorrect = true;
+  inputs.forEach(function(inp){
+    const val = stripAccents(inp.value.toUpperCase());
+    const letter = inp.dataset.letter;
+    if(!val){ allFilled = false; inp.classList.remove('correct','incorrect'); return; }
+    if(val === letter){ inp.classList.add('correct'); inp.classList.remove('incorrect'); }
+    else { inp.classList.add('incorrect'); inp.classList.remove('correct'); allCorrect = false; }
+  });
+  if(!allFilled){
+    alert('Certaines cases sont encore vides.');
+  } else if(allCorrect){
+    alert('Bravo, la grille est complète et juste !');
+  }
+}
+function revealGrid(){
+  document.querySelectorAll('.cell-input').forEach(function(inp){
+    inp.value = inp.dataset.letter;
+    inp.classList.add('correct');
+    inp.classList.remove('incorrect');
+    inp.disabled = true;
+  });
+}
+function resetGridInputs(){
+  document.querySelectorAll('.cell-input').forEach(function(inp){
+    inp.value = '';
+    inp.disabled = false;
+    inp.classList.remove('correct','incorrect');
+  });
+}
+
+/* =========================================================
+   PLEIN ÉCRAN (vue projection — grille et définitions uniquement,
+   le panneau de construction des mots-clés reste hors champ)
+   ========================================================= */
+function toggleGridFullscreen(){
+  const panel = document.getElementById('gridPanel');
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if(!isFs){
+    if(panel.requestFullscreen) panel.requestFullscreen();
+    else if(panel.webkitRequestFullscreen) panel.webkitRequestFullscreen();
+  } else {
+    if(document.exitFullscreen) document.exitFullscreen();
+    else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+function onGridFullscreenChange(){
+  const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  const btn = document.getElementById('gridFsBtn');
+  if(btn) btn.textContent = isFs ? 'Quitter le plein écran' : 'Plein écran';
+}
+document.addEventListener('fullscreenchange', onGridFullscreenChange);
+document.addEventListener('webkitfullscreenchange', onGridFullscreenChange);
+
+/* =========================================================
+   RÉINITIALISATION GÉNÉRALE
+   ========================================================= */
+function resetAll(){
+  const hasContent = currentPuzzle !== null || wordDefs.some(function(wd,i){
+    return wd.word !== (DEFAULT_WORDS[i]?DEFAULT_WORDS[i].word:'') || wd.def !== (DEFAULT_WORDS[i]?DEFAULT_WORDS[i].def:'');
+  });
+  if(hasContent){
+    if(!confirm('Recommencer ? Les mots saisis et la grille seront effacés.')) return;
+  }
+  wordDefs = DEFAULT_WORDS.map(function(w){ return { word: w.word, def: w.def }; });
+  currentPuzzle = null;
+  defsByWord = {};
+  renderWordRows();
+  document.getElementById('gridPanel').style.display = 'none';
+  expandToolPanel();
+}
+
+/* =========================================================
+   EXPORT POWERPOINT (généré localement, sans appel réseau)
+   ========================================================= */
+function drawGridOnSlide(slide, puzzle, maps, opts){
+  const width = puzzle.width, height = puzzle.height;
+  let cellSize = Math.min(opts.maxW / width, opts.maxH / height);
+  cellSize = Math.max(0.2, Math.min(0.55, cellSize));
+  const gridW = cellSize * width, gridH = cellSize * height;
+  const startX = opts.x + (opts.maxW - gridW) / 2;
+  const startY = opts.y + (opts.maxH - gridH) / 2;
+  const letterFontSize = Math.max(9, Math.min(26, Math.round(cellSize * 72 * 0.42)));
+  const numberFontSize = Math.max(5, Math.min(9, Math.round(cellSize * 72 * 0.16)));
+
+  for(let r = 0; r < height; r++){
+    for(let c = 0; c < width; c++){
+      const k = r + ',' + c;
+      if(!maps.letterAt[k]) continue;
+      const x = startX + c * cellSize, y = startY + r * cellSize;
+      slide.addShape('rect', {
+        x: x, y: y, w: cellSize, h: cellSize,
+        fill: { color: 'FFFFFF' },
+        line: { color: 'D7D3CE', width: 0.75 }
+      });
+      if(opts.showLetters){
+        slide.addText(maps.letterAt[k], {
+          x: x, y: y, w: cellSize, h: cellSize,
+          align: 'center', valign: 'middle',
+          fontSize: letterFontSize, bold: true, color: '20282B',
+          fontFace: 'Arial', margin: 0
+        });
+      }
+      if(maps.numberAt[k]){
+        slide.addText(String(maps.numberAt[k]), {
+          x: x + 0.02, y: y + 0.01, w: Math.max(cellSize * 0.6, 0.01), h: Math.max(cellSize * 0.4, 0.01),
+          align: 'left', valign: 'top',
+          fontSize: numberFontSize, bold: true, color: '0088A9',
+          fontFace: 'Arial', margin: 0
+        });
+      }
+    }
+  }
+}
+
+function cluesToTextRuns(list){
+  if(list.length === 0) return [{ text: '—', options: {} }];
+  return list.map(function(p, idx){
+    const def = defsByWord[p.word] || '';
+    return {
+      text: p.number + '. ' + def,
+      options: { breakLine: idx < list.length - 1, paraSpaceAfter: 6 }
+    };
+  });
+}
+
+function exportToPptx(){
+  if(!currentPuzzle){
+    alert("Générez d'abord une grille avant de l'exporter.");
+    return;
+  }
+  if(typeof window.PptxGenJS === 'undefined'){
+    alert("La bibliothèque d'export PowerPoint n'a pas pu se charger (fichier libs/pptxgen.bundle.js manquant à côté de cette page).");
+    return;
+  }
+
+  const puzzle = currentPuzzle;
+  const maps = computeGridMaps(puzzle);
+  const COLOR_BLEU_FONCE = '0088A9';
+  const COLOR_DARK = '20282B';
+  const COLOR_GRIS = '5D6160';
+  const COLOR_GRIS_MOYEN = 'A2A5A4';
+
+  const pres = new window.PptxGenJS();
+  pres.layout = 'LAYOUT_WIDE';
+
+  // ---- Diapositive 1 : grille vide + définitions ----
+  const s1 = pres.addSlide();
+  s1.background = { color: 'FFFFFF' };
+  s1.addText('AXIS MUNDI', { x: 0.5, y: 0.32, w: 4, h: 0.35, fontSize: 11, bold: true, color: COLOR_BLEU_FONCE, fontFace: 'Arial' });
+  s1.addText('Mots croisés', { x: 0.5, y: 0.68, w: 9, h: 0.6, fontSize: 28, bold: true, color: COLOR_DARK, fontFace: 'Arial' });
+  s1.addText('Grille à compléter', { x: 0.5, y: 1.28, w: 8, h: 0.35, fontSize: 13, color: COLOR_GRIS, fontFace: 'Arial' });
+
+  drawGridOnSlide(s1, puzzle, maps, { showLetters: false, x: 0.6, y: 1.85, maxW: 7.3, maxH: 4.9 });
+
+  const across = puzzle.placements.filter(function(p){ return p.dir === 'H'; }).sort(function(a,b){ return a.number - b.number; });
+  const down = puzzle.placements.filter(function(p){ return p.dir === 'V'; }).sort(function(a,b){ return a.number - b.number; });
+
+  s1.addText('HORIZONTALEMENT', { x: 8.2, y: 1.85, w: 4.5, h: 0.3, fontSize: 11, bold: true, color: COLOR_BLEU_FONCE, fontFace: 'Arial' });
+  s1.addText(cluesToTextRuns(across), { x: 8.2, y: 2.2, w: 4.5, h: 2.2, fontSize: 10, color: COLOR_GRIS, fontFace: 'Arial', valign: 'top' });
+  s1.addText('VERTICALEMENT', { x: 8.2, y: 4.5, w: 4.5, h: 0.3, fontSize: 11, bold: true, color: COLOR_BLEU_FONCE, fontFace: 'Arial' });
+  s1.addText(cluesToTextRuns(down), { x: 8.2, y: 4.85, w: 4.5, h: 2.2, fontSize: 10, color: COLOR_GRIS, fontFace: 'Arial', valign: 'top' });
+
+  s1.addText('AXIS MUNDI — Outil de conception pédagogique', { x: 0.5, y: 7.1, w: 8, h: 0.3, fontSize: 8.5, color: COLOR_GRIS_MOYEN, fontFace: 'Arial' });
+
+  // ---- Diapositive 2 : solution ----
+  const s2 = pres.addSlide();
+  s2.background = { color: 'FFFFFF' };
+  s2.addText('AXIS MUNDI', { x: 0.5, y: 0.32, w: 4, h: 0.35, fontSize: 11, bold: true, color: COLOR_BLEU_FONCE, fontFace: 'Arial' });
+  s2.addText('Mots croisés — Solution', { x: 0.5, y: 0.68, w: 9, h: 0.6, fontSize: 28, bold: true, color: COLOR_DARK, fontFace: 'Arial' });
+  s2.addText('Grille complète', { x: 0.5, y: 1.28, w: 8, h: 0.35, fontSize: 13, color: COLOR_GRIS, fontFace: 'Arial' });
+
+  drawGridOnSlide(s2, puzzle, maps, { showLetters: true, x: 0.6, y: 1.85, maxW: 12.1, maxH: 5.0 });
+
+  s2.addText('AXIS MUNDI — Outil de conception pédagogique', { x: 0.5, y: 7.1, w: 8, h: 0.3, fontSize: 8.5, color: COLOR_GRIS_MOYEN, fontFace: 'Arial' });
+
+  pres.writeFile({ fileName: 'AXISMUNDI-Mots-Croises.pptx' });
+}
+
+renderWordRows();
+</script>
+
+</body>
+</html>

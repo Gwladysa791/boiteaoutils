@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tirage au sort — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:900px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Onglets de mode ---------- */
+  .mode-tabs{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+  .mode-tab{
+    background:#fff;
+    border:1.5px solid var(--gris-clair);
+    color:var(--gris);
+    padding:10px 20px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .mode-tab.active{background:transparent;border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .mode-tab:not(.active):hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .mode-panel{display:none;}
+  .mode-panel.active{display:block;}
+
+  /* ---------- Listes à puces (chips) ---------- */
+  .chip-input-row{display:flex;gap:8px;margin-bottom:12px;}
+  .chip-input-row input{
+    flex:1;
+    border:1.5px solid var(--gris-clair);
+    border-radius:18px;
+    padding:9px 15px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--gris);
+    background:#fff;
+  }
+  .chip-input-row input:focus{outline:none;border-color:var(--bleu);}
+  .chip-input-row button{
+    border:none;
+    background:var(--bleu-fonce);
+    color:#fff;
+    padding:9px 18px;
+    border-radius:18px;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    white-space:nowrap;
+  }
+  .chip-input-row button:hover{background:#006f87;}
+  .chip-list{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;}
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--gris-fond2);
+    color:var(--gris);
+    font-size:12.5px;
+    font-weight:600;
+    padding:6px 8px 6px 13px;
+    border-radius:14px;
+  }
+  .chip button{
+    background:none;
+    border:none;
+    color:var(--gris-moyen);
+    font-size:13px;
+    cursor:pointer;
+    padding:2px;
+    line-height:1;
+  }
+  .chip button:hover{color:var(--rouge);}
+  .chip-empty{font-size:12px;color:var(--gris-moyen);font-style:italic;margin-bottom:20px;display:block;}
+
+  /* ---------- Mode Tirage ---------- */
+  .draw-options{display:flex;align-items:center;gap:8px;margin-bottom:22px;font-size:13px;color:var(--gris);}
+  .draw-options input[type=checkbox]{width:16px;height:16px;accent-color:var(--bleu-fonce);flex-shrink:0;}
+
+  .primary-cta-row{text-align:center;margin-bottom:24px;}
+  .primary-cta{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:13px 32px;
+    font-size:14px;
+    font-weight:700;
+    border-radius:26px;
+    cursor:pointer;
+    font-family:inherit;
+    box-shadow:0 8px 18px rgba(0,136,169,0.25);
+    transition:background .15s ease;
+  }
+  .primary-cta:hover{background:#006f87;}
+  .primary-cta:disabled{opacity:0.45;cursor:not-allowed;box-shadow:none;}
+
+  .draw-result-card{
+    position:relative;
+    background:var(--gris-fond2);
+    border-radius:12px;
+    padding:34px 20px;
+    text-align:center;
+    margin-bottom:24px;
+  }
+  .draw-result{font-size:25px;font-weight:700;color:var(--bleu-fonce);min-height:32px;word-break:break-word;}
+  .draw-result.result-placeholder{font-size:13.5px;font-weight:600;color:var(--gris-moyen);font-style:italic;}
+  .draw-result.result-final{animation:drawPop .3s ease;}
+  @keyframes drawPop{0%{transform:scale(0.9);}60%{transform:scale(1.06);}100%{transform:scale(1);}}
+  .draw-fs-btn{
+    position:absolute;top:14px;right:14px;z-index:3;
+    background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);
+    padding:7px 14px;border-radius:16px;font-size:11.5px;cursor:pointer;font-family:inherit;
+  }
+  .draw-fs-btn:hover{background:#fff;}
+  .draw-fs-redraw{
+    display:none;margin-top:26px;background:var(--bleu-fonce);color:#fff;border:none;
+    padding:13px 30px;font-size:14px;font-weight:700;border-radius:26px;cursor:pointer;font-family:inherit;
+  }
+  .draw-fs-redraw:hover{background:#006f87;}
+  .draw-result-card:fullscreen, .draw-result-card:-webkit-full-screen{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:var(--gris-fond2);min-height:100vh;border-radius:0;padding:40px;
+  }
+  .draw-result-card:fullscreen .draw-result, .draw-result-card:-webkit-full-screen .draw-result{
+    font-size:64px;max-width:1100px;
+  }
+  .draw-result-card:fullscreen .draw-fs-redraw, .draw-result-card:-webkit-full-screen .draw-fs-redraw{
+    display:inline-block;
+  }
+
+  .draw-history h3{font-size:13.5px;color:var(--gris);margin:0 0 10px;}
+  .history-list{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-direction:column;gap:6px;}
+  .history-list li{
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:8px 14px;
+    font-size:12.5px;
+    color:var(--gris);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .history-list li span.hn{font-weight:700;color:var(--bleu-fonce);flex-shrink:0;}
+  .history-empty{font-size:12px;color:var(--gris-moyen);font-style:italic;}
+  .history-clear-btn{
+    background:none;
+    border:none;
+    color:var(--gris-moyen);
+    font-size:11.5px;
+    cursor:pointer;
+    text-decoration:underline;
+    font-family:inherit;
+    padding:0;
+  }
+  .history-clear-btn:hover{color:var(--rouge);}
+
+  /* ---------- Mode Groupes ---------- */
+  .nb-input-row{display:flex;align-items:center;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+  .nb-input-row label{font-size:13px;font-weight:700;color:var(--gris);}
+  .nb-input-row input{
+    width:66px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:8px;
+    padding:8px 10px;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--gris);
+    text-align:center;
+  }
+  .nb-input-row input:focus{outline:none;border-color:var(--bleu);}
+
+  .group-msg{font-size:12.5px;color:var(--gris-moyen);font-style:italic;}
+  .group-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:14px;
+    margin-top:6px;
+  }
+  .group-card{background:var(--gris-fond2);border-radius:10px;padding:14px 16px 16px;}
+  .group-card-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .group-badge{
+    width:26px;height:26px;
+    border-radius:50%;
+    background:var(--bleu-fonce);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;
+    font-weight:700;
+    flex-shrink:0;
+  }
+  .group-title{font-size:13.5px;font-weight:700;color:#20282b;flex:1;}
+  .group-count{font-size:11px;color:var(--gris-moyen);background:#fff;border-radius:10px;padding:2px 7px;flex-shrink:0;}
+  .group-members{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
+  .group-members li{background:#fff;border-radius:6px;padding:6px 10px;font-size:12.5px;color:var(--gris);}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .mode-tabs, .chip-input-row, .draw-options, .primary-cta-row, .history-clear-btn, .nb-input-row, .actions-row, footer, .draw-fs-btn, .draw-fs-redraw{display:none !important;}
+    body{background:#fff;}
+    .draw-result-card, .group-card{box-shadow:none;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Tirage au sort<span>Sélection aléatoire pour vos animations</span></h1>
+      <p class="hero-desc">Tirez un nom, un sujet ou une carte au hasard dans une liste, ou répartissez un groupe en sous-équipes équilibrées, en quelques secondes.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          2-5 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          2 modes : tirage simple ou groupes
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('toolPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Faire un tirage &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- roue de tirage -->
+        <g>
+          <path d="M120,108 L120,50 A58,58 0 0,1 170,79 Z" fill="#F5AB33"/>
+          <path d="M120,108 L170,79 A58,58 0 0,1 170,137 Z" fill="#884EC2"/>
+          <path d="M120,108 L170,137 A58,58 0 0,1 120,166 Z" fill="#15CA88"/>
+          <path d="M120,108 L120,166 A58,58 0 0,1 70,137 Z" fill="#DE5C5C"/>
+          <path d="M120,108 L70,137 A58,58 0 0,1 70,79 Z" fill="#0088A9"/>
+          <path d="M120,108 L70,79 A58,58 0 0,1 120,50 Z" fill="#5D6160"/>
+          <circle cx="120" cy="108" r="10" fill="#fff"/>
+          <path d="M120,32 L112,46 L128,46 Z" fill="#20282b"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Tirage au sort</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> choisissez le mode qui correspond à votre besoin du moment — désigner une personne, ou répartir le groupe en sous-équipes.</p>
+  </div>
+
+  <div class="panel" id="toolPanel">
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="tirage" onclick="switchMode('tirage')">Tirage au sort</button>
+      <button class="mode-tab" data-mode="groupes" onclick="switchMode('groupes')">Répartition en groupes</button>
+    </div>
+
+    <!-- ===== Mode : tirage au sort ===== -->
+    <div class="mode-panel active" id="panel-tirage">
+      <h2>Votre liste à tirer au sort</h2>
+      <p class="panel-sub">Ajoutez des noms, des sujets ou des cartes, puis lancez le tirage.</p>
+
+      <div class="chip-input-row">
+        <input type="text" id="drawInput" placeholder="Ajouter un élément…" onkeydown="if(event.key==='Enter'){event.preventDefault();addDrawItem();}">
+        <button onclick="addDrawItem()">Ajouter</button>
+      </div>
+      <div class="chip-list" id="drawItems"></div>
+
+      <label class="draw-options">
+        <input type="checkbox" id="keepRemoving" checked>
+        Retirer l'élément tiré de la liste (tirage sans remise)
+      </label>
+
+      <div class="primary-cta-row">
+        <button class="primary-cta" id="drawBtn" onclick="performDraw()">Tirer au sort</button>
+      </div>
+
+      <div class="draw-result-card" id="drawResultCard">
+        <button class="draw-fs-btn" id="drawFsBtn" onclick="toggleDrawFullscreen()">Plein écran</button>
+        <div class="draw-result result-placeholder" id="drawResult">Cliquez sur « Tirer au sort » pour lancer le tirage.</div>
+        <button class="draw-fs-redraw" onclick="performDraw()">Tirer au sort</button>
+      </div>
+
+      <div class="draw-history">
+        <h3>Historique des tirages</h3>
+        <ul class="history-list" id="historyList"></ul>
+        <button class="history-clear-btn" id="clearHistoryBtn" onclick="clearHistory()">Vider l'historique</button>
+      </div>
+    </div>
+
+    <!-- ===== Mode : répartition en groupes ===== -->
+    <div class="mode-panel" id="panel-groupes">
+      <h2>Votre liste de participants</h2>
+      <p class="panel-sub">Ajoutez les participants à répartir, indiquez le nombre de groupes souhaité, puis lancez la répartition.</p>
+
+      <div class="chip-input-row">
+        <input type="text" id="groupInput" placeholder="Ajouter un participant…" onkeydown="if(event.key==='Enter'){event.preventDefault();addGroupItem();}">
+        <button onclick="addGroupItem()">Ajouter</button>
+      </div>
+      <div class="chip-list" id="groupItems"></div>
+
+      <div class="nb-input-row">
+        <label for="nbGroups">Nombre de groupes</label>
+        <input type="number" id="nbGroups" min="2" value="2">
+      </div>
+
+      <div class="primary-cta-row">
+        <button class="primary-cta" onclick="performGroupSplit()">Répartir aléatoirement</button>
+      </div>
+
+      <div id="groupResults"></div>
+    </div>
+
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+/* ---------- État ---------- */
+let drawPool = [];
+let drawHistory = [];
+let isDrawing = false;
+
+let groupPool = [];
+
+/* ---------- Utilitaires ---------- */
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function shuffle(arr){
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
+}
+
+/* ---------- Onglets ---------- */
+function switchMode(mode){
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  document.querySelectorAll('.mode-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + mode));
+}
+
+/* ---------- Mode Tirage ---------- */
+function addDrawItem(){
+  const input = document.getElementById('drawInput');
+  const val = input.value.trim();
+  if(!val) return;
+  drawPool.push(val);
+  input.value = '';
+  input.focus();
+  renderDrawItems();
+}
+
+function removeDrawItem(index){
+  drawPool.splice(index, 1);
+  renderDrawItems();
+}
+
+function renderDrawItems(){
+  const wrap = document.getElementById('drawItems');
+  if(drawPool.length === 0){
+    wrap.innerHTML = '<span class="chip-empty">Aucun élément ajouté pour le moment.</span>';
+  } else {
+    wrap.innerHTML = drawPool.map((val, i) =>
+      '<span class="chip">' + escapeHtml(val) + '<button onclick="removeDrawItem(' + i + ')" title="Retirer">&times;</button></span>'
+    ).join('');
+  }
+  const btn = document.getElementById('drawBtn');
+  if(btn) btn.disabled = drawPool.length === 0 || isDrawing;
+}
+
+function renderHistory(){
+  const list = document.getElementById('historyList');
+  if(drawHistory.length === 0){
+    list.innerHTML = '<li class="history-empty">Aucun tirage effectué pour le moment.</li>';
+  } else {
+    list.innerHTML = drawHistory.map(h =>
+      '<li><span class="hn">#' + h.n + '</span><span>' + escapeHtml(h.val) + '</span></li>'
+    ).join('');
+  }
+}
+
+function clearHistory(){
+  drawHistory = [];
+  renderHistory();
+}
+
+function performDraw(){
+  if(isDrawing) return;
+  if(drawPool.length === 0){
+    alert('Ajoutez au moins un élément à tirer au sort.');
+    return;
+  }
+  isDrawing = true;
+  renderDrawItems();
+
+  const resultEl = document.getElementById('drawResult');
+  resultEl.classList.remove('result-placeholder', 'result-final');
+
+  const keepRemoving = document.getElementById('keepRemoving').checked;
+  let ticks = 0;
+  const maxTicks = 16 + Math.floor(Math.random() * 6);
+
+  const interval = setInterval(function(){
+    const randIdx = Math.floor(Math.random() * drawPool.length);
+    resultEl.textContent = drawPool[randIdx];
+    ticks++;
+    if(ticks >= maxTicks){
+      clearInterval(interval);
+      const finalIdx = Math.floor(Math.random() * drawPool.length);
+      const finalVal = drawPool[finalIdx];
+      resultEl.textContent = finalVal;
+      resultEl.classList.add('result-final');
+
+      drawHistory.unshift({ n: drawHistory.length + 1, val: finalVal });
+
+      if(keepRemoving){
+        drawPool.splice(finalIdx, 1);
+        renderDrawItems();
+      }
+      renderHistory();
+      isDrawing = false;
+      renderDrawItems();
+    }
+  }, 80);
+}
+
+/* ---------- Mode Groupes ---------- */
+function addGroupItem(){
+  const input = document.getElementById('groupInput');
+  const val = input.value.trim();
+  if(!val) return;
+  groupPool.push(val);
+  input.value = '';
+  input.focus();
+  renderGroupItems();
+}
+
+function removeGroupItem(index){
+  groupPool.splice(index, 1);
+  renderGroupItems();
+}
+
+function renderGroupItems(){
+  const wrap = document.getElementById('groupItems');
+  if(groupPool.length === 0){
+    wrap.innerHTML = '<span class="chip-empty">Aucun participant ajouté pour le moment.</span>';
+  } else {
+    wrap.innerHTML = groupPool.map((val, i) =>
+      '<span class="chip">' + escapeHtml(val) + '<button onclick="removeGroupItem(' + i + ')" title="Retirer">&times;</button></span>'
+    ).join('');
+  }
+}
+
+function renderGroupCard(members, idx){
+  const letter = String.fromCharCode(65 + (idx % 26));
+  const membersHtml = members.map(m => '<li>' + escapeHtml(m) + '</li>').join('');
+  return '' +
+    '<div class="group-card">' +
+      '<div class="group-card-head">' +
+        '<span class="group-badge">' + letter + '</span>' +
+        '<span class="group-title">Groupe ' + letter + '</span>' +
+        '<span class="group-count">' + members.length + '</span>' +
+      '</div>' +
+      '<ul class="group-members">' + membersHtml + '</ul>' +
+    '</div>';
+}
+
+function performGroupSplit(){
+  const resultWrap = document.getElementById('groupResults');
+  const nb = parseInt(document.getElementById('nbGroups').value, 10);
+
+  if(groupPool.length < 2){
+    resultWrap.innerHTML = '<p class="group-msg">Ajoutez au moins deux participants avant de répartir.</p>';
+    return;
+  }
+  if(!nb || nb < 2){
+    resultWrap.innerHTML = '<p class="group-msg">Indiquez un nombre de groupes d\'au moins 2.</p>';
+    return;
+  }
+  if(nb > groupPool.length){
+    resultWrap.innerHTML = '<p class="group-msg">Le nombre de groupes ne peut pas dépasser le nombre de participants.</p>';
+    return;
+  }
+
+  const shuffled = shuffle(groupPool.slice());
+  const groups = [];
+  for(let i = 0; i < nb; i++){ groups.push([]); }
+  shuffled.forEach(function(name, i){ groups[i % nb].push(name); });
+
+  resultWrap.innerHTML = '<div class="group-grid">' + groups.map(renderGroupCard).join('') + '</div>';
+}
+
+/* ---------- Réinitialisation ---------- */
+function resetAll(){
+  const hasContent = drawPool.length > 0 || drawHistory.length > 0 || groupPool.length > 0 ||
+    document.getElementById('groupResults').innerHTML.trim() !== '';
+  if(hasContent){
+    if(!confirm('Tout effacer (listes, historique et résultats) et repartir de zéro ?')) return;
+  }
+  drawPool = [];
+  drawHistory = [];
+  groupPool = [];
+  isDrawing = false;
+  document.getElementById('keepRemoving').checked = true;
+  document.getElementById('nbGroups').value = 2;
+  document.getElementById('groupResults').innerHTML = '';
+  const resultEl = document.getElementById('drawResult');
+  resultEl.classList.remove('result-final');
+  resultEl.classList.add('result-placeholder');
+  resultEl.textContent = 'Cliquez sur « Tirer au sort » pour lancer le tirage.';
+  renderDrawItems();
+  renderHistory();
+  renderGroupItems();
+}
+
+/* ---------- Plein écran ---------- */
+function toggleDrawFullscreen(){
+  const card = document.getElementById('drawResultCard');
+  const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if(!isFs){
+    if(card.requestFullscreen) card.requestFullscreen();
+    else if(card.webkitRequestFullscreen) card.webkitRequestFullscreen();
+  } else {
+    if(document.exitFullscreen) document.exitFullscreen();
+    else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+
+function updateDrawFsBtn(){
+  const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  const btn = document.getElementById('drawFsBtn');
+  if(btn) btn.textContent = isFs ? 'Quitter le plein écran' : 'Plein écran';
+}
+document.addEventListener('fullscreenchange', updateDrawFsBtn);
+document.addEventListener('webkitfullscreenchange', updateDrawFsBtn);
+
+renderDrawItems();
+renderHistory();
+renderGroupItems();
+</script>
+
+</body>
+</html>

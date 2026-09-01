@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les 4C — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:960px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Grille des 4C ---------- */
+  .fourc-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+  }
+  @media (max-width:640px){
+    .fourc-grid{grid-template-columns:1fr;}
+  }
+  .fourc-box{
+    border-radius:6px;
+    padding:20px 22px 22px;
+    background:#fff;
+  }
+  .fourc-title{
+    margin:0 0 6px;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:.4px;
+    color:#20282b;
+    text-transform:uppercase;
+  }
+  .fourc-hint{
+    margin:0 0 14px;
+    font-size:12px;
+    color:var(--gris-moyen);
+    line-height:1.4;
+  }
+  .fourc-textarea{
+    width:100%;
+    min-height:150px;
+    border:none;
+    background:transparent;
+    resize:vertical;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--gris);
+    line-height:1.5;
+    padding:0;
+  }
+  .fourc-textarea:focus{outline:none;}
+  .fourc-textarea::placeholder{color:var(--gris-moyen);font-style:italic;}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+    .fourc-box{border-width:3px !important;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Les 4C<span>Continuer, cesser, commencer, changer</span></h1>
+      <p class="hero-desc">Un temps de réflexion individuelle pour clore la session : quatre questions simples pour transformer ce qui a été appris en décisions concrètes, avant de reprendre le cours du quotidien.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          5-10 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Réflexion individuelle
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('fourcPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Commencer &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- mini grille des 4C -->
+        <g transform="translate(45,35)" fill="none">
+          <rect x="0" y="0" width="65" height="48" rx="4" stroke="#00B5E2" stroke-width="5"/>
+          <rect x="75" y="0" width="65" height="48" rx="4" stroke="#D7D3CE" stroke-width="5"/>
+          <rect x="0" y="58" width="65" height="48" rx="4" stroke="#A2A5A4" stroke-width="5"/>
+          <rect x="75" y="58" width="65" height="48" rx="4" stroke="#0088A9" stroke-width="5"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Les 4C</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> formulez, pour chacune des quatre cases, une ou deux phrases simples et concrètes. Il ne s'agit pas de faire un bilan exhaustif de la session, mais de repérer ce qui, très concrètement, va changer dans votre pratique à partir de maintenant.</p>
+  </div>
+
+  <div class="panel" id="fourcPanel">
+    <h2>Vos quatre réponses</h2>
+    <p class="panel-sub">Prenez quelques minutes, sans vous relire ni vous corriger.</p>
+
+    <div class="fourc-grid">
+      <div class="fourc-box" style="border:5px solid var(--bleu);">
+        <p class="fourc-title">Ce que je continue</p>
+        <p class="fourc-hint">Ce qui fonctionne déjà bien dans ma pratique et que je veux maintenir.</p>
+        <textarea class="fourc-textarea" id="c-continue" placeholder="Écrivez ici…"></textarea>
+      </div>
+
+      <div class="fourc-box" style="border:5px solid var(--gris-clair);">
+        <p class="fourc-title">Ce que je cesse</p>
+        <p class="fourc-hint">Ce que je vais arrêter de faire, à la lumière de ce que j'ai appris.</p>
+        <textarea class="fourc-textarea" id="c-cesse" placeholder="Écrivez ici…"></textarea>
+      </div>
+
+      <div class="fourc-box" style="border:5px solid var(--gris-moyen);">
+        <p class="fourc-title">Ce que je commence</p>
+        <p class="fourc-hint">Une nouvelle pratique, un nouveau réflexe que je vais mettre en place.</p>
+        <textarea class="fourc-textarea" id="c-commence" placeholder="Écrivez ici…"></textarea>
+      </div>
+
+      <div class="fourc-box" style="border:5px solid var(--bleu-fonce);">
+        <p class="fourc-title">Ce que je change</p>
+        <p class="fourc-hint">Ce que je vais faire différemment, sans l'abandonner complètement.</p>
+        <textarea class="fourc-textarea" id="c-change" placeholder="Écrivez ici…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil de clôture. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+const FOURC_IDS = ['c-continue', 'c-cesse', 'c-commence', 'c-change'];
+
+function resetAll(){
+  const hasContent = FOURC_IDS.some(function(id){
+    return document.getElementById(id).value.trim() !== '';
+  });
+  if(hasContent){
+    if(!confirm("Effacer les quatre réponses et repartir de zéro ?")) return;
+  }
+  FOURC_IDS.forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+}
+</script>
+
+</body>
+</html>

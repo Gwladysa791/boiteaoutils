@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test RS — Réactivité au Stress — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --faible: #15CA88;
+    --moyenne: #00B5E2;
+    --forte: #F5AB33;
+    --extreme: #DE5C5C;
+    --physio: #0088A9;
+    --psycho: #884EC2;
+    --compo: #F5AB33;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:420px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:780px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:18px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro strong{color:var(--bleu-fonce);}
+  .scale-legend{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:12px;
+  }
+  .scale-legend .sl-item{
+    flex:1;
+    min-width:110px;
+    background:var(--gris-fond2);
+    border-radius:6px;
+    padding:7px 9px;
+    font-size:11.5px;
+    text-align:center;
+  }
+  .scale-legend b{display:block;color:var(--bleu-fonce);font-size:13px;}
+  .progress-wrap{
+    position:sticky;
+    top:0;
+    background:var(--fond);
+    padding:10px 0 14px;
+    z-index:10;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--gris-fond2);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:var(--bleu);
+    transition:width .25s ease;
+  }
+  .progress-label{
+    font-size:12px;
+    color:var(--gris-moyen);
+    text-align:right;
+    margin-top:4px;
+  }
+  .question{
+    background:#fff;
+    border-radius:8px;
+    padding:16px 18px;
+    margin-bottom:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .question .qnum{
+    display:inline-block;
+    min-width:24px;
+    font-weight:700;
+    color:var(--bleu-fonce);
+    margin-right:6px;
+  }
+  .question .qtext{font-size:14.5px;color:#2f3130;}
+  .options{
+    display:flex;
+    gap:6px;
+    margin-top:12px;
+    flex-wrap:wrap;
+  }
+  .options label{
+    flex:1;
+    min-width:78px;
+    text-align:center;
+    padding:8px 4px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:6px;
+    font-size:11.5px;
+    cursor:pointer;
+    color:var(--gris);
+    transition:all .15s ease;
+    user-select:none;
+  }
+  .options input{position:absolute;opacity:0;pointer-events:none;}
+  .options label.selected{
+    background:var(--bleu-fonce);
+    border-color:var(--bleu-fonce);
+    color:#fff;
+    font-weight:700;
+  }
+  .cta-wrap{text-align:center;margin-top:30px;}
+  button#submitBtn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:14px 34px;
+    font-size:15px;
+    font-weight:700;
+    border-radius:30px;
+    cursor:pointer;
+    font-family:inherit;
+    letter-spacing:0.5px;
+    transition:background .2s ease;
+  }
+  button#submitBtn:hover{background:#006f87;}
+  .missing-note{
+    text-align:center;
+    color:var(--extreme);
+    font-size:13px;
+    margin-top:10px;
+    min-height:18px;
+  }
+  #resultsSection{display:none;}
+  .results-card{
+    background:#fff;
+    border-radius:8px;
+    padding:26px 22px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.08);
+  }
+  .results-card h2{color:var(--bleu-fonce);margin-top:0;font-size:20px;}
+  .global-gauge{margin:22px 0 6px;}
+  .gauge-track{
+    height:22px;
+    border-radius:11px;
+    background:var(--gris-fond2);
+    overflow:hidden;
+    position:relative;
+  }
+  .gauge-fill{
+    height:100%;
+    width:0%;
+    border-radius:11px;
+    transition:width 1s cubic-bezier(.2,.9,.3,1);
+  }
+  .gauge-bands{
+    display:flex;
+    justify-content:space-between;
+    font-size:10.5px;
+    color:var(--gris-moyen);
+    margin-top:6px;
+  }
+  .gauge-score{
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    color:var(--gris);
+    margin-bottom:4px;
+  }
+  .gauge-band-label{
+    text-align:center;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:14px;
+  }
+  .subscores{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin:26px 0 8px;
+  }
+  .subscore-col{
+    flex:1;
+    min-width:150px;
+  }
+  .subscore-col .sc-label{font-size:12px;font-weight:700;margin-bottom:6px;color:var(--gris);}
+  .subscore-col .sc-track{
+    height:14px;
+    border-radius:7px;
+    background:var(--gris-fond2);
+    overflow:hidden;
+  }
+  .subscore-col .sc-fill{height:100%;width:0%;border-radius:7px;transition:width 1s cubic-bezier(.2,.9,.3,1);}
+  .subscore-col .sc-value{font-size:11.5px;color:var(--gris-moyen);margin-top:4px;}
+  .interpretation{margin-top:26px;font-size:14px;}
+  .interp-block{
+    border-left:4px solid var(--gris-clair);
+    padding:12px 16px;
+    margin-bottom:12px;
+    border-radius:4px;
+    background:var(--gris-fond2);
+  }
+  .interp-block h3{margin:0 0 6px;font-size:14.5px;}
+  .interp-block p{margin:0 0 6px;font-size:13px;color:var(--gris);}
+  .interp-block p:last-child{margin-bottom:0;}
+  .interp-block.alert{border-left-color:var(--extreme);background:#FBEBEA;}
+  .actions-row{text-align:center;margin-top:24px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px;
+  }
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+  @media print{
+    .hero-header, .back-link, .intro, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+  }
+  @media(max-width:480px){
+    .options label{font-size:10.5px;padding:7px 3px;min-width:60px;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Test RS<span>Réactivité au stress</span></h1>
+      <p class="hero-desc">Un auto-positionnement sur les manifestations physiques, psychologiques et comportementales du stress dans votre quotidien, pour objectiver ce que vous ressentez peut-être déjà de façon diffuse.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          15-20 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0" stroke-width="2" stroke-linecap="round"/><path d="M12 15V8" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="1.6" fill="#fff" stroke="none"/></svg></span>
+          39 items, 3 dimensions
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('questionsList').scrollIntoView({behavior:'smooth',block:'start'})">
+        Commencer le test &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+
+        <!-- jauge de réactivité -->
+        <g fill="none" stroke-width="14" stroke-linecap="round">
+          <path d="M38.0,148.0 A82,82 0 0 1 62.0,90.0" stroke="var(--faible)"/>
+          <path d="M62.0,90.0 A82,82 0 0 1 120.0,66.0" stroke="var(--moyenne)"/>
+          <path d="M120.0,66.0 A82,82 0 0 1 178.0,90.0" stroke="var(--forte)"/>
+          <path d="M178.0,90.0 A82,82 0 0 1 202.0,148.0" stroke="var(--extreme)"/>
+        </g>
+        <line x1="120" y1="148" x2="167" y2="81" stroke="#20282b" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="120" cy="148" r="10" fill="#20282b"/>
+        <circle cx="120" cy="148" r="4" fill="#fff"/>
+
+        <!-- pastilles des 3 dimensions -->
+        <g transform="translate(58,180)">
+          <circle r="14" fill="var(--physio)"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="inherit">P</text>
+        </g>
+        <g transform="translate(120,192)">
+          <circle r="14" fill="var(--psycho)"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="inherit">&#936;</text>
+        </g>
+        <g transform="translate(182,180)">
+          <circle r="14" fill="var(--compo)"/>
+          <text x="0" y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="inherit">C</text>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Test RS — Réactivité au Stress</span>
+  </nav>
+
+  <div id="formSection">
+    <div class="intro">
+      <strong>Consigne :</strong> ce questionnaire décrit des manifestations physiques, psychologiques et comportementales du stress. Reportez le chiffre équivalant à la fréquence de chaque manifestation dans votre vie quotidienne. Il n'y a pas de bonnes ou de mauvaises réponses : répondez en fonction des moments où vous êtes particulièrement stressé(e) dans votre vie.
+      <div class="scale-legend">
+        <div class="sl-item"><b>0</b>Jamais</div>
+        <div class="sl-item"><b>1</b>Rarement</div>
+        <div class="sl-item"><b>2</b>Parfois</div>
+        <div class="sl-item"><b>3</b>Souvent</div>
+        <div class="sl-item"><b>4</b>Très souvent</div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 39 questions répondues</div>
+    </div>
+
+    <div id="questionsList"></div>
+
+    <div class="cta-wrap">
+      <button id="submitBtn" onclick="calculerResultats()">Voir mes résultats</button>
+      <div class="missing-note" id="missingNote"></div>
+    </div>
+  </div>
+
+  <div id="resultsSection">
+    <div class="results-card">
+      <h2>Vos résultats</h2>
+
+      <div class="global-gauge">
+        <div class="gauge-score" id="gaugeScore">0 / 156</div>
+        <div class="gauge-band-label" id="gaugeBandLabel">—</div>
+        <div class="gauge-track"><div class="gauge-fill" id="gaugeFill"></div></div>
+        <div class="gauge-bands">
+          <span>0 · faible</span>
+          <span>40 · moyenne</span>
+          <span>79 · forte</span>
+          <span>118 · extrême</span>
+          <span>156</span>
+        </div>
+      </div>
+
+      <p style="font-size:12.5px;color:var(--gris-moyen);margin-top:20px;">Répartition par type de réactivité (chaque sous-score va de 0 à 52) :</p>
+      <div class="subscores" id="subscoresArea"></div>
+
+      <div class="interpretation" id="interpretationArea"></div>
+
+      <div class="actions-row">
+        <button onclick="window.print()">Imprimer / exporter</button>
+        <button onclick="recommencer()">Recommencer</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique d'auto-positionnement. Ce test ne constitue pas un diagnostic médical ou psychologique. Les données saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+const questions = [
+ {n:1,t:"J'ai mal à la tête",c:"physio"},
+ {n:2,t:"J'ai des bouffées de chaleur",c:"physio"},
+ {n:3,t:"J'ai des palpitations",c:"physio"},
+ {n:4,t:"Mes muscles sont tendus",c:"physio"},
+ {n:5,t:"J'ai des sueurs froides",c:"physio"},
+ {n:6,t:"Mes mains tremblent",c:"physio"},
+ {n:7,t:"J'ai des troubles du sommeil",c:"physio"},
+ {n:8,t:"J'ai des cauchemars",c:"physio"},
+ {n:9,t:"Je me sens épuisé(e)",c:"physio"},
+ {n:10,t:"J'ai des troubles digestifs",c:"physio"},
+ {n:11,t:"J'ai des brûlures d'estomac",c:"physio"},
+ {n:12,t:"Je n'ai plus d'appétit",c:"physio"},
+ {n:13,t:"J'ai du mal à respirer",c:"physio"},
+ {n:14,t:"Je me sens sous pression",c:"psycho"},
+ {n:15,t:"Je me fais trop de souci pour des choses mineures",c:"psycho"},
+ {n:16,t:"J'ai l'impression qu'il va m'arriver quelque chose de pénible",c:"psycho"},
+ {n:17,t:"Je me sens soucieux(se) sans savoir pourquoi",c:"psycho"},
+ {n:18,t:"Je me tracasse trop longtemps pour les problèmes à venir",c:"psycho"},
+ {n:19,t:"Je ne peux pas arrêter de penser à mes soucis quand je le souhaite",c:"psycho"},
+ {n:20,t:"Je me sens triste",c:"psycho"},
+ {n:21,t:"Je n'arrive pas à me concentrer",c:"psycho"},
+ {n:22,t:"Je me sens irritable",c:"psycho"},
+ {n:23,t:"Je n'ai envie de rien",c:"psycho"},
+ {n:24,t:"J'ai l'impression d'être débordé(e)",c:"psycho"},
+ {n:25,t:"Je n'arrive pas à penser à des choses agréables",c:"psycho"},
+ {n:26,t:"Je me sens diminué(e)",c:"psycho"},
+ {n:27,t:"Je me mets en colère",c:"compo"},
+ {n:28,t:"Je ne peux pas me calmer quand je le veux",c:"compo"},
+ {n:29,t:"Je fais des fautes d'inattention",c:"compo"},
+ {n:30,t:"Je réagis sans prendre le temps de réfléchir",c:"compo"},
+ {n:31,t:"J'ai du mal à me décider",c:"compo"},
+ {n:32,t:"Je conduis trop vite",c:"compo"},
+ {n:33,t:"Je mange pour me calmer",c:"compo"},
+ {n:34,t:"Je prends des boissons alcoolisées pour me relaxer",c:"compo"},
+ {n:35,t:"Je fume pour me calmer",c:"compo"},
+ {n:36,t:"Je regarde ma montre",c:"compo"},
+ {n:37,t:"Je prends des calmants",c:"compo"},
+ {n:38,t:"Je vérifie inutilement certaines choses que je viens de faire",c:"compo"},
+ {n:39,t:"Je tapote du pied ou tripote nerveusement des objets",c:"compo"}
+];
+
+const answers = {};
+const optionLabels = [
+  {v:0, l:"Jamais"},
+  {v:1, l:"Rarement"},
+  {v:2, l:"Parfois"},
+  {v:3, l:"Souvent"},
+  {v:4, l:"Très souvent"}
+];
+
+const categoryMeta = {
+  physio: {label:"Réactivité physiologique", hex:"#0088A9"},
+  psycho: {label:"Réactivité psychologique", hex:"#884EC2"},
+  compo: {label:"Réactivité comportementale", hex:"#F5AB33"}
+};
+
+function buildQuestions(){
+  const list = document.getElementById('questionsList');
+  const frag = document.createDocumentFragment();
+  questions.forEach(q=>{
+    const div = document.createElement('div');
+    div.className='question';
+    const optionsHtml = optionLabels.map(o=>`
+      <label id="lbl-${q.n}-${o.v}">
+        <input type="radio" name="q${q.n}" value="${o.v}" onchange="setAnswer(${q.n},${o.v})">
+        ${o.l}
+      </label>
+    `).join('');
+    div.innerHTML = `
+      <span class="qnum">${q.n}.</span><span class="qtext">${q.t}</span>
+      <div class="options">${optionsHtml}</div>
+    `;
+    frag.appendChild(div);
+  });
+  list.appendChild(frag);
+}
+
+function setAnswer(n, val){
+  answers[n]=val;
+  optionLabels.forEach(o=>{
+    document.getElementById(`lbl-${n}-${o.v}`).classList.toggle('selected', o.v===val);
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const count = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (count/39*100)+'%';
+  document.getElementById('progressLabel').textContent = `${count} / 39 questions répondues`;
+}
+
+function calculerResultats(){
+  const count = Object.keys(answers).length;
+  if(count < 39){
+    document.getElementById('missingNote').textContent = `Il reste ${39-count} question(s) sans réponse. Merci de compléter le questionnaire avant de voir vos résultats.`;
+    const firstMissing = questions.find(q=>answers[q.n]===undefined);
+    if(firstMissing){
+      document.querySelector(`label[id="lbl-${firstMissing.n}-0"]`).closest('.question').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    return;
+  }
+  document.getElementById('missingNote').textContent='';
+
+  const subscores = {physio:0, psycho:0, compo:0};
+  questions.forEach(q=>{ subscores[q.c] += answers[q.n]; });
+  const total = subscores.physio + subscores.psycho + subscores.compo;
+
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('resultsSection').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderResults(total, subscores);
+}
+
+function getBand(total){
+  if(total<=39) return {key:'faible', label:'Réactivité faible', hex:'var(--faible)'};
+  if(total<=78) return {key:'moyenne', label:'Réactivité moyenne', hex:'var(--moyenne)'};
+  if(total<=117) return {key:'forte', label:'Réactivité forte', hex:'var(--forte)'};
+  return {key:'extreme', label:'Réactivité extrême', hex:'var(--extreme)'};
+}
+
+function renderResults(total, subscores){
+  document.getElementById('gaugeScore').textContent = `${total} / 156`;
+  const band = getBand(total);
+  const bandLabelEl = document.getElementById('gaugeBandLabel');
+  bandLabelEl.textContent = band.label;
+  bandLabelEl.style.color = band.hex;
+  setTimeout(()=>{
+    document.getElementById('gaugeFill').style.width = (total/156*100)+'%';
+    document.getElementById('gaugeFill').style.background = band.hex;
+  }, 80);
+
+  const subArea = document.getElementById('subscoresArea');
+  subArea.innerHTML='';
+  ['physio','psycho','compo'].forEach(key=>{
+    const meta = categoryMeta[key];
+    const val = subscores[key];
+    const col = document.createElement('div');
+    col.className='subscore-col';
+    col.innerHTML = `
+      <div class="sc-label" style="color:${meta.hex};">${meta.label}</div>
+      <div class="sc-track"><div class="sc-fill" data-h="${val/52*100}" style="background:${meta.hex};"></div></div>
+      <div class="sc-value">${val} / 52</div>
+    `;
+    subArea.appendChild(col);
+  });
+  setTimeout(()=>{
+    subArea.querySelectorAll('.sc-fill').forEach(el=>{
+      el.style.width = el.getAttribute('data-h')+'%';
+    });
+  }, 100);
+
+  renderInterpretation(total, subscores, band);
+}
+
+function renderInterpretation(total, subscores, band){
+  const area = document.getElementById('interpretationArea');
+  area.innerHTML='';
+
+  const bandTexts = {
+    faible: "Les manifestations de stress que vous rapportez restent limitées dans votre vie quotidienne actuelle. Cela ne signifie pas une absence de tension, mais des ressources de régulation qui semblent, pour l'instant, suffisantes.",
+    moyenne: "Le stress se manifeste de façon régulière, sans nécessairement déborder vos capacités actuelles de régulation. C'est un niveau fréquent, qui mérite d'être surveillé s'il s'installe dans la durée ou s'intensifie.",
+    forte: "Les manifestations rapportées sont fréquentes et concernent plusieurs registres à la fois — physique, psychologique et/ou comportemental. C'est un point d'attention réel, à ne pas minimiser, même en l'absence de signal d'alerte isolé.",
+    extreme: "Le niveau de réactivité rapporté est très élevé. Au-delà de cet outil, il est recommandé d'en parler avec un médecin du travail, votre médecin traitant ou un professionnel de santé — en complément de toute démarche de prévention engagée par ailleurs."
+  };
+
+  const overview = document.createElement('div');
+  overview.className = 'interp-block' + (band.key==='extreme' ? ' alert' : '');
+  overview.style.borderLeftColor = band.hex;
+  overview.innerHTML = `<h3>Vue d'ensemble — ${total}/156, ${band.label.toLowerCase()}</h3><p>${bandTexts[band.key]}</p>`;
+  area.appendChild(overview);
+
+  const maxSub = Math.max(subscores.physio, subscores.psycho, subscores.compo);
+  const dominants = ['physio','psycho','compo'].filter(k=>subscores[k]===maxSub && maxSub>0);
+
+  const typeTexts = {
+    physio: "Le stress se traduit chez vous en priorité par des signaux corporels — tensions, troubles du sommeil, fatigue, manifestations digestives ou cardio-respiratoires. Ces signaux méritent d'être pris au sérieux au même titre que les autres : le corps signale souvent une charge avant que l'esprit ne la nomme.",
+    psycho: "Le stress se traduit chez vous en priorité par des manifestations psychologiques — ruminations, difficulté à se concentrer, sentiment d'être débordé(e), tristesse ou irritabilité. Ce registre est parfois moins visible pour l'entourage que les signes physiques, ce qui peut retarder la prise de conscience de sa fréquence réelle.",
+    compo: "Le stress se traduit chez vous en priorité par des comportements de régulation immédiate — colère, impulsivité, vérifications répétées, ou recours à des consommations (tabac, alcool, calmants) pour faire retomber la tension. Ponctuels, ces comportements peuvent être des soupapes utiles ; installés dans la durée, ils masquent souvent la tension sous-jacente plus qu'ils ne la résolvent, et méritent d'être regardés avec attention, notamment lorsqu'ils impliquent une consommation régulière."
+  };
+
+  let domHtml = '';
+  if(dominants.length===1){
+    domHtml = `<h3>Type de réactivité prédominant : ${categoryMeta[dominants[0]].label}</h3><p>${typeTexts[dominants[0]]}</p>`;
+  } else if(dominants.length>1){
+    domHtml = `<h3>Type de réactivité prédominant : plusieurs registres à égalité</h3><p>${dominants.map(d=>categoryMeta[d].label).join(', ')} ressortent au même niveau (${maxSub}/52 chacun). Le stress semble se diffuser chez vous sur plusieurs registres à la fois plutôt que de se concentrer sur un seul.</p>`;
+  } else {
+    domHtml = `<h3>Type de réactivité prédominant</h3><p>Aucun registre ne se distingue nettement des autres à ce niveau de score.</p>`;
+  }
+  const domBlock = document.createElement('div');
+  domBlock.className='interp-block';
+  domBlock.innerHTML = domHtml;
+  area.appendChild(domBlock);
+
+  const note = document.createElement('p');
+  note.style.cssText='font-size:12.5px;color:var(--gris-moyen);margin-top:14px;';
+  note.textContent = "Ce résultat reflète votre ressenti à un moment donné, en référence aux périodes où vous vous sentez particulièrement stressé(e). Il constitue un point de repère pour engager une réflexion sur vos propres leviers de régulation, non un diagnostic médical ou psychologique.";
+  area.appendChild(note);
+}
+
+function recommencer(){
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  document.querySelectorAll('.options label').forEach(l=>l.classList.remove('selected'));
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  updateProgress();
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('formSection').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuestions();
+</script>
+
+</body>
+</html>
