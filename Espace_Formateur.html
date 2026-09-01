@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Studio d'animation pédagogique — AXIS MUNDI</title>
+<script src="tool-view-context.js" data-api-only></script>
 <style>
   @font-face {
     font-family: 'Century Gothic Fallback';
@@ -776,6 +777,9 @@ const CATEGORY_LABELS = {
   "ressources": "Ressources pédagogiques"
 };
 function findTool(toolId){ return CATALOG.find(function(t){ return t.id === toolId; }) || null; }
+function toolViewUrl(file, view){
+  return AxisMundiToolViews.withView(file, view, location.href);
+}
 
 /* =========================================================
    FICHES MÉMOS — documents individuels (dupliqué depuis Fiches_Memos.html)
@@ -1378,7 +1382,7 @@ function renderDiapoOutilMode(wrap, p, modeToggleHtml){
         (tool ? '<span class="topbar-badge">' + escapeHtml(tool.type) + ' · ' + escapeHtml(tool.dureeLabel) + '</span>' : '') +
         '<button class="topbar-btn" onclick="changeOutil()"' + (p.locked ? ' disabled' : '') + '>Changer d\'outil</button>' +
       '</div>' +
-      '<div class="outil-embed-frame">' + (tool ? '<iframe src="' + escapeHtml(tool.fichier) + '" title="' + escapeHtml(tool.titre) + '" loading="lazy"></iframe>' : '<p style="padding:20px;color:var(--gris-moyen);">Cet outil n\'est plus disponible dans le catalogue.</p>') + '</div>' +
+      '<div class="outil-embed-frame">' + (tool ? '<iframe src="' + escapeHtml(toolViewUrl(tool.fichier, 'formateur')) + '" title="' + escapeHtml(tool.titre) + '" loading="lazy"></iframe>' : '<p style="padding:20px;color:var(--gris-moyen);">Cet outil n\'est plus disponible dans le catalogue.</p>') + '</div>' +
     '</div>';
 }
 function setDiapoMode(mode){
@@ -1465,7 +1469,7 @@ function renderOutilEditor(wrap, p){
         (tool ? '<span class="topbar-badge">' + escapeHtml(tool.type) + ' · ' + escapeHtml(tool.dureeLabel) + '</span>' : '') +
         '<button class="topbar-btn" onclick="changeOutil()"' + (p.locked ? ' disabled' : '') + '>Changer d\'outil</button>' +
       '</div>' +
-      '<div class="outil-embed-frame">' + (tool ? '<iframe src="' + escapeHtml(tool.fichier) + '" title="' + escapeHtml(tool.titre) + '" loading="lazy"></iframe>' : '<p style="padding:20px;color:var(--gris-moyen);">Cet outil n\'est plus disponible dans le catalogue.</p>') + '</div>' +
+      '<div class="outil-embed-frame">' + (tool ? '<iframe src="' + escapeHtml(toolViewUrl(tool.fichier, 'formateur')) + '" title="' + escapeHtml(tool.titre) + '" loading="lazy"></iframe>' : '<p style="padding:20px;color:var(--gris-moyen);">Cet outil n\'est plus disponible dans le catalogue.</p>') + '</div>' +
     '</div>';
 }
 function renderOutilCatFilters(){
@@ -3321,7 +3325,7 @@ function renderFormationFloatBar(){
 /* ---------- Rendu en lecture seule d'une page (Mode Formation + fenêtre de projection) ---------- */
 function formationOutilFrameHtml(toolId){
   const tool = findTool(toolId);
-  return tool ? '<iframe class="formation-outil-frame" src="' + escapeHtml(tool.fichier) + '" title="' + escapeHtml(tool.titre) + '"></iframe>' : '<div class="canvas-empty-state">Aucun outil choisi pour cette page.</div>';
+  return tool ? '<iframe class="formation-outil-frame" src="' + escapeHtml(toolViewUrl(tool.fichier, 'formateur')) + '" title="' + escapeHtml(tool.titre) + '"></iframe>' : '<div class="canvas-empty-state">Aucun outil choisi pour cette page.</div>';
 }
 function formationFicheMemoHtml(subId){
   const fiche = findFicheMemo(subId);
