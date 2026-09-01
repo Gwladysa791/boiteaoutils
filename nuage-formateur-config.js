@@ -68,6 +68,8 @@
   function buildPreviewUrl(href) {
     const url = new URL(href);
     url.searchParams.delete('session');
+    url.searchParams.delete('live');
+    url.searchParams.delete('maxWords');
     url.searchParams.set('view', 'participant');
     url.searchParams.set('preview', '1');
     return url.href;

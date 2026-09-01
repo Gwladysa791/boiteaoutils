@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'Nuage_De_Mots.html'), 'utf8');
 const configPath = path.join(root, 'nuage-formateur-config.js');
+const livePath = path.join(root, 'nuage-live-session.js');
 const formateurView = html.match(/<section class="formateur-view"[\s\S]*?<\/section>/i)?.[0] || '';
 
 test('Nuage de mots exposes a dedicated operational formateur view', () => {
@@ -73,9 +74,79 @@ test('formateur settings are sanitized, persisted and used for participant previ
   assert.deepEqual(config.load(storage), config.DEFAULT_CONFIG);
 
   assert.equal(
-    config.buildPreviewUrl('https://example.test/Nuage_De_Mots.html?view=formateur&session=123456'),
+    config.buildPreviewUrl('https://example.test/Nuage_De_Mots.html?view=formateur&live=ABCDE&maxWords=4&session=123456'),
     'https://example.test/Nuage_De_Mots.html?view=participant&preview=1'
   );
+});
+
+test('the formateur view contains the complete live-session cockpit', () => {
+  for (const id of [
+    'formateurOpenSessionButton',
+    'formateurLiveSetup',
+    'formateurLiveActive',
+    'formateurLiveStatus',
+    'formateurLiveCode',
+    'formateurLiveQr',
+    'formateurLiveUrl',
+    'formateurCopyLinkButton',
+    'formateurLiveParticipantLink',
+    'formateurResponseCount',
+    'formateurLiveCloud',
+    'formateurSyncSessionButton',
+    'formateurCloseSessionButton',
+    'formateurLiveError',
+  ]) {
+    assert.match(formateurView, new RegExp(`id="${id}"`), `${id} is missing`);
+  }
+
+  assert.match(html, /<script src="qrcode-generator\.js"><\/script>/);
+  assert.match(html, /<script src="nuage-live-session\.js"><\/script>/);
+  assert.match(html, /AXMSession\.creerSession\('nuage_mots'/);
+  assert.match(html, /AXMSession\.listerReponses/);
+  assert.match(html, /AXMSession\.ecouterReponses/);
+  assert.match(html, /AXMSession\.mettreAJourSession/);
+  assert.match(html, /AXMSession\.fermerSession/);
+});
+
+test('the live-session state module builds safe URLs and deduplicates responses', {
+  skip: !fs.existsSync(livePath),
+}, () => {
+  const live = require(livePath);
+
+  assert.equal(
+    live.buildParticipantUrl('https://example.test/Nuage_De_Mots.html?view=formateur&live=OLD', 'Q7ABC', 4),
+    'https://example.test/Nuage_De_Mots.html?session=Q7ABC&maxWords=4'
+  );
+  assert.equal(
+    live.buildFormateurSessionUrl('https://example.test/Nuage_De_Mots.html?view=participant&preview=1', 'Q7ABC', 4),
+    'https://example.test/Nuage_De_Mots.html?view=formateur&live=Q7ABC&maxWords=4'
+  );
+  assert.deepEqual(live.sessionPatch({ title: '  Équipe Nord ', instruction: ' Deux mots. ' }), {
+    titre: 'Équipe Nord',
+    consigne: 'Deux mots.',
+  });
+
+  const tracker = live.createResponseTracker();
+  assert.equal(tracker.add({ id: 'r1', payload: { mot: 'Écoute' } }), true);
+  assert.equal(tracker.add({ id: 'r1', payload: { mot: 'Écoute' } }), false);
+  assert.equal(tracker.add({ id: 'r2', payload: { mot: 'écoute' } }), true);
+  assert.equal(tracker.add({ id: 'r3', payload: { mot: 'Confiance' } }), true);
+  assert.deepEqual(tracker.snapshot(), {
+    total: 3,
+    words: [
+      { text: 'Écoute', count: 2 },
+      { text: 'Confiance', count: 1 },
+    ],
+  });
+
+  assert.equal(live.canSubmit({ statut: 'ouverte' }, 1, 2), true);
+  assert.equal(live.canSubmit({ statut: 'ouverte' }, 2, 2), false);
+  assert.equal(live.canSubmit({ statut: 'ouverte' }, 99, null), true);
+  assert.equal(live.canSubmit({ statut: 'fermee' }, 0, 2), false);
+});
+
+test('the live-session state module is available', () => {
+  assert.ok(fs.existsSync(livePath), 'nuage-live-session.js is missing');
 });
 
 test('all inline scripts in Nuage de mots compile', () => {

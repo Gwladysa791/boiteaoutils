@@ -290,6 +290,43 @@
   .formateur-preview-actions{display:flex;gap:10px;margin-top:16px;}
   .formateur-preview-link{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:10px 16px;border-radius:9px;background:var(--bleu-fonce);color:#fff;text-decoration:none;font-size:12px;font-weight:700;transition:background .15s;}
   .formateur-preview-link:hover{background:#006f87;}
+  .formateur-live-card{grid-column:1 / -1;}
+  .formateur-live-card-head{display:flex;align-items:center;justify-content:space-between;gap:18px;}
+  .formateur-live-state{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;border-radius:999px;padding:7px 11px;background:#eef2f3;color:#6e787a;font-size:11px;font-weight:700;}
+  .formateur-live-state::before{content:'';width:8px;height:8px;border-radius:50%;background:#aab2b4;}
+  .formateur-live-state.is-active{background:#eaf8f2;color:#36705a;}
+  .formateur-live-state.is-active::before{background:var(--vert);box-shadow:0 0 0 4px rgba(21,202,136,.13);}
+  .formateur-live-state.is-closed{background:#f2f2f2;color:#737a7c;}
+  .formateur-live-setup{padding:25px 22px 26px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .formateur-live-setup-copy h3{margin:0 0 5px;color:#20282b;font-size:14.5px;}
+  .formateur-live-setup-copy p{margin:0;max-width:600px;color:#7a8182;font-size:12.5px;}
+  .formateur-primary-button,.formateur-secondary-button,.formateur-danger-button{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:background .15s,opacity .15s;}
+  .formateur-primary-button{background:var(--bleu-fonce);color:#fff;}
+  .formateur-primary-button:hover{background:#006f87;}
+  .formateur-secondary-button{background:#eef4f5;color:#365f68;}
+  .formateur-secondary-button:hover{background:#e1ecee;}
+  .formateur-danger-button{background:#fff0ee;color:#a8493e;}
+  .formateur-danger-button:hover{background:#fbe3df;}
+  .formateur-primary-button:disabled,.formateur-secondary-button:disabled,.formateur-danger-button:disabled{opacity:.5;cursor:default;}
+  .formateur-live-active{display:none;padding:22px;gap:20px;}
+  .formateur-live-active.is-visible{display:grid;grid-template-columns:280px minmax(0,1fr);}
+  .formateur-join-box{border:1px solid #dce7e9;border-radius:12px;background:#f8fbfc;padding:19px;text-align:center;}
+  .formateur-join-label{margin:0 0 8px;color:#7e888a;font-size:11px;}
+  .formateur-live-code{margin:0 0 11px;color:var(--bleu-fonce);font-size:30px;font-weight:700;letter-spacing:5px;}
+  #formateurLiveQr{display:block;width:156px;height:156px;margin:0 auto 12px;border-radius:7px;background:#fff;}
+  .formateur-live-url{margin:0 0 13px;color:#7c8587;font-size:10px;word-break:break-all;line-height:1.4;}
+  .formateur-share-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .formateur-share-actions a{display:flex;align-items:center;justify-content:center;text-decoration:none;}
+  .formateur-live-results{min-width:0;display:grid;gap:14px;}
+  .formateur-live-metrics{display:flex;align-items:center;justify-content:space-between;gap:14px;}
+  .formateur-response-count{display:flex;align-items:baseline;gap:7px;color:#687173;font-size:12px;}
+  .formateur-response-count strong{color:var(--bleu-fonce);font-size:25px;line-height:1;}
+  .formateur-live-cloud-wrap{position:relative;min-height:300px;border-radius:12px;background:var(--gris-fond2);overflow:hidden;}
+  #formateurLiveCloud{display:block;width:100%;height:auto;}
+  .formateur-live-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;color:#9aa2a4;font-size:12.5px;font-style:italic;text-align:center;}
+  .formateur-live-actions{display:flex;flex-wrap:wrap;gap:9px;}
+  .formateur-live-error{display:none;margin:0 22px 20px;border-radius:8px;background:#fff1ef;color:#a44339;padding:10px 12px;font-size:12px;font-weight:700;}
+  .formateur-live-error.is-visible{display:block;}
   .participant-limit-note{display:none;margin-top:8px !important;color:var(--bleu-fonce);font-size:12px;font-weight:700;}
   @media (max-width:800px){
     .formateur-topbar-inner{align-items:flex-start;padding:16px 18px;}
@@ -300,6 +337,9 @@
     .formateur-save-status{font-size:0;padding:6px;}
     .formateur-save-status::before{font-size:10px;}
     .formateur-workspace{grid-template-columns:1fr;padding:18px;gap:16px;}
+    .formateur-live-setup{align-items:stretch;flex-direction:column;}
+    .formateur-live-active.is-visible{grid-template-columns:1fr;}
+    .formateur-join-box{max-width:360px;width:100%;margin:0 auto;}
   }
 
   /* Vue participant : header compact dédié pour une session ou une prévisualisation. */
@@ -406,6 +446,52 @@
         </div>
       </div>
     </div>
+
+    <div class="formateur-card formateur-live-card">
+      <div class="formateur-card-head formateur-live-card-head">
+        <div>
+          <h2>Session en direct</h2>
+          <p>Partage, réponses et pilotage depuis le Studio</p>
+        </div>
+        <span class="formateur-live-state" id="formateurLiveStatus" role="status">Non ouverte</span>
+      </div>
+
+      <div class="formateur-live-setup" id="formateurLiveSetup">
+        <div class="formateur-live-setup-copy">
+          <h3>Les réglages sont prêts</h3>
+          <p>L’ouverture crée le code participant et fige le nombre maximal de mots pour cette session.</p>
+        </div>
+        <button class="formateur-primary-button" id="formateurOpenSessionButton" type="button">Ouvrir la participation</button>
+      </div>
+
+      <div class="formateur-live-active" id="formateurLiveActive">
+        <div class="formateur-join-box">
+          <p class="formateur-join-label">Code à communiquer</p>
+          <p class="formateur-live-code" id="formateurLiveCode">—</p>
+          <canvas id="formateurLiveQr" width="180" height="180" aria-label="QR code participant"></canvas>
+          <p class="formateur-live-url" id="formateurLiveUrl"></p>
+          <div class="formateur-share-actions">
+            <button class="formateur-secondary-button" id="formateurCopyLinkButton" type="button">Copier le lien</button>
+            <a class="formateur-secondary-button" id="formateurLiveParticipantLink" href="#" target="_blank" rel="noopener">Ouvrir ↗</a>
+          </div>
+        </div>
+
+        <div class="formateur-live-results">
+          <div class="formateur-live-metrics">
+            <div class="formateur-response-count"><strong id="formateurResponseCount">0</strong> réponse(s) reçue(s)</div>
+          </div>
+          <div class="formateur-live-cloud-wrap">
+            <canvas id="formateurLiveCloud" width="760" height="360"></canvas>
+            <div class="formateur-live-empty" id="formateurLiveEmpty">En attente des premiers mots…</div>
+          </div>
+          <div class="formateur-live-actions">
+            <button class="formateur-primary-button" id="formateurSyncSessionButton" type="button">Mettre à jour les participants</button>
+            <button class="formateur-danger-button" id="formateurCloseSessionButton" type="button">Clôturer la session</button>
+          </div>
+        </div>
+      </div>
+      <p class="formateur-live-error" id="formateurLiveError" role="alert"></p>
+    </div>
   </div>
 </section>
 
@@ -479,7 +565,7 @@
     </div>
     <div class="word-input-row">
       <input type="text" id="wordInput" placeholder="Tapez un mot puis validez…" maxlength="30" onkeydown="if(event.key==='Enter'){event.preventDefault();addWordFromInput();}">
-      <button onclick="addWordFromInput()">Ajouter</button>
+      <button id="wordSubmitButton" onclick="addWordFromInput()">Ajouter</button>
     </div>
     <div class="word-chips" id="wordChips"></div>
     <p class="session-send-status" id="sessionSendStatus"></p>
@@ -505,6 +591,8 @@
 
 <footer>AXIS MUNDI — Outil d'animation collective. Les mots saisis restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
 
+<script src="qrcode-generator.js"></script>
+<script src="nuage-live-session.js"></script>
 <script>
 const PALETTE = ['#0088A9', '#00B5E2', '#F5AB33', '#884EC2', '#15CA88', '#E86F5C'];
 const MIN_FONT = 18;
@@ -544,6 +632,14 @@ function addWordFromInput(){
 function addWord(raw){
   const trimmed = (raw || '').trim();
   if(!trimmed) return;
+  if(SESSION_CODE){
+    envoyerMotSession(trimmed);
+    return;
+  }
+  ajouterMotAuNuage(trimmed);
+}
+
+function ajouterMotAuNuage(trimmed){
   const key = normalizedKey(trimmed);
   const existing = words.find(w => normalizedKey(w.text) === key);
   if(existing){
@@ -552,7 +648,6 @@ function addWord(raw){
     words.push({ text: trimmed, count: 1 });
   }
   renderAll();
-  envoyerMotSession(trimmed);
 }
 
 function removeWord(index){
@@ -727,21 +822,47 @@ document.addEventListener('webkitfullscreenchange', onCloudFullscreenChange);
 renderAll();
 
 /* ---------- Session en direct (optionnelle, ?session=CODE) ---------- */
-const SESSION_CODE = new URLSearchParams(location.search).get('session');
+const SESSION_PARAMS = new URLSearchParams(location.search);
+const SESSION_CODE = SESSION_PARAMS.get('session');
+const PARTICIPANT_MAX_WORDS = SESSION_PARAMS.has('maxWords') && window.AxisMundiNuageLive
+  ? window.AxisMundiNuageLive.normalizeMaxWords(SESSION_PARAMS.get('maxWords'))
+  : null;
 let liveSessionRow = null;
+let participantSubmissionCount = 0;
+let participantPendingCount = 0;
+let sessionScriptsPromise = null;
+
+function chargerModulesSession(){
+  if(window.AXMSession) return Promise.resolve(window.AXMSession);
+  if(sessionScriptsPromise) return sessionScriptsPromise;
+
+  sessionScriptsPromise = new Promise(function(resolve, reject){
+    function chargerModuleMetier(){
+      if(window.AXMSession){ resolve(window.AXMSession); return; }
+      const moduleScript = document.createElement('script');
+      moduleScript.src = 'session-live.js';
+      moduleScript.onload = function(){ resolve(window.AXMSession); };
+      moduleScript.onerror = function(){ reject(new Error('Module de session indisponible.')); };
+      document.body.appendChild(moduleScript);
+    }
+
+    if(window.supabase && window.supabase.createClient){
+      chargerModuleMetier();
+      return;
+    }
+    const sdkScript = document.createElement('script');
+    sdkScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    sdkScript.onload = chargerModuleMetier;
+    sdkScript.onerror = function(){ reject(new Error('Connexion au service de session impossible.')); };
+    document.body.appendChild(sdkScript);
+  });
+  return sessionScriptsPromise;
+}
 
 function chargerScriptsSession(cb){
-  const s1 = document.createElement('script');
-  s1.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-  s1.onload = function(){
-    const s2 = document.createElement('script');
-    s2.src = 'session-live.js';
-    s2.onload = cb;
-    s2.onerror = function(){ afficherStatutSession('Module de session indisponible.'); };
-    document.body.appendChild(s2);
-  };
-  s1.onerror = function(){ afficherStatutSession('Connexion au service de session impossible (hors ligne ?).'); };
-  document.body.appendChild(s1);
+  chargerModulesSession().then(cb).catch(function(error){
+    afficherStatutSession(error.message);
+  });
 }
 
 function afficherStatutSession(texte){
@@ -752,6 +873,7 @@ function afficherStatutSession(texte){
 
 async function initSessionMode(){
   afficherStatutSession('Connexion à la session…');
+  actualiserEtatSaisieParticipant();
   try{
     liveSessionRow = await AXMSession.recupererSessionParCode(SESSION_CODE);
   } catch(e){
@@ -765,10 +887,13 @@ async function initSessionMode(){
   document.getElementById('sessionPseudoRow').style.display = 'flex';
   appliquerConsigne(liveSessionRow.consigne);
   appliquerTitre(liveSessionRow.titre);
+  afficherLimiteParticipant();
+  actualiserEtatSaisieParticipant();
   AXMSession.ecouterSession(liveSessionRow.id, function(s){
     liveSessionRow = s;
     appliquerConsigne(s.consigne);
     appliquerTitre(s.titre);
+    actualiserEtatSaisieParticipant();
   });
 }
 
@@ -782,15 +907,55 @@ function appliquerTitre(titre){
   document.getElementById('heroTitleMain').textContent = (titre && titre.trim()) ? titre : 'Nuage de mots';
 }
 
+function afficherLimiteParticipant(){
+  if(PARTICIPANT_MAX_WORDS === null) return;
+  const limit = document.getElementById('participantLimitNote');
+  limit.style.display = 'block';
+  limit.textContent = 'Vous pouvez proposer jusqu’à ' + PARTICIPANT_MAX_WORDS + (PARTICIPANT_MAX_WORDS > 1 ? ' mots.' : ' mot.');
+}
+
+function actualiserEtatSaisieParticipant(){
+  if(!SESSION_CODE) return;
+  const input = document.getElementById('wordInput');
+  const button = document.getElementById('wordSubmitButton');
+  const status = document.getElementById('sessionSendStatus');
+  const submitted = participantSubmissionCount + participantPendingCount;
+  const allowed = !!(liveSessionRow && window.AxisMundiNuageLive &&
+    window.AxisMundiNuageLive.canSubmit(liveSessionRow, submitted, PARTICIPANT_MAX_WORDS));
+  input.disabled = !allowed;
+  button.disabled = !allowed;
+
+  if(liveSessionRow && liveSessionRow.statut === 'fermee'){
+    status.textContent = 'Cette session est clôturée.';
+  } else if(liveSessionRow && PARTICIPANT_MAX_WORDS !== null && submitted >= PARTICIPANT_MAX_WORDS){
+    status.textContent = 'Merci, votre participation est complète.';
+  }
+}
+
 async function envoyerMotSession(mot){
-  if(!liveSessionRow) return;
+  if(!liveSessionRow || !window.AxisMundiNuageLive){
+    document.getElementById('sessionSendStatus').textContent = 'La session est encore en cours de connexion.';
+    return;
+  }
+  const submitted = participantSubmissionCount + participantPendingCount;
+  if(!window.AxisMundiNuageLive.canSubmit(liveSessionRow, submitted, PARTICIPANT_MAX_WORDS)){
+    actualiserEtatSaisieParticipant();
+    return;
+  }
+  participantPendingCount++;
+  actualiserEtatSaisieParticipant();
   try{
     const pseudo = document.getElementById('sessionPseudo').value.trim();
     await AXMSession.envoyerReponse(liveSessionRow.id, pseudo, { mot: mot });
+    participantPendingCount--;
+    participantSubmissionCount++;
+    ajouterMotAuNuage(mot);
     document.getElementById('sessionSendStatus').textContent = 'Mot transmis au formateur.';
   } catch(e){
+    participantPendingCount--;
     document.getElementById('sessionSendStatus').textContent = "Erreur d'envoi : " + e.message;
   }
+  actualiserEtatSaisieParticipant();
 }
 
 /* ---------- Préparation formateur et prévisualisation locale ---------- */
@@ -816,6 +981,228 @@ function lireFormulaireFormateur(){
     instruction: document.getElementById('formateurInstructionInput').value,
     maxWords: document.getElementById('formateurMaxWordsInput').value
   };
+}
+
+let formateurLiveSessionRow = null;
+let formateurLiveTracker = window.AxisMundiNuageLive
+  ? window.AxisMundiNuageLive.createResponseTracker()
+  : null;
+let formateurLiveMaxWords = 3;
+
+function afficherErreurFormateurLive(message){
+  const error = document.getElementById('formateurLiveError');
+  error.textContent = message || '';
+  error.classList.toggle('is-visible', !!message);
+}
+
+function afficherStatutFormateurLive(label, stateClass){
+  const status = document.getElementById('formateurLiveStatus');
+  status.textContent = label;
+  status.classList.remove('is-active', 'is-closed');
+  if(stateClass) status.classList.add(stateClass);
+}
+
+function dessinerQrCodeFormateur(text){
+  if(typeof qrcode !== 'function') return;
+  let qr;
+  try{
+    qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+  } catch(error){
+    return;
+  }
+  const modules = qr.getModuleCount();
+  const scale = 4;
+  const quiet = 3;
+  const size = (modules + quiet * 2) * scale;
+  const canvas = document.getElementById('formateurLiveQr');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, size, size);
+  ctx.fillStyle = '#20282b';
+  for(let row = 0; row < modules; row++){
+    for(let col = 0; col < modules; col++){
+      if(qr.isDark(row, col)){
+        ctx.fillRect((col + quiet) * scale, (row + quiet) * scale, scale, scale);
+      }
+    }
+  }
+}
+
+function renderFormateurLiveCloud(snapshot){
+  const canvas = document.getElementById('formateurLiveCloud');
+  const empty = document.getElementById('formateurLiveEmpty');
+  const ctx = canvas.getContext && canvas.getContext('2d');
+  document.getElementById('formateurResponseCount').textContent = String(snapshot.total);
+  if(snapshot.words.length === 0){
+    empty.style.display = 'flex';
+    if(ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  empty.style.display = 'none';
+  if(!ctx) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const layout = computeLayout(snapshot.words, canvas.width, canvas.height, ctx);
+  layout.forEach(function(word){
+    ctx.save();
+    ctx.translate(word.x, word.y);
+    if(word.rotate) ctx.rotate(-Math.PI / 2);
+    ctx.font = buildFontString(word.fontVariant, word.fontSize);
+    ctx.fillStyle = word.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(word.text, 0, 0);
+    ctx.restore();
+  });
+}
+
+function traiterReponseFormateurLive(response){
+  if(!formateurLiveTracker || !formateurLiveTracker.add(response)) return;
+  renderFormateurLiveCloud(formateurLiveTracker.snapshot());
+}
+
+function appliquerEtatFormateurLive(session){
+  const closed = session && session.statut === 'fermee';
+  afficherStatutFormateurLive(closed ? 'Clôturée' : 'Ouverte', closed ? 'is-closed' : 'is-active');
+  document.getElementById('formateurSyncSessionButton').disabled = closed;
+  document.getElementById('formateurCloseSessionButton').disabled = closed;
+  document.getElementById('formateurCloseSessionButton').textContent = closed ? 'Session clôturée' : 'Clôturer la session';
+}
+
+async function activerCockpitFormateur(session, maxWords){
+  formateurLiveSessionRow = session;
+  formateurLiveMaxWords = window.AxisMundiNuageLive.normalizeMaxWords(maxWords);
+  formateurLiveTracker = window.AxisMundiNuageLive.createResponseTracker();
+  const participantUrl = window.AxisMundiNuageLive.buildParticipantUrl(location.href, session.code, formateurLiveMaxWords);
+
+  document.getElementById('formateurLiveSetup').style.display = 'none';
+  document.getElementById('formateurLiveActive').classList.add('is-visible');
+  document.getElementById('formateurLiveCode').textContent = session.code;
+  document.getElementById('formateurLiveUrl').textContent = participantUrl;
+  document.getElementById('formateurLiveParticipantLink').href = participantUrl;
+  document.getElementById('formateurMaxWordsInput').disabled = true;
+  document.getElementById('formateurResetButton').disabled = true;
+  dessinerQrCodeFormateur(participantUrl);
+  appliquerEtatFormateurLive(session);
+  renderFormateurLiveCloud(formateurLiveTracker.snapshot());
+
+  AXMSession.ecouterSession(session.id, function(updated){
+    formateurLiveSessionRow = updated;
+    appliquerEtatFormateurLive(updated);
+  });
+  AXMSession.ecouterReponses(session.id, traiterReponseFormateurLive);
+  const initialResponses = await AXMSession.listerReponses(session.id);
+  initialResponses.forEach(traiterReponseFormateurLive);
+}
+
+async function ouvrirSessionFormateur(){
+  const button = document.getElementById('formateurOpenSessionButton');
+  afficherErreurFormateurLive('');
+  button.disabled = true;
+  button.textContent = 'Ouverture…';
+  afficherStatutFormateurLive('Connexion…');
+  try{
+    await chargerModulesSession();
+    const config = window.AxisMundiNuageConfig.save(window.localStorage, lireFormulaireFormateur());
+    const session = await AXMSession.creerSession('nuage_mots', config.title);
+    const patch = window.AxisMundiNuageLive.sessionPatch(config);
+    await AXMSession.mettreAJourSession(session.id, patch);
+    Object.assign(session, patch);
+    const adminUrl = window.AxisMundiNuageLive.buildFormateurSessionUrl(location.href, session.code, config.maxWords);
+    history.replaceState(null, '', adminUrl);
+    await activerCockpitFormateur(session, config.maxWords);
+  } catch(error){
+    afficherStatutFormateurLive('Non ouverte');
+    afficherErreurFormateurLive('Impossible d’ouvrir la session : ' + error.message);
+    button.disabled = false;
+    button.textContent = 'Réessayer';
+  }
+}
+
+async function reprendreSessionFormateur(code, maxWords){
+  afficherErreurFormateurLive('');
+  afficherStatutFormateurLive('Connexion…');
+  try{
+    await chargerModulesSession();
+    const session = await AXMSession.recupererSessionParCode(code);
+    if(!session || session.outil !== 'nuage_mots') throw new Error('session introuvable');
+    const current = window.AxisMundiNuageConfig.sanitize({
+      title: session.titre,
+      instruction: session.consigne,
+      maxWords: maxWords
+    });
+    remplirFormulaireFormateur(current);
+    window.AxisMundiNuageConfig.save(window.localStorage, current);
+    await activerCockpitFormateur(session, current.maxWords);
+  } catch(error){
+    afficherStatutFormateurLive('Indisponible');
+    afficherErreurFormateurLive('Impossible de reprendre la session : ' + error.message);
+  }
+}
+
+async function synchroniserSessionFormateur(){
+  if(!formateurLiveSessionRow || formateurLiveSessionRow.statut === 'fermee') return;
+  const button = document.getElementById('formateurSyncSessionButton');
+  const config = window.AxisMundiNuageConfig.save(window.localStorage, lireFormulaireFormateur());
+  const patch = window.AxisMundiNuageLive.sessionPatch(config);
+  button.disabled = true;
+  button.textContent = 'Mise à jour…';
+  afficherErreurFormateurLive('');
+  try{
+    await AXMSession.mettreAJourSession(formateurLiveSessionRow.id, patch);
+    Object.assign(formateurLiveSessionRow, patch);
+    button.textContent = 'Participants à jour ✓';
+    window.setTimeout(function(){
+      if(formateurLiveSessionRow && formateurLiveSessionRow.statut !== 'fermee'){
+        button.disabled = false;
+        button.textContent = 'Mettre à jour les participants';
+      }
+    }, 1400);
+  } catch(error){
+    button.disabled = false;
+    button.textContent = 'Réessayer la mise à jour';
+    afficherErreurFormateurLive('Mise à jour impossible : ' + error.message);
+  }
+}
+
+async function copierLienParticipant(){
+  const button = document.getElementById('formateurCopyLinkButton');
+  const url = document.getElementById('formateurLiveParticipantLink').href;
+  try{
+    await navigator.clipboard.writeText(url);
+  } catch(error){
+    const field = document.createElement('textarea');
+    field.value = url;
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    document.execCommand('copy');
+    document.body.removeChild(field);
+  }
+  button.textContent = 'Lien copié ✓';
+  window.setTimeout(function(){ button.textContent = 'Copier le lien'; }, 1400);
+}
+
+async function cloturerSessionFormateur(){
+  if(!formateurLiveSessionRow || formateurLiveSessionRow.statut === 'fermee') return;
+  if(!window.confirm('Clôturer cette session ? Les participants ne pourront plus envoyer de mot.')) return;
+  const button = document.getElementById('formateurCloseSessionButton');
+  button.disabled = true;
+  button.textContent = 'Clôture…';
+  afficherErreurFormateurLive('');
+  try{
+    await AXMSession.fermerSession(formateurLiveSessionRow.id);
+    formateurLiveSessionRow.statut = 'fermee';
+    appliquerEtatFormateurLive(formateurLiveSessionRow);
+  } catch(error){
+    button.disabled = false;
+    button.textContent = 'Clôturer la session';
+    afficherErreurFormateurLive('Clôture impossible : ' + error.message);
+  }
 }
 
 function initFormateurView(){
@@ -844,12 +1231,21 @@ function initFormateurView(){
   form.addEventListener('submit', function(event){ event.preventDefault(); });
   form.addEventListener('input', enregistrerReglages);
   form.addEventListener('change', enregistrerReglages);
+  document.getElementById('formateurOpenSessionButton').addEventListener('click', ouvrirSessionFormateur);
+  document.getElementById('formateurSyncSessionButton').addEventListener('click', synchroniserSessionFormateur);
+  document.getElementById('formateurCopyLinkButton').addEventListener('click', copierLienParticipant);
+  document.getElementById('formateurCloseSessionButton').addEventListener('click', cloturerSessionFormateur);
   document.getElementById('formateurResetButton').addEventListener('click', function(){
     const defaults = api.clear(window.localStorage);
     remplirFormulaireFormateur(defaults);
     api.save(window.localStorage, defaults);
     status.textContent = 'Réglages réinitialisés';
   });
+
+  const params = new URLSearchParams(location.search);
+  if(params.get('live')){
+    reprendreSessionFormateur(params.get('live'), params.get('maxWords'));
+  }
 }
 
 function initParticipantPreview(){
