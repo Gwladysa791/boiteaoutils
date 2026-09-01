@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session en direct — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  .topbar{
+    display:flex; align-items:center; gap:16px;
+    background:#fff; padding:14px 26px; box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .topbar .logo{height:26px;}
+  .topbar .outil-nom{font-size:14px; font-weight:700; color:var(--bleu-fonce); flex:1;}
+  .btn-fermer{
+    background:transparent; border:1.5px solid var(--gris-moyen); color:var(--gris);
+    padding:8px 16px; border-radius:18px; font-size:12px; cursor:pointer; font-family:inherit;
+  }
+  .btn-fermer:hover{background:var(--gris-fond2);}
+  .btn-fermer:disabled{opacity:.5; cursor:default;}
+
+  .wrap{
+    max-width:1180px; margin:0 auto; padding:30px 24px 60px;
+    display:grid; grid-template-columns:280px 1fr; gap:26px;
+    align-items:start;
+  }
+  @media (max-width:820px){ .wrap{grid-template-columns:1fr;} }
+
+  .join-panel{
+    background:#fff; border-radius:12px; padding:24px 20px; text-align:center;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06); position:sticky; top:20px;
+  }
+  .join-label{font-size:12.5px; color:var(--gris-moyen); margin:0 0 10px;}
+  .join-code{
+    font-size:34px; font-weight:700; letter-spacing:5px; color:var(--bleu-fonce);
+    margin-bottom:14px;
+  }
+  #qrCanvas{width:170px; height:170px; margin:0 auto 14px; display:block; border-radius:8px;}
+  .join-url{font-size:11px; color:var(--gris-moyen); word-break:break-all; margin:0 0 16px;}
+  .join-count{font-size:13px; font-weight:700; color:var(--gris);}
+  .join-count span{color:var(--vert); font-size:18px;}
+
+  .results-panel{
+    background:#fff; border-radius:12px; padding:26px 28px 32px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06); min-height:360px;
+  }
+  .results-panel h2{margin:0 0 20px; font-size:17px; color:var(--bleu-fonce);}
+  .empty{font-size:13.5px; color:var(--gris-moyen); font-style:italic;}
+  .erreur{color:var(--rouge); font-size:14px; font-weight:700;}
+
+  /* ROTI */
+  .roti-bars{margin-bottom:26px;}
+  .roti-bar-row{display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .roti-bar-label{width:16px; font-weight:700; font-size:15px; text-align:center;}
+  .roti-bar-track{flex:1; background:var(--gris-fond2); border-radius:8px; height:20px; overflow:hidden;}
+  .roti-bar-fill{height:100%; border-radius:8px; transition:width .3s ease;}
+  .roti-bar-count{width:26px; text-align:right; font-size:13px; font-weight:700; color:var(--gris);}
+  .roti-comments{display:flex; flex-direction:column; gap:10px;}
+  .roti-comment{background:var(--gris-fond2); border-radius:8px; padding:10px 14px;}
+  .roti-comment strong{font-size:12px; color:var(--bleu-fonce);}
+  .roti-comment p{margin:4px 0 0; font-size:13px; color:var(--gris);}
+
+  /* Nuage de mots */
+  .cloud-wrap-live{position:relative; width:100%; background:var(--gris-fond2); border-radius:10px; overflow:hidden; min-height:340px;}
+  #cloudCanvasLive{display:block; width:100%; height:auto;}
+  #cloudEmptyLive{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;}
+
+  footer{text-align:center; font-size:11px; color:var(--gris-moyen); padding:10px 20px 30px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img class="logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+  <span class="outil-nom" id="outilNom">Session en direct</span>
+  <button class="btn-fermer" id="btnFermer" onclick="fermerLaSession()">Clôturer la session</button>
+</div>
+
+<div class="wrap">
+  <div class="join-panel">
+    <p class="join-label">Pour participer, scannez ce code ou rendez-vous sur :</p>
+    <div class="join-code" id="joinCode">—</div>
+    <canvas id="qrCanvas"></canvas>
+    <p class="join-url" id="joinUrl"></p>
+    <p class="join-count"><span id="participantCount">0</span> réponse(s) reçue(s)</p>
+  </div>
+
+  <div class="results-panel" id="resultsPanel">
+    <p class="empty">Initialisation de la session…</p>
+  </div>
+</div>
+
+<footer>AXIS MUNDI — Session en direct (v1 de test, sans compte formateur). Les données restent liées au code de session.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="qrcode-generator.js"></script>
+<script src="session-live.js"></script>
+<script>
+const TOOL_PAGES = { roti: 'ROTI.html', nuage_mots: 'Nuage_De_Mots.html' };
+const TOOL_LABELS = { roti: 'ROTI — Return On Time Invested', nuage_mots: 'Nuage de mots' };
+const ROTI_COLORS = {1:'#DE5C5C',2:'#F5AB33',3:'#A2A5A4',4:'#00B5E2',5:'#15CA88'};
+
+const params = new URLSearchParams(location.search);
+let outil = params.get('outil');
+let code = params.get('session');
+let sessionRow = null;
+let totalReponses = 0;
+let rotiCounts = {1:0,2:0,3:0,4:0,5:0};
+let rotiCommentaires = [];
+
+async function init(){
+  try{
+    if(code){
+      sessionRow = await AXMSession.recupererSessionParCode(code);
+      if(!sessionRow){ afficherErreur('Session introuvable pour ce code.'); return; }
+      outil = sessionRow.outil;
+    } else {
+      if(!outil || !TOOL_PAGES[outil]){ afficherErreur('Paramètre ?outil= manquant ou invalide (roti | nuage_mots).'); return; }
+      sessionRow = await AXMSession.creerSession(outil);
+      code = sessionRow.code;
+      const url = new URL(location.href);
+      url.searchParams.set('outil', outil);
+      url.searchParams.set('session', code);
+      history.replaceState(null, '', url.toString());
+    }
+
+    document.getElementById('outilNom').textContent = TOOL_LABELS[outil] || outil;
+    document.getElementById('joinCode').textContent = code;
+    const participantUrl = new URL(TOOL_PAGES[outil], location.href);
+    participantUrl.searchParams.set('session', code);
+    document.getElementById('joinUrl').textContent = participantUrl.toString();
+    dessinerQrCode(participantUrl.toString());
+    initResultsPanel(outil);
+
+    if(sessionRow.statut === 'fermee'){
+      document.getElementById('btnFermer').textContent = 'Session clôturée';
+      document.getElementById('btnFermer').disabled = true;
+    }
+
+    const initiales = await AXMSession.listerReponses(sessionRow.id);
+    initiales.forEach(r => traiterReponse(outil, r));
+    majCompteur();
+
+    AXMSession.ecouterReponses(sessionRow.id, function(reponse){
+      traiterReponse(outil, reponse);
+      majCompteur();
+    });
+  } catch(e){
+    afficherErreur('Erreur : ' + e.message);
+  }
+}
+
+function afficherErreur(msg){
+  document.getElementById('resultsPanel').innerHTML = '<p class="erreur">' + msg + '</p>';
+}
+
+function majCompteur(){
+  document.getElementById('participantCount').textContent = totalReponses;
+}
+
+function dessinerQrCode(text){
+  let qr;
+  try{ qr = qrcode(0,'M'); qr.addData(text); qr.make(); } catch(e){ return; }
+  const n = qr.getModuleCount();
+  const scale = 5, quiet = 3;
+  const size = (n + quiet*2) * scale;
+  const canvas = document.getElementById('qrCanvas');
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,size,size);
+  ctx.fillStyle = '#20282b';
+  for(let row=0; row<n; row++){
+    for(let col=0; col<n; col++){
+      if(qr.isDark(row,col)) ctx.fillRect((col+quiet)*scale, (row+quiet)*scale, scale, scale);
+    }
+  }
+}
+
+function initResultsPanel(outil){
+  const panel = document.getElementById('resultsPanel');
+  if(outil === 'roti'){
+    panel.innerHTML = '<h2>Résultats en direct</h2>' +
+      '<div class="roti-bars" id="rotiBars"></div>' +
+      '<div class="roti-comments" id="rotiComments"><p class="empty">En attente des premières réponses…</p></div>';
+    renderRoti();
+  } else if(outil === 'nuage_mots'){
+    panel.innerHTML = '<h2>Nuage en direct</h2>' +
+      '<div class="cloud-wrap-live"><canvas id="cloudCanvasLive" width="800" height="440"></canvas>' +
+      '<div class="empty" id="cloudEmptyLive">En attente des premiers mots…</div></div>';
+  }
+}
+
+function traiterReponse(outil, reponse){
+  totalReponses++;
+  if(outil === 'roti'){
+    const score = reponse.payload && reponse.payload.score;
+    if(score >= 1 && score <= 5) rotiCounts[score]++;
+    if(reponse.payload && reponse.payload.commentaire){
+      rotiCommentaires.unshift({ pseudo: reponse.pseudo || 'Anonyme', texte: reponse.payload.commentaire });
+    }
+    renderRoti();
+  } else if(outil === 'nuage_mots'){
+    const mot = reponse.payload && reponse.payload.mot;
+    if(mot) ajouterMotCloudLive(mot);
+  }
+}
+
+function escapeHtml(s){
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderRoti(){
+  const bars = document.getElementById('rotiBars');
+  if(!bars) return;
+  const total = Object.values(rotiCounts).reduce((a,b)=>a+b,0);
+  bars.innerHTML = [1,2,3,4,5].map(function(score){
+    const n = rotiCounts[score];
+    const pct = total ? Math.round(n/total*100) : 0;
+    return '<div class="roti-bar-row">' +
+      '<span class="roti-bar-label" style="color:' + ROTI_COLORS[score] + '">' + score + '</span>' +
+      '<div class="roti-bar-track"><div class="roti-bar-fill" style="width:' + pct + '%; background:' + ROTI_COLORS[score] + '"></div></div>' +
+      '<span class="roti-bar-count">' + n + '</span>' +
+    '</div>';
+  }).join('');
+
+  const commentsEl = document.getElementById('rotiComments');
+  if(rotiCommentaires.length === 0){
+    commentsEl.innerHTML = '<p class="empty">En attente des premières réponses…</p>';
+  } else {
+    commentsEl.innerHTML = rotiCommentaires.map(function(c){
+      return '<div class="roti-comment"><strong>' + escapeHtml(c.pseudo) + '</strong><p>' + escapeHtml(c.texte) + '</p></div>';
+    }).join('');
+  }
+}
+
+/* ---------- Nuage de mots — agrégation live (même moteur de disposition que Nuage_De_Mots.html) ---------- */
+const PALETTE = ['#0088A9', '#00B5E2', '#F5AB33', '#884EC2', '#15CA88', '#E86F5C'];
+const MIN_FONT = 18;
+const MAX_FONT = 66;
+const FONT_VARIANTS = [
+  { family: "'Century Gothic Fallback', sans-serif", weight: 700, style: 'normal' },
+  { family: "Georgia, 'Times New Roman', serif",       weight: 700, style: 'normal' },
+  { family: "'Trebuchet MS', sans-serif",              weight: 700, style: 'italic' },
+  { family: "Verdana, Geneva, sans-serif",             weight: 400, style: 'normal' },
+  { family: "'Century Gothic Fallback', sans-serif",   weight: 400, style: 'italic' },
+  { family: "'Courier New', Courier, monospace",       weight: 700, style: 'normal' }
+];
+
+function buildFontString(variant, fontSize){
+  const stylePart = variant.style === 'italic' ? 'italic ' : '';
+  return stylePart + variant.weight + ' ' + fontSize + 'px ' + variant.family;
+}
+
+let cloudWords = []; // [{text, count}]
+
+function ajouterMotCloudLive(mot){
+  const trimmed = (mot || '').trim();
+  if(!trimmed) return;
+  const key = trimmed.toLowerCase();
+  const existing = cloudWords.find(function(w){ return w.text.toLowerCase() === key; });
+  if(existing) existing.count += 1;
+  else cloudWords.push({ text: trimmed, count: 1 });
+  renderCloudLive();
+}
+
+function rectsOverlap(a, b){
+  return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
+}
+
+function computeLayout(wordList, W, H, ctx){
+  const maxCount = Math.max.apply(null, wordList.map(function(w){ return w.count; }));
+  const sized = wordList.map(function(w){
+    const ratio = maxCount > 1 ? (w.count - 1) / (maxCount - 1) : 0.4;
+    return Object.assign({}, w, { fontSize: Math.round(MIN_FONT + ratio * (MAX_FONT - MIN_FONT)) });
+  });
+  sized.sort(function(a, b){ return b.count - a.count || b.fontSize - a.fontSize; });
+
+  const placed = [];
+  const centerX = W / 2;
+  const centerY = H / 2;
+
+  sized.forEach(function(w, idx){
+    w.fontVariant = FONT_VARIANTS[idx % FONT_VARIANTS.length];
+    ctx.font = buildFontString(w.fontVariant, w.fontSize);
+    const textWidth = ctx.measureText(w.text).width;
+    const textHeight = w.fontSize * 1.15;
+    const rotate = (idx > 0 && idx % 5 === 0);
+    const boxW = (rotate ? textHeight : textWidth) + 10;
+    const boxH = (rotate ? textWidth : textHeight) + 10;
+
+    let angle = Math.random() * Math.PI * 2;
+    let radius = 0;
+    const angleStep = 0.42;
+    const radiusStep = 2.6;
+    let x = centerX, y = centerY;
+    let rect = { x: x - boxW / 2, y: y - boxH / 2, w: boxW, h: boxH };
+    let ok = false;
+
+    for(let attempt = 0; attempt < 700; attempt++){
+      x = centerX + radius * Math.cos(angle);
+      y = centerY + radius * Math.sin(angle);
+      rect = { x: x - boxW / 2, y: y - boxH / 2, w: boxW, h: boxH };
+      const withinBounds = rect.x >= 0 && rect.y >= 0 && (rect.x + rect.w) <= W && (rect.y + rect.h) <= H;
+      const collides = placed.some(function(p){ return rectsOverlap(p, rect); });
+      if(withinBounds && !collides){ ok = true; break; }
+      angle += angleStep;
+      radius += radiusStep;
+    }
+
+    placed.push(rect);
+    w.x = x; w.y = y; w.rotate = rotate;
+    w.color = PALETTE[idx % PALETTE.length];
+    w.placedWithinBounds = ok;
+  });
+
+  return sized;
+}
+
+function renderCloudLive(){
+  const canvas = document.getElementById('cloudCanvasLive');
+  const emptyState = document.getElementById('cloudEmptyLive');
+  if(!canvas) return;
+  const ctx = canvas.getContext && canvas.getContext('2d');
+
+  if(cloudWords.length === 0){
+    if(emptyState) emptyState.style.display = 'flex';
+    if(ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  if(emptyState) emptyState.style.display = 'none';
+  if(!ctx) return;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const layout = computeLayout(cloudWords, canvas.width, canvas.height, ctx);
+
+  layout.forEach(function(w){
+    ctx.save();
+    ctx.translate(w.x, w.y);
+    if(w.rotate) ctx.rotate(-Math.PI / 2);
+    ctx.font = buildFontString(w.fontVariant, w.fontSize);
+    ctx.fillStyle = w.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(w.text, 0, 0);
+    ctx.restore();
+  });
+}
+
+function fermerLaSession(){
+  if(!sessionRow) return;
+  if(!confirm('Clôturer cette session ? (information indicative — les participants ayant déjà le lien ouvert pourront encore envoyer une réponse)')) return;
+  AXMSession.fermerSession(sessionRow.id).then(function(){
+    const btn = document.getElementById('btnFermer');
+    btn.textContent = 'Session clôturée';
+    btn.disabled = true;
+  }).catch(function(e){ alert('Erreur : ' + e.message); });
+}
+
+init();
+</script>
+
+</body>
+</html>
