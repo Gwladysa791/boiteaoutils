@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Arbre à personnages — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:1080px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{
+    display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;
+  }
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Arbre + sélection ---------- */
+  .arbre-layout{display:flex;gap:28px;align-items:flex-start;}
+  .arbre-image-col{flex:0 1 440px;min-width:240px;}
+  .arbre-wrap{position:relative;width:100%;line-height:0;}
+  .arbre-img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid var(--gris-fond2);}
+  .hotspot-layer{position:absolute;inset:0;}
+  .leader-layer{position:absolute;inset:0;width:100%;height:100%;}
+  .hotspot{
+    position:absolute;width:21px;height:21px;border-radius:50%;
+    background:rgba(0,136,169,0.9);color:#fff;font-size:10.5px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    transform:translate(-50%,-50%);cursor:pointer;border:2px solid #fff;
+    box-shadow:0 2px 5px rgba(0,0,0,0.25);font-family:inherit;padding:0;
+    transition:transform .12s ease, background .12s ease;
+  }
+  .hotspot:hover{transform:translate(-50%,-50%) scale(1.18);}
+  .hotspot.active{background:var(--orange);transform:translate(-50%,-50%) scale(1.3);}
+
+  .arbre-composer-col{flex:1;min-width:260px;}
+  .select-wrap{margin-bottom:16px;}
+  .select-wrap label{display:block;font-size:11.5px;font-weight:700;color:var(--gris-moyen);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px;}
+  .select-wrap select{width:100%;padding:10px 12px;border-radius:6px;border:1.5px solid var(--gris-fond2);font-family:inherit;font-size:13.5px;color:var(--gris);background:#fff;}
+  .select-wrap select:focus{outline:none;border-color:var(--bleu);}
+
+  .composer{background:var(--fond);border-radius:8px;padding:18px 20px;min-height:190px;display:flex;flex-direction:column;justify-content:center;}
+  .composer-empty{margin:0;font-size:13px;color:var(--gris-moyen);font-style:italic;text-align:center;}
+  .composer-label{display:inline-block;background:var(--bleu-fonce);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:12px;margin-bottom:10px;}
+  .composer-textarea{width:100%;min-height:100px;border:1.5px solid var(--gris-fond2);border-radius:6px;background:#fff;resize:vertical;font-family:inherit;font-size:13.5px;color:var(--gris);line-height:1.5;padding:12px;margin-bottom:10px;}
+  .composer-textarea:focus{outline:none;border-color:var(--bleu);}
+  .composer-textarea::placeholder{color:var(--gris-moyen);font-style:italic;}
+  .composer-add-btn{background:var(--bleu-fonce);color:#fff;border:none;padding:7px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .composer-add-btn:hover{background:#006f87;}
+
+  @media (max-width:860px){
+    .arbre-layout{flex-direction:column;}
+    .arbre-image-col{flex:1 1 auto;max-width:380px;width:100%;margin:0 auto;}
+  }
+
+  /* ---------- Réflexions partagées ---------- */
+  .reflection-card{background:#fff;border-left:4px solid var(--bleu-fonce);border-radius:6px;padding:12px 16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+  .reflection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .reflection-num{font-size:12.5px;font-weight:700;color:var(--bleu-fonce);}
+  .reflection-del{background:none;border:none;color:rgba(0,0,0,0.3);font-size:16px;cursor:pointer;padding:0;line-height:1;}
+  .reflection-del:hover{color:var(--rouge);}
+  .reflection-text{margin:6px 0 0;font-size:13.5px;color:var(--gris);line-height:1.5;}
+  .reflection-empty{font-size:13px;color:var(--gris-moyen);font-style:italic;text-align:center;padding:16px 10px;}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .select-wrap, .composer, .reflection-del, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+    .arbre-layout{flex-direction:column;}
+    .arbre-image-col{max-width:520px;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">L'Arbre à personnages<span>Se positionner dans un collectif, par le détour de l'image</span></h1>
+      <p class="hero-desc">Dix-huit personnages occupent l'arbre, chacun à sa façon — en hauteur, isolé, porté, suspendu, endormi au pied du tronc. Un support projectif pour dire, sans avoir à le formuler frontalement, la place que l'on sent occuper aujourd'hui dans une équipe, un projet ou une période de changement.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          20-40 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke-width="2" stroke-linecap="round"/><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Individuel puis collectif
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('boardPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Découvrir l'arbre &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- arbre stylisé, personnages à différentes positions -->
+        <g stroke="#0088A9" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M122,192 L122,108"/>
+          <path d="M122,150 L76,112"/>
+          <path d="M122,128 L168,96"/>
+          <path d="M122,108 L102,58"/>
+          <path d="M122,108 L148,62"/>
+        </g>
+        <circle cx="122" cy="192" r="11" fill="#0088A9"/>
+        <circle cx="76"  cy="112" r="10" fill="#15CA88"/>
+        <circle cx="168" cy="96"  r="10" fill="#F5AB33"/>
+        <circle cx="102" cy="58"  r="10" fill="#884EC2"/>
+        <circle cx="148" cy="62"  r="10" fill="#DE5C5C"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">L'Arbre à personnages</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> sélectionnez le personnage qui correspond le mieux à ce que vous vivez actuellement dans l'équipe.</p>
+  </div>
+
+  <div class="panel" id="boardPanel">
+    <h2>L'arbre et votre réflexion</h2>
+    <p class="panel-sub">Regardez d'abord l'arbre dans son ensemble, sans chercher tout de suite. Cliquez sur un numéro pour rédiger votre réflexion.</p>
+
+    <div class="arbre-layout">
+      <div class="arbre-image-col">
+        <div class="arbre-wrap">
+          <img class="arbre-img" src="brand_assets/arbre_personnages_illustration.jpg" alt="Arbre aux personnages : dix-huit silhouettes numérotées occupant différentes positions dans les branches et au pied de l'arbre">
+          <svg class="leader-layer" id="leaderLayer" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+          <div class="hotspot-layer" id="hotspotLayer"></div>
+        </div>
+      </div>
+
+      <div class="arbre-composer-col">
+        <div class="select-wrap">
+          <label for="personnageSelect">Ou choisissez directement un numéro</label>
+          <select id="personnageSelect" onchange="onSelectChange(this.value)"></select>
+        </div>
+
+        <div class="composer">
+          <p class="composer-empty" id="composerEmpty">Cliquez sur un numéro dans l'arbre pour commencer.</p>
+          <div class="composer-form" id="composerForm" style="display:none;">
+            <span class="composer-label" id="composerLabel"></span>
+            <textarea class="composer-textarea" id="reflectionText" placeholder="Qu'est-ce que ce personnage dit de votre situation aujourd'hui ?"></textarea>
+            <button class="composer-add-btn" onclick="addReflection()">Ajouter cette réflexion</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Réflexions partagées</h2>
+    <p class="panel-sub">Au fil du tour de table, consignez ici ce que chacun choisit de garder par écrit.</p>
+    <div id="reflectionsList"></div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation collective. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
+
+<script>
+const CHARACTERS = [
+  {num:1,  cLeft:45.16, cTop:3.42,  bLeft:47.74, bTop:2.28},
+  {num:2,  cLeft:83.06, cTop:6.27,  bLeft:80.73, bTop:5.82},
+  {num:3,  cLeft:12.10, cTop:14.82, bLeft:10.48, bTop:9.98},
+  {num:4,  cLeft:44.76, cTop:19.95, bLeft:41.13, bTop:16.88},
+  {num:5,  cLeft:75.40, cTop:20.81, bLeft:76.21, bTop:17.67},
+  {num:6,  cLeft:66.13, cTop:22.81, bLeft:70.40, bTop:19.73},
+  {num:7,  cLeft:16.13, cTop:31.64, bLeft:21.13, bTop:32.55},
+  {num:8,  cLeft:36.29, cTop:37.63, bLeft:31.21, bTop:38.54},
+  {num:9,  cLeft:84.68, cTop:39.34, bLeft:89.11, bTop:39.34},
+  {num:10, cLeft:60.08, cTop:41.33, bLeft:61.77, bTop:36.83},
+  {num:11, cLeft:40.32, cTop:54.16, bLeft:40.48, bTop:54.16},
+  {num:12, cLeft:87.10, cTop:54.16, bLeft:92.74, bTop:53.88},
+  {num:13, cLeft:32.26, cTop:60.72, bLeft:25.81, bTop:59.86},
+  {num:14, cLeft:83.87, cTop:73.55, bLeft:85.08, bTop:68.99},
+  {num:15, cLeft:13.31, cTop:75.26, bLeft:8.06, bTop:73.55},
+  {num:16, cLeft:64.52, cTop:78.68, bLeft:65.73, bTop:77.19},
+  {num:17, cLeft:36.29, cTop:80.96, bLeft:31.94, bTop:81.76},
+  {num:18, cLeft:74.19, cTop:86.66, bLeft:75.89, bTop:85.40}
+];
+
+let selectedNum = null;
+let reflections = [];
+let nextReflectionId = 1;
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function renderHotspots(){
+  const wrap = document.getElementById('hotspotLayer');
+  wrap.innerHTML = CHARACTERS.map(function(c){
+    return '<button type="button" class="hotspot" style="left:' + c.bLeft + '%;top:' + c.bTop + '%;" data-num="' + c.num + '" onclick="selectChar(' + c.num + ')" title="Personnage n°' + c.num + '">' + c.num + '</button>';
+  }).join('');
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('leaderLayer');
+  while(svg.firstChild){ svg.removeChild(svg.firstChild); }
+  CHARACTERS.forEach(function(c){
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', c.cLeft);
+    line.setAttribute('y1', c.cTop);
+    line.setAttribute('x2', c.bLeft);
+    line.setAttribute('y2', c.bTop);
+    line.setAttribute('stroke', '#0088A9');
+    line.setAttribute('stroke-width', '0.35');
+    line.setAttribute('stroke-opacity', '0.7');
+    line.setAttribute('vector-effect', 'non-scaling-stroke');
+    svg.appendChild(line);
+  });
+}
+
+function renderSelectOptions(){
+  const sel = document.getElementById('personnageSelect');
+  sel.innerHTML = '<option value="">Choisir un numéro…</option>' + CHARACTERS.map(function(c){
+    return '<option value="' + c.num + '">Personnage n°' + c.num + '</option>';
+  }).join('');
+}
+
+function selectChar(n){
+  selectedNum = n;
+  document.querySelectorAll('.hotspot').forEach(function(el){
+    el.classList.toggle('active', parseInt(el.dataset.num, 10) === n);
+  });
+  document.getElementById('personnageSelect').value = String(n);
+  document.getElementById('composerLabel').textContent = 'Personnage n°' + n;
+  document.getElementById('composerEmpty').style.display = 'none';
+  document.getElementById('composerForm').style.display = 'block';
+  document.getElementById('reflectionText').focus();
+}
+
+function onSelectChange(val){
+  if(val === '') return;
+  selectChar(parseInt(val, 10));
+}
+
+function addReflection(){
+  if(selectedNum === null) return;
+  const ta = document.getElementById('reflectionText');
+  const text = ta.value.trim();
+  if(!text){ ta.focus(); return; }
+  reflections.push({id: nextReflectionId++, num: selectedNum, text: text});
+  ta.value = '';
+  clearSelection();
+  renderReflections();
+}
+
+function clearSelection(){
+  selectedNum = null;
+  document.querySelectorAll('.hotspot').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('personnageSelect').value = '';
+  document.getElementById('composerEmpty').style.display = 'block';
+  document.getElementById('composerForm').style.display = 'none';
+}
+
+function removeReflection(id){
+  reflections = reflections.filter(function(r){ return r.id !== id; });
+  renderReflections();
+}
+
+function renderReflections(){
+  const wrap = document.getElementById('reflectionsList');
+  if(reflections.length === 0){
+    wrap.innerHTML = '<p class="reflection-empty">Aucune réflexion partagée pour le moment.</p>';
+    return;
+  }
+  wrap.innerHTML = reflections.map(function(r){
+    return '' +
+      '<div class="reflection-card">' +
+        '<div class="reflection-head">' +
+          '<span class="reflection-num">Personnage n°' + r.num + '</span>' +
+          '<button class="reflection-del" onclick="removeReflection(' + r.id + ')" title="Supprimer">&times;</button>' +
+        '</div>' +
+        '<p class="reflection-text">' + escapeHtml(r.text) + '</p>' +
+      '</div>';
+  }).join('');
+}
+
+function resetAll(){
+  const hasContent = reflections.length > 0 || selectedNum !== null || document.getElementById('reflectionText').value.trim() !== '';
+  if(hasContent){
+    if(!confirm('Effacer toutes les réflexions partagées et repartir de zéro ?')) return;
+  }
+  reflections = [];
+  document.getElementById('reflectionText').value = '';
+  clearSelection();
+  renderReflections();
+}
+
+renderHotspots();
+renderSelectOptions();
+renderReflections();
+</script>
+
+</body>
+</html>

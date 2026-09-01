@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les différentes méthodes pédagogiques pour construire une formation — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  header{
+    background:var(--bleu-fonce);
+    color:#fff;
+    padding:40px 24px 32px;
+    text-align:center;
+  }
+  header .brand-logo{
+    height:50px;
+    width:auto;
+    display:block;
+    margin:0 auto 16px;
+  }
+  header h1{
+    margin:0;
+    font-size:22px;
+    font-weight:700;
+  }
+  header p.signature{
+    margin:8px 0 0;
+    font-size:13.5px;
+    color:#eaf7fb;
+    font-style:italic;
+  }
+  .container{
+    max-width:760px;
+    margin:0 auto;
+    padding:30px 20px 70px;
+  }
+  .back-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin:0 0 22px;
+  }
+  .back-link{
+    display:inline-block;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+
+  article{
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    padding:38px 40px 44px;
+  }
+  .theme-tag{
+    display:inline-block;
+    background:var(--gris-fond2);
+    color:var(--bleu-fonce);
+    font-size:11.5px;
+    font-weight:700;
+    padding:5px 13px;
+    border-radius:14px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    margin-bottom:16px;
+  }
+  .article-title{
+    margin:0 0 14px;
+    font-size:25px;
+    line-height:1.32;
+    font-weight:700;
+    color:#20282b;
+  }
+  .article-meta{
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    margin-bottom:28px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--gris-fond2);
+  }
+  .article-meta span{margin-right:14px;}
+  .article-body p{
+    font-size:14.5px;
+    color:var(--gris);
+    margin:0 0 16px;
+  }
+  .article-body h2.section-h2{
+    margin:32px 0 12px;
+    font-size:19px;
+    color:var(--bleu-fonce);
+  }
+  .article-body ul{
+    margin:0 0 16px;
+    padding-left:20px;
+  }
+  .article-body li{
+    margin-bottom:6px;
+    font-size:14.5px;
+    color:var(--gris);
+  }
+  .table-wrap{
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--gris-fond2);
+    margin:8px 0 20px;
+  }
+  .article-body table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  .article-body th{
+    background:var(--bleu-fonce);
+    color:#fff;
+    text-align:left;
+    padding:11px 15px;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+    font-weight:700;
+  }
+  .article-body td{
+    padding:11px 15px;
+    border-bottom:1px solid var(--gris-fond2);
+    color:var(--gris);
+  }
+  .article-body tr:last-child td{border-bottom:none;}
+
+  .closing-note{
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:20px 24px;
+    margin-top:10px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .closing-note strong{color:var(--bleu-fonce);}
+
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--gris-moyen);
+    padding:24px 20px;
+  }
+
+  @media print{
+    header, .back-links, footer{display:none !important;}
+    body{background:#fff;}
+    article{box-shadow:none;padding:0;}
+  }
+  @media (max-width:600px){input,select,textarea{font-size:16px;}
+    article{padding:28px 22px 34px;}
+    .article-title{font-size:20px;}
+    .article-body th, .article-body td{padding:9px 10px;font-size:12.5px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="brand-logo" src="brand_assets/logo_axismundi_blanc.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+  <h1>Blog Pédagogie &amp; Animations</h1>
+  <p class="signature">Articles et repères pour nourrir votre pratique de formateur</p>
+</header>
+
+<div class="container">
+
+  <div class="back-links">
+    <a class="back-link" href="Pedagogie.html">&larr; Retour au blog</a>
+    <a class="back-link" href="index.html">Accueil</a>
+  </div>
+
+  <article>
+    <span class="theme-tag">Ingénierie pédagogique</span>
+    <h1 class="article-title">Les différentes méthodes pédagogiques pour construire une formation</h1>
+    <div class="article-meta">
+      <span>3 min de lecture</span>
+      <span>Publié le 27/07/2026</span>
+    </div>
+
+    <div class="article-body">
+      <p>Concevoir une formation efficace ne consiste pas uniquement à sélectionner des contenus. La qualité des apprentissages dépend en grande partie des méthodes pédagogiques mobilisées. Une ingénierie pédagogique performante alterne les approches afin de maintenir l'attention, favoriser l'engagement, faciliter la mémorisation et permettre le transfert des acquis en situation de travail.</p>
+
+      <h2 class="section-h2">Pourquoi varier les méthodes&nbsp;?</h2>
+      <p>Diversifier les méthodes permet de répondre à la diversité des profils d'apprenants, d'éviter la monotonie et d'articuler acquisition de connaissances, développement des compétences et réflexion collective.</p>
+
+      <h2 class="section-h2">La méthode expositive</h2>
+      <p>Transmission structurée de connaissances. À privilégier pour poser un cadre ou introduire une notion, en séquences courtes.</p>
+
+      <h2 class="section-h2">La méthode interrogative</h2>
+      <p>Le formateur guide l'apprentissage par le questionnement afin de mobiliser les connaissances des participants.</p>
+
+      <h2 class="section-h2">La méthode démonstrative</h2>
+      <p>Le formateur montre un geste ou une procédure avant une reproduction par les participants.</p>
+
+      <h2 class="section-h2">La méthode active</h2>
+      <p>Les participants apprennent en faisant&nbsp;: études de cas, jeux pédagogiques, simulations, ateliers, débats, exercices.</p>
+
+      <h2 class="section-h2">La méthode expérientielle</h2>
+      <p>L'expérience est suivie d'un débriefing structuré afin de transformer l'action en apprentissage durable.</p>
+
+      <h2 class="section-h2">La pédagogie collaborative</h2>
+      <p>Les apprentissages s'appuient sur l'intelligence collective&nbsp;: World Café, codéveloppement, Jigsaw, brainwriting, etc.</p>
+
+      <h2 class="section-h2">La pédagogie inversée</h2>
+      <p>Les apports théoriques sont réalisés en amont pour consacrer le temps de formation aux mises en pratique.</p>
+
+      <h2 class="section-h2">La pédagogie par projet</h2>
+      <p>Les participants produisent un livrable concret répondant à une problématique réelle.</p>
+
+      <h2 class="section-h2">Construire une séquence pédagogique</h2>
+      <p>Une séquence efficace alterne&nbsp;: accroche, exploration des représentations, apports ciblés, activité, débriefing, synthèse et évaluation (quiz ou ROTI).</p>
+
+      <h2 class="section-h2">Choisir la méthode adaptée</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Objectif</th><th>Méthode</th><th>Exemples</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Transmettre</td><td>Expositive</td><td>Présentation, capsule</td></tr>
+            <tr><td>Développer un savoir-faire</td><td>Démonstrative</td><td>Exercice, simulation</td></tr>
+            <tr><td>Faire réfléchir</td><td>Interrogative</td><td>Questionnement</td></tr>
+            <tr><td>Résoudre un problème</td><td>Collaborative</td><td>Codéveloppement, World Café</td></tr>
+            <tr><td>Faire produire</td><td>Active</td><td>Étude de cas, atelier</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="section-h2">Les recommandations d'AXIS MUNDI</h2>
+      <div class="closing-note">
+        Une formation performante n'accumule pas les outils&nbsp;: elle mobilise les méthodes les plus pertinentes au regard des objectifs pédagogiques. <strong>Alterner régulièrement les modalités d'animation, limiter les apports magistraux à des séquences courtes et accorder une place importante aux activités et au débriefing favorisent durablement l'engagement et le transfert des acquis.</strong>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<footer>AXIS MUNDI — Article rédigé par l'équipe AXIS MUNDI à destination des formateurs et intervenants.</footer>
+
+</body>
+</html>

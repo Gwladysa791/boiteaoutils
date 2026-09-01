@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Échelle de sécurité psychologique — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+    --vert: #15CA88;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:800px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{display:inline-block;margin:0 0 18px;font-size:12.5px;color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .back-link:hover{text-decoration:underline;}
+  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:18px;font-size:14px;color:var(--gris);}
+  .intro strong{color:var(--bleu-fonce);}
+  .intro .source-note{display:block;margin-top:10px;font-size:12px;color:var(--gris-moyen);font-style:italic;}
+  .scale-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+  .scale-legend .sl-item{flex:1;min-width:120px;background:var(--gris-fond2);border-radius:6px;padding:7px 8px;font-size:11.5px;text-align:center;}
+  .scale-legend b{display:block;color:var(--bleu-fonce);font-size:13px;margin-bottom:2px;}
+
+  /* ---------- Rappel d'échelle flottant ---------- */
+  .scale-sidebar{
+    position:fixed;
+    top:50%;
+    right:22px;
+    transform:translateY(-50%);
+    width:156px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.12);
+    padding:14px 13px;
+    z-index:60;
+  }
+  .scale-sidebar .ss-title{font-size:10.5px;font-weight:700;color:var(--bleu-fonce);text-transform:uppercase;letter-spacing:.4px;margin:0 0 10px;}
+  .scale-sidebar .ss-item{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+  .scale-sidebar .ss-item:last-child{margin-bottom:0;}
+  .scale-sidebar .ss-num{width:20px;height:20px;border-radius:50%;background:var(--gris-fond2);color:var(--gris);font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .scale-sidebar .ss-label{font-size:11px;color:var(--gris);line-height:1.25;}
+  @media(max-width:1240px){.scale-sidebar{display:none !important;}}
+  @media print{.scale-sidebar{display:none !important;}}
+  .panel{background:#fff;border-radius:8px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .panel h2{margin:0 0 12px;font-size:16px;color:var(--bleu-fonce);}
+  .field-row{display:flex;gap:12px;flex-wrap:wrap;}
+  .field{flex:1;min-width:220px;}
+  .field label{display:block;font-size:12.5px;color:var(--gris-moyen);margin-bottom:4px;font-weight:700;}
+  .field input[type=text]{width:100%;padding:10px 12px;border:1.5px solid var(--gris-clair);border-radius:6px;font-family:inherit;font-size:14px;color:var(--gris);}
+  .field input[type=text]:focus{outline:none;border-color:var(--bleu);}
+  .progress-wrap{position:sticky;top:0;background:var(--fond);padding:10px 0 14px;z-index:10;}
+  .progress-bar{height:6px;background:var(--gris-fond2);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;width:0%;background:var(--bleu);transition:width .25s ease;}
+  .progress-label{font-size:12px;color:var(--gris-moyen);text-align:right;margin-top:4px;}
+  .question{background:#fff;border-radius:8px;padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .question .qnum{display:inline-block;min-width:24px;font-weight:700;color:var(--bleu-fonce);margin-right:6px;}
+  .question .qtext{font-size:14.5px;color:#2f3130;}
+  .options{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;}
+  .options label{flex:1;min-width:60px;text-align:center;padding:9px 4px;border:1.5px solid var(--gris-clair);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--gris);transition:all .15s ease;user-select:none;}
+  .options input{position:absolute;opacity:0;pointer-events:none;}
+  .options label.selected{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:700;}
+  .cta-wrap{text-align:center;margin-top:30px;}
+  button#submitBtn{background:var(--bleu-fonce);color:#fff;border:none;padding:11px 26px;font-size:13.5px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:0.5px;transition:background .2s ease;}
+  button#submitBtn:hover{background:#006f87;}
+  .missing-note{text-align:center;color:var(--rouge);font-size:13px;margin-top:10px;min-height:18px;}
+  #resultsSection{display:none;}
+  .results-card{background:#fff;border-radius:8px;padding:26px 22px;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+  .results-card h2{color:var(--bleu-fonce);margin-top:0;font-size:20px;}
+  .gauge-wrap{margin:28px 0 10px;}
+  .gauge-track{position:relative;height:22px;border-radius:11px;background:linear-gradient(90deg,var(--rouge) 0%,var(--orange) 33%,var(--bleu) 66%,var(--vert) 100%);overflow:visible;}
+  .gauge-marker{position:absolute;top:-9px;width:4px;height:40px;background:#20282b;border-radius:2px;transform:translateX(-2px);transition:left 1s cubic-bezier(.2,.9,.3,1);left:0%;}
+  .gauge-marker::after{content:attr(data-val);position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:13px;font-weight:700;color:#20282b;white-space:nowrap;}
+  .gauge-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--gris-moyen);margin-top:6px;}
+  .band-label{text-align:center;margin-top:22px;font-size:17px;font-weight:700;}
+  .band-desc{text-align:center;font-size:13.5px;color:var(--gris);max-width:520px;margin:8px auto 0;}
+  .items-breakdown{margin-top:30px;}
+  .items-breakdown h3{font-size:14.5px;color:var(--bleu-fonce);margin:0 0 12px;}
+  .item-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12.5px;}
+  .item-row .item-txt{flex:0 0 260px;color:var(--gris);}
+  .item-row .item-bar-wrap{flex:1;height:12px;background:var(--gris-fond2);border-radius:6px;overflow:hidden;}
+  .item-row .item-bar{height:100%;border-radius:6px;width:0%;transition:width 1s cubic-bezier(.2,.9,.3,1);}
+  .item-row .item-val{flex:0 0 30px;text-align:right;font-weight:700;color:var(--gris);}
+  .watch-block{margin-top:26px;background:var(--gris-fond2);border-left:4px solid var(--orange);border-radius:4px;padding:14px 16px;}
+  .watch-block h3{margin:0 0 8px;font-size:14px;color:#20282b;}
+  .watch-block ul{margin:0;padding-left:18px;font-size:13px;}
+  .watch-block li{margin-bottom:6px;}
+  .lever-block{margin-top:16px;background:#eafbf4;border-left:4px solid var(--vert);border-radius:4px;padding:14px 16px;}
+  .lever-block h3{margin:0 0 8px;font-size:14px;color:#20282b;}
+  .lever-block p{margin:0;font-size:13px;}
+  .actions-row{text-align:center;margin-top:24px;}
+  .actions-row button{background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:7px 15px;border-radius:9px;font-size:12px;cursor:pointer;font-family:inherit;margin:0 6px;}
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+  @media print{
+    .hero-header, .back-link, .intro, .field-row, .actions-row, footer, .progress-wrap{display:none !important;}
+    body{background:#fff;}
+  }
+  @media(max-width:520px){
+    .item-row{flex-wrap:wrap;}
+    .item-row .item-txt{flex:1 1 100%;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Peut-on prendre des risques<span>sans craindre les conséquences ?</span></h1>
+      <p class="hero-desc">L'échelle de sécurité psychologique d'Amy Edmondson (1999) mesure dans quelle mesure une équipe permet à ses membres de s'exprimer, d'admettre une erreur ou de demander de l'aide sans crainte d'en subir les conséquences.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          5-8 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          7 items, 1 score global
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('questionsList').scrollIntoView({behavior:'smooth',block:'start'})">
+        Démarrer l'auto-positionnement &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+        <g transform="translate(45,60)">
+          <circle cx="20" cy="20" r="18" fill="var(--vert)"/>
+          <circle cx="80" cy="10" r="18" fill="var(--bleu-fonce)"/>
+          <circle cx="140" cy="24" r="18" fill="var(--orange)"/>
+          <path d="M20,20 L80,10 L140,24" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <g transform="translate(20,20)"><path d="M-6,0 l4,4 l8,-9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <g transform="translate(80,10)"><path d="M-6,0 l4,4 l8,-9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <g transform="translate(140,24)"><path d="M-6,0 l4,4 l8,-9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="scale-sidebar" id="scaleSidebar">
+  <p class="ss-title">Rappel de l'échelle</p>
+  <div class="ss-item"><span class="ss-num">1</span><span class="ss-label">Pas du tout d'accord</span></div>
+  <div class="ss-item"><span class="ss-num">2</span><span class="ss-label">Plutôt pas d'accord</span></div>
+  <div class="ss-item"><span class="ss-num">3</span><span class="ss-label">Ni l'un ni l'autre</span></div>
+  <div class="ss-item"><span class="ss-num">4</span><span class="ss-label">Plutôt d'accord</span></div>
+  <div class="ss-item"><span class="ss-num">5</span><span class="ss-label">Tout à fait d'accord</span></div>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Échelle de sécurité psychologique</span>
+  </nav>
+
+  <div id="formSection">
+    <div class="intro">
+      <strong>Consigne :</strong> pensez à une équipe en particulier (la vôtre, celle que vous encadrez ou celle que vous accompagnez) et indiquez votre degré d'accord avec chacune des 7 affirmations suivantes.
+      <div class="scale-legend">
+        <div class="sl-item"><b>1</b>Pas du tout d'accord</div>
+        <div class="sl-item"><b>2</b>Plutôt pas d'accord</div>
+        <div class="sl-item"><b>3</b>Ni l'un ni l'autre</div>
+        <div class="sl-item"><b>4</b>Plutôt d'accord</div>
+        <div class="sl-item"><b>5</b>Tout à fait d'accord</div>
+      </div>
+      <span class="source-note">Adapté de l'échelle de sécurité psychologique développée par Amy Edmondson (1999), Psychological Safety and Learning Behavior in Work Teams, Administrative Science Quarterly, 44(2), 350-383.</span>
+    </div>
+
+    <div class="panel">
+      <h2>Équipe concernée</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="perimetre">Équipe observée (facultatif)</label>
+          <input type="text" id="perimetre" placeholder="Ex : équipe projet, comité de direction...">
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 7 questions répondues</div>
+    </div>
+
+    <div id="questionsList"></div>
+
+    <div class="cta-wrap">
+      <button id="submitBtn" onclick="calculerResultats()">Voir mes résultats</button>
+      <div class="missing-note" id="missingNote"></div>
+    </div>
+  </div>
+
+  <div id="resultsSection">
+    <div class="results-card">
+      <h2>Votre résultat</h2>
+      <p style="font-size:13.5px;color:var(--gris-moyen);">Score global sur un maximum de 35 points (7 items, échelle de 1 à 5, items inversés recodés).</p>
+
+      <div class="gauge-wrap">
+        <div class="gauge-track"><div class="gauge-marker" id="gaugeMarker" data-val=""></div></div>
+        <div class="gauge-scale"><span>7</span><span>14</span><span>21</span><span>28</span><span>35</span></div>
+      </div>
+
+      <div class="band-label" id="bandLabel"></div>
+      <p class="band-desc" id="bandDesc"></p>
+
+      <div class="items-breakdown">
+        <h3>Détail par item</h3>
+        <div id="itemsList"></div>
+      </div>
+
+      <div class="watch-block" id="watchBlock" style="display:none;">
+        <h3>Points de vigilance</h3>
+        <ul id="watchList"></ul>
+      </div>
+
+      <div class="lever-block">
+        <h3>Ce que ce résultat n'est pas</h3>
+        <p>Ce score reflète une perception individuelle, à un instant donné, sur une équipe donnée. Il varie selon les événements traversés récemment (arrivée d'un nouveau manager, restructuration, tension collective) et selon la place occupée dans l'équipe. Croisé avec les scores d'autres membres de la même équipe, il devient un vrai outil de pilotage ; isolé, il reste un point de repère individuel à interroger collectivement plutôt qu'une conclusion en soi.</p>
+      </div>
+
+      <div class="actions-row">
+        <button onclick="window.print()">Imprimer / exporter</button>
+        <button onclick="recommencer()">Recommencer</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique d'auto-positionnement, adapté d'un instrument de recherche académique. Il ne constitue pas un diagnostic clinique ni une mesure certifiée. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+const questions = [
+ {n:1,t:"Dans cette équipe, une erreur commise finit souvent par vous être reprochée.",reverse:true},
+ {n:2,t:"Les membres de cette équipe sont capables de soulever des problèmes et des sujets délicats.",reverse:false},
+ {n:3,t:"Il arrive que des membres de cette équipe soient mis à l'écart parce qu'ils sont différents.",reverse:true},
+ {n:4,t:"Il est possible de prendre des risques au sein de cette équipe sans craindre les conséquences.",reverse:false},
+ {n:5,t:"Il est difficile de demander de l'aide à d'autres membres de cette équipe.",reverse:true},
+ {n:6,t:"Personne dans cette équipe n'agirait délibérément de façon à nuire aux efforts d'un collègue.",reverse:false},
+ {n:7,t:"En travaillant avec les membres de cette équipe, mes compétences singulières sont reconnues et mises à profit.",reverse:false}
+];
+
+const answers = {};
+
+const bands = [
+  {min:7, max:14, label:"Sécurité psychologique fragile", color:"var(--rouge)", hex:"#DE5C5C",
+    desc:"Le climat perçu incite à la prudence : les erreurs semblent risquées à admettre, les désaccords difficiles à exprimer. Ce n'est pas un jugement sur les personnes, mais un signal sur les conditions collectives à retravailler en priorité."},
+  {min:15, max:21, label:"Sécurité psychologique en construction", color:"var(--orange)", hex:"#F5AB33",
+    desc:"La confiance existe mais reste inégale selon les sujets ou les situations. Certains registres (le droit à l'erreur, la demande d'aide, l'expression d'un désaccord) sont sans doute plus faciles que d'autres à ce stade."},
+  {min:22, max:28, label:"Sécurité psychologique installée", color:"var(--bleu-fonce)", hex:"#0088A9",
+    desc:"L'équipe offre globalement un climat propice à la prise de parole et à l'apprentissage par l'erreur. Le point de vigilance porte désormais sur la durabilité de ce climat face aux tensions ou aux changements à venir."},
+  {min:29, max:35, label:"Sécurité psychologique forte", color:"var(--vert)", hex:"#15CA88",
+    desc:"Le sentiment de sécurité rapporté est élevé sur l'ensemble des dimensions mesurées. Cette qualité de climat constitue une ressource réelle pour l'innovation, l'apprentissage collectif et la gestion des tensions — elle mérite d'être entretenue consciemment, pas seulement constatée."}
+];
+
+function buildQuestions(){
+  const list = document.getElementById('questionsList');
+  const frag = document.createDocumentFragment();
+  questions.forEach(q=>{
+    const div = document.createElement('div');
+    div.className='question';
+    let optsHtml = '';
+    for(let v=1; v<=5; v++){
+      optsHtml += `
+        <label id="lbl-${q.n}-${v}">
+          <input type="radio" name="q${q.n}" value="${v}" onchange="setAnswer(${q.n},${v})">
+          ${v}
+        </label>`;
+    }
+    div.innerHTML = `
+      <span class="qnum">${q.n}.</span><span class="qtext">${q.t}</span>
+      <div class="options">${optsHtml}</div>
+    `;
+    frag.appendChild(div);
+  });
+  list.appendChild(frag);
+}
+
+function setAnswer(n, val){
+  answers[n]=val;
+  for(let v=1; v<=5; v++){
+    document.getElementById(`lbl-${n}-${v}`).classList.toggle('selected', v===val);
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const count = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (count/7*100)+'%';
+  document.getElementById('progressLabel').textContent = `${count} / 7 questions répondues`;
+}
+
+function calculerResultats(){
+  const count = Object.keys(answers).length;
+  if(count < 7){
+    document.getElementById('missingNote').textContent = `Il reste ${7-count} question(s) sans réponse. Merci de compléter le questionnaire avant de voir vos résultats.`;
+    const firstMissing = questions.find(q=>answers[q.n]===undefined);
+    if(firstMissing){
+      document.querySelector(`label[id="lbl-${firstMissing.n}-1"]`).closest('.question').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    return;
+  }
+  document.getElementById('missingNote').textContent='';
+
+  const scored = questions.map(q=>{
+    const raw = answers[q.n];
+    const val = q.reverse ? (6-raw) : raw;
+    return {n:q.n, t:q.t, raw, val};
+  });
+  const total = scored.reduce((s,q)=>s+q.val,0);
+
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('resultsSection').style.display='block';
+  const sidebar = document.getElementById('scaleSidebar');
+  if(sidebar) sidebar.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderGauge(total);
+  renderItems(scored);
+  renderWatch(scored);
+}
+
+function renderGauge(total){
+  const pct = ((total-7)/(35-7))*100;
+  const marker = document.getElementById('gaugeMarker');
+  setTimeout(()=>{
+    marker.style.left = pct+'%';
+    marker.setAttribute('data-val', total+'/35');
+  },80);
+
+  const band = bands.find(b=>total>=b.min && total<=b.max);
+  document.getElementById('bandLabel').textContent = band.label;
+  document.getElementById('bandLabel').style.color = band.hex;
+  document.getElementById('bandDesc').textContent = band.desc;
+}
+
+function renderItems(scored){
+  const wrap = document.getElementById('itemsList');
+  wrap.innerHTML = scored.map(q=>{
+    const color = q.val<=2 ? 'var(--rouge)' : (q.val===3 ? 'var(--orange)' : 'var(--vert)');
+    return `
+    <div class="item-row">
+      <span class="item-txt">${q.n}. ${q.t.length>70 ? q.t.slice(0,68)+'…' : q.t}</span>
+      <span class="item-bar-wrap"><span class="item-bar" style="background:${color};" data-w="${q.val/5*100}"></span></span>
+      <span class="item-val">${q.val}/5</span>
+    </div>`;
+  }).join('');
+  setTimeout(()=>{
+    wrap.querySelectorAll('.item-bar').forEach(b=>{ b.style.width = b.getAttribute('data-w')+'%'; });
+  },80);
+}
+
+function renderWatch(scored){
+  const low = scored.filter(q=>q.val<=2).sort((a,b)=>a.val-b.val);
+  const block = document.getElementById('watchBlock');
+  const list = document.getElementById('watchList');
+  if(low.length===0){
+    block.style.display='none';
+    return;
+  }
+  block.style.display='block';
+  list.innerHTML = low.map(q=>`<li>${q.t} <strong>(${q.val}/5)</strong></li>`).join('');
+}
+
+function recommencer(){
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  document.querySelectorAll('.options label').forEach(l=>l.classList.remove('selected'));
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  updateProgress();
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('formSection').style.display='block';
+  const sidebar = document.getElementById('scaleSidebar');
+  if(sidebar) sidebar.style.display='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuestions();
+</script>
+
+</body>
+</html>

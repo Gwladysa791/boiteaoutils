@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte mentale — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --extreme: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-mindmap-img{position:absolute;top:50%;left:50%;width:100%;height:100%;object-fit:contain;transform:translate(-50%,-50%);z-index:2;filter:drop-shadow(0 8px 16px rgba(0,90,110,0.18));}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:920px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:22px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro strong{color:var(--bleu-fonce);}
+  .intro .note-dev{
+    display:block;
+    margin-top:10px;
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    font-style:italic;
+  }
+
+  /* ---------- Barre d'outils ---------- */
+  .map-toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .btn-tool{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:11px 22px;
+    font-size:13.5px;
+    font-weight:700;
+    border-radius:24px;
+    cursor:pointer;
+    font-family:inherit;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .btn-tool:hover{background:#006f87;transform:translateY(-1px);}
+  .btn-tool.ghost{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+  }
+  .btn-tool.ghost:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);background:none;transform:none;}
+
+  /* ---------- Zone de carte ---------- */
+  .map-wrap{
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    padding:14px;
+    margin-bottom:16px;
+  }
+  .map-canvas{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    min-height:400px;
+    background:radial-gradient(circle at 50% 50%, var(--gris-fond2) 0%, #fff 68%);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .map-lines{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+  }
+  .map-center{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    background:var(--bleu-fonce);
+    color:#fff;
+    font-weight:700;
+    font-size:15px;
+    text-align:center;
+    min-width:170px;
+    max-width:260px;
+    padding:18px 24px;
+    border-radius:50px;
+    box-shadow:0 8px 22px rgba(0,136,169,0.35);
+    outline:none;
+    cursor:text;
+    z-index:3;
+  }
+  .map-center:empty:before{content:attr(data-placeholder);opacity:.75;}
+  .map-node-wrap{
+    position:absolute;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .map-node{
+    background:#fff;
+    border:2.5px solid var(--bleu);
+    border-radius:14px;
+    padding:10px 16px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--gris);
+    min-width:100px;
+    max-width:170px;
+    text-align:center;
+    outline:none;
+    cursor:text;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  }
+  .map-node:empty:before{content:attr(data-placeholder);opacity:.5;}
+  .node-remove, .node-add{
+    position:absolute;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 1px 3px rgba(0,0,0,0.12);
+    padding:0;
+    z-index:4;
+  }
+  .node-remove{
+    top:-9px;
+    right:-9px;
+    background:#fff;
+    border:1.5px solid var(--gris-clair);
+    color:var(--gris);
+  }
+  .node-remove:hover{border-color:var(--extreme);color:var(--extreme);}
+  .node-add{
+    bottom:-9px;
+    right:-9px;
+    background:var(--bleu-fonce);
+    border:1.5px solid var(--bleu-fonce);
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+  }
+  .node-add:hover{background:#006f87;border-color:#006f87;}
+  .node-image-btn{
+    position:absolute;
+    bottom:-9px;
+    left:-9px;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:#fff;
+    border:1.5px solid var(--bleu-fonce);
+    color:var(--bleu-fonce);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 1px 3px rgba(0,0,0,0.12);
+    padding:0;
+    z-index:4;
+  }
+  .node-image-btn:hover{background:var(--bleu-fonce);color:#fff;}
+  .map-node.level2, .map-node.level3, .map-node.level4{
+    font-size:12px;
+    padding:8px 13px;
+    min-width:80px;
+    max-width:140px;
+    font-weight:600;
+  }
+  .map-node.level3, .map-node.level4{
+    font-size:11.5px;
+    padding:6px 11px;
+    min-width:70px;
+    max-width:125px;
+  }
+  .map-node.map-node-image{
+    padding:0;
+    overflow:hidden;
+    cursor:default;
+    width:72px;
+    height:72px;
+    min-width:0;
+    max-width:none;
+  }
+  .map-node.map-node-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    border-radius:11px;
+  }
+  .map-node.map-node-image.level2{width:56px;height:56px;}
+  .map-node.map-node-image.level3, .map-node.map-node-image.level4{width:46px;height:46px;}
+  .map-hint{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    margin:12px 4px 0;
+  }
+  .map-empty-hint{
+    position:absolute;
+    left:50%;
+    top:78%;
+    transform:translate(-50%,-50%);
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    text-align:center;
+    width:80%;
+    z-index:1;
+  }
+
+  /* ---------- Idées de branches ---------- */
+  .suggestions{
+    background:#fff;
+    border-radius:10px;
+    padding:18px 20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .suggestions h2{margin:0 0 6px;font-size:15px;color:var(--bleu-fonce);}
+  .suggestions p{margin:0 0 12px;font-size:13px;color:var(--gris);}
+  .suggestions .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .suggestions .chip{
+    border:1.5px solid var(--gris-clair);
+    background:var(--gris-fond2);
+    color:var(--gris);
+    padding:6px 14px;
+    border-radius:16px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .suggestions .chip:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .map-toolbar, .intro, .suggestions, .map-hint, footer{display:none !important;}
+    .node-remove, .node-add, .node-image-btn, .node-image-remove{display:none !important;}
+    body{background:#fff;}
+    .map-wrap{box-shadow:none;padding:0;}
+    .map-canvas{min-height:600px;background:none;}
+  }
+  @media (max-width:600px){
+    .map-canvas{min-height:340px;}
+    .map-node{max-width:120px;font-size:12px;padding:8px 12px;}
+    .map-center{min-width:130px;max-width:190px;font-size:13.5px;padding:14px 18px;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Carte mentale<span>Structurer une notion clé</span></h1>
+      <p class="hero-desc">Placez la notion à travailler au centre, puis développez-la en branches pour organiser des idées, préparer un débrief collectif ou structurer un temps de réflexion.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Durée libre
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.6" stroke-width="2"/><circle cx="5" cy="6" r="1.8" stroke-width="2"/><circle cx="19" cy="6" r="1.8" stroke-width="2"/><circle cx="5" cy="18" r="1.8" stroke-width="2"/><circle cx="19" cy="18" r="1.8" stroke-width="2"/><path d="M9.9 10.8L6.4 7.2M14.1 10.8l3.5-3.6M9.9 13.2l-3.5 3.6M14.1 13.2l3.5 3.6" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+          Notion centrale + branches, sous-branches et images illimitées
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('mapSection').scrollIntoView({behavior:'smooth',block:'start'})">
+        Créer ma carte &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+      </svg>
+      <img class="hero-mindmap-img" src="Illustrations%20headers/mind_map_fond_transparent.png" alt="">
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Carte mentale</span>
+  </nav>
+
+  <div class="intro">
+    <strong>Consigne :</strong> depuis la notion centrale, ajoutez des branches de texte ou d'images, sur autant de niveaux que nécessaire. Chaque élément est éditable, remplaçable ou supprimable à tout moment.
+  </div>
+
+  <div id="mapSection">
+    <div class="map-toolbar">
+      <button class="btn-tool" onclick="addBranch()">+ Ajouter une branche</button>
+      <button class="btn-tool" onclick="addImageBranch()">+ Ajouter une image</button>
+      <button class="btn-tool ghost" onclick="resetMap()">Recommencer</button>
+      <button class="btn-tool ghost" onclick="window.print()">Imprimer / Exporter</button>
+    </div>
+
+    <div class="map-wrap">
+      <div class="map-canvas" id="mapCanvas">
+        <svg class="map-lines" id="mapLines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="map-empty-hint" id="emptyHint">Ajoutez votre première branche ou votre première image pour commencer à développer la carte.</div>
+        <div class="map-center" id="mapCenter" contenteditable="true" data-placeholder="Votre notion clé" spellcheck="false"></div>
+      </div>
+    </div>
+    <input type="file" id="imageFileInput" accept="image/*" style="display:none">
+    <p class="map-hint">Astuce : cliquez sur un texte pour le modifier. La carte n'est pas enregistrée automatiquement — pensez à l'imprimer ou à l'exporter en PDF avant de quitter la page.</p>
+  </div>
+
+  <div class="suggestions" style="margin-top:20px;">
+    <h2>Quelques usages possibles</h2>
+    <p>Cliquez sur une suggestion pour préremplir la notion centrale, puis adaptez la carte à votre contexte.</p>
+    <div class="chips">
+      <button class="chip" onclick="setCentral('Les leviers de la coopération')">Les leviers de la coopération</button>
+      <button class="chip" onclick="setCentral('Ce qui déclenche mon stress')">Ce qui déclenche mon stress</button>
+      <button class="chip" onclick="setCentral('Les compétences clés du poste')">Les compétences clés du poste</button>
+      <button class="chip" onclick="setCentral('Bilan de la séquence')">Bilan de la séquence</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil de structuration visuelle à usage individuel ou collectif. Le contenu de la carte reste local à votre navigateur : il n'est ni enregistré ni transmis, et disparaît à la fermeture de la page sauf impression ou export.</footer>
+
+<script>
+const PALETTE = ['#00B5E2','#F5AB33','#884EC2','#15CA88','#DE5C5C','#5FA7A0','#E86F5C','#B895DA','#97F4D2','#F9CD85'];
+const RX1 = 32, RY1 = 25;   // rayon centre -> branche de niveau 1 (marge verticale laissée pour les images jointes)
+const RX2 = 20, RY2 = 17;   // rayon parent -> sous-branche, pour chaque niveau suivant
+const CHILD_SPREAD = Math.PI * 0.55; // ouverture angulaire pour répartir les sous-branches d'un même parent
+const MAX_LEVEL = 4; // profondeur maximale (notion centrale = niveau 0)
+
+let nodeSeq = 0;
+const root = { id:'root', x:50, y:50, level:0, children:[] };
+
+function setCentral(text){
+  const center = document.getElementById('mapCenter');
+  center.textContent = text;
+  center.focus();
+}
+
+function toggleEmptyHint(){
+  document.getElementById('emptyHint').style.display = root.children.length === 0 ? 'block' : 'none';
+}
+
+function findNode(id, node){
+  node = node || root;
+  if(node.id === id) return node;
+  for(const child of node.children){
+    const found = findNode(id, child);
+    if(found) return found;
+  }
+  return null;
+}
+
+function clampPct(v){
+  return Math.max(6, Math.min(94, v));
+}
+
+function positionNode(node){
+  const parent = node.parent;
+  const Rx = node.level === 1 ? RX1 : RX2;
+  const Ry = node.level === 1 ? RY1 : RY2;
+  node.x = clampPct(parent.x + Rx * Math.cos(node.angle));
+  node.y = clampPct(parent.y + Ry * Math.sin(node.angle));
+}
+
+function updateNodeDom(node){
+  node.wrap.style.left = node.x + '%';
+  node.wrap.style.top = node.y + '%';
+  node.wrap.style.transform = 'translate(-50%,-50%)';
+  node.line.setAttribute('x1', node.parent.x);
+  node.line.setAttribute('y1', node.parent.y);
+  node.line.setAttribute('x2', node.x);
+  node.line.setAttribute('y2', node.y);
+}
+
+function layoutChildren(parent){
+  const kids = parent.children;
+  const n = kids.length;
+  kids.forEach((kid, i)=>{
+    kid.angle = (n === 1) ? parent.angle : (parent.angle - CHILD_SPREAD/2 + (i/(n-1)) * CHILD_SPREAD);
+    positionNode(kid);
+    updateNodeDom(kid);
+    layoutChildren(kid);
+  });
+}
+
+function layoutAll(){
+  const n = root.children.length;
+  root.children.forEach((node, i)=>{
+    node.angle = (Math.PI * 2 * i / n) - (Math.PI / 2);
+    positionNode(node);
+    updateNodeDom(node);
+    layoutChildren(node);
+  });
+  toggleEmptyHint();
+}
+
+const IMAGE_ICON_SVG = '<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.3" fill="currentColor" stroke="none"/><path d="M21 16l-5.5-5.5L7 19" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+let pendingImageParentId = null; // null => rattaché à la notion centrale
+
+function createNode(parent, color, type, imageData){
+  const id = 'node' + (++nodeSeq);
+  const level = parent.level + 1;
+
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('stroke', color);
+  line.setAttribute('stroke-width', level === 1 ? 0.6 : 0.45);
+  document.getElementById('mapLines').appendChild(line);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'map-node-wrap';
+  wrap.id = 'wrap-' + id;
+
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'node-remove';
+  removeBtn.setAttribute('aria-label', 'Supprimer cet élément');
+  removeBtn.innerHTML = '&times;';
+  wrap.appendChild(removeBtn);
+
+  let contentEl;
+  if(type === 'image'){
+    contentEl = document.createElement('div');
+    contentEl.className = 'map-node map-node-image' + (level >= 2 ? ' level' + Math.min(level,4) : '');
+    contentEl.style.borderColor = color;
+    const img = document.createElement('img');
+    img.src = imageData;
+    img.alt = '';
+    contentEl.appendChild(img);
+  } else {
+    contentEl = document.createElement('div');
+    contentEl.className = 'map-node' + (level >= 2 ? ' level' + Math.min(level,4) : '');
+    contentEl.contentEditable = 'true';
+    contentEl.spellcheck = false;
+    contentEl.dataset.placeholder = level === 1 ? 'Nouvelle idée' : 'Nouvelle sous-branche';
+    contentEl.style.borderColor = color;
+  }
+
+  let addBranchBtn = null, addImageBtn = null;
+  if(level < MAX_LEVEL){
+    addBranchBtn = document.createElement('button');
+    addBranchBtn.className = 'node-add';
+    addBranchBtn.setAttribute('aria-label', 'Ajouter une sous-branche de texte');
+    addBranchBtn.innerHTML = '&#43;';
+    wrap.appendChild(addBranchBtn);
+
+    addImageBtn = document.createElement('button');
+    addImageBtn.className = 'node-image-btn';
+    addImageBtn.setAttribute('aria-label', 'Ajouter une image en sous-branche');
+    addImageBtn.innerHTML = IMAGE_ICON_SVG;
+    wrap.appendChild(addImageBtn);
+  }
+
+  wrap.appendChild(contentEl);
+  document.getElementById('mapCanvas').appendChild(wrap);
+
+  const node = {id, parent, level, color, type: type || 'text', wrap, node: contentEl, line, children: []};
+
+  removeBtn.onclick = function(){ removeNode(id); };
+  if(addBranchBtn) addBranchBtn.onclick = function(){ addChild(id); };
+  if(addImageBtn) addImageBtn.onclick = function(){ requestAddImage(id); };
+
+  return node;
+}
+
+function addBranch(){
+  const color = PALETTE[root.children.length % PALETTE.length];
+  const node = createNode(root, color, 'text');
+  root.children.push(node);
+  layoutAll();
+  node.node.focus();
+}
+
+function addImageBranch(){
+  requestAddImage(null);
+}
+
+function addChild(parentId){
+  const parent = findNode(parentId);
+  if(!parent) return;
+  const node = createNode(parent, parent.color, 'text');
+  parent.children.push(node);
+  layoutAll();
+  node.node.focus();
+}
+
+function requestAddImage(parentId){
+  pendingImageParentId = parentId;
+  document.getElementById('imageFileInput').click();
+}
+
+document.getElementById('imageFileInput').addEventListener('change', function(e){
+  const file = e.target.files && e.target.files[0];
+  const parentId = pendingImageParentId;
+  e.target.value = '';
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    const parent = parentId ? findNode(parentId) : root;
+    if(!parent) return;
+    const color = (parent === root) ? PALETTE[root.children.length % PALETTE.length] : parent.color;
+    const node = createNode(parent, color, 'image', evt.target.result);
+    parent.children.push(node);
+    layoutAll();
+  };
+  reader.readAsDataURL(file);
+});
+
+function removeSubtreeDom(node){
+  node.children.forEach(removeSubtreeDom);
+  node.wrap.remove();
+  node.line.remove();
+}
+
+function removeNode(id){
+  const node = findNode(id);
+  if(!node || !node.parent) return;
+  removeSubtreeDom(node);
+  const siblings = node.parent.children;
+  siblings.splice(siblings.indexOf(node), 1);
+  layoutAll();
+}
+
+function resetMap(){
+  const hasContent = root.children.length > 0 || document.getElementById('mapCenter').textContent.trim() !== '';
+  if(hasContent){
+    if(!confirm('Effacer la carte actuelle et repartir d\'une page vierge ?')) return;
+  }
+  root.children.forEach(removeSubtreeDom);
+  root.children = [];
+  document.getElementById('mapCenter').textContent = '';
+  toggleEmptyHint();
+}
+
+toggleEmptyHint();
+</script>
+
+</body>
+</html>

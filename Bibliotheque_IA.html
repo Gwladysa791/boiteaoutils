@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bibliothèque d'IA — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+    --vert: #15CA88;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 340px;height:290px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:260px;height:220px;}
+  }
+  .container{max-width:1060px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-child{margin-bottom:0;}
+  .intro strong{color:var(--bleu-fonce);}
+  .intro .maj-note{
+    display:flex;align-items:flex-start;gap:9px;margin-top:12px;padding-top:12px;
+    border-top:1px dashed var(--gris-clair);font-size:12px;color:var(--gris-moyen);
+  }
+  .intro .maj-note svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;color:var(--gris-moyen);}
+
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px;
+  }
+  .search-wrap{flex:1;min-width:220px;}
+  .search-wrap input{
+    width:100%;padding:11px 16px;border:1.5px solid var(--gris-clair);border-radius:22px;
+    font-family:inherit;font-size:14px;color:var(--gris);background:#fff;
+  }
+  .search-wrap input:focus{outline:none;border-color:var(--bleu);}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+  .filter-pill{
+    border:1.5px solid var(--gris-clair);background:#fff;color:var(--gris);
+    padding:7px 15px;border-radius:18px;font-size:12.5px;font-weight:700;cursor:pointer;
+    font-family:inherit;white-space:nowrap;transition:border-color .15s ease,color .15s ease;
+  }
+  .filter-pill:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .filter-pill.active{background:transparent;border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+
+  .ai-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:16px;
+  }
+  .ai-card{
+    background:#fff;border-radius:12px;padding:20px 20px 18px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);display:flex;flex-direction:column;
+    border-top:4px solid var(--bleu);
+  }
+  .ai-card h3{margin:0 0 10px;font-size:16px;color:#20282b;}
+  .cat-tag{
+    display:inline-block;align-self:flex-start;background:var(--gris-fond2);color:var(--bleu-fonce);
+    font-size:10.5px;font-weight:700;padding:3px 11px;border-radius:12px;margin-bottom:12px;
+    text-transform:uppercase;letter-spacing:0.3px;
+  }
+  .ai-card p.pitch{margin:0 0 10px;font-size:13.5px;color:#33393b;font-weight:700;line-height:1.4;}
+  .ai-card p.usage{margin:0 0 14px;font-size:13px;color:var(--gris);flex:1;line-height:1.5;}
+  .ai-card .usage strong{color:var(--bleu-fonce);}
+  .ai-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+  .tarif-tag{font-size:11.5px;color:var(--gris-moyen);}
+  .btn-decouvrir{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    background:var(--bleu-fonce);color:#fff;text-decoration:none;
+    padding:10px 16px;border-radius:20px;font-size:12.5px;font-weight:700;
+    transition:background .15s ease;
+  }
+  .btn-decouvrir:hover{background:#006f87;}
+  .btn-decouvrir svg{width:13px;height:13px;}
+
+  .empty-state{
+    grid-column:1/-1;background:#fff;border-radius:10px;padding:44px 24px;text-align:center;
+    color:var(--gris-moyen);font-size:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .howto-box{
+    background:var(--gris-fond2);border-radius:8px;padding:16px 18px;margin-top:28px;
+    font-size:12.5px;color:var(--gris);
+  }
+  .howto-box strong{color:var(--bleu-fonce);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Bibliothèque d'IA<span>Des IA utiles pour concevoir vos outils et supports</span></h1>
+      <p class="hero-desc">Une sélection commentée d'intelligences artificielles utiles à la conception pédagogique — rédaction, recherche documentaire, visuels, quiz, vidéo. Chaque fiche précise un cas d'usage concret ramené à votre pratique, pas un argumentaire commercial.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span id="statCount">15 IA référencées</span>
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 3v13m0 0l-4-4m4 4l4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke-width="2" stroke-linecap="round"/></svg></span>
+          8 catégories d'usage
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('library').scrollIntoView({behavior:'smooth',block:'start'})">
+        Parcourir la bibliothèque &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.14">
+          <circle cx="20" cy="35" r="2.2"/><circle cx="44" cy="18" r="1.8"/><circle cx="12" cy="75" r="1.8"/>
+          <circle cx="215" cy="28" r="2.2"/><circle cx="226" cy="60" r="1.8"/><circle cx="60" cy="192" r="1.8"/>
+        </g>
+        <circle cx="120" cy="100" r="46" fill="#00B5E2" opacity="0.15"/>
+        <circle cx="120" cy="100" r="26" fill="none" stroke="#0088A9" stroke-width="2.4"/>
+        <circle cx="120" cy="100" r="6" fill="#0088A9"/>
+        <g stroke="#0088A9" stroke-width="2.2">
+          <line x1="120" y1="100" x2="65" y2="60"/>
+          <line x1="120" y1="100" x2="175" y2="55"/>
+          <line x1="120" y1="100" x2="185" y2="120"/>
+          <line x1="120" y1="100" x2="150" y2="165"/>
+          <line x1="120" y1="100" x2="70" y2="155"/>
+        </g>
+        <circle cx="65" cy="60" r="11" fill="#F5AB33"/>
+        <circle cx="175" cy="55" r="11" fill="#15CA88"/>
+        <circle cx="185" cy="120" r="11" fill="#884EC2"/>
+        <circle cx="150" cy="165" r="11" fill="#E86F5C"/>
+        <circle cx="70" cy="155" r="11" fill="#00B5E2"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Bibliothèque d'IA</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>À propos de cette page :</strong> ces IA restent des accélérateurs de premier jet — elles dégrossissent une structure, une reformulation ou un visuel que vous reprenez ensuite pour l'ajuster à votre contexte et à votre charte. Aucune ne remplace l'expertise de contenu.</p>
+    <p>Chaque outil s'ouvre depuis son propre site, avec son propre compte et ses propres conditions d'usage.</p>
+    <div class="maj-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 8v4l3 2" stroke-linecap="round"/></svg>
+      <span>Tarifs indiqués à titre indicatif (juillet 2026) — à vérifier sur le site de l'éditeur avant tout abonnement, ces grilles évoluent fréquemment.</span>
+    </div>
+  </div>
+
+  <div id="library">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Rechercher une IA (nom, usage...)" oninput="renderGrid()">
+      </div>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="ai-grid" id="aiGrid"></div>
+  </div>
+
+  <div class="howto-box">
+    <strong>Constitution de la bibliothèque :</strong> les fiches privilégient un usage concret ramené à la conception de formation et à la prévention des RPS plutôt qu'un panorama exhaustif du marché. D'autres IA viendront enrichir cette sélection au fil des usages testés.
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Sélection à visée informative, sans lien commercial avec les éditeurs cités. Chaque outil reste soumis à ses propres conditions d'usage et de confidentialité.</footer>
+
+<script>
+/*
+  Pour ajouter une IA à cette bibliothèque, ajouter un objet à ce tableau :
+  {
+    id: "identifiant-unique",
+    nom: "Nom de l'IA",
+    categorie: "clé-catégorie", // voir CATEGORIES ci-dessous
+    pitch: "Une phrase de positionnement.",
+    usage: "Cas d'usage concret ramené à la pratique de conception pédagogique.",
+    tarif: "Gratuit avec limites / Payant à partir de X",
+    lien: "https://..."
+  }
+*/
+const CATEGORIES = [
+  { key: "redaction", label: "Rédaction & contenu" },
+  { key: "recherche", label: "Recherche & synthèse" },
+  { key: "presentations", label: "Présentations" },
+  { key: "visuels", label: "Visuels & schémas" },
+  { key: "quiz", label: "Interactions live & quiz" },
+  { key: "video", label: "Vidéo par avatar" },
+  { key: "transcription", label: "Transcription" },
+  { key: "illustration", label: "Illustration & BD" }
+];
+
+const TOOLS = [
+  {
+    id: "chatgpt",
+    nom: "ChatGPT",
+    categorie: "redaction",
+    pitch: "Assistant généraliste pour dégrossir un premier jet.",
+    usage: "Reformuler une question de quiz, générer des variantes d'étude de cas, simplifier un contenu trop académique pour un public opérationnel.",
+    tarif: "Gratuit avec limites, Plus à 20$/mois",
+    lien: "https://chatgpt.com"
+  },
+  {
+    id: "claude",
+    nom: "Claude",
+    categorie: "redaction",
+    pitch: "Assistant généraliste, à l'aise sur les contenus longs et nuancés.",
+    usage: "Structurer un contenu dense (programme de formation, note de cadrage), reformuler avec plus de nuance sur des sujets sensibles.",
+    tarif: "Gratuit avec limites, Pro à 20$/mois",
+    lien: "https://claude.ai"
+  },
+  {
+    id: "notebooklm",
+    nom: "NotebookLM",
+    categorie: "recherche",
+    pitch: "Synthétise vos propres documents plutôt que le web entier.",
+    usage: "Ingérer des rapports INRS ou ANACT et des comptes rendus d'entretiens pour en tirer une synthèse fidèle aux sources, avec une version audio façon podcast pour réécouter en déplacement.",
+    tarif: "Gratuit",
+    lien: "https://notebooklm.google"
+  },
+  {
+    id: "perplexity",
+    nom: "Perplexity",
+    categorie: "recherche",
+    pitch: "Moteur de réponse sourcé, utile pour une veille rapide.",
+    usage: "Faire un point rapide et sourcé sur une évolution réglementaire ou une actualité RPS/QVCT avant de préparer un contenu.",
+    tarif: "Gratuit avec limites, Pro à 20$/mois",
+    lien: "https://www.perplexity.ai"
+  },
+  {
+    id: "gamma",
+    nom: "Gamma",
+    categorie: "presentations",
+    pitch: "Génère un squelette de présentation à partir d'un texte.",
+    usage: "Dégrossir la structure d'un premier jet de CODIR ou de proposition commerciale avant de le reprendre dans votre propre charte graphique.",
+    tarif: "Gratuit (400 crédits à vie), dès 10€/mois",
+    lien: "https://gamma.app"
+  },
+  {
+    id: "beautifulai",
+    nom: "Beautiful.ai",
+    categorie: "presentations",
+    pitch: "Mise en page automatique qui s'ajuste à mesure que le contenu change.",
+    usage: "Reprendre un support existant qui a besoin d'une remise en forme rapide, sans repartir d'un diaporama vierge.",
+    tarif: "12 à 40$/mois",
+    lien: "https://www.beautiful.ai"
+  },
+  {
+    id: "napkin",
+    nom: "Napkin AI",
+    categorie: "visuels",
+    pitch: "Transforme un texte en diagramme ou infographie.",
+    usage: "Visualiser rapidement une méthodologie en plusieurs étapes ou un processus d'accompagnement avant remise en forme définitive.",
+    tarif: "Gratuit avec limites",
+    lien: "https://www.napkin.ai"
+  },
+  {
+    id: "canva",
+    nom: "Canva",
+    categorie: "visuels",
+    pitch: "Visuels de synthèse aux couleurs de votre structure.",
+    usage: "Habiller un schéma ou une synthèse dans la charte graphique AXIS MUNDI — infographies, visuels de couverture, mise en page rapide.",
+    tarif: "Gratuit avec limites, Pro à partir de 12€/mois",
+    lien: "https://www.canva.com"
+  },
+  {
+    id: "wooclap",
+    nom: "Wooclap",
+    categorie: "quiz",
+    pitch: "Sondages et quiz interactifs en session, multi-appareils.",
+    usage: "Combler l'absence de synchronisation temps réel de vos outils maison — recueil à chaud, régulation collective en ouverture ou clôture de session.",
+    tarif: "Gratuit jusqu'à 1000 participants/événement",
+    lien: "https://www.wooclap.com"
+  },
+  {
+    id: "curipod",
+    nom: "Curipod",
+    categorie: "quiz",
+    pitch: "Génère une séquence interactive complète à partir d'un sujet.",
+    usage: "Produire en quelques minutes un enchaînement sondage / question ouverte / quiz sur une thématique donnée, à retravailler ensuite.",
+    tarif: "Gratuit avec plafond hebdomadaire, payant sur devis",
+    lien: "https://curipod.com"
+  },
+  {
+    id: "synthesia",
+    nom: "Synthesia",
+    categorie: "video",
+    pitch: "Vidéo par avatar IA, sans tournage.",
+    usage: "Produire une capsule courte de sensibilisation à diffuser en amont d'une session, en complément du présentiel.",
+    tarif: "Gratuit avec limites, dès 18-29€/mois",
+    lien: "https://www.synthesia.io"
+  },
+  {
+    id: "heygen",
+    nom: "HeyGen",
+    categorie: "video",
+    pitch: "Alternative à Synthesia, styles d'avatars différents.",
+    usage: "Même usage que Synthesia — vigilance sur la consommation de crédits des avatars les plus réalistes, qui peut vite alourdir la facture.",
+    tarif: "Gratuit avec limites, dès 29€/mois",
+    lien: "https://www.heygen.com"
+  },
+  {
+    id: "otter",
+    nom: "Otter.ai",
+    categorie: "transcription",
+    pitch: "Transcription automatique d'entretiens et de réunions.",
+    usage: "Retranscrire un entretien de diagnostic RPS ou une réunion de cadrage — accord préalable des personnes et vigilance sur l'hébergement des données à prévoir systématiquement.",
+    tarif: "Gratuit (300 min/mois), Pro à 16,99$/mois",
+    lien: "https://otter.ai"
+  },
+  {
+    id: "eggie",
+    nom: "Eggie.AI",
+    categorie: "illustration",
+    pitch: "Planches de bande dessinée générées par IA.",
+    usage: "Vulgariser un sujet sensible (fait religieux, harcèlement) sous une forme narrative plus accessible qu'un support classique.",
+    tarif: "Gratuit (10 tokens/mois), dès 25€/mois",
+    lien: "https://eggie.ai"
+  },
+  {
+    id: "firefly",
+    nom: "Adobe Firefly",
+    categorie: "illustration",
+    pitch: "Générateur d'images entraîné pour un usage commercial sécurisé.",
+    usage: "Produire une illustration ou un visuel d'accompagnement quand la question des droits d'usage doit être bordée proprement (contenu client, support diffusé largement).",
+    tarif: "Gratuit (25 crédits/mois), de 9,99 à 199,99$/mois",
+    lien: "https://firefly.adobe.com"
+  }
+];
+
+let activeCategory = "all";
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function categoryLabel(key){
+  const c = CATEGORIES.find(x => x.key === key);
+  return c ? c.label : key;
+}
+
+function renderFilters(){
+  const wrap = document.getElementById('filters');
+  const pills = [{ key: "all", label: "Toutes les catégories" }].concat(CATEGORIES);
+  wrap.innerHTML = pills.map(p => `
+    <button class="filter-pill${activeCategory === p.key ? ' active' : ''}" onclick="setActiveCategory('${p.key}')">${escapeHtml(p.label)}</button>
+  `).join('');
+}
+
+function setActiveCategory(key){
+  activeCategory = key;
+  renderFilters();
+  renderGrid();
+}
+
+function aiCardHtml(t){
+  return `
+    <div class="ai-card">
+      <h3>${escapeHtml(t.nom)}</h3>
+      <span class="cat-tag">${escapeHtml(categoryLabel(t.categorie))}</span>
+      <p class="pitch">${escapeHtml(t.pitch)}</p>
+      <p class="usage"><strong>Usage concret :</strong> ${escapeHtml(t.usage)}</p>
+      <div class="ai-footer">
+        <span class="tarif-tag">${escapeHtml(t.tarif)}</span>
+      </div>
+      <a class="btn-decouvrir" href="${t.lien}" target="_blank" rel="noopener noreferrer">
+        Découvrir
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  `;
+}
+
+function matchSearch(t, query){
+  if(!query) return true;
+  const haystack = (t.nom + ' ' + t.pitch + ' ' + t.usage + ' ' + categoryLabel(t.categorie)).toLowerCase();
+  return haystack.includes(query.toLowerCase());
+}
+
+function renderGrid(){
+  const query = document.getElementById('searchInput').value.trim();
+  const filtered = TOOLS.filter(t => (activeCategory === 'all' || t.categorie === activeCategory) && matchSearch(t, query));
+  const grid = document.getElementById('aiGrid');
+  if(filtered.length === 0){
+    grid.innerHTML = `
+      <div class="empty-state">
+        <p>Aucune IA ne correspond à cette recherche. Essayez un autre mot-clé ou une autre catégorie.</p>
+      </div>
+    `;
+    return;
+  }
+  grid.innerHTML = filtered.map(aiCardHtml).join('');
+}
+
+renderFilters();
+renderGrid();
+document.getElementById('statCount').textContent = TOOLS.length + ' IA référencées';
+</script>
+
+</body>
+</html>

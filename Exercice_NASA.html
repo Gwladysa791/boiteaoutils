@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perdus sur la Lune — L'exercice NASA — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.16;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:760px;margin:0 auto;padding:28px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro strong{color:var(--bleu-fonce);}
+  .intro .note-dev{
+    display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;
+  }
+
+  /* ---------- Liste de classement (glisser-déposer) ---------- */
+  .rank-panel{
+    background:#fff;border-radius:8px;padding:18px 18px 22px;margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .rank-panel h2{margin:0 0 4px;font-size:16px;color:var(--bleu-fonce);}
+  .rank-instructions{font-size:12.5px;color:var(--gris-moyen);margin:0 0 16px;}
+  .rank-list{display:flex;flex-direction:column;gap:8px;}
+  .rank-row{
+    display:flex;align-items:center;gap:10px;
+    background:var(--gris-fond2);border:1.5px solid transparent;border-radius:8px;
+    padding:10px 12px;user-select:none;touch-action:none;
+    transition:background .12s ease, box-shadow .12s ease;
+  }
+  .rank-row.dragging{
+    background:#fff;border-color:var(--bleu);box-shadow:0 8px 18px rgba(0,0,0,0.12);
+    opacity:0.95;
+  }
+  .rank-num{
+    flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--bleu-fonce);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+  }
+  .rank-handle{
+    flex-shrink:0;width:22px;text-align:center;color:var(--gris-moyen);cursor:grab;font-size:16px;line-height:1;
+    letter-spacing:1px;
+  }
+  .rank-handle:active{cursor:grabbing;}
+  .rank-label{flex:1;font-size:13.5px;color:#2f3130;font-weight:700;}
+  .rank-arrows{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+  .rank-arrows button{
+    width:24px;height:18px;border:none;background:#fff;color:var(--gris);border-radius:4px;
+    cursor:pointer;font-size:10px;line-height:1;font-family:inherit;
+  }
+  .rank-arrows button:hover{background:var(--bleu);color:#fff;}
+  .rank-arrows button:disabled{opacity:0.3;cursor:default;}
+  .rank-arrows button:disabled:hover{background:#fff;color:var(--gris);}
+
+  .cta-wrap{text-align:center;margin-top:26px;}
+  button#submitBtn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:14px 34px;
+    font-size:15px;
+    font-weight:700;
+    border-radius:30px;
+    cursor:pointer;
+    font-family:inherit;
+    letter-spacing:0.5px;
+  }
+  button#submitBtn:hover{background:#006f87;}
+
+  #resultsSection{display:none;}
+  .results-card{
+    background:#fff;
+    border-radius:8px;
+    padding:26px 22px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.08);
+  }
+  .results-card h2{color:var(--bleu-fonce);margin-top:0;font-size:20px;}
+  .score-display{text-align:center;margin:18px 0 10px;}
+  .score-display .snum{font-size:38px;font-weight:700;color:var(--bleu-fonce);}
+  .score-display .slabel{font-size:13px;color:var(--gris-moyen);}
+  .score-band{
+    text-align:center;font-size:13.5px;font-weight:700;margin-bottom:6px;
+  }
+  .score-scale{
+    display:flex;font-size:10.5px;color:var(--gris-moyen);justify-content:center;gap:10px;
+    flex-wrap:wrap;margin-bottom:22px;
+  }
+  .score-scale span b{display:block;color:var(--gris);}
+  /* ---------- Comparaison côte à côte ---------- */
+  .compare-wrap{margin:26px 0 30px;}
+  .compare-title{font-size:14px;color:var(--bleu-fonce);font-weight:700;margin:0 0 4px;text-align:center;}
+  .compare-hint{font-size:12px;color:var(--gris-moyen);text-align:center;margin:0 0 16px;}
+  .compare-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;
+  }
+  .compare-col h4{
+    margin:0 0 10px;font-size:13px;color:var(--gris-moyen);text-transform:uppercase;
+    letter-spacing:0.4px;text-align:center;
+  }
+  .compare-row{
+    display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;
+    font-size:12.5px;color:#2f3130;font-weight:700;
+  }
+  .compare-row:nth-child(even){background:var(--gris-fond2);}
+  .compare-row .c-num{
+    flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--bleu-fonce);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:10.5px;
+  }
+  .compare-row .c-dot{flex-shrink:0;width:12px;height:12px;border-radius:50%;}
+  .compare-row .c-label{flex:1;line-height:1.3;}
+  @media (max-width:600px){
+    .compare-grid{grid-template-columns:1fr;}
+    .compare-row .c-label{font-size:12px;}
+  }
+  .corrige-item{
+    border-left:4px solid var(--gris-clair);
+    padding:12px 16px;
+    margin-bottom:10px;
+    border-radius:4px;
+    background:var(--gris-fond2);
+  }
+  .corrige-item.exact{border-left-color:var(--vert);}
+  .corrige-item.proche{border-left-color:var(--orange);}
+  .corrige-item.loin{border-left-color:var(--rouge);}
+  .corrige-item h3{margin:0 0 6px;font-size:14px;color:#2f3130;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .corrige-item .c-dot{flex-shrink:0;width:11px;height:11px;border-radius:50%;display:inline-block;}
+  .corrige-item .rank-badge{
+    display:inline-block;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:10px;color:#fff;background:var(--bleu-fonce);
+  }
+  .corrige-item .ecart-tag{
+    display:inline-block;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:10px;color:#fff;
+  }
+  .ecart-tag.exact{background:var(--vert);}
+  .ecart-tag.proche{background:var(--orange);}
+  .ecart-tag.loin{background:var(--rouge);}
+  .corrige-item p{margin:0;font-size:13px;color:var(--gris);}
+  .actions-row{text-align:center;margin-top:24px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px;
+  }
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:20px;}
+  @media print{
+    .hero-header, .back-link, .intro, .actions-row, footer, .rank-arrows{display:none !important;}
+    body{background:#fff;}
+  }
+  @media(max-width:480px){
+    .rank-label{font-size:12.5px;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Perdus sur la Lune<span>L'exercice NASA</span></h1>
+      <p class="hero-desc">Votre vaisseau s'est écrasé à 300 km du point de rendez-vous. Classez les 15 objets rescapés par ordre d'importance pour rejoindre le vaisseau-mère, puis comparez votre lecture à celle des experts.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          15-20 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          15 objets à classer
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('rankPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Commencer le classement &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- lune -->
+        <circle cx="90" cy="100" r="52" fill="var(--gris-clair)" opacity="0.9"/>
+        <circle cx="72" cy="82" r="10" fill="#ffffff" opacity="0.5"/>
+        <circle cx="105" cy="120" r="7" fill="#ffffff" opacity="0.4"/>
+        <circle cx="68" cy="118" r="5" fill="#ffffff" opacity="0.4"/>
+
+        <!-- fusée -->
+        <g transform="translate(150,60) rotate(35)">
+          <path d="M0,-30 C12,-18 12,10 0,26 C-12,10 -12,-18 0,-30 Z" fill="var(--bleu-fonce)"/>
+          <circle cx="0" cy="-6" r="6" fill="#fff" opacity="0.85"/>
+          <path d="M-9,18 L-18,32 L-4,24 Z" fill="var(--orange)"/>
+          <path d="M9,18 L18,32 L4,24 Z" fill="var(--orange)"/>
+        </g>
+
+        <!-- pastilles de classement -->
+        <g transform="translate(158,146) rotate(-8)">
+          <rect x="0" y="0" width="46" height="24" rx="12" fill="#ffffff" style="filter:drop-shadow(0 2px 5px rgba(0,0,0,0.12));"/>
+          <text x="23" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="var(--bleu-fonce)" font-family="inherit">1</text>
+        </g>
+        <g transform="translate(192,168) rotate(6)">
+          <rect x="0" y="0" width="46" height="24" rx="12" fill="#ffffff" style="filter:drop-shadow(0 2px 5px rgba(0,0,0,0.12));"/>
+          <text x="23" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="var(--orange)" font-family="inherit">2</text>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Perdus sur la Lune — L'exercice NASA</span>
+  </nav>
+
+  <div id="formSection">
+    <div class="intro">
+      <strong>Scénario :</strong> votre équipe d'astronautes devait alunir près du vaisseau-mère, mais un incident a forcé un alunissage à 300 kilomètres du point de rendez-vous. Seuls 15 objets ont résisté au crash. Classez-les de 1 (le plus indispensable pour rejoindre le vaisseau-mère) à 15 (le moins utile), en glissant les lignes ci-dessous ou en utilisant les flèches. Une fois votre classement stabilisé, découvrez la grille de référence utilisée traditionnellement pour cet exercice et l'écart entre votre lecture et la leur.
+    </div>
+
+    <div class="rank-panel" id="rankPanel">
+      <h2>Votre classement</h2>
+      <p class="rank-instructions">1 = le plus important pour votre survie. Glissez une ligne (poignée ⠿) ou utilisez les flèches pour la déplacer.</p>
+      <div class="rank-list" id="rankList"></div>
+    </div>
+
+    <div class="cta-wrap">
+      <button id="submitBtn" onclick="calculerResultats()">Voir la comparaison</button>
+    </div>
+  </div>
+
+  <div id="resultsSection">
+    <div class="results-card">
+      <h2>Comparaison avec la grille de référence</h2>
+      <div class="score-display">
+        <div class="snum" id="scoreNum">0</div>
+        <div class="slabel">points d'écart au total (plus le score est bas, plus votre classement s'approche de la grille de référence)</div>
+      </div>
+      <div class="score-band" id="scoreBand"></div>
+      <div class="score-scale">
+        <span><b>0-25</b>Excellent</span>
+        <span><b>26-32</b>Bon</span>
+        <span><b>33-45</b>Moyen</span>
+        <span><b>46-55</b>Passable</span>
+        <span><b>56-70</b>Faible</span>
+        <span><b>71+</b>Très faible</span>
+      </div>
+
+      <div class="compare-wrap">
+        <div class="compare-title">Votre classement face à la grille de référence</div>
+        <div class="compare-hint">Chaque objet garde la même couleur dans les deux colonnes, pour repérer facilement son rang d'une grille à l'autre.</div>
+        <div class="compare-grid">
+          <div class="compare-col">
+            <h4>Votre classement</h4>
+            <div id="compareYours"></div>
+          </div>
+          <div class="compare-col">
+            <h4>Grille de référence</h4>
+            <div id="compareNasa"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="corrigeArea"></div>
+      <div class="actions-row">
+        <button onclick="window.print()">Imprimer / exporter</button>
+        <button onclick="recommencer()">Recommencer</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique de dynamique collective. Les données saisies restent dans votre session (aucun enregistrement, aucun envoi). La grille de référence proposée reprend la version classique de cet exercice de survie, utilisée à des fins pédagogiques depuis de nombreuses années en formation.</footer>
+
+<script>
+/*
+  items : liste des 15 objets.
+  nasaRank : rang de référence (1 = le plus important), rationale : justification classique de ce rang.
+  Pour le développement futur du cumul de groupe : chaque classement individuel est déjà
+  représenté par un simple tableau ordonné de id (voir "order" plus bas) — il suffira de
+  collecter plusieurs tableaux "order" pour calculer un classement moyen de groupe.
+*/
+const items = [
+  {id:"allumettes", label:"Boîte d'allumettes", nasaRank:15, rationale:"L'absence d'oxygène ne permet pas de les enflammer."},
+  {id:"nourriture", label:"Nourriture concentrée", nasaRank:4, rationale:"Répare les pertes d'énergie."},
+  {id:"corde", label:"50 mètres de corde en nylon", nasaRank:6, rationale:"Escalader les rochers, hisser les blessés."},
+  {id:"parachute", label:"Soie de parachute", nasaRank:8, rationale:"Protège des rayons du soleil."},
+  {id:"generateur", label:"Groupe électrogène à énergie solaire", nasaRank:13, rationale:"Encombrant, d'une utilité limitée sur un trajet aussi court."},
+  {id:"pistolets", label:"Deux pistolets de calibre 45", nasaRank:11, rationale:"Peuvent, par leur recul, accélérer la propulsion."},
+  {id:"lait", label:"Caisse de lait déshydraté", nasaRank:12, rationale:"Plus encombrante que la nourriture concentrée, pour un intérêt nutritionnel proche."},
+  {id:"oxygene", label:"2 bonbonnes d'oxygène de 45 kilos", nasaRank:1, rationale:"Premier élément essentiel de survie."},
+  {id:"carte", label:"Carte stellaire", nasaRank:3, rationale:"Indispensable pour s'orienter."},
+  {id:"radeaux", label:"2 radeaux de sauvetage auto-gonflables", nasaRank:9, rationale:"Le gaz (CO2) qu'ils contiennent peut servir à se propulser."},
+  {id:"compas", label:"Compas magnétique", nasaRank:14, rationale:"Inutile : le champ magnétique lunaire n'est pas polarisé."},
+  {id:"eau", label:"25 litres d'eau", nasaRank:2, rationale:"Évite la déshydratation, sous la forte chaleur de la face éclairée."},
+  {id:"premiers-soins", label:"Trousse de premiers soins avec seringues hypodermiques", nasaRank:7, rationale:"Une ouverture est prévue dans le costume d'astronaute pour les sérums et vitamines."},
+  {id:"torches", label:"Torches de signalisation", nasaRank:10, rationale:"Utiles seulement quand le vaisseau-mère sera en vue."},
+  {id:"emetteur", label:"Émetteur-récepteur à énergie solaire", nasaRank:5, rationale:"Pour communiquer avec le vaisseau-mère."}
+];
+
+/* Une couleur fixe par objet (basée sur son ordre de déclaration ci-dessus),
+   pour repérer le même objet d'une grille à l'autre dans la comparaison. */
+const PALETTE = [
+  "#00B5E2", "#DE5C5C", "#15CA88", "#F5AB33", "#884EC2",
+  "#0088A9", "#E86F5C", "#5FA7A0", "#B895DA", "#2f9e4f",
+  "#D46A9F", "#4A6FA5", "#C9A227", "#7B8D42", "#A24B4B"
+];
+function colorFor(id){
+  const idx = items.findIndex(i=>i.id===id);
+  return PALETTE[idx % PALETTE.length];
+}
+
+let order = [];
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function initOrder(){
+  order = shuffle(items.map(it=>it.id));
+}
+
+function renderRankList(){
+  const wrap = document.getElementById('rankList');
+  wrap.innerHTML = '';
+  order.forEach((id, idx)=>{
+    const item = items.find(i=>i.id===id);
+    const row = document.createElement('div');
+    row.className = 'rank-row';
+    row.dataset.id = id;
+    row.innerHTML = `
+      <span class="rank-num">${idx+1}</span>
+      <span class="rank-handle" title="Glisser pour réordonner">&#10247;</span>
+      <span class="rank-label">${item.label}</span>
+      <span class="rank-arrows">
+        <button aria-label="Monter" ${idx===0?'disabled':''} onclick="moveItem('${id}',-1)">&#9650;</button>
+        <button aria-label="Descendre" ${idx===order.length-1?'disabled':''} onclick="moveItem('${id}',1)">&#9660;</button>
+      </span>
+    `;
+    row.querySelector('.rank-handle').addEventListener('pointerdown', (e)=> startDrag(id, row, e));
+    wrap.appendChild(row);
+  });
+}
+
+function moveItem(id, delta){
+  const i = order.indexOf(id);
+  const j = i + delta;
+  if(j < 0 || j >= order.length) return;
+  [order[i], order[j]] = [order[j], order[i]];
+  renderRankList();
+}
+
+/* --- glisser-déposer (pointer events, souris + tactile) --- */
+let dragState = null;
+
+function startDrag(id, rowEl, e){
+  e.preventDefault();
+  rowEl.classList.add('dragging');
+  dragState = { id };
+
+  function onMove(ev){
+    const el = document.elementFromPoint(ev.clientX, ev.clientY);
+    const overRow = el ? el.closest('.rank-row') : null;
+    if(!overRow) return;
+    const overId = overRow.dataset.id;
+    if(overId === id) return;
+    const i = order.indexOf(id);
+    const j = order.indexOf(overId);
+    if(i === -1 || j === -1) return;
+    order.splice(i,1);
+    order.splice(j,0,id);
+    renderRankList();
+    const newRow = document.querySelector(`.rank-row[data-id="${id}"]`);
+    if(newRow) newRow.classList.add('dragging');
+  }
+  function onUp(){
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    document.removeEventListener('pointercancel', onUp);
+    const el = document.querySelector(`.rank-row[data-id="${id}"]`);
+    if(el) el.classList.remove('dragging');
+    dragState = null;
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+  document.addEventListener('pointercancel', onUp);
+}
+
+function ecartClass(diff){
+  const abs = Math.abs(diff);
+  if(abs <= 1) return 'exact';
+  if(abs <= 4) return 'proche';
+  return 'loin';
+}
+function ecartLabel(diff){
+  const abs = Math.abs(diff);
+  if(abs <= 1) return 'écart minime';
+  if(abs <= 4) return 'écart modéré';
+  return 'écart important';
+}
+
+function scoreBandLabel(score){
+  if(score <= 25) return 'Excellent — votre lecture est très proche de la grille de référence.';
+  if(score <= 32) return 'Bon — votre lecture rejoint globalement la grille de référence.';
+  if(score <= 45) return 'Moyen — des priorités méritent d\'être rediscutées.';
+  if(score <= 55) return 'Passable — plusieurs écarts significatifs avec la grille de référence.';
+  if(score <= 70) return 'Faible — la logique de survie retenue diffère nettement.';
+  return 'Très faible — l\'occasion d\'un débat approfondi sur les priorités choisies.';
+}
+
+function calculerResultats(){
+  let score = 0;
+  const details = order.map((id, idx)=>{
+    const item = items.find(i=>i.id===id);
+    const yourRank = idx+1;
+    const diff = yourRank - item.nasaRank;
+    score += Math.abs(diff);
+    return {...item, yourRank, diff};
+  }).sort((a,b)=> a.nasaRank - b.nasaRank);
+
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreBand').textContent = scoreBandLabel(score);
+
+  /* --- comparaison côte à côte --- */
+  const yoursWrap = document.getElementById('compareYours');
+  const nasaWrap = document.getElementById('compareNasa');
+  yoursWrap.innerHTML = order.map((id, idx)=>{
+    const item = items.find(i=>i.id===id);
+    return `
+      <div class="compare-row">
+        <span class="c-num">${idx+1}</span>
+        <span class="c-dot" style="background:${colorFor(id)};"></span>
+        <span class="c-label">${item.label}</span>
+      </div>
+    `;
+  }).join('');
+  const nasaOrder = items.slice().sort((a,b)=>a.nasaRank-b.nasaRank);
+  nasaWrap.innerHTML = nasaOrder.map(item=>`
+      <div class="compare-row">
+        <span class="c-num">${item.nasaRank}</span>
+        <span class="c-dot" style="background:${colorFor(item.id)};"></span>
+        <span class="c-label">${item.label}</span>
+      </div>
+  `).join('');
+
+  /* --- corrigé détaillé (avec pastille de couleur pour rester cohérent) --- */
+  const area = document.getElementById('corrigeArea');
+  area.innerHTML = '';
+  details.forEach(d=>{
+    const cls = ecartClass(d.diff);
+    const div = document.createElement('div');
+    div.className = 'corrige-item ' + cls;
+    const signe = d.diff > 0 ? '+' : '';
+    div.innerHTML = `
+      <h3><span class="c-dot" style="background:${colorFor(d.id)};"></span>${d.label}
+        <span class="rank-badge">Référence n°${d.nasaRank}</span>
+        <span class="ecart-tag ${cls}">Vous : n°${d.yourRank} (${signe}${d.diff})</span>
+      </h3>
+      <p>${d.rationale}</p>
+    `;
+    area.appendChild(div);
+  });
+}
+
+function recommencer(){
+  initOrder();
+  renderRankList();
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('formSection').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+initOrder();
+renderRankList();
+</script>
+
+</body>
+</html>

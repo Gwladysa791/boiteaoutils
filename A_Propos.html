@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>À propos — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --gris-fonce: #464948;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  header{
+    background:var(--bleu-fonce);
+    color:#fff;
+    padding:44px 24px 36px;
+    text-align:center;
+  }
+  header .brand-logo{
+    height:50px;
+    width:auto;
+    display:block;
+    margin:0 auto 16px;
+  }
+  header h1{
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+  }
+  header p.signature{
+    margin:8px 0 0;
+    font-size:13.5px;
+    color:#eaf7fb;
+    font-style:italic;
+  }
+  .container{
+    max-width:960px;
+    margin:0 auto;
+    padding:30px 20px 70px;
+  }
+  .back-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin:0 0 18px;
+  }
+  .back-link{
+    display:inline-block;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+
+  .hero-text-card{
+    background:#fff;
+    border-radius:12px;
+    padding:30px 34px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom:28px;
+    border-left:5px solid var(--bleu);
+  }
+  .hero-text-card h2{
+    margin:0 0 12px;
+    font-size:21px;
+    color:var(--bleu-fonce);
+  }
+  .hero-text-card p{
+    margin:0;
+    font-size:14.5px;
+    color:var(--gris);
+    max-width:760px;
+  }
+
+  .content-section{
+    background:#fff;
+    border-radius:12px;
+    padding:30px 34px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom:22px;
+  }
+  .content-section h3{
+    margin:0 0 6px;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    color:var(--gris-moyen);
+  }
+  .content-section h2{
+    margin:0 0 16px;
+    font-size:20px;
+    color:#20282b;
+  }
+  .content-section p{
+    margin:0 0 14px;
+    font-size:14.5px;
+    color:var(--gris);
+    max-width:780px;
+  }
+  .content-section p:last-of-type{margin-bottom:0;}
+  .content-section .cta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 22px;
+    border-radius:24px;
+    font-size:13.5px;
+    font-weight:700;
+    text-decoration:none;
+    cursor:pointer;
+    border:none;
+    font-family:inherit;
+    transition:background .15s ease, transform .15s ease, border-color .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--bleu-fonce);color:#fff;}
+  .btn-primary:hover{background:#00708a;}
+  .btn-secondary{background:#fff;color:var(--bleu-fonce);border:1.5px solid var(--gris-clair);}
+  .btn-secondary:hover{border-color:var(--bleu-fonce);}
+
+  .expertise-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:16px;
+  }
+  .expertise-card{
+    background:var(--gris-fond2);
+    border-radius:10px;
+    padding:20px 20px 18px;
+  }
+  .expertise-card .icon-tile{
+    width:38px;height:38px;border-radius:11px;background:#fff;color:var(--bleu-fonce);
+    display:flex;align-items:center;justify-content:center;margin-bottom:12px;
+  }
+  .expertise-card .icon-tile svg{width:19px;height:19px;}
+  .expertise-card h4{margin:0 0 6px;font-size:14.5px;color:#20282b;}
+  .expertise-card p{margin:0;font-size:12.5px;color:var(--gris);line-height:1.5;}
+
+  .signature-block{
+    text-align:center;
+    padding:36px 20px 8px;
+    color:var(--gris-moyen);
+    font-size:13px;
+    font-style:italic;
+  }
+
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--gris-moyen);
+    padding:24px 20px;
+  }
+
+/* =========================================================
+   BANDEAU DE NAVIGATION COMMUN (onglets + méga-menus)
+   ========================================================= */
+.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.94);backdrop-filter:blur(8px);border-bottom:1px solid #D7D3CE;}
+.header-inner{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:40px;}
+.brand-mark{display:flex;align-items:center;gap:16px;text-decoration:none;flex-shrink:0;}
+.brand-mark img{height:28px;width:auto;}
+nav.main-nav{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap;}
+nav.main-nav > a{font-size:13.5px;font-weight:700;color:#5D6160;text-decoration:none;padding:9px 16px;border-radius:8px;transition:background .15s ease,color .15s ease;white-space:nowrap;}
+nav.main-nav > a:hover, nav.main-nav > a:focus-visible{background:#EAF7FB;color:#0088A9;}
+.header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.header-actions .btn-nav{display:inline-flex;align-items:center;gap:8px;background:#0088A9;color:#fff;border:none;padding:9px 18px;font-size:13px;font-weight:700;border-radius:24px;text-decoration:none;white-space:nowrap;transition:background .15s ease;}
+.header-actions .btn-nav:hover{background:#00708a;}
+.header-burger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:#464948;}
+.nav-item{position:relative;}
+.nav-link-btn{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:#5D6160;text-decoration:none;padding:7px 13px;border-radius:8px;transition:background .15s ease,color .15s ease;white-space:nowrap;background:none;border:none;cursor:pointer;font-family:inherit;}
+.nav-link-btn:hover, .nav-link-btn:focus-visible, .nav-item.open .nav-link-btn{background:#EAF7FB;color:#0088A9;}
+.nav-link-btn .chevron{width:9px;height:9px;flex-shrink:0;transition:transform .18s ease;}
+.nav-item.open .nav-link-btn .chevron{transform:rotate(180deg);}
+.nav-dropdown{position:absolute;top:calc(100% + 10px);left:0;min-width:600px;background:#fff;border-radius:14px;box-shadow:0 16px 40px rgba(70,73,72,0.16);border:1px solid #D7D3CE;padding:22px 26px;display:none;grid-template-columns:repeat(4,1fr);gap:24px;z-index:110;}
+.nav-dropdown.simple{min-width:280px;grid-template-columns:1fr;gap:2px;padding:14px;}
+.nav-item.open .nav-dropdown{display:grid;}
+.nav-dropdown-col{display:flex;flex-direction:column;gap:2px;}
+.nav-dropdown-col .col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#A2A5A4;margin:0 0 8px;padding:0 8px;}
+.nav-dropdown-col a{font-size:13.5px;color:#464948;text-decoration:none;padding:7px 8px;border-radius:7px;transition:background .15s ease,color .15s ease;line-height:1.3;}
+.nav-dropdown-col a:hover, .nav-dropdown-col a:focus-visible{background:#F0EBE5;color:#0088A9;}
+@media (max-width:920px){
+  nav.main-nav{position:fixed;top:60px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;padding:10px 20px 20px;border-bottom:1px solid #D7D3CE;box-shadow:0 12px 20px rgba(0,0,0,0.06);display:none;max-height:calc(100vh - 60px);overflow-y:auto;}
+  nav.main-nav.open{display:flex;}
+  .header-burger{display:block;}
+  .header-actions .btn-nav span{display:none;}
+  .nav-item{width:100%;}
+  .nav-link-btn{width:100%;justify-content:space-between;padding:12px 8px;}
+  .nav-dropdown, .nav-dropdown.simple{position:static;box-shadow:none;border:none;border-left:2px solid #EAF7FB;padding:2px 6px 8px 16px;margin:0 0 6px;min-width:0;display:none;grid-template-columns:1fr;gap:0;}
+  .nav-item.open .nav-dropdown{display:grid;}
+  .nav-dropdown-col{margin-top:8px;}
+  .nav-dropdown-col:first-child{margin-top:2px;}
+}
+@media (max-width:640px){
+  .hero-text-card, .content-section{padding:24px 22px;}
+}
+</style>
+</head>
+<body>
+<div class="site-header">
+  <div class="header-inner">
+    <a class="brand-mark" href="index.html">
+      <img src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+    </a>
+    <button class="header-burger" onclick="toggleNav()" aria-label="Ouvrir le menu" aria-expanded="false" id="burgerBtn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Accueil</a>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Outils pédagogiques
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-col">
+            <p class="col-title">Découvrir</p>
+            <a href="Sommaire.html">Tous les outils</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Démarrer &amp; animer</p>
+            <a href="Sommaire.html?cat=icebreakers">Icebreakers</a>
+            <a href="Sommaire.html?cat=animation-collective">Animation collective</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Comprendre &amp; diagnostiquer</p>
+            <a href="Sommaire.html?cat=questionnaires-auto-positionnement">Questionnaires</a>
+            <a href="Sommaire.html?cat=diagnostics-cadres-methodo">Diagnostics &amp; cadres</a>
+            <a href="Sommaire.html?cat=etude-de-cas">Études de cas</a>
+          </div>
+          <div class="nav-dropdown-col">
+            <p class="col-title">Tester &amp; débriefer</p>
+            <a href="Sommaire.html?cat=quiz-connaissances">Quiz de connaissances</a>
+            <a href="Sommaire.html?cat=jeu-serieux">Jeu pédagogique</a>
+            <a href="Sommaire.html?cat=outils-debrief">Outils de débrief</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item has-dropdown">
+        <button class="nav-link-btn" aria-expanded="false">
+          Ressources
+          <svg class="chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
+        </button>
+        <div class="nav-dropdown simple">
+          <div class="nav-dropdown-col">
+            <a href="Pedagogie.html">Blog Pédagogie &amp; Animations</a>
+            <a href="Videotheque.html">Vidéothèque</a>
+            <a href="Supports_PowerPoint.html">Supports PowerPoint</a>
+            <a href="Fiches_Memos.html">Fiches mémos</a>
+            <a href="Bibliotheque_IA.html">Bibliothèque d'IA</a>
+            <a href="Glossaire.html">Glossaire</a>
+          </div>
+        </div>
+      </div>
+      <a href="https://regardsperspectivesaxismundi-gwladysguerin-9131s-projects.vercel.app/" target="_blank" rel="noopener">Actualités</a>
+      <a href="A_Propos.html">À propos</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn-nav" href="Espace_Formateur.html"><span>Mon espace formateur</span></a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <img class="brand-logo" src="brand_assets/logo_axismundi_blanc.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+  <h1>À propos d'AXIS MUNDI</h1>
+  <p class="signature">Développer le potentiel humain</p>
+</header>
+
+<div class="container">
+
+  <div class="back-links">
+    <a class="back-link" href="index.html">&larr; Retour à l'accueil</a>
+    <a class="back-link" href="Sommaire.html">Voir tous les outils &rarr;</a>
+  </div>
+
+  <div class="hero-text-card">
+    <h2>Développer le potentiel humain, dans la réalité des organisations</h2>
+    <p>AXIS MUNDI intervient sur les sujets où l'humain, le collectif et la performance se rencontrent — et parfois se heurtent. Prévention des risques psychosociaux, qualité de vie et des conditions de travail, conduite du changement, management : chaque accompagnement part du travail réel, pas d'un modèle théorique plaqué sur un contexte qu'il ne connaît pas.</p>
+  </div>
+
+  <div class="content-section">
+    <h3>Notre approche</h3>
+    <h2>Une lecture systémique, pas une prestation isolée</h2>
+    <p>Une action de formation ou d'accompagnement ne produit d'effet durable que si elle s'articule avec ce qui se joue autour d'elle : les contraintes de production, les jeux d'acteurs, le rôle du management de proximité, le calendrier social parfois tendu. C'est pourquoi une intervention AXIS MUNDI se pense rarement en vase clos — elle croise les dimensions organisationnelle, psychosociale, pédagogique et méthodologique plutôt que de traiter un sujet isolément.</p>
+    <p>Cette lecture s'appuie sur les repères de l'ANACT, de l'INRS, de la psychosociologie des organisations et de la psychologie du travail. Mais un cadre théorique solide ne garantit pas, à lui seul, l'efficacité d'un dispositif : encore faut-il qu'il soit réellement approprié par les équipes concernées, compatible avec leurs contraintes, et soutenable dans la durée. C'est cette exigence d'applicabilité concrète qui structure nos productions, qu'il s'agisse d'un diagnostic RPS, de l'accompagnement d'une restructuration ou d'un parcours de formation managériale.</p>
+  </div>
+
+  <div class="content-section">
+    <h3>Le Pôle formation</h3>
+    <h2>De l'ingénierie pédagogique à des outils prêts à l'emploi</h2>
+    <p>Le Pôle formation d'AXIS MUNDI conçoit et pilote des dispositifs pédagogiques pour les formateurs, les managers et les équipes RH. Son travail consiste à transformer une intention pédagogique en séquences réellement animables : une progression qui a du sens, des objectifs atteignables au regard du temps disponible, des modalités adaptées à la maturité des publics — et non un empilement de contenus.</p>
+    <p>C'est de ce travail qu'est née la boîte à outils du formateur : une bibliothèque de quiz, questionnaires, jeux pédagogiques, icebreakers et supports de diagnostic, pensée pour équiper des temps de formation en prévention primaire, secondaire et tertiaire, en management et en dynamique de groupe — directement mobilisables, sans heures de préparation supplémentaires.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="Sommaire.html">Découvrir la boîte à outils →</a>
+      <a class="btn btn-secondary" href="Espace_Formateur.html">Accéder à mon espace formateur</a>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h3>Domaines d'expertise</h3>
+    <h2>Des sujets traités en connexion les uns avec les autres</h2>
+    <div class="expertise-grid">
+      <div class="expertise-card">
+        <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.4-9.5-9C.7 8.2 3 4.5 7 4.5c2 0 3.6 1 5 2.6 1.4-1.6 3-2.6 5-2.6 4 0 6.3 3.7 4.5 7.5C19 16.6 12 21 12 21z" stroke-linejoin="round"/></svg></div>
+        <h4>Prévention des RPS et QVCT</h4>
+        <p>Diagnostics, plans d'action et démarches de prévention primaire, secondaire et tertiaire ancrées dans le fonctionnement réel des équipes.</p>
+      </div>
+      <div class="expertise-card">
+        <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 3L4 14h6l-1 7 9-11h-6z" stroke-linejoin="round"/></svg></div>
+        <h4>Accompagnement du changement</h4>
+        <p>Restructurations, PSE, fusions, tensions collectives : un accompagnement qui tient compte des résistances et du temps nécessaire à l'appropriation.</p>
+      </div>
+      <div class="expertise-card">
+        <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5" stroke-linecap="round"/></svg></div>
+        <h4>Management et dynamiques collectives</h4>
+        <p>Développement des pratiques managériales et régulation des collectifs de travail, avec une attention constante aux jeux d'acteurs.</p>
+      </div>
+      <div class="expertise-card">
+        <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 1 0 9 9" stroke-linecap="round"/><path d="M12 3v9l6 2" stroke-linecap="round"/></svg></div>
+        <h4>Diagnostic organisationnel</h4>
+        <p>Méthodologies de diagnostic individuel et collectif, pour objectiver une situation avant d'engager un plan d'action.</p>
+      </div>
+      <div class="expertise-card">
+        <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M8.5 9h7M8.5 13h7M8.5 17h4" stroke-linecap="round"/></svg></div>
+        <h4>Ingénierie pédagogique</h4>
+        <p>Conception de dispositifs d'accompagnement complexes, de la structuration des objectifs jusqu'au pilotage du déploiement.</p>
+      </div>
+      <div class="expertise-card">
+        <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="2.6"/><circle cx="16" cy="9" r="2.6"/><path d="M3.5 19c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6M11.5 19c.6-3 2.3-4.6 4.5-4.6s3.9 1.6 4.5 4.6" stroke-linecap="round"/></svg></div>
+        <h4>Dynamiques de groupe</h4>
+        <p>Animation de temps collectifs qui favorisent l'expression, la coopération et l'intelligence collective, au-delà de la seule transmission.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="signature-block">Développer le potentiel humain.</p>
+
+</div>
+
+<footer>AXIS MUNDI — Pour toute question sur nos accompagnements ou notre Pôle formation, écrivez-nous à gwladys.guerin@axismundi.fr · <a href="index.html#suggestion" style="color:var(--bleu-fonce);font-weight:700;">Proposer une idée / signaler un besoin</a></footer>
+
+<script>
+/* =========================================================
+   NAVIGATION — bandeau commun (onglets + méga-menus)
+   ========================================================= */
+function toggleNav(){
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('burgerBtn');
+  const open = nav.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function initNavDropdowns(){
+  const items = Array.from(document.querySelectorAll('.nav-item.has-dropdown'));
+  function closeAll(){
+    items.forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.nav-link-btn').setAttribute('aria-expanded','false');
+    });
+  }
+  items.forEach(item=>{
+    const btn = item.querySelector('.nav-link-btn');
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const wasOpen = item.classList.contains('open');
+      closeAll();
+      if(!wasOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+  document.addEventListener('click', (e)=>{
+    if(!e.target.closest('.nav-item.has-dropdown')) closeAll();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeAll();
+  });
+}
+initNavDropdowns();
+</script>
+
+</body>
+</html>

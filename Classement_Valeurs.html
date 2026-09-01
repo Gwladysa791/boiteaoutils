@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classement collectif des valeurs — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:940px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{
+    display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;
+  }
+
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:22px 24px 26px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2{
+    margin:0 0 6px;
+    font-size:16px;
+    color:var(--bleu-fonce);
+  }
+  .panel .panel-sub{
+    margin:0 0 18px;
+    font-size:13px;
+    color:var(--gris-moyen);
+  }
+
+  /* ---------- Construction du classement ---------- */
+  .name-row{margin-bottom:16px;}
+  .name-row label{display:block;font-size:12.5px;font-weight:700;color:var(--gris);margin-bottom:6px;}
+  .name-row input{
+    width:100%;
+    max-width:320px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:8px;
+    padding:9px 14px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--gris);
+    background:#fff;
+  }
+  .name-row input:focus{outline:none;border-color:var(--bleu);}
+
+  .builder-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;}
+  @media (max-width:820px){input,select,textarea{font-size:16px;}.builder-layout{grid-template-columns:1fr;}}
+
+  .search-row{margin-bottom:12px;}
+  .search-row input{
+    width:100%;
+    border:1.5px solid var(--gris-clair);
+    border-radius:22px;
+    padding:9px 16px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--gris);
+    background:#fff;
+  }
+  .search-row input:focus{outline:none;border-color:var(--bleu);}
+
+  .values-pool{
+    max-height:400px;
+    overflow-y:auto;
+    padding:2px 8px 2px 0;
+  }
+  .family-group{margin-bottom:16px;}
+  .family-group:last-child{margin-bottom:2px;}
+  .family-title{
+    margin:0 0 8px;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--bleu-fonce);
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    padding-left:9px;
+    border-left:3px solid var(--bleu);
+  }
+  .family-chips{display:flex;flex-wrap:wrap;gap:7px;}
+  .value-chip{
+    border:1.5px solid var(--gris-clair);
+    background:var(--gris-fond2);
+    color:var(--gris);
+    padding:7px 14px;
+    border-radius:16px;
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+    white-space:nowrap;
+  }
+  .value-chip:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .value-chip:disabled{opacity:0.35;cursor:not-allowed;}
+  .pool-empty{font-size:12px;color:var(--gris-moyen);font-style:italic;padding:8px 2px;}
+
+  .ranking-count{font-size:12.5px;font-weight:700;color:var(--bleu-fonce);margin-bottom:10px;}
+  .ranking-list{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:7px;min-height:40px;}
+  .ranking-empty{font-size:12.5px;color:var(--gris-moyen);font-style:italic;padding:8px 2px;}
+  .ranking-row{
+    display:flex;align-items:center;gap:10px;
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:8px 10px;
+  }
+  .ranking-num{
+    flex-shrink:0;width:24px;height:24px;border-radius:50%;
+    background:var(--bleu-fonce);color:#fff;font-size:11.5px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ranking-label{flex:1;font-size:13px;color:#20282b;font-weight:600;}
+  .ranking-actions{display:flex;align-items:center;gap:1px;flex-shrink:0;}
+  .ranking-actions button{
+    background:none;border:none;color:var(--gris-moyen);
+    font-size:14px;cursor:pointer;padding:3px 5px;line-height:1;
+  }
+  .ranking-actions button:hover{color:var(--bleu-fonce);}
+  .ranking-actions button:disabled{opacity:0.3;cursor:not-allowed;}
+  .ranking-actions .remove-btn:hover{color:var(--rouge);}
+
+  .validate-row{text-align:center;margin-top:6px;}
+  .validate-btn{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:12px 30px;
+    font-size:13.5px;
+    font-weight:700;
+    border-radius:24px;
+    cursor:pointer;
+    font-family:inherit;
+    box-shadow:0 8px 18px rgba(0,136,169,0.25);
+  }
+  .validate-btn:hover{background:#006f87;}
+
+  /* ---------- Vue collective ---------- */
+  .collective-count{font-size:13px;color:var(--gris);margin-bottom:16px;}
+  .collective-count strong{color:var(--bleu-fonce);}
+  .collective-empty{font-size:13px;color:var(--gris-moyen);font-style:italic;text-align:center;padding:20px 10px;}
+  .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .bar-rank{flex-shrink:0;width:22px;font-size:12px;font-weight:700;color:var(--gris-moyen);text-align:right;}
+  .bar-label{flex:0 0 150px;font-size:13px;font-weight:600;color:#20282b;}
+  .bar-track{flex:1;background:var(--gris-fond2);border-radius:8px;height:22px;position:relative;overflow:hidden;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--bleu-fonce),var(--bleu));border-radius:8px;}
+  .bar-score{flex-shrink:0;width:74px;font-size:11.5px;color:var(--gris-moyen);text-align:right;}
+  @media (max-width:600px){
+    .bar-label{flex-basis:100px;font-size:12px;}
+    .bar-score{width:60px;}
+  }
+  .toggle-all-row{text-align:center;margin-top:12px;}
+  .toggle-all-btn{
+    background:none;border:none;color:var(--bleu-fonce);
+    font-size:12.5px;font-weight:700;cursor:pointer;text-decoration:underline;font-family:inherit;
+  }
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px 8px;
+  }
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .name-row, .search-row, .values-pool, .ranking-actions,
+    .validate-row, .toggle-all-btn, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;}
+    .builder-layout{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Classement collectif des valeurs<span>Ce qui compte vraiment pour l'équipe</span></h1>
+      <p class="hero-desc">Chaque participant sélectionne et classe ses 10 valeurs les plus importantes parmi une liste de 65. Les classements individuels se cumulent en direct pour faire émerger les valeurs partagées par le collectif.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          30-45 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          65 valeurs, top 10 par participant
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('builderPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Construire un classement &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+
+        <!-- classement en barres -->
+        <g>
+          <rect x="70" y="58" width="100" height="14" rx="4" fill="#F5AB33"/>
+          <rect x="70" y="80" width="82" height="14" rx="4" fill="#884EC2"/>
+          <rect x="70" y="102" width="66" height="14" rx="4" fill="#15CA88"/>
+          <rect x="70" y="124" width="50" height="14" rx="4" fill="#DE5C5C"/>
+          <rect x="70" y="146" width="34" height="14" rx="4" fill="#0088A9"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Classement collectif des valeurs</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>Consigne :</strong> choisissez et classez vos 10 valeurs les plus importantes parmi la liste ci-dessous, puis validez votre classement.</p>
+    <span class="note-dev">Les participants saisissent leur classement à tour de rôle sur le même écran (celui du formateur, ou un poste qui circule). Les choix individuels ne sont pas conservés au-delà de l'agrégation : seule la vue collective est affichée, pas qui a choisi quoi.</span>
+  </div>
+
+  <div class="panel" id="builderPanel">
+    <h2>Construire un classement</h2>
+    <p class="panel-sub">Cliquez sur les valeurs dans l'ordre d'importance, de la plus essentielle à la moins essentielle. Vous pouvez réordonner ou retirer une valeur avant de valider.</p>
+
+    <div class="name-row">
+      <label for="participantName">Prénom du participant (facultatif)</label>
+      <input type="text" id="participantName" placeholder="Ex. Julie">
+    </div>
+
+    <div class="builder-layout">
+      <div class="pool-col">
+        <div class="search-row">
+          <input type="text" id="searchInput" placeholder="Rechercher une valeur…" oninput="setSearch(this.value)">
+        </div>
+        <div class="values-pool" id="valuesPool"></div>
+      </div>
+
+      <div class="ranking-col">
+        <div class="ranking-count" id="rankingCount">0 / 10 valeurs sélectionnées</div>
+        <ul class="ranking-list" id="rankingList"></ul>
+        <div class="validate-row">
+          <button class="validate-btn" onclick="validateRanking()">Valider ce classement</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Vue collective</h2>
+    <p class="panel-sub">Classement pondéré : chaque valeur cumule des points selon le rang que lui attribue chaque participant (10 points pour un rang 1, 1 point pour un rang 10).</p>
+    <div class="collective-count" id="collectiveCount"></div>
+    <div id="collectiveView"></div>
+  </div>
+
+  <div class="actions-row">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="resetAll()">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil d'animation. Les classements individuels ne sont pas enregistrés au-delà de leur agrégation ; seule la vue collective reste affichée (aucun enregistrement, aucun envoi à un serveur).</footer>
+
+<script>
+/* ---------- Données ---------- */
+/* Les 65 valeurs sont regroupées en familles thématiques pour faciliter la lecture et le choix.
+   Ce découpage est une proposition de départ, à ajuster librement : certaines valeurs (ex. "bonheur",
+   "hiérarchie") sont à la frontière de plusieurs familles et ont été placées dans la plus proche. */
+const VALUE_FAMILIES = [
+  { name: "Bienveillance et solidarité", values: ["abnégation","aide","altruisme","bienveillance","bonté","compassion","entraide","générosité","gentillesse","humanisme","service"] },
+  { name: "Convivialité et lien social", values: ["amabilité","clémence","collectif","convivialité","cordialité","courtoisie","entente","famille","fraternité","proximité"] },
+  { name: "Coopération et engagement", values: ["alignement","collaboration","coopération","devoir","dévouement","diplomatie"] },
+  { name: "Droiture et intégrité", values: ["dignité","droiture","fidélité","franchise","honnêteté","honneur","respect","vérité"] },
+  { name: "Discernement et sérénité", values: ["bonheur","calme","clairvoyance","discrétion","humilité","résilience","sagesse","sérénité"] },
+  { name: "Exigence et performance", values: ["compétence","compétition","discipline","efficacité","excellence","expertise","rigueur","utilité"] },
+  { name: "Courage et affirmation de soi", values: ["audace","autorité","bravoure","conviction","courage","fermeté","indépendance"] },
+  { name: "Stabilité et fiabilité", values: ["adaptation","constance","fiabilité","sécurité"] },
+  { name: "Cadre et équité", values: ["diversité","égalité","hiérarchie"] }
+];
+const VALUES_POOL = VALUE_FAMILIES.reduce(function(acc, f){ return acc.concat(f.values); }, []);
+const MAX_RANK = 10;
+
+/* ---------- État ---------- */
+let currentRanking = [];
+let searchTerm = '';
+let scores = {};      // valeur -> points cumulés (Borda)
+let frequency = {};   // valeur -> nombre de fois choisie (tous rangs confondus)
+let participantCount = 0;
+let showAllCollective = false;
+
+VALUES_POOL.forEach(function(v){ scores[v] = 0; frequency[v] = 0; });
+
+/* ---------- Utilitaires ---------- */
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function normalize(str){
+  return String(str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+/* ---------- Recherche ---------- */
+function setSearch(val){
+  searchTerm = val;
+  renderPool();
+}
+
+/* ---------- Construction du classement individuel ---------- */
+function renderPool(){
+  const wrap = document.getElementById('valuesPool');
+  const term = normalize(searchTerm.trim());
+  const full = currentRanking.length >= MAX_RANK;
+
+  let html = '';
+  let totalAvailable = 0;
+
+  VALUE_FAMILIES.forEach(function(family){
+    const available = family.values.filter(function(v){
+      return currentRanking.indexOf(v) === -1 && (!term || normalize(v).indexOf(term) !== -1);
+    });
+    if(available.length === 0) return;
+    totalAvailable += available.length;
+    html += '<div class="family-group">' +
+      '<h3 class="family-title">' + escapeHtml(family.name) + '</h3>' +
+      '<div class="family-chips">' +
+      available.map(function(v){
+        return '<button type="button" class="value-chip"' + (full ? ' disabled' : '') +
+          ' onclick="addToRanking(\'' + v.replace(/'/g, "\\'") + '\')">' + escapeHtml(v) + '</button>';
+      }).join('') +
+      '</div></div>';
+  });
+
+  if(totalAvailable === 0){
+    wrap.innerHTML = '<span class="pool-empty">Aucune valeur disponible pour cette recherche.</span>';
+    return;
+  }
+  wrap.innerHTML = html;
+}
+
+function addToRanking(value){
+  if(currentRanking.length >= MAX_RANK) return;
+  if(currentRanking.indexOf(value) !== -1) return;
+  currentRanking.push(value);
+  renderPool();
+  renderRanking();
+}
+
+function removeFromRanking(index){
+  currentRanking.splice(index, 1);
+  renderPool();
+  renderRanking();
+}
+
+function moveRanking(index, direction){
+  const newIndex = index + direction;
+  if(newIndex < 0 || newIndex >= currentRanking.length) return;
+  const tmp = currentRanking[index];
+  currentRanking[index] = currentRanking[newIndex];
+  currentRanking[newIndex] = tmp;
+  renderRanking();
+}
+
+function renderRanking(){
+  document.getElementById('rankingCount').textContent = currentRanking.length + ' / ' + MAX_RANK + ' valeurs sélectionnées';
+  const list = document.getElementById('rankingList');
+  if(currentRanking.length === 0){
+    list.innerHTML = '<li class="ranking-empty">Cliquez sur une valeur à gauche pour commencer votre classement.</li>';
+    return;
+  }
+  list.innerHTML = currentRanking.map(function(v, i){
+    const isFirst = i === 0, isLast = i === currentRanking.length - 1;
+    return '<li class="ranking-row">' +
+      '<span class="ranking-num">' + (i + 1) + '</span>' +
+      '<span class="ranking-label">' + escapeHtml(v) + '</span>' +
+      '<span class="ranking-actions">' +
+        '<button onclick="moveRanking(' + i + ', -1)"' + (isFirst ? ' disabled' : '') + ' title="Monter">&uarr;</button>' +
+        '<button onclick="moveRanking(' + i + ', 1)"' + (isLast ? ' disabled' : '') + ' title="Descendre">&darr;</button>' +
+        '<button class="remove-btn" onclick="removeFromRanking(' + i + ')" title="Retirer">&times;</button>' +
+      '</span>' +
+    '</li>';
+  }).join('');
+}
+
+/* ---------- Validation et agrégation ---------- */
+function validateRanking(){
+  if(currentRanking.length === 0){
+    alert('Sélectionnez au moins une valeur avant de valider.');
+    return;
+  }
+  if(currentRanking.length < MAX_RANK){
+    if(!confirm('Ce classement ne comporte que ' + currentRanking.length + ' valeur(s) sur ' + MAX_RANK + ' attendues. Valider quand même ?')) return;
+  }
+
+  const n = currentRanking.length;
+  currentRanking.forEach(function(value, i){
+    scores[value] += (n - i);
+    frequency[value] += 1;
+  });
+  participantCount += 1;
+
+  currentRanking = [];
+  document.getElementById('participantName').value = '';
+  renderPool();
+  renderRanking();
+  renderCollective();
+}
+
+/* ---------- Vue collective ---------- */
+function renderCollective(){
+  const countEl = document.getElementById('collectiveCount');
+  countEl.innerHTML = participantCount === 0
+    ? ''
+    : '<strong>' + participantCount + '</strong> classement' + (participantCount > 1 ? 's' : '') + ' enregistré' + (participantCount > 1 ? 's' : '');
+
+  const wrap = document.getElementById('collectiveView');
+  if(participantCount === 0){
+    wrap.innerHTML = '<p class="collective-empty">Aucun classement enregistré pour le moment.</p>';
+    return;
+  }
+
+  const ranked = VALUES_POOL
+    .map(function(v){ return { value: v, score: scores[v], freq: frequency[v] }; })
+    .filter(function(r){ return r.score > 0; })
+    .sort(function(a, b){ return b.score - a.score || b.freq - a.freq || a.value.localeCompare(b.value); });
+
+  if(ranked.length === 0){
+    wrap.innerHTML = '<p class="collective-empty">Aucune valeur sélectionnée pour le moment.</p>';
+    return;
+  }
+
+  const displayCount = showAllCollective ? ranked.length : Math.min(15, ranked.length);
+  const maxScore = ranked[0].score;
+
+  let html = ranked.slice(0, displayCount).map(function(r, i){
+    const pct = Math.max(6, Math.round((r.score / maxScore) * 100));
+    return '<div class="bar-row">' +
+      '<span class="bar-rank">' + (i + 1) + '</span>' +
+      '<span class="bar-label">' + escapeHtml(r.value) + '</span>' +
+      '<span class="bar-track"><span class="bar-fill" style="width:' + pct + '%"></span></span>' +
+      '<span class="bar-score">' + r.score + ' pts &middot; ' + r.freq + 'x</span>' +
+    '</div>';
+  }).join('');
+
+  wrap.innerHTML = html;
+
+  if(ranked.length > 15){
+    const label = showAllCollective ? 'Afficher moins' : 'Afficher toutes les valeurs classées (' + ranked.length + ')';
+    wrap.innerHTML += '<div class="toggle-all-row"><button class="toggle-all-btn" onclick="toggleShowAll()">' + label + '</button></div>';
+  }
+}
+
+function toggleShowAll(){
+  showAllCollective = !showAllCollective;
+  renderCollective();
+}
+
+/* ---------- Réinitialisation ---------- */
+function resetAll(){
+  const hasContent = participantCount > 0 || currentRanking.length > 0;
+  if(hasContent){
+    if(!confirm('Effacer tous les classements enregistrés et repartir de zéro ?')) return;
+  }
+  currentRanking = [];
+  searchTerm = '';
+  participantCount = 0;
+  showAllCollective = false;
+  VALUES_POOL.forEach(function(v){ scores[v] = 0; frequency[v] = 0; });
+  document.getElementById('participantName').value = '';
+  document.getElementById('searchInput').value = '';
+  renderPool();
+  renderRanking();
+  renderCollective();
+}
+
+renderPool();
+renderRanking();
+renderCollective();
+</script>
+
+</body>
+</html>

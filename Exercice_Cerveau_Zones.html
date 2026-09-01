@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un cerveau puissant — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --rouge: #DE5C5C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 380px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:33px;font-weight:700;line-height:1.16;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:400px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-brain-img{position:absolute;top:50%;left:50%;width:118%;transform:translate(-50%,-50%);z-index:2;filter:drop-shadow(0 10px 18px rgba(0,90,110,0.20));}
+  .hero-brain-badge{position:absolute;top:6px;left:-4px;background:#fff;border-radius:14px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--bleu-fonce);box-shadow:0 4px 10px rgba(0,0,0,0.12);transform:rotate(-6deg);z-index:3;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:820px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:16px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+  }
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .panel h2{margin:0;font-size:16px;color:var(--bleu-fonce);}
+  .step-note{font-size:12.5px;color:var(--gris-moyen);margin:0 0 14px;}
+
+  /* Chips */
+  #chipsTray{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:18px;
+    min-height:20px;
+  }
+  .chip{
+    background:var(--gris-fond2);
+    border:1.5px solid var(--gris-clair);
+    color:var(--gris);
+    padding:9px 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    cursor:grab;
+    font-family:inherit;
+    touch-action:none;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .chip:active{cursor:grabbing;}
+  .chip.armed{
+    background:var(--bleu-fonce);
+    border-color:var(--bleu-fonce);
+    color:#fff;
+  }
+  .chip.dragging-source{opacity:0.35;}
+  .chip.empty-note{
+    border:none;
+    background:none;
+    color:var(--gris-moyen);
+    font-weight:400;
+    font-style:italic;
+    cursor:default;
+    padding:9px 0;
+  }
+  #dragGhost{
+    position:fixed;
+    z-index:100;
+    display:none;
+    pointer-events:none;
+    background:var(--bleu-fonce);
+    color:#fff;
+    padding:9px 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    font-family:inherit;
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+    transform:translate(-50%,-50%);
+    white-space:nowrap;
+  }
+
+  /* Diagram */
+  .diagram-wrap{max-width:600px;margin:0 auto;position:relative;}
+  svg#brainSvg{width:100%;height:auto;display:block;}
+  .zone-hit{cursor:pointer;fill:rgba(0,0,0,0);transition:fill .12s ease;}
+  .zone-hit.drag-over{fill:rgba(0,181,226,0.28);}
+  .zone-badge-circle{fill:#fff;stroke:var(--gris-clair);stroke-width:4;}
+  .zone-badge-text{
+    font-family:'Century Gothic Fallback','Century Gothic',sans-serif;
+    font-size:32px;
+    font-weight:700;
+    text-anchor:middle;
+    dominant-baseline:central;
+    fill:var(--gris);
+    pointer-events:none;
+  }
+  .zone-name-label{
+    font-family:'Century Gothic Fallback','Century Gothic',sans-serif;
+    font-size:25px;
+    font-weight:700;
+    text-anchor:middle;
+    fill:#fff;
+    pointer-events:none;
+  }
+  .zone-ring{fill:none;stroke-width:9;stroke-linejoin:round;pointer-events:none;}
+  .zone-ring.correct{stroke:var(--vert);}
+  .zone-ring.incorrect{stroke:var(--rouge);}
+
+  .verify-row{text-align:center;margin-top:18px;}
+  button.btn-primary{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:12px 28px;
+    border-radius:24px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.btn-primary:hover{background:#006f87;}
+  button.btn-ghost{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:10px 20px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+    margin:0 6px;
+  }
+  .score-note{
+    text-align:center;
+    margin-top:14px;
+    font-size:14px;
+    font-weight:700;
+  }
+  .explore-hint{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    margin-top:10px;
+  }
+
+  /* Info popover */
+  .popover{
+    position:fixed;
+    z-index:50;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,0.18);
+    padding:18px;
+    width:300px;
+    display:none;
+  }
+  .popover.open{display:block;}
+  .popover h4{margin:0 0 4px;font-size:15px;color:var(--bleu-fonce);}
+  .popover .func-tags{margin:8px 0 10px;}
+  .popover .func-tag{
+    display:inline-block;
+    background:var(--gris-fond2);
+    color:var(--gris);
+    font-size:11px;
+    font-weight:700;
+    padding:3px 10px;
+    border-radius:10px;
+    margin:0 5px 5px 0;
+  }
+  .popover p{font-size:13px;color:var(--gris);margin:0;}
+  .popover-close{
+    margin-top:12px;
+    width:100%;
+    padding:8px;
+    border-radius:16px;
+    border:1.5px solid var(--gris-clair);
+    background:#fff;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12.5px;
+    color:var(--gris);
+  }
+  .popover-backdrop{position:fixed;inset:0;z-index:40;display:none;}
+  .popover-backdrop.open{display:block;}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Un cerveau<span>puissant</span></h1>
+      <p class="hero-desc">Un exercice d'association pour situer, sur un schéma réel, les six grandes zones du cerveau et leurs fonctions dominantes — à son rythme, avec un mode exploration détaillé une fois le schéma corrigé.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          8-10 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke-width="2"/></svg></span>
+          6 zones à identifier
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('step1Panel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Commencer l'exercice &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="88" ry="72" fill="var(--bleu)" opacity="0.12"/>
+      </svg>
+      <img class="hero-brain-img" src="Illustrations%20headers/braindesign-vecteur-tridimensionnel.png" alt="">
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Un cerveau puissant — zones et fonctions</span>
+  </nav>
+
+  <div class="intro">
+    <strong>Consigne :</strong> glissez chaque étiquette vers la zone du cerveau qui lui correspond, puis vérifiez vos réponses. Une fois l'exercice corrigé, cliquez sur chaque zone pour découvrir ses fonctions en détail.
+  </div>
+
+  <div class="panel" id="step1Panel">
+    <h2>Étape 1 — Associez chaque nom à sa zone</h2>
+    <p class="step-note">Glissez-déposez une étiquette sur la zone du cerveau qui lui correspond. Pour vider une zone déjà complétée, cliquez dessus.</p>
+    <div id="chipsTray"></div>
+
+    <div class="diagram-wrap">
+      <svg id="brainSvg" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="dragGhost"></div>
+    </div>
+
+    <div class="verify-row">
+      <button class="btn-primary" id="verifyBtn" onclick="verifyAnswers()">Vérifier mes réponses</button>
+    </div>
+    <div class="score-note" id="scoreNote"></div>
+    <div class="explore-hint" id="exploreHint" style="display:none;">Le mode exploration est activé : cliquez sur une zone pour en savoir plus. <button class="btn-ghost" onclick="resetExercise()">Recommencer l'exercice</button></div>
+  </div>
+
+</div>
+
+<div class="popover-backdrop" id="popoverBackdrop" onclick="closeInfoPopover()"></div>
+<div class="popover" id="infoPopover">
+  <h4 id="popTitle">Zone</h4>
+  <div class="func-tags" id="popFuncs"></div>
+  <p id="popText"></p>
+  <button class="popover-close" onclick="closeInfoPopover()">Fermer</button>
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique de sensibilisation. Les données saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+const zones = [
+  {
+    key:"frontal", num:1, name:"Lobe frontal", color:"#00B5E2",
+    badgeX:303, badgeY:277,
+    poly:"745.7,58.2 601.0,22.0 441.5,18.9 293.8,51.8 171.3,113.9 68.3,213.6 155.5,213.6 198.8,256.7 272.7,256.7 290.7,227.7 326.0,221.4 352.8,241.9 357.5,274.9 345.7,276.4 345.7,239.5 330.0,241.0 330.8,281.9 354.3,282.7 304.0,306.3 271.8,259.9 198.8,259.9 154.8,215.9 66.8,215.9 15.7,364.3 26.0,460.1 59.0,532.4 133.5,581.1 224.7,587.3 323.0,470.4 467.5,440.5 485.5,399.7 473.8,288.2 493.5,236.3 526.5,207.3 581.5,191.6 570.5,154.0 590.0,124.8 671.8,102.1",
+    functions:["Décision","Planification","Contrôle"],
+    explication:"Situé à l'avant du cerveau, le lobe frontal est impliqué dans les fonctions exécutives : anticiper, planifier, arbitrer entre plusieurs options, inhiber une réaction impulsive. Il intervient aussi fortement dans la régulation du comportement social."
+  },
+  {
+    key:"parietal", num:2, name:"Lobe pariétal", color:"#15CA88",
+    badgeX:681, badgeY:294,
+    poly:"941.3,197.9 784.2,196.3 746.5,234.0 704.8,234.0 685.2,274.9 653.0,281.1 627.8,266.2 617.5,241.0 624.7,214.4 651.3,195.5 686.7,202.6 704.8,231.6 744.8,231.6 783.3,194.0 937.3,194.0 869.8,132.7 772.3,69.9 720.5,76.9 677.3,113.9 604.2,130.4 583.0,154.0 598.7,199.5 530.3,219.1 491.8,265.4 485.5,325.0 498.2,409.1 480.8,446.8 513.0,479.0 561.8,499.4 608.2,482.9 691.5,486.1 744.8,471.1 783.3,439.0 815.5,379.3 840.0,216.7 912.2,215.2",
+    functions:["Perception","Attention","Coordination"],
+    explication:"Situé à l'arrière du lobe frontal, il intègre les informations sensorielles — toucher, position du corps dans l'espace — et joue un rôle central dans l'attention et la coordination des mouvements avec les perceptions."
+  },
+  {
+    key:"occipital", num:3, name:"Lobe occipital", color:"#A2A5A4",
+    badgeX:944, badgeY:465,
+    poly:"950.0,208.8 913.8,227.7 851.0,227.7 834.5,360.4 807.7,425.6 769.2,469.6 769.2,513.6 825.0,530.8 884.0,530.1 896.5,594.4 859.5,659.6 893.3,688.7 964.0,706.0 1012.0,687.1 1050.5,651.0 1075.7,599.1 1084.3,531.6 1081.2,490.8 1021.5,490.8 984.5,453.9 953.0,453.9 945.2,486.9 919.3,503.3 895.7,501.8 870.5,479.0 875.3,434.3 916.2,416.9 936.5,425.6 953.0,451.5 984.5,451.5 1020.7,487.6 1080.3,487.6 1036.3,340.0",
+    functions:["Vision","Analyse visuelle"],
+    explication:"Situé à l'arrière du cerveau, il traite l'essentiel des informations visuelles transmises par les yeux : formes, couleurs, mouvement."
+  },
+  {
+    key:"temporal", num:4, name:"Lobe temporal", color:"#884EC2",
+    badgeX:526, badgeY:603,
+    poly:"245.2,660.3 339.5,660.3 401.5,598.4 430.5,598.4 447.0,559.1 495.8,555.9 517.0,591.3 491.8,633.7 459.7,635.2 430.5,600.7 403.0,600.7 341.0,662.7 246.7,662.7 271.0,703.6 315.0,737.4 377.2,758.5 436.0,760.9 547.7,724.0 595.5,683.1 660.8,688.7 791.2,649.4 850.2,651.0 878.5,612.4 884.7,570.9 877.7,542.6 814.0,541.8 759.0,522.2 758.2,477.5 709.5,496.2 616.0,494.7 560.2,512.0 508.3,490.8 470.7,453.1 345.0,471.9 291.5,511.2 239.7,592.9",
+    functions:["Mémoire à long terme","Langage"],
+    explication:"Situé sur le côté du cerveau, il intervient dans la mémoire à long terme, la reconnaissance des sons et du langage, ainsi que dans le traitement des émotions via les structures qu'il abrite."
+  },
+  {
+    key:"cervelet", num:5, name:"Cervelet", color:"#F5AB33",
+    badgeX:771, badgeY:743,
+    poly:"935.0,713.0 877.7,694.2 846.2,662.0 812.5,659.6 674.2,698.9 601.0,697.3 598.0,716.1 609.7,746.8 667.8,810.4 719.7,804.9 738.5,815.1 808.5,819.0 882.3,797.1 906.7,776.7 925.5,746.0 879.2,746.0 848.5,715.3 802.2,715.3 809.3,746.0 801.5,764.9 783.3,779.7 755.8,782.1 731.5,766.4 722.8,747.5 724.5,725.6 740.2,704.3 766.8,695.7 799.8,712.2 848.5,712.2 880.0,743.6 927.2,743.6",
+    functions:["Coordination","Précision","Équilibre"],
+    explication:"Situé à l'arrière et en dessous du cerveau, le cervelet ajuste la précision et la fluidité des mouvements, et contribue à l'équilibre postural."
+  },
+  {
+    key:"tronc", num:6, name:"Tronc cérébral", color:"#5D6160",
+    badgeX:723, badgeY:887,
+    poly:"675.7,823.7 697.7,857.5 706.3,874.7 704.0,901.5 697.7,925.8 702.5,936.0 707.2,940.8 725.2,942.3 737.8,940.8 752.0,934.4 762.2,924.3 767.7,913.3 768.5,906.9 755.0,891.2 748.8,890.5 749.5,888.1 752.7,888.1 741.0,871.6 728.3,848.0 719.7,819.8 713.5,818.2 696.2,822.2",
+    functions:["Survie","Régulation","Automatique"],
+    explication:"Structure la plus profonde, elle relie le cerveau à la moelle épinière et régule les fonctions vitales automatiques : respiration, rythme cardiaque, éveil."
+  }
+];
+
+let assignments = {};   // zoneKey -> chipKey
+let armedChip = null;
+let verified = false;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+let chipOrder = shuffle(zones.map(z=>z.key));
+
+function buildBrainSvg(){
+  const svg = document.getElementById('brainSvg');
+  const svgNS = 'http://www.w3.org/2000/svg';
+  svg.setAttribute('viewBox','0 0 1100 958');
+  const zonesPolys = zones.map(z=>`<polygon id="zone-${z.key}" class="zone-hit" points="${z.poly}" fill="rgba(0,0,0,0)"/>`).join('\n');
+  svg.innerHTML = `
+    <image href="cerveau_assets/cerveau.png" x="0" y="0" width="1100" height="958" preserveAspectRatio="xMidYMid meet"/>
+    <g id="hitLayer">${zonesPolys}</g>
+    <g id="ringsLayer"></g>
+    <g id="badgesLayer"></g>
+  `;
+
+  const badgesLayer = document.getElementById('badgesLayer');
+  zones.forEach(z=>{
+    const g = document.createElementNS(svgNS,'g');
+    const circle = document.createElementNS(svgNS,'circle');
+    circle.setAttribute('cx', z.badgeX);
+    circle.setAttribute('cy', z.badgeY);
+    circle.setAttribute('r', 33);
+    circle.setAttribute('class','zone-badge-circle');
+    const text = document.createElementNS(svgNS,'text');
+    text.setAttribute('x', z.badgeX);
+    text.setAttribute('y', z.badgeY+1);
+    text.setAttribute('class','zone-badge-text');
+    text.textContent = z.num;
+    g.appendChild(circle);
+    g.appendChild(text);
+    g.id = 'badge-'+z.key;
+    badgesLayer.appendChild(g);
+  });
+
+  zones.forEach(z=>{
+    document.getElementById('zone-'+z.key).addEventListener('click', (e)=> onZoneClick(z.key, e));
+  });
+}
+
+function renderChips(){
+  const tray = document.getElementById('chipsTray');
+  tray.innerHTML='';
+  const placedKeys = Object.values(assignments);
+  const remaining = chipOrder.filter(k=>!placedKeys.includes(k));
+  if(remaining.length===0){
+    const note = document.createElement('span');
+    note.className='chip empty-note';
+    note.textContent = 'Toutes les étiquettes sont placées.';
+    tray.appendChild(note);
+    return;
+  }
+  remaining.forEach(key=>{
+    const z = zones.find(zz=>zz.key===key);
+    const chip = document.createElement('button');
+    chip.className = 'chip' + (armedChip===key ? ' armed' : '');
+    chip.textContent = z.name;
+    chip.onclick = ()=> onChipClick(key);
+    chip.addEventListener('pointerdown', (e)=> startChipDrag(key, chip, e));
+    tray.appendChild(chip);
+  });
+}
+
+function onChipClick(key){
+  if(justDragged) return;
+  armedChip = (armedChip===key) ? null : key;
+  renderChips();
+}
+
+function onZoneClick(zoneKey, evt){
+  if(justDragged) return;
+  if(verified){
+    openInfoPopover(zoneKey, evt);
+    return;
+  }
+  if(armedChip){
+    placeChip(zoneKey, armedChip);
+  } else if(assignments[zoneKey]){
+    delete assignments[zoneKey];
+    renderChips();
+    renderZoneLabels();
+  }
+}
+
+function placeChip(zoneKey, chipKey){
+  // remove this chip from any previous zone it occupied
+  Object.keys(assignments).forEach(zk=>{
+    if(assignments[zk]===chipKey) delete assignments[zk];
+  });
+  assignments[zoneKey] = chipKey;
+  armedChip = null;
+  renderChips();
+  renderZoneLabels();
+}
+
+// --- Glisser-déposer (pointer events, compatible souris + tactile) ---
+let dragState = null;
+let justDragged = false;
+
+function startChipDrag(key, chipEl, e){
+  if(verified) return;
+  if(e.button !== undefined && e.button !== 0) return;
+  e.preventDefault();
+
+  const ghost = document.getElementById('dragGhost');
+  const z = zones.find(zz=>zz.key===key);
+  ghost.textContent = z.name;
+  ghost.style.display = 'block';
+  positionGhost(e.clientX, e.clientY);
+  chipEl.classList.add('dragging-source');
+  dragState = { key, chipEl, lastZone: null };
+
+  function onMove(ev){
+    positionGhost(ev.clientX, ev.clientY);
+    updateDragOverZone(ev.clientX, ev.clientY);
+  }
+  function onUp(ev){
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    document.removeEventListener('pointercancel', onCancel);
+    ghost.style.display = 'none';
+    chipEl.classList.remove('dragging-source');
+    clearDragOver();
+    const dropZoneKey = hitTestZone(ev.clientX, ev.clientY);
+    if(dropZoneKey){
+      placeChip(dropZoneKey, key);
+    }
+    dragState = null;
+    justDragged = true;
+    setTimeout(()=>{ justDragged = false; }, 60);
+  }
+  function onCancel(){
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    document.removeEventListener('pointercancel', onCancel);
+    ghost.style.display = 'none';
+    chipEl.classList.remove('dragging-source');
+    clearDragOver();
+    dragState = null;
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+  document.addEventListener('pointercancel', onCancel);
+}
+
+function positionGhost(x, y){
+  const ghost = document.getElementById('dragGhost');
+  ghost.style.left = x+'px';
+  ghost.style.top = y+'px';
+}
+
+function hitTestZone(x, y){
+  if(typeof document.elementFromPoint !== 'function') return null;
+  const el = document.elementFromPoint(x, y);
+  if(!el) return null;
+  const zoneEl = (typeof el.closest === 'function') ? el.closest('.zone-hit') : null;
+  if(zoneEl && zoneEl.id && zoneEl.id.indexOf('zone-')===0) return zoneEl.id.slice(5);
+  return null;
+}
+
+function updateDragOverZone(x, y){
+  const key = hitTestZone(x, y);
+  if(dragState.lastZone === key) return;
+  clearDragOver();
+  if(key){
+    const el = document.getElementById('zone-'+key);
+    if(el) el.classList.add('drag-over');
+  }
+  dragState.lastZone = key;
+}
+
+function clearDragOver(){
+  document.querySelectorAll('.zone-hit.drag-over').forEach(el=>el.classList.remove('drag-over'));
+}
+
+function renderZoneLabels(){
+  // remove old labels
+  document.querySelectorAll('.zone-name-label').forEach(el=>el.remove());
+  const badgesLayer = document.getElementById('badgesLayer');
+  const svgNS = 'http://www.w3.org/2000/svg';
+  Object.entries(assignments).forEach(([zoneKey, chipKey])=>{
+    const zone = zones.find(z=>z.key===zoneKey);
+    const chip = zones.find(z=>z.key===chipKey);
+    const text = document.createElementNS(svgNS,'text');
+    text.setAttribute('x', zone.badgeX);
+    text.setAttribute('y', zone.badgeY + 60);
+    text.setAttribute('class','zone-name-label');
+    text.setAttribute('stroke', zone.color);
+    text.setAttribute('stroke-width', '6');
+    text.setAttribute('paint-order','stroke');
+    text.textContent = chip.name;
+    badgesLayer.appendChild(text);
+  });
+}
+
+function verifyAnswers(){
+  const placedCount = Object.keys(assignments).length;
+  if(placedCount < 6){
+    document.getElementById('scoreNote').textContent = `Il reste ${6-placedCount} zone(s) sans étiquette. Complétez l'exercice avant de vérifier.`;
+    document.getElementById('scoreNote').style.color = 'var(--rouge)';
+    return;
+  }
+  let score = 0;
+  const ringsLayer = document.getElementById('ringsLayer');
+  ringsLayer.innerHTML='';
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  zones.forEach(z=>{
+    const isCorrect = assignments[z.key] === z.key;
+    if(isCorrect) score++;
+    const ring = document.createElementNS(svgNS,'polygon');
+    ring.setAttribute('points', z.poly);
+    ring.setAttribute('class', 'zone-ring ' + (isCorrect ? 'correct' : 'incorrect'));
+    ringsLayer.appendChild(ring);
+
+    if(!isCorrect){
+      // relabel with the wrong guess struck through info + correct name shown via badge tooltip on hover (title)
+      const zoneEl2 = document.getElementById('zone-'+z.key);
+      const title = document.createElementNS(svgNS,'title');
+      title.textContent = `Réponse attendue : ${z.name}`;
+      zoneEl2.appendChild(title);
+    }
+  });
+
+  document.getElementById('scoreNote').style.color = 'var(--gris)';
+  document.getElementById('scoreNote').textContent = `Score : ${score}/6 — les zones incorrectes sont entourées en rouge (survolez-les pour voir la bonne réponse).`;
+  verified = true;
+  document.getElementById('verifyBtn').style.display = 'none';
+  document.getElementById('exploreHint').style.display = 'block';
+}
+
+function openInfoPopover(zoneKey, evt){
+  const z = zones.find(zz=>zz.key===zoneKey);
+  document.getElementById('popTitle').textContent = `${z.num}. ${z.name}`;
+  document.getElementById('popFuncs').innerHTML = z.functions.map(f=>`<span class="func-tag">${f}</span>`).join('');
+  document.getElementById('popText').textContent = z.explication;
+
+  const pop = document.getElementById('infoPopover');
+  const backdrop = document.getElementById('popoverBackdrop');
+  backdrop.classList.add('open');
+  pop.classList.add('open');
+
+  let left = (evt && evt.clientX ? evt.clientX : window.innerWidth/2) + 12;
+  let top = (evt && evt.clientY ? evt.clientY : window.innerHeight/2) + 12;
+  left = Math.min(left, window.innerWidth-320);
+  top = Math.min(top, window.innerHeight-260);
+  pop.style.left = Math.max(10,left)+'px';
+  pop.style.top = Math.max(10,top)+'px';
+}
+
+function closeInfoPopover(){
+  document.getElementById('infoPopover').classList.remove('open');
+  document.getElementById('popoverBackdrop').classList.remove('open');
+}
+
+function resetExercise(){
+  assignments = {};
+  armedChip = null;
+  verified = false;
+  chipOrder = shuffle(zones.map(z=>z.key));
+  document.getElementById('verifyBtn').style.display = 'inline-block';
+  document.getElementById('exploreHint').style.display = 'none';
+  document.getElementById('scoreNote').textContent = '';
+  buildBrainSvg();
+  renderChips();
+  renderZoneLabels();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+buildBrainSvg();
+renderChips();
+</script>
+
+</body>
+</html>

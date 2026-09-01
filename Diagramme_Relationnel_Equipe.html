@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramme relationnel d'équipe — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --c1: #0088A9;
+    --c2: #15CA88;
+    --c3: #F5AB33;
+    --c4: #DE5C5C;
+    --c5: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.16;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:440px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{
+    flex:0 0 400px;
+    height:340px;
+    position:relative;
+  }
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-team-img{position:absolute;top:50%;left:50%;width:112%;transform:translate(-50%,-50%);z-index:2;filter:drop-shadow(0 10px 18px rgba(0,90,110,0.20));}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:900px;margin:0 auto;padding:26px 20px 60px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+  }
+  .intro h3{margin:14px 0 6px;font-size:13.5px;color:var(--bleu-fonce);}
+  .intro ol{margin:6px 0 0;padding-left:20px;font-size:13.5px;}
+  .intro ol li{margin-bottom:4px;}
+  .panel{
+    background:#fff;
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .panel h2{margin:0;font-size:16px;color:var(--bleu-fonce);}
+  .field-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+  .field{flex:1;min-width:150px;}
+  .field label{
+    display:block;
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    margin-bottom:4px;
+    font-weight:700;
+  }
+  .field input[type=text], .field input[type=number]{
+    width:100%;
+    padding:10px 12px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .field input:focus{outline:none;border-color:var(--bleu);}
+  button.btn-primary{
+    background:var(--bleu-fonce);
+    color:#fff;
+    border:none;
+    padding:11px 22px;
+    border-radius:22px;
+    font-size:13.5px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    white-space:nowrap;
+  }
+  button.btn-primary:hover{background:#006f87;}
+  button.btn-ghost{
+    background:transparent;
+    border:1.5px solid var(--gris-moyen);
+    color:var(--gris);
+    padding:9px 18px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.btn-small{
+    background:var(--gris-fond2);
+    border:none;
+    color:var(--gris);
+    width:28px;height:28px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:14px;
+    font-family:inherit;
+    flex-shrink:0;
+  }
+  button.btn-small:hover{background:var(--gris-clair);}
+
+  /* Members */
+  .member-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:8px 0;
+    border-bottom:1px solid var(--gris-fond2);
+  }
+  .member-row:last-child{border-bottom:none;}
+  .member-avatar{
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--bleu-fonce);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:12px;flex-shrink:0;
+  }
+  .member-row input[type=text]{
+    padding:8px 10px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:13px;
+    color:var(--gris);
+  }
+  .member-row .m-prenom{flex:1;min-width:100px;font-weight:700;}
+  .member-row .m-fonction{flex:1.4;min-width:120px;color:var(--gris-moyen);}
+
+  /* Legend editor */
+  .legend-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px solid var(--gris-fond2);
+    flex-wrap:wrap;
+  }
+  .legend-row:last-child{border-bottom:none;}
+  .legend-swatch{
+    width:20px;height:20px;
+    border-radius:5px;
+    flex-shrink:0;
+  }
+  .legend-row input[type=text]{
+    flex:1;
+    min-width:180px;
+    padding:8px 10px;
+    border:1.5px solid var(--gris-clair);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:13px;
+    color:var(--gris);
+  }
+  .legend-vigilance{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11.5px;
+    color:var(--gris-moyen);
+    white-space:nowrap;
+  }
+
+  /* Diagram */
+  .diagram-instructions{
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    margin-bottom:12px;
+    background:var(--gris-fond2);
+    border-radius:6px;
+    padding:9px 12px;
+  }
+  .diagram-wrap{
+    max-width:640px;
+    margin:0 auto;
+  }
+  svg#diagramSvg{width:100%;height:auto;display:block;}
+  .node-circle{cursor:pointer;transition:stroke-width .1s ease;}
+  .node-circle.armed{stroke:#F5AB33;stroke-width:4;}
+  .node-label{
+    font-family:'Century Gothic Fallback','Century Gothic',sans-serif;
+    font-size:13px;
+    font-weight:700;
+    fill:var(--gris);
+    text-anchor:middle;
+    pointer-events:none;
+  }
+  .node-initials{
+    font-family:'Century Gothic Fallback','Century Gothic',sans-serif;
+    font-size:12px;
+    font-weight:700;
+    fill:#fff;
+    text-anchor:middle;
+    dominant-baseline:central;
+    pointer-events:none;
+  }
+  .empty-diagram{
+    text-align:center;
+    color:var(--gris-moyen);
+    font-size:13.5px;
+    padding:30px 10px;
+    font-style:italic;
+  }
+
+  /* Popover */
+  .popover{
+    position:fixed;
+    z-index:50;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,0.18);
+    padding:16px;
+    width:290px;
+    display:none;
+  }
+  .popover.open{display:block;}
+  .popover h4{margin:0 0 4px;font-size:14px;color:var(--bleu-fonce);}
+  .popover .sub{font-size:11.5px;color:var(--gris-moyen);margin-bottom:12px;}
+  .popover .cat-toggle{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    width:100%;
+    text-align:left;
+    border:1.5px solid var(--gris-clair);
+    background:#fff;
+    border-radius:8px;
+    padding:8px 10px;
+    margin-bottom:7px;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12.5px;
+    color:var(--gris);
+  }
+  .popover .cat-toggle .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+  .popover .cat-toggle.active{background:var(--gris-fond2);font-weight:700;border-color:var(--gris-moyen);}
+  .popover .cat-toggle .check{margin-left:auto;font-size:13px;opacity:0;}
+  .popover .cat-toggle.active .check{opacity:1;}
+  .popover-close{
+    margin-top:6px;
+    width:100%;
+    padding:8px;
+    border-radius:16px;
+    border:1.5px solid var(--gris-clair);
+    background:#fff;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12.5px;
+    color:var(--gris);
+  }
+  .popover-backdrop{position:fixed;inset:0;z-index:40;display:none;}
+  .popover-backdrop.open{display:block;}
+
+  /* Analysis */
+  .analysis-block{
+    border-left:4px solid var(--gris-clair);
+    padding:12px 16px;
+    margin-bottom:12px;
+    border-radius:4px;
+    background:var(--gris-fond2);
+  }
+  .analysis-block h3{margin:0 0 6px;font-size:14px;color:var(--gris);}
+  .analysis-block p{margin:0 0 6px;font-size:13px;color:var(--gris);}
+  .analysis-block p:last-child{margin-bottom:0;}
+  .analysis-block.limites{border-left-color:var(--c4);background:#FBEBEA;}
+  .stat-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .stat-box{
+    flex:1;
+    min-width:120px;
+    background:var(--bleu-fonce);
+    color:#fff;
+    border-radius:8px;
+    padding:12px;
+  }
+  .stat-box .snum{font-size:20px;font-weight:700;}
+  .stat-box .slabel{font-size:11px;opacity:0.9;}
+  .actions-row{text-align:center;margin-top:24px;}
+  .actions-row button{margin:0 6px;}
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+  @media print{
+    .hero-header, .back-link, #teamSetupPanel, .diagram-instructions, .actions-row, footer{display:none !important;}
+    body{background:#fff;}
+    .panel{box-shadow:none;border:1px solid var(--gris-clair);}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Diagramme relationnel<span>d'équipe</span></h1>
+      <p class="hero-desc">Une cartographie visuelle des dynamiques relationnelles telles que vous les percevez au sein d'un collectif, pour objectiver une intuition avant un entretien ou un temps de régulation.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          10-15 minutes
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" stroke-width="2"/><circle cx="17" cy="9" r="3" stroke-width="2"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5" stroke-width="2"/><path d="M12 20c0-3 2.5-5 5-5s4 2 4 5" stroke-width="2"/></svg></span>
+          jusqu'à 24 personnes
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('teamSetupPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Configurer mon équipe &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <g stroke="#0088A9" stroke-width="1" opacity="0.14" fill="none">
+          <path d="M18,30 L42,16"/><path d="M8,70 L24,120"/><path d="M210,24 L228,55"/><path d="M222,110 L205,170"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+      </svg>
+      <img class="hero-team-img" src="Illustrations%20headers/equipe-affaires-ligne-continue-illustration-vectorielle-coloree-groupe-hommes-affaires-debout.png" alt="">
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Diagramme relationnel d'équipe</span>
+  </nav>
+
+  <div class="intro">
+    <strong>Consigne :</strong> indiquez le nombre de personnes qui composent l'équipe et complétez les prénoms et fonctions, puis, sur le diagramme, cliquez sur une première personne et une seconde pour qualifier le lien qui les unit. Une fois le diagramme stabilisé, générez l'analyse.
+  </div>
+
+  <div class="panel" id="teamSetupPanel">
+    <h2>Composition de l'équipe</h2>
+    <div class="field-row">
+      <div class="field">
+        <label for="teamSize">Combien de personnes composent l'équipe ?</label>
+        <input type="number" id="teamSize" min="2" max="24" value="6">
+      </div>
+      <button class="btn-primary" onclick="generateTeam()">Générer le diagramme</button>
+    </div>
+  </div>
+
+  <div class="panel" id="membersPanel" style="display:none;">
+    <div class="panel-head">
+      <h2>Membres de l'équipe</h2>
+      <div>
+        <button class="btn-ghost" onclick="addPerson()">+ Ajouter une personne</button>
+        <button class="btn-ghost" onclick="resetTool()">Réinitialiser tout</button>
+      </div>
+    </div>
+    <div id="membersList"></div>
+  </div>
+
+  <div class="panel" id="legendPanel" style="display:none;">
+    <h2>Légende des liens</h2>
+    <p style="font-size:12.5px;color:var(--gris-moyen);margin:0 0 10px;">Renommez les catégories selon ce que vous souhaitez repérer (collaboration, confiance, tension, communication, influence…). Cochez « point de vigilance » pour les catégories que l'analyse devra signaler spécifiquement.</p>
+    <div id="legendList"></div>
+  </div>
+
+  <div class="panel" id="diagramPanel" style="display:none;">
+    <h2>Diagramme relationnel</h2>
+    <div class="diagram-instructions">Cliquez sur une personne, puis sur une seconde pour qualifier leur lien. Cliquez à nouveau sur une paire déjà reliée pour modifier ou retirer une qualification.</div>
+    <div class="diagram-wrap">
+      <svg id="diagramSvg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+  </div>
+
+  <div class="panel" id="analysisPanel" style="display:none;">
+    <div class="panel-head">
+      <h2>Analyse</h2>
+      <button class="btn-primary" onclick="generateAnalysis()">Générer l'analyse</button>
+    </div>
+    <div id="analysisArea"></div>
+  </div>
+
+  <div class="actions-row" id="printRow" style="display:none;">
+    <button class="btn-ghost" onclick="window.print()">Imprimer / exporter</button>
+  </div>
+
+</div>
+
+<div class="popover-backdrop" id="popoverBackdrop" onclick="closePopover()"></div>
+<div class="popover" id="popover">
+  <h4 id="popTitle">Lien entre X et Y</h4>
+  <div class="sub">Sélectionnez une ou plusieurs qualifications pour ce lien.</div>
+  <div id="popCatList"></div>
+  <button class="popover-close" onclick="closePopover()">Fermer</button>
+</div>
+
+<footer>AXIS MUNDI — Outil de préparation managériale. Les données saisies restent dans votre session (aucun enregistrement, aucun envoi). À utiliser en complément d'autres sources d'observation, jamais comme diagnostic isolé.</footer>
+
+<script>
+let people = [];
+let idCounter = 0;
+let links = {};
+let positions = {};
+let armedId = null;
+let activePair = null;
+
+let legend = [
+  {key:'c1', label:"Collaboration fréquente et fluide", hex:"var(--c1)", hexResolved:"#0088A9", vigilance:false},
+  {key:'c2', label:"Relation de confiance", hex:"var(--c2)", hexResolved:"#15CA88", vigilance:false},
+  {key:'c3', label:"Communication occasionnelle ou distante", hex:"var(--c3)", hexResolved:"#F5AB33", vigilance:false},
+  {key:'c4', label:"Tension ou friction perçue", hex:"var(--c4)", hexResolved:"#DE5C5C", vigilance:true},
+  {key:'c5', label:"Lien d'influence ou de leadership informel", hex:"var(--c5)", hexResolved:"#884EC2", vigilance:false}
+];
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+function pairKey(a,b){
+  return a<b ? `${a}-${b}` : `${b}-${a}`;
+}
+
+function initials(person){
+  const p = (person.prenom||'').trim();
+  if(!p) return '?';
+  const parts = p.split(/\s+/);
+  return parts.length>1 ? (parts[0][0]+parts[1][0]).toUpperCase() : p.slice(0,2).toUpperCase();
+}
+
+function displayName(person, idx){
+  return (person.prenom||'').trim() || `Personne ${idx+1}`;
+}
+
+function generateTeam(){
+  const n = parseInt(document.getElementById('teamSize').value, 10);
+  if(!n || n<2){ alert("Merci d'indiquer un nombre de personnes valide (2 minimum)."); return; }
+  people = [];
+  idCounter = 0;
+  links = {};
+  for(let i=0;i<n;i++){
+    people.push({id:idCounter++, prenom:'', fonction:''});
+  }
+  document.getElementById('teamSetupPanel').style.display='none';
+  document.getElementById('membersPanel').style.display='block';
+  document.getElementById('legendPanel').style.display='block';
+  document.getElementById('diagramPanel').style.display='block';
+  document.getElementById('analysisPanel').style.display='block';
+  document.getElementById('printRow').style.display='block';
+  renderMembers();
+  renderLegend();
+  computeLayout();
+  renderDiagram();
+}
+
+function addPerson(){
+  people.push({id:idCounter++, prenom:'', fonction:''});
+  renderMembers();
+  computeLayout();
+  renderDiagram();
+}
+
+function removePerson(id){
+  people = people.filter(p=>p.id!==id);
+  Object.keys(links).forEach(k=>{
+    const [a,b] = k.split('-').map(Number);
+    if(a===id || b===id) delete links[k];
+  });
+  renderMembers();
+  computeLayout();
+  renderDiagram();
+}
+
+function renderMembers(){
+  const wrap = document.getElementById('membersList');
+  wrap.innerHTML='';
+  people.forEach((p, idx)=>{
+    const row = document.createElement('div');
+    row.className='member-row';
+    row.innerHTML = `
+      <div class="member-avatar">${initials(p)}</div>
+      <input type="text" class="m-prenom" placeholder="Prénom (personne ${idx+1})" value="${escapeHtml(p.prenom)}">
+      <input type="text" class="m-fonction" placeholder="Fonction / rôle" value="${escapeHtml(p.fonction)}">
+      <button class="btn-small" title="Retirer cette personne" onclick="removePerson(${p.id})">×</button>
+    `;
+    const prenomInput = row.querySelector('.m-prenom');
+    const fonctionInput = row.querySelector('.m-fonction');
+    prenomInput.addEventListener('input', ()=>{ p.prenom = prenomInput.value; renderDiagram(); row.querySelector('.member-avatar').textContent = initials(p); });
+    fonctionInput.addEventListener('input', ()=>{ p.fonction = fonctionInput.value; });
+    wrap.appendChild(row);
+  });
+}
+
+function renderLegend(){
+  const wrap = document.getElementById('legendList');
+  wrap.innerHTML='';
+  legend.forEach((cat, idx)=>{
+    const row = document.createElement('div');
+    row.className='legend-row';
+    row.innerHTML = `
+      <div class="legend-swatch" style="background:${cat.hexResolved};"></div>
+      <input type="text" value="${escapeHtml(cat.label)}">
+      <label class="legend-vigilance"><input type="checkbox" ${cat.vigilance?'checked':''}> Point de vigilance</label>
+    `;
+    const textInput = row.querySelector('input[type=text]');
+    const checkbox = row.querySelector('input[type=checkbox]');
+    textInput.addEventListener('input', ()=>{ cat.label = textInput.value; renderPopoverIfOpen(); });
+    checkbox.addEventListener('change', ()=>{ cat.vigilance = checkbox.checked; });
+    wrap.appendChild(row);
+  });
+}
+
+function computeLayout(){
+  positions = {};
+  const n = people.length;
+  if(n===0) return;
+  const cx=300, cy=300;
+  if(n===1){ positions[people[0].id] = {x:cx,y:cy,r:28}; return; }
+  const radius = n>14 ? 240 : n>8 ? 225 : 200;
+  const nodeR = n<=6?26:n<=10?22:n<=16?18:14;
+  people.forEach((p,i)=>{
+    const angle = (2*Math.PI*i/n) - Math.PI/2;
+    positions[p.id] = {
+      x: cx + radius*Math.cos(angle),
+      y: cy + radius*Math.sin(angle),
+      r: nodeR
+    };
+  });
+}
+
+function renderDiagram(){
+  const svg = document.getElementById('diagramSvg');
+  svg.innerHTML='';
+  if(people.length===0){
+    return;
+  }
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  // draw links first (under nodes)
+  Object.entries(links).forEach(([key, catsSet])=>{
+    if(!catsSet || catsSet.size===0) return;
+    const [a,b] = key.split('-').map(Number);
+    const posA = positions[a], posB = positions[b];
+    if(!posA || !posB) return;
+    const cats = Array.from(catsSet);
+    const dx = posB.x-posA.x, dy = posB.y-posA.y;
+    const len = Math.sqrt(dx*dx+dy*dy) || 1;
+    const perpX = -dy/len, perpY = dx/len;
+    cats.forEach((catKey, idx)=>{
+      const catMeta = legend.find(c=>c.key===catKey);
+      if(!catMeta) return;
+      const spread = (idx - (cats.length-1)/2) * 6;
+      const ox = perpX*spread, oy = perpY*spread;
+      const line = document.createElementNS(svgNS,'line');
+      line.setAttribute('x1', posA.x+ox);
+      line.setAttribute('y1', posA.y+oy);
+      line.setAttribute('x2', posB.x+ox);
+      line.setAttribute('y2', posB.y+oy);
+      line.setAttribute('stroke', catMeta.hexResolved);
+      line.setAttribute('stroke-width', '3');
+      line.setAttribute('stroke-linecap','round');
+      line.style.cursor='pointer';
+      line.addEventListener('click', (e)=>{ e.stopPropagation(); openPairPopover(a,b,e); });
+      svg.appendChild(line);
+    });
+  });
+
+  // draw nodes
+  people.forEach((p, idx)=>{
+    const pos = positions[p.id];
+    if(!pos) return;
+    const g = document.createElementNS(svgNS,'g');
+
+    const circle = document.createElementNS(svgNS,'circle');
+    circle.setAttribute('cx', pos.x);
+    circle.setAttribute('cy', pos.y);
+    circle.setAttribute('r', pos.r);
+    circle.setAttribute('fill', '#0088A9');
+    circle.setAttribute('stroke', '#fff');
+    circle.setAttribute('stroke-width', armedId===p.id ? '4' : '2');
+    if(armedId===p.id) circle.setAttribute('stroke', '#F5AB33');
+    circle.setAttribute('class', 'node-circle' + (armedId===p.id ? ' armed' : ''));
+
+    const title = document.createElementNS(svgNS,'title');
+    title.textContent = `${displayName(p,idx)}${p.fonction ? ' — '+p.fonction : ''}`;
+    circle.appendChild(title);
+
+    const initText = document.createElementNS(svgNS,'text');
+    initText.setAttribute('x', pos.x);
+    initText.setAttribute('y', pos.y);
+    initText.setAttribute('class','node-initials');
+    initText.textContent = initials(p);
+
+    const label = document.createElementNS(svgNS,'text');
+    label.setAttribute('x', pos.x);
+    label.setAttribute('y', pos.y + pos.r + 16);
+    label.setAttribute('class','node-label');
+    label.textContent = displayName(p, idx);
+
+    g.appendChild(circle);
+    g.appendChild(initText);
+    g.appendChild(label);
+    g.style.cursor='pointer';
+    g.addEventListener('click', (e)=>{ e.stopPropagation(); onNodeClick(p.id); });
+
+    svg.appendChild(g);
+  });
+}
+
+function onNodeClick(id){
+  if(armedId===null){
+    armedId = id;
+    renderDiagram();
+  } else if(armedId===id){
+    armedId = null;
+    renderDiagram();
+  } else {
+    const a = armedId, b = id;
+    armedId = null;
+    renderDiagram();
+    openPairPopover(a, b, {clientX: window.innerWidth/2 - 145, clientY: 160});
+  }
+}
+
+function openPairPopover(a, b, evt){
+  activePair = pairKey(a,b);
+  const personA = people.find(p=>p.id===a);
+  const personB = people.find(p=>p.id===b);
+  const idxA = people.indexOf(personA), idxB = people.indexOf(personB);
+  document.getElementById('popTitle').textContent = `Lien entre ${displayName(personA, idxA)} et ${displayName(personB, idxB)}`;
+  renderPopoverIfOpen();
+
+  const pop = document.getElementById('popover');
+  const backdrop = document.getElementById('popoverBackdrop');
+  backdrop.classList.add('open');
+  pop.classList.add('open');
+
+  let left = (evt.clientX||window.innerWidth/2) + 12;
+  let top = (evt.clientY||window.innerHeight/2) + 12;
+  left = Math.min(left, window.innerWidth-310);
+  top = Math.min(top, window.innerHeight-320);
+  pop.style.left = Math.max(10,left)+'px';
+  pop.style.top = Math.max(10,top)+'px';
+}
+
+function renderPopoverIfOpen(){
+  if(!activePair) return;
+  const listWrap = document.getElementById('popCatList');
+  const currentSet = links[activePair] || new Set();
+  listWrap.innerHTML='';
+  legend.forEach(cat=>{
+    const btn = document.createElement('button');
+    btn.className = 'cat-toggle' + (currentSet.has(cat.key) ? ' active' : '');
+    btn.innerHTML = `<span class="dot" style="background:${cat.hexResolved};"></span><span>${escapeHtml(cat.label)}</span><span class="check">✓</span>`;
+    btn.onclick = ()=> toggleCategoryOnPair(cat.key);
+    listWrap.appendChild(btn);
+  });
+}
+
+function toggleCategoryOnPair(catKey){
+  if(!activePair) return;
+  if(!links[activePair]) links[activePair] = new Set();
+  if(links[activePair].has(catKey)) links[activePair].delete(catKey);
+  else links[activePair].add(catKey);
+  if(links[activePair].size===0) delete links[activePair];
+  renderPopoverIfOpen();
+  renderDiagram();
+}
+
+function closePopover(){
+  activePair = null;
+  document.getElementById('popover').classList.remove('open');
+  document.getElementById('popoverBackdrop').classList.remove('open');
+}
+
+function resetTool(){
+  if(!confirm("Réinitialiser entièrement le diagramme (membres, légende et liens) ?")) return;
+  people=[]; idCounter=0; links={}; positions={}; armedId=null; activePair=null;
+  legend = [
+    {key:'c1', label:"Collaboration fréquente et fluide", hex:"var(--c1)", hexResolved:"#0088A9", vigilance:false},
+    {key:'c2', label:"Relation de confiance", hex:"var(--c2)", hexResolved:"#15CA88", vigilance:false},
+    {key:'c3', label:"Communication occasionnelle ou distante", hex:"var(--c3)", hexResolved:"#F5AB33", vigilance:false},
+    {key:'c4', label:"Tension ou friction perçue", hex:"var(--c4)", hexResolved:"#DE5C5C", vigilance:true},
+    {key:'c5', label:"Lien d'influence ou de leadership informel", hex:"var(--c5)", hexResolved:"#884EC2", vigilance:false}
+  ];
+  document.getElementById('teamSetupPanel').style.display='block';
+  document.getElementById('membersPanel').style.display='none';
+  document.getElementById('legendPanel').style.display='none';
+  document.getElementById('diagramPanel').style.display='none';
+  document.getElementById('analysisPanel').style.display='none';
+  document.getElementById('printRow').style.display='none';
+  document.getElementById('analysisArea').innerHTML='';
+  document.getElementById('diagramSvg').innerHTML='';
+}
+
+function generateAnalysis(){
+  const area = document.getElementById('analysisArea');
+  const n = people.length;
+  if(n<2){
+    area.innerHTML = '<p style="color:var(--gris-moyen);font-style:italic;">Ajoutez au moins deux personnes avant de générer une analyse.</p>';
+    return;
+  }
+
+  const ids = people.map(p=>p.id);
+  const degreeSets = {}; ids.forEach(id=>degreeSets[id]=new Set());
+  const catCount = {}; legend.forEach(c=>catCount[c.key]=0);
+  const catByPerson = {}; ids.forEach(id=>catByPerson[id]={});
+  let totalTagInstances = 0;
+  let connectedPairs = 0;
+
+  Object.entries(links).forEach(([key, catsSet])=>{
+    if(!catsSet || catsSet.size===0) return;
+    const [a,b] = key.split('-').map(Number);
+    if(!degreeSets[a] || !degreeSets[b]) return;
+    connectedPairs++;
+    degreeSets[a].add(b);
+    degreeSets[b].add(a);
+    catsSet.forEach(catKey=>{
+      totalTagInstances++;
+      catCount[catKey] = (catCount[catKey]||0)+1;
+      catByPerson[a][catKey] = (catByPerson[a][catKey]||0)+1;
+      catByPerson[b][catKey] = (catByPerson[b][catKey]||0)+1;
+    });
+  });
+
+  if(connectedPairs===0){
+    area.innerHTML = '<p style="color:var(--gris-moyen);font-style:italic;">Aucun lien n\'a encore été tracé sur le diagramme. Qualifiez au moins une relation entre deux personnes pour générer une analyse.</p>';
+    return;
+  }
+
+  const degreeList = people.map((p,idx)=>({id:p.id, name:displayName(p,idx), deg:degreeSets[p.id].size}))
+    .sort((a,b)=>b.deg-a.deg);
+  const maxDeg = degreeList[0].deg;
+  const avgDeg = (degreeList.reduce((s,d)=>s+d.deg,0)/n).toFixed(1);
+  const pivots = degreeList.filter(d=>d.deg===maxDeg && maxDeg>0);
+  const isolates = degreeList.filter(d=>d.deg===0);
+  const peripheral = degreeList.filter(d=>d.deg===1);
+
+  const possiblePairs = n*(n-1)/2;
+  const density = Math.round(connectedPairs/possiblePairs*100);
+
+  let html = '';
+
+  // Vue d'ensemble
+  html += `<div class="stat-row">
+    <div class="stat-box"><div class="snum">${n}</div><div class="slabel">personnes cartographiées</div></div>
+    <div class="stat-box" style="background:#5FA7A0;"><div class="snum">${connectedPairs}</div><div class="slabel">paires reliées / ${possiblePairs} possibles</div></div>
+    <div class="stat-box" style="background:#884EC2;"><div class="snum">${density}%</div><div class="slabel">densité relationnelle</div></div>
+    <div class="stat-box" style="background:#F5AB33;"><div class="snum">${avgDeg}</div><div class="slabel">connexions moyennes / personne</div></div>
+  </div>`;
+
+  html += `<div class="analysis-block">
+    <h3>Vue d'ensemble</h3>
+    <p>${connectedPairs} paire${connectedPairs>1?'s ont':' a'} été qualifiée${connectedPairs>1?'s':''} sur les ${possiblePairs} paires possibles au sein de cette équipe de ${n} personnes, soit une densité relationnelle de ${density}%. ${density<30 ? "Ce niveau plutôt bas peut traduire un choix volontaire de vous concentrer sur les relations les plus significatives à vos yeux, ou refléter une équipe encore peu documentée dans votre regard — libre à vous de compléter si certains liens ont été omis faute de temps." : density>70 ? "Ce niveau élevé traduit une équipe dont vous percevez la plupart des relations comme suffisamment marquées pour être qualifiées, ce qui suppose une connaissance fine du collectif." : "Ce niveau intermédiaire suggère une équipe partiellement documentée : les relations les plus visibles ou les plus significatives à vos yeux ont été tracées en priorité."}</p>
+  </div>`;
+
+  // Pivots
+  html += `<div class="analysis-block">
+    <h3>Personnes en position de pivot</h3>
+    <p>${pivots.length===1
+      ? `<b>${escapeHtml(pivots[0].name)}</b> concentre le plus grand nombre de connexions perçues (${pivots[0].deg} sur ${n-1} personnes possibles), ce qui en fait un point de passage relationnel central dans votre lecture de l'équipe — à considérer comme une ressource pour la circulation de l'information ou la régulation de tensions, mais aussi comme un point de vulnérabilité en cas d'absence ou de départ.`
+      : pivots.length>1
+      ? `Plusieurs personnes se partagent la position la plus centrale, avec ${maxDeg} connexions chacune : ${pivots.map(p=>escapeHtml(p.name)).join(', ')}. Cette centralité partagée peut être un facteur de robustesse pour le collectif, à condition que ces personnes ne portent pas également l'essentiel des tensions perçues.`
+      : `Aucune personne ne se démarque nettement en nombre de connexions : les relations tracées sont réparties de façon relativement homogène dans votre lecture actuelle de l'équipe.`
+    }</p>
+  </div>`;
+
+  // Isolés / périphériques
+  if(isolates.length>0 || peripheral.length>0){
+    html += `<div class="analysis-block">
+      <h3>Personnes en retrait relationnel</h3>
+      ${isolates.length>0 ? `<p><b>${isolates.map(p=>escapeHtml(p.name)).join(', ')}</b> n'apparaissen${isolates.length>1?'t':'t'} dans aucun lien qualifié à ce stade. Cela peut refléter une intégration encore récente, un fonctionnement en autonomie assumée, ou au contraire un isolement qui mériterait d'être objectivé par un échange direct plutôt que déduit du seul diagramme.</p>` : ''}
+      ${peripheral.length>0 ? `<p><b>${peripheral.map(p=>escapeHtml(p.name)).join(', ')}</b> n'appara${peripheral.length>1?'issent':'ît'} relié${peripheral.length>1?'s':''} qu'à une seule personne dans votre lecture actuelle, ce qui en fait des positions plutôt périphériques dans la structure relationnelle perçue.</p>` : ''}
+    </div>`;
+  }
+
+  // Répartition par catégorie
+  let catHtml = '';
+  legend.forEach(cat=>{
+    const count = catCount[cat.key]||0;
+    if(count===0) return;
+    const pct = Math.round(count/totalTagInstances*100);
+    const topPeople = Object.entries(catByPerson).filter(([id])=>true)
+      .map(([id, counts])=>({id, name: displayName(people.find(p=>p.id==id), people.findIndex(p=>p.id==id)), c: counts[cat.key]||0}))
+      .filter(x=>x.c>0)
+      .sort((a,b)=>b.c-a.c);
+    const topNames = topPeople.slice(0,3).map(x=>escapeHtml(x.name)).join(', ');
+    catHtml += `<p><b style="color:${cat.hexResolved};">${escapeHtml(cat.label)}</b> — ${count} lien${count>1?'s':''} qualifié${count>1?'s':''} (${pct}% des qualifications posées)${topNames ? `, concernant principalement : ${topNames}.` : '.'}</p>`;
+  });
+  if(catHtml){
+    html += `<div class="analysis-block">
+      <h3>Répartition par nature de lien</h3>
+      ${catHtml}
+    </div>`;
+  }
+
+  // Vigilance
+  const vigilanceCats = legend.filter(c=>c.vigilance && (catCount[c.key]||0)>0);
+  if(vigilanceCats.length>0){
+    const vigPeopleMap = {};
+    vigilanceCats.forEach(cat=>{
+      Object.entries(catByPerson).forEach(([id, counts])=>{
+        if(counts[cat.key]) vigPeopleMap[id] = (vigPeopleMap[id]||0) + counts[cat.key];
+      });
+    });
+    const vigList = Object.entries(vigPeopleMap)
+      .map(([id,c])=>({name: displayName(people.find(p=>p.id==id), people.findIndex(p=>p.id==id)), c}))
+      .sort((a,b)=>b.c-a.c);
+    html += `<div class="analysis-block" style="border-left-color:#DE5C5C;background:#FBEBEA;">
+      <h3>Points de vigilance signalés</h3>
+      <p>Les catégories que vous avez marquées comme « points de vigilance » (${vigilanceCats.map(c=>escapeHtml(c.label)).join(', ')}) représentent ${vigilanceCats.reduce((s,c)=>s+catCount[c.key],0)} qualification${vigilanceCats.reduce((s,c)=>s+catCount[c.key],0)>1?'s':''} au total. ${vigList.length>0 ? `Elles concernent en priorité : <b>${vigList.slice(0,3).map(v=>escapeHtml(v.name)).join(', ')}</b>.` : ''} Avant toute conclusion, ces éléments gagnent à être confrontés à un échange direct avec les personnes concernées : le diagramme signale une perception, pas une cause.</p>
+    </div>`;
+  }
+
+  // Limites
+  html += `<div class="analysis-block limites">
+    <h3>Limites de la démarche</h3>
+    <p>Ce diagramme reflète votre seule perception, à un instant donné, des relations au sein de l'équipe — pas une mesure validée, ni le point de vue des personnes concernées elles-mêmes. Il est probablement influencé par l'actualité récente du collectif, par la qualité de vos échanges avec chacun, et par votre propre positionnement dans les relations observées.</p>
+    <p>Une ligne tracée entre deux personnes ne rend compte que d'une facette de leur relation, à un moment précis ; elle peut évoluer rapidement selon le contexte, la charge de travail ou les événements traversés collectivement.</p>
+    <p>Cet outil n'a pas vocation à être diffusé tel quel auprès de l'équipe, ni à fonder seul une décision RH ou organisationnelle. Il constitue un support de préparation — pour clarifier votre propre lecture avant un entretien, un temps de régulation d'équipe ou un accompagnement — et gagne à être recoupé avec d'autres sources : entretiens individuels, observations de terrain, remontées RH.</p>
+  </div>`;
+
+  area.innerHTML = html;
+  if(typeof area.scrollIntoView === 'function'){
+    area.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
+</script>
+
+</body>
+</html>

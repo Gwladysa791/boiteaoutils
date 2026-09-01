@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créateur de quiz — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.55;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 400px;height:340px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:300px;height:260px;}
+  }
+  .container{max-width:900px;margin:0 auto;padding:26px 20px 60px;}
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+
+  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:20px;font-size:14px;color:var(--gris);}
+  .intro p{margin:0 0 10px;}
+  .intro p:last-of-type{margin-bottom:0;}
+  .intro .note-dev{display:block;margin-top:12px;font-size:12.5px;color:var(--gris-moyen);font-style:italic;}
+
+  .panel{background:#fff;border-radius:8px;padding:22px 24px 26px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .panel h2{margin:0 0 6px;font-size:16px;color:var(--bleu-fonce);}
+  .panel .panel-sub{margin:0 0 18px;font-size:13px;color:var(--gris-moyen);}
+
+  /* ---------- Constructeur de question ---------- */
+  .field-label{display:block;font-size:12.5px;font-weight:700;color:var(--gris);margin-bottom:6px;}
+  .type-choice{display:flex;gap:24px;margin-bottom:18px;flex-wrap:wrap;}
+  .type-choice-opt{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;color:#20282b;}
+  .type-choice-opt input[type=radio]{width:16px;height:16px;accent-color:var(--bleu-fonce);cursor:pointer;flex-shrink:0;}
+  .type-hint{font-size:11.5px;color:var(--gris-moyen);margin:-12px 0 18px;}
+  .libre-note{display:none;font-size:12.5px;color:var(--gris);background:var(--gris-fond2);border-radius:8px;padding:10px 12px;margin:0 0 16px;}
+
+  .question-input{width:100%;border:1.5px solid var(--gris-clair);border-radius:8px;padding:12px 14px;font-family:inherit;font-size:15px;font-weight:700;color:#20282b;margin-bottom:18px;}
+  .question-input:focus{outline:none;border-color:var(--bleu);}
+
+  .qopt-row{display:flex;align-items:center;gap:10px;background:var(--gris-fond2);border-radius:8px;padding:8px 10px;margin-bottom:8px;}
+  .qopt-row .qopt-mark{flex-shrink:0;width:20px;height:20px;cursor:pointer;accent-color:var(--bleu-fonce);}
+  .qopt-row input[type=text]{flex:1;border:1.5px solid var(--gris-clair);border-radius:6px;padding:7px 10px;font-family:inherit;font-size:13px;color:var(--gris);background:#fff;}
+  .qopt-row input[type=text]:focus{outline:none;border-color:var(--bleu);}
+  .qopt-row button.remove-opt{background:none;border:none;color:var(--gris-moyen);font-size:15px;cursor:pointer;padding:2px 4px;line-height:1;flex-shrink:0;}
+  .qopt-row button.remove-opt:hover{color:var(--rouge);}
+  .qopt-fixed-text{flex:1;font-size:13px;font-weight:700;color:#20282b;padding:7px 10px;}
+
+  .add-opt-row{margin:6px 0 20px;}
+  .add-opt-row button{background:transparent;border:1.5px dashed var(--gris-moyen);color:var(--gris);padding:6px 12px;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .add-opt-row button:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+
+  .add-q-row{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:4px;}
+  .add-q-btn{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#fff;border:1.5px solid var(--bleu-fonce);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;transition:background .15s ease, transform .15s ease;}
+  .add-q-btn:hover{background:var(--bleu-fonce);transform:translateY(-1px);}
+  .add-q-btn svg{width:17px;height:17px;stroke:var(--bleu-fonce);fill:none;transition:stroke .15s ease;}
+  .add-q-btn:hover svg{stroke:#fff;}
+  .builder-note{font-size:12px;color:var(--rouge);margin-top:0;min-height:16px;text-align:right;}
+
+  /* ---------- Liste des questions ajoutées ---------- */
+  .qlist{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+  .qlist-empty{font-size:13px;color:var(--gris-moyen);font-style:italic;text-align:center;padding:20px 10px;}
+  .qcard{background:var(--gris-fond2);border-radius:8px;padding:14px 16px;}
+  .qcard-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+  .qcard-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--bleu-fonce);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .qcard-text{flex:1;font-size:13.5px;font-weight:700;color:#20282b;}
+  .qcard-type{flex-shrink:0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:3px 9px;border-radius:10px;color:#fff;}
+  .qcard-type.unique{background:var(--bleu-fonce);}
+  .qcard-type.multiple{background:var(--violet);}
+  .qcard-type.vraifaux{background:var(--vert);}
+  .qcard-type.libre{background:var(--orange);}
+  .qcard-del{background:none;border:none;color:var(--gris-moyen);font-size:15px;cursor:pointer;padding:0 2px;flex-shrink:0;}
+  .qcard-del:hover{color:var(--rouge);}
+  .qcard-opts{list-style:none;margin:0;padding:0 0 0 34px;font-size:12.5px;color:var(--gris);}
+  .qcard-opts li{margin-bottom:3px;}
+  .qcard-opts li.is-correct{color:#0c7d55;font-weight:700;}
+  .qcard-opts li.is-correct::before{content:"✓ ";}
+  .qcard-opts li.libre-note-item{font-style:italic;color:var(--gris-moyen);}
+
+  .launch-row{text-align:center;margin-top:20px;}
+  .launch-btn{background:var(--bleu-fonce);color:#fff;border:none;padding:9px 22px;font-size:12.5px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;box-shadow:0 3px 10px rgba(0,136,169,0.20);}
+  .launch-btn:hover{background:#006f87;}
+  .launch-btn:disabled{background:var(--gris-moyen);cursor:not-allowed;box-shadow:none;}
+
+  /* ---------- Player ---------- */
+  #playerSection{display:none;}
+  .progress-wrap{position:sticky;top:0;background:var(--fond);padding:10px 0 14px;z-index:10;}
+  .progress-bar{height:6px;background:var(--gris-fond2);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;width:0%;background:var(--bleu);transition:width .25s ease;}
+  .progress-label{font-size:12px;color:var(--gris-moyen);text-align:right;margin-top:4px;}
+
+  .pq{background:#fff;border-radius:8px;padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+  .pq-head{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;}
+  .pq-num{font-weight:700;color:var(--bleu-fonce);}
+  .pq-text{font-size:14.5px;color:#2f3130;font-weight:700;}
+  .pq-type-note{font-size:11.5px;color:var(--gris-moyen);margin:-8px 0 12px 20px;font-style:italic;}
+  .pq-opt{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1.5px solid var(--gris-clair);border-radius:8px;margin-bottom:7px;cursor:pointer;}
+  .pq-opt:hover{border-color:var(--bleu-fonce);}
+  .pq-opt.selected{background:var(--gris-fond2);border-color:var(--bleu-fonce);}
+  .pq-opt input{flex-shrink:0;}
+  .pq-opt label{flex:1;font-size:13.5px;color:#33393b;cursor:pointer;}
+  .pq-text-answer{width:100%;min-height:96px;resize:vertical;border:1.5px solid var(--gris-clair);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:13.5px;line-height:1.5;color:#20282b;}
+  .pq-text-answer:focus{outline:none;border-color:var(--bleu-fonce);}
+  .pq-charcount{font-size:11px;color:var(--gris-moyen);text-align:right;margin-top:4px;}
+
+  .cta-wrap{text-align:center;margin-top:24px;}
+  button#submitQuizBtn{background:var(--bleu-fonce);color:#fff;border:none;padding:11px 26px;font-size:13.5px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:0.5px;}
+  button#submitQuizBtn:hover{background:#006f87;}
+  .missing-note{text-align:center;color:var(--rouge);font-size:13px;margin-top:10px;min-height:18px;}
+
+  /* ---------- Résultats ---------- */
+  #resultsSection{display:none;}
+  .results-card{background:#fff;border-radius:8px;padding:26px 22px;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+  .results-card h2{color:var(--bleu-fonce);margin-top:0;font-size:20px;}
+  .score-display{text-align:center;margin:18px 0 24px;}
+  .score-display .snum{font-size:38px;font-weight:700;color:var(--bleu-fonce);}
+  .score-display .slabel{font-size:13px;color:var(--gris-moyen);}
+  .corrige-item{border-left:4px solid var(--gris-clair);padding:12px 16px;margin-bottom:12px;border-radius:4px;background:var(--gris-fond2);}
+  .corrige-item.correct{border-left-color:var(--vert);}
+  .corrige-item.incorrect{border-left-color:var(--rouge);}
+  .corrige-item.neutral{border-left-color:var(--orange);}
+  .corrige-item h3{margin:0 0 6px;font-size:14px;color:#2f3130;}
+  .corrige-item .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:10px;color:#fff;margin-left:8px;vertical-align:middle;}
+  .corrige-item.correct .tag{background:var(--vert);}
+  .corrige-item.incorrect .tag{background:var(--rouge);}
+  .corrige-item.neutral .tag{background:var(--orange);}
+  .corrige-item p{margin:0 0 4px;font-size:13px;color:var(--gris);}
+  .corrige-item p:last-child{margin-bottom:0;}
+  .corrige-item .your-answer{font-size:12px;color:var(--gris-moyen);}
+
+  .actions-row{text-align:center;margin-top:20px;}
+  .actions-row button{background:transparent;border:1.5px solid var(--gris-moyen);color:var(--gris);padding:7px 15px;border-radius:9px;font-size:12px;cursor:pointer;font-family:inherit;margin:0 6px 8px;}
+  .actions-row button:hover{background:var(--gris-fond2);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .breadcrumb, #builderSection, .actions-row, .progress-wrap, footer{display:none !important;}
+    body{background:#fff;}
+    .panel, .results-card{box-shadow:none;}
+  }
+  @media(max-width:480px){
+    .score-display .snum{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Créateur de quiz<span>Vos questions, vos bonnes réponses</span></h1>
+      <p class="hero-desc">Construisez un quiz sur mesure — réponse unique, réponses multiples, vrai/faux ou question libre — pour ancrer un contenu métier ou vérifier des connaissances en fin de session.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Durée variable
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M20 19V8" stroke-width="2" stroke-linecap="round"/></svg></span>
+          4 types de questions
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('builderPanel').scrollIntoView({behavior:'smooth',block:'start'})">
+        Créer un quiz &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.16">
+          <circle cx="18" cy="30" r="2.4"/><circle cx="42" cy="16" r="1.8"/><circle cx="8" cy="70" r="1.8"/>
+          <circle cx="24" cy="120" r="2.2"/><circle cx="14" cy="165" r="1.8"/><circle cx="210" cy="24" r="2.2"/>
+          <circle cx="228" cy="55" r="1.8"/><circle cx="222" cy="110" r="2.4"/><circle cx="205" cy="170" r="1.8"/>
+          <circle cx="60" cy="195" r="1.8"/><circle cx="130" cy="200" r="2.2"/>
+        </g>
+        <ellipse cx="120" cy="105" rx="92" ry="74" fill="var(--bleu)" opacity="0.14"/>
+        <g transform="translate(55,55)">
+          <rect x="0" y="0" width="130" height="20" rx="6" fill="#fff" opacity="0.7"/>
+          <rect x="0" y="30" width="105" height="16" rx="8" fill="var(--vert)"/>
+          <rect x="0" y="52" width="105" height="16" rx="8" fill="#fff" opacity="0.7"/>
+          <rect x="0" y="74" width="105" height="16" rx="8" fill="#fff" opacity="0.7"/>
+          <circle cx="8" cy="38" r="4" fill="#fff"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Créateur de quiz</span>
+  </nav>
+
+  <div class="intro">
+    <p>Ajoutez vos questions une à une : choisissez le type de réponse attendu — unique, multiple, vrai/faux ou question libre — rédigez la question et indiquez la ou les bonnes réponses. Pour le type Vrai/Faux, les deux propositions sont déjà prêtes ; il ne reste qu'à cocher la bonne. La question libre, elle, n'a pas de réponse type : le participant rédige sa réponse dans un champ dédié, qui apparaît telle quelle dans le corrigé pour relecture, sans notation automatique. Une fois le quiz constitué, lancez-le pour le faire passer aux participants.</p>
+    <span class="note-dev">Le score d'une question à réponses multiples n'est compté juste que si l'ensemble exact des bonnes réponses est coché — ni une de plus, ni une de moins. Cette règle est rappelée aux participants avant qu'ils ne commencent.</span>
+  </div>
+
+  <div id="builderSection">
+    <div class="panel" id="builderPanel">
+      <h2>Ajouter une question</h2>
+      <p class="panel-sub">Définissez le type de question, son texte, puis ses réponses possibles.</p>
+
+      <div class="type-choice" role="radiogroup" aria-label="Type de réponse">
+        <label class="type-choice-opt">
+          <input type="radio" name="qTypeChoice" id="typeUniqueBtn" checked onchange="setCurrentType('unique')">
+          Réponse unique
+        </label>
+        <label class="type-choice-opt">
+          <input type="radio" name="qTypeChoice" id="typeMultipleBtn" onchange="setCurrentType('multiple')">
+          Réponses multiples
+        </label>
+        <label class="type-choice-opt">
+          <input type="radio" name="qTypeChoice" id="typeVraiFauxBtn" onchange="setCurrentType('vraifaux')">
+          Vrai / Faux
+        </label>
+        <label class="type-choice-opt">
+          <input type="radio" name="qTypeChoice" id="typeLibreBtn" onchange="setCurrentType('libre')">
+          Question libre
+        </label>
+      </div>
+      <p class="type-hint" id="typeHint">Une seule réponse sera considérée comme correcte.</p>
+
+      <span class="field-label">Question</span>
+      <input type="text" class="question-input" id="qTextInput" placeholder="Ex : Que signifie le sigle RPS ?" onkeydown="handleQuestionEnterKey(event)">
+
+      <span class="field-label" id="qOptionsLabel">Réponses possibles — cochez la ou les bonnes réponses</span>
+      <p class="libre-note" id="libreNote">Question ouverte : le participant rédige sa réponse en texte libre dans un champ dédié. Comme il n'existe pas de réponse type, cette question n'est pas notée automatiquement — elle apparaît dans le corrigé pour relecture.</p>
+      <div id="qOptionsList"></div>
+      <div class="add-opt-row" id="addOptRow">
+        <button id="addOptBtn" onclick="addCurrentOption()">+ Ajouter une réponse</button>
+      </div>
+
+      <div class="add-q-row">
+        <div class="builder-note" id="builderNote"></div>
+        <button class="add-q-btn" onclick="addQuestionToQuiz()" title="Ajouter cette question au quiz" aria-label="Ajouter cette question au quiz"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Votre quiz</h2>
+      <p class="panel-sub" id="qlistSub">Aucune question ajoutée pour le moment.</p>
+      <div class="qlist" id="qlist"></div>
+
+      <div class="launch-row">
+        <button class="launch-btn" id="launchQuizBtn" onclick="launchQuiz()" disabled>Lancer le quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="playerSection">
+    <div class="intro">
+      <strong>Consigne :</strong> répondez à chaque question. Pour les questions à réponses multiples, sélectionnez toutes les bonnes réponses — la question n'est comptée juste que si votre sélection correspond exactement aux bonnes réponses. Les questions à réponse libre ne sont pas corrigées automatiquement : exprimez-vous librement, votre réponse sera simplement reprise dans le corrigé.
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 question répondue</div>
+    </div>
+
+    <div id="playerQuestions"></div>
+
+    <div class="cta-wrap">
+      <button id="submitQuizBtn" onclick="calculerResultats()">Voir mes résultats</button>
+      <div class="missing-note" id="missingNote"></div>
+    </div>
+  </div>
+
+  <div id="resultsSection">
+    <div class="results-card">
+      <h2>Résultats</h2>
+      <div class="score-display">
+        <div class="snum" id="scoreNum">0/0</div>
+        <div class="slabel">bonnes réponses</div>
+      </div>
+      <div id="corrigeArea"></div>
+    </div>
+  </div>
+
+  <div class="actions-row" id="playerActions" style="display:none;">
+    <button onclick="window.print()">Imprimer / exporter</button>
+    <button onclick="rejouerQuiz()">Recommencer le quiz</button>
+    <button onclick="modifierQuiz()">Modifier le quiz</button>
+  </div>
+
+</div>
+
+<footer>AXIS MUNDI — Outil pédagogique de création de quiz. Les réponses saisies restent dans votre session (aucun enregistrement, aucun envoi).</footer>
+
+<script>
+let currentType = 'unique';
+let currentOptions = [{id: 1, text: ''}, {id: 2, text: ''}];   // {id, text}
+let currentCorrect = [];   // ids marked correct in the builder
+let nextOptId = 3;
+
+let quizQuestions = [];    // {id, text, type, options:[{id,text}], correctIds:[id,...]}
+let nextQId = 1;
+
+let playerAnswers = {};    // qId -> [optId,...] pour unique/multiple/vraifaux, ou string pour libre
+
+const FREE_TEXT_MAXLEN = 300;
+
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+
+/* ---------- Constructeur : type de question ---------- */
+function setCurrentType(type){
+  currentType = type;
+  document.getElementById('typeUniqueBtn').checked = (type === 'unique');
+  document.getElementById('typeMultipleBtn').checked = (type === 'multiple');
+  document.getElementById('typeVraiFauxBtn').checked = (type === 'vraifaux');
+  document.getElementById('typeLibreBtn').checked = (type === 'libre');
+  document.getElementById('typeHint').textContent =
+    type === 'unique' ? 'Une seule réponse sera considérée comme correcte.' :
+    type === 'multiple' ? 'Une ou plusieurs réponses peuvent être considérées comme correctes.' :
+    type === 'vraifaux' ? 'Une seule des deux propositions sera considérée comme correcte.' :
+    'Question ouverte, sans notation automatique : le participant rédige librement sa réponse.';
+  document.getElementById('qOptionsLabel').textContent =
+    type === 'multiple' ? 'Réponses possibles — cochez la ou les bonnes réponses' :
+    type === 'vraifaux' ? 'Indiquez la réponse correcte' :
+    'Réponses possibles — cochez la bonne réponse';
+  document.getElementById('qOptionsLabel').style.display = (type === 'libre') ? 'none' : 'block';
+  document.getElementById('libreNote').style.display = (type === 'libre') ? 'block' : 'none';
+  document.getElementById('qOptionsList').style.display = (type === 'libre') ? 'none' : 'block';
+  document.getElementById('addOptRow').style.display = (type === 'vraifaux' || type === 'libre') ? 'none' : 'block';
+
+  // Chaque sélection de type repart sur son propre nombre de réponses vierges par défaut
+  // (2 en unique, 5 en multiple, la paire fixe en Vrai/Faux, aucune en question libre),
+  // pour un comportement prévisible à chaque changement de type.
+  if(type === 'vraifaux'){
+    currentOptions = [{id: nextOptId++, text: 'Vrai'}, {id: nextOptId++, text: 'Faux'}];
+  } else if(type === 'libre'){
+    currentOptions = [];
+  } else {
+    const defaultCount = type === 'multiple' ? 5 : 2;
+    currentOptions = Array.from({length: defaultCount}, () => ({id: nextOptId++, text: ''}));
+  }
+  currentCorrect = [];
+
+  renderCurrentOptions();
+}
+
+/* ---------- Constructeur : réponses de la question en cours ---------- */
+function addCurrentOption(){
+  if(currentOptions.length >= 8) return;
+  currentOptions.push({id: nextOptId++, text: ''});
+  renderCurrentOptions();
+}
+
+function removeCurrentOption(id){
+  currentOptions = currentOptions.filter(o => o.id !== id);
+  currentCorrect = currentCorrect.filter(cid => cid !== id);
+  renderCurrentOptions();
+}
+
+function onCurrentOptionText(id, val){
+  const o = currentOptions.find(o => o.id === id);
+  if(o) o.text = val;
+}
+
+function toggleCurrentCorrect(id){
+  if(currentType === 'multiple'){
+    const idx = currentCorrect.indexOf(id);
+    if(idx === -1) currentCorrect.push(id); else currentCorrect.splice(idx, 1);
+  } else {
+    currentCorrect = [id];
+  }
+  renderCurrentOptions();
+}
+
+function renderCurrentOptions(){
+  const wrap = document.getElementById('qOptionsList');
+  if(currentOptions.length === 0){
+    wrap.innerHTML = '';
+    return;
+  }
+  if(currentType === 'vraifaux'){
+    wrap.innerHTML = currentOptions.map(o => {
+      const checked = currentCorrect.indexOf(o.id) !== -1;
+      return `
+        <div class="qopt-row">
+          <input class="qopt-mark" type="radio" name="currentCorrect" ${checked ? 'checked' : ''} onchange="toggleCurrentCorrect(${o.id})" title="Marquer comme bonne réponse">
+          <span class="qopt-fixed-text">${escapeHtml(o.text)}</span>
+        </div>`;
+    }).join('');
+    return;
+  }
+  const markType = currentType === 'multiple' ? 'checkbox' : 'radio';
+  wrap.innerHTML = currentOptions.map((o, idx) => {
+    const checked = currentCorrect.indexOf(o.id) !== -1;
+    return `
+      <div class="qopt-row">
+        <input class="qopt-mark" type="${markType}" name="currentCorrect" ${checked ? 'checked' : ''} onchange="toggleCurrentCorrect(${o.id})" title="Marquer comme bonne réponse">
+        <input type="text" value="${escapeHtml(o.text)}" placeholder="Texte de la réponse…" oninput="onCurrentOptionText(${o.id}, this.value)" onkeydown="handleOptionEnterKey(event, ${idx})">
+        <button class="remove-opt" onclick="removeCurrentOption(${o.id})" title="Retirer">&times;</button>
+      </div>`;
+  }).join('');
+}
+
+/* ---------- Validation de la question en cours ---------- */
+function getCurrentQuestionError(){
+  const text = document.getElementById('qTextInput').value.trim();
+  if(!text) return 'Merci de rédiger la question.';
+  if(currentType === 'libre') return null;
+  const filled = currentOptions.filter(o => o.text.trim() !== '');
+  if(filled.length < 2) return 'Ajoutez au moins deux réponses possibles.';
+  const correctFilled = currentCorrect.filter(cid => filled.some(o => o.id === cid));
+  if(correctFilled.length === 0) return 'Cochez au moins une bonne réponse.';
+  return null;
+}
+
+/* ---------- Validation au clavier : Entrée passe de la question aux réponses, puis valide ---------- */
+function handleQuestionEnterKey(e){
+  if(e.key !== 'Enter') return;
+  e.preventDefault();
+  const optInputs = document.querySelectorAll('#qOptionsList input[type=text]');
+  if(optInputs.length > 0){
+    optInputs[0].focus();
+    optInputs[0].select();
+  } else {
+    // Vrai/Faux (pas de champ texte) ou Question libre : rien à saisir de plus, on valide directement.
+    addQuestionToQuiz();
+  }
+}
+
+function handleOptionEnterKey(e, index){
+  if(e.key !== 'Enter') return;
+  e.preventDefault();
+  const optInputs = document.querySelectorAll('#qOptionsList input[type=text]');
+  const next = optInputs[index + 1];
+  if(next){
+    next.focus();
+    next.select();
+  } else {
+    addQuestionToQuiz();
+  }
+}
+
+/* ---------- Bouton "+" : valide et enregistre la question courante dans le quiz ---------- */
+function addQuestionToQuiz(){
+  const note = document.getElementById('builderNote');
+  const err = getCurrentQuestionError();
+  if(err){
+    note.textContent = err;
+    return;
+  }
+  const text = document.getElementById('qTextInput').value.trim();
+  const filled = currentType === 'libre' ? [] : currentOptions.filter(o => o.text.trim() !== '');
+  const correctFilled = currentType === 'libre'
+    ? []
+    : currentCorrect.filter(cid => filled.some(o => o.id === cid));
+
+  quizQuestions.push({
+    id: nextQId++,
+    text: text,
+    type: currentType,
+    options: filled.map(o => ({id: o.id, text: o.text.trim()})),
+    correctIds: correctFilled.slice()
+  });
+
+  startNewQuestion();
+  renderQuizList();
+}
+
+/* ---------- Bouton "+" : ouvre une question supplémentaire (Q2, Q3, Q4…) ---------- */
+function startNewQuestion(){
+  document.getElementById('qTextInput').value = '';
+  currentOptions = [];
+  currentCorrect = [];
+  document.getElementById('builderNote').textContent = '';
+  setCurrentType('unique');
+}
+
+function removeQuizQuestion(id){
+  quizQuestions = quizQuestions.filter(q => q.id !== id);
+  renderQuizList();
+}
+
+function renderQuizList(){
+  const wrap = document.getElementById('qlist');
+  const sub = document.getElementById('qlistSub');
+  const launchBtn = document.getElementById('launchQuizBtn');
+
+  sub.textContent = quizQuestions.length === 0
+    ? 'Aucune question ajoutée pour le moment.'
+    : quizQuestions.length + ' question' + (quizQuestions.length > 1 ? 's' : '') + ' prête' + (quizQuestions.length > 1 ? 's' : '') + '.';
+
+  launchBtn.disabled = quizQuestions.length === 0;
+
+  if(quizQuestions.length === 0){
+    wrap.innerHTML = '<p class="qlist-empty">Construisez votre première question ci-dessus.</p>';
+    return;
+  }
+
+  wrap.innerHTML = quizQuestions.map((q, i) => `
+    <div class="qcard">
+      <div class="qcard-head">
+        <span class="qcard-num">${i + 1}</span>
+        <span class="qcard-text">${escapeHtml(q.text)}</span>
+        <span class="qcard-type ${q.type}">${
+          q.type === 'unique' ? 'Réponse unique' :
+          q.type === 'multiple' ? 'Réponses multiples' :
+          q.type === 'vraifaux' ? 'Vrai / Faux' :
+          'Question libre'
+        }</span>
+        <button class="qcard-del" onclick="removeQuizQuestion(${q.id})" title="Supprimer">&times;</button>
+      </div>
+      <ul class="qcard-opts">
+        ${q.type === 'libre'
+          ? '<li class="libre-note-item">Réponse libre — non notée automatiquement.</li>'
+          : q.options.map(o => `<li class="${q.correctIds.indexOf(o.id) !== -1 ? 'is-correct' : ''}">${escapeHtml(o.text)}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+/* ---------- Lancement du quiz ---------- */
+function launchQuiz(){
+  if(quizQuestions.length === 0) return;
+  playerAnswers = {};
+  document.getElementById('builderSection').style.display = 'none';
+  document.getElementById('playerSection').style.display = 'block';
+  document.getElementById('playerActions').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'none';
+  buildPlayerQuestions();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function modifierQuiz(){
+  document.getElementById('builderSection').style.display = 'block';
+  document.getElementById('playerSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('playerActions').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function rejouerQuiz(){
+  playerAnswers = {};
+  document.getElementById('playerSection').style.display = 'block';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('playerActions').style.display = 'none';
+  buildPlayerQuestions();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- Passation ---------- */
+function buildPlayerQuestions(){
+  const wrap = document.getElementById('playerQuestions');
+  wrap.innerHTML = quizQuestions.map((q, qi) => {
+    if(q.type === 'libre'){
+      return `
+        <div class="pq" id="pq-${q.id}">
+          <div class="pq-head"><span class="pq-num">${qi + 1}.</span><span class="pq-text">${escapeHtml(q.text)}</span></div>
+          <p class="pq-type-note">Question ouverte, non notée automatiquement.</p>
+          <textarea class="pq-text-answer" id="pqtext-${q.id}" maxlength="${FREE_TEXT_MAXLEN}" rows="4" placeholder="Votre réponse…" oninput="onPlayerTextAnswer(${q.id}, this.value)"></textarea>
+          <div class="pq-charcount" id="pqcount-${q.id}">0 / ${FREE_TEXT_MAXLEN} caractères</div>
+        </div>`;
+    }
+    const inputType = q.type === 'multiple' ? 'checkbox' : 'radio';
+    const typeNote = q.type === 'multiple' ? `<p class="pq-type-note">Plusieurs réponses possibles.</p>` : '';
+    const opts = q.options.map(o => `
+      <div class="pq-opt" id="pqopt-${q.id}-${o.id}" onclick="togglePlayerAnswer(${q.id}, ${o.id}, '${q.type}')">
+        <input type="${inputType}" name="pq-${q.id}" id="pqin-${q.id}-${o.id}" onclick="event.stopPropagation();togglePlayerAnswer(${q.id}, ${o.id}, '${q.type}')">
+        <label for="pqin-${q.id}-${o.id}">${escapeHtml(o.text)}</label>
+      </div>`).join('');
+    return `
+      <div class="pq" id="pq-${q.id}">
+        <div class="pq-head"><span class="pq-num">${qi + 1}.</span><span class="pq-text">${escapeHtml(q.text)}</span></div>
+        ${typeNote}
+        ${opts}
+      </div>`;
+  }).join('');
+  updateProgress();
+}
+
+function onPlayerTextAnswer(qId, val){
+  playerAnswers[qId] = val;
+  const counter = document.getElementById('pqcount-' + qId);
+  if(counter) counter.textContent = val.length + ' / ' + FREE_TEXT_MAXLEN + ' caractères';
+  updateProgress();
+}
+
+function togglePlayerAnswer(qId, optId, type){
+  const current = playerAnswers[qId] || [];
+  let updated;
+  if(type === 'unique' || type === 'vraifaux'){
+    updated = [optId];
+  } else {
+    updated = current.indexOf(optId) !== -1 ? current.filter(id => id !== optId) : current.concat([optId]);
+  }
+  playerAnswers[qId] = updated;
+
+  const q = quizQuestions.find(q => q.id === qId);
+  q.options.forEach(o => {
+    const row = document.getElementById('pqopt-' + qId + '-' + o.id);
+    const input = document.getElementById('pqin-' + qId + '-' + o.id);
+    const isSel = updated.indexOf(o.id) !== -1;
+    row.classList.toggle('selected', isSel);
+    input.checked = isSel;
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const answered = quizQuestions.filter(q => (playerAnswers[q.id] || []).length > 0).length;
+  const total = quizQuestions.length;
+  document.getElementById('progressFill').style.width = (total ? (answered / total * 100) : 0) + '%';
+  document.getElementById('progressLabel').textContent = answered + ' / ' + total + ' question' + (total > 1 ? 's' : '') + ' répondue' + (answered > 1 ? 's' : '');
+}
+
+/* ---------- Résultats ---------- */
+function sameSet(a, b){
+  if(a.length !== b.length) return false;
+  const sa = a.slice().sort((x,y)=>x-y);
+  const sb = b.slice().sort((x,y)=>x-y);
+  return sa.every((v,i) => v === sb[i]);
+}
+
+function calculerResultats(){
+  const total = quizQuestions.length;
+  const answered = quizQuestions.filter(q => (playerAnswers[q.id] || []).length > 0).length;
+  if(answered < total){
+    document.getElementById('missingNote').textContent = `Il reste ${total - answered} question(s) sans réponse. Merci de répondre à toutes les questions avant de voir vos résultats.`;
+    const firstMissing = quizQuestions.find(q => (playerAnswers[q.id] || []).length === 0);
+    if(firstMissing){
+      document.getElementById('pq-' + firstMissing.id).scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    return;
+  }
+  document.getElementById('missingNote').textContent = '';
+
+  const gradable = quizQuestions.filter(q => q.type !== 'libre');
+  let score = 0;
+  const corrigeArea = document.getElementById('corrigeArea');
+  corrigeArea.innerHTML = quizQuestions.map((q, qi) => {
+    if(q.type === 'libre'){
+      const userText = (playerAnswers[q.id] || '').trim() || '(aucune réponse)';
+      return `
+        <div class="corrige-item neutral">
+          <h3>${qi + 1}. ${escapeHtml(q.text)} <span class="tag">réponse libre</span></h3>
+          <p class="your-answer">Réponse du participant : ${escapeHtml(userText)}</p>
+        </div>`;
+    }
+    const userAnswer = playerAnswers[q.id] || [];
+    const isCorrect = sameSet(userAnswer, q.correctIds);
+    if(isCorrect) score++;
+    const optLabel = (id) => { const o = q.options.find(o => o.id === id); return o ? o.text : ''; };
+    const yourTxt = userAnswer.map(optLabel).join(', ') || '(aucune réponse)';
+    const correctTxt = q.correctIds.map(optLabel).join(', ');
+    return `
+      <div class="corrige-item ${isCorrect ? 'correct' : 'incorrect'}">
+        <h3>${qi + 1}. ${escapeHtml(q.text)} <span class="tag">${isCorrect ? 'correct' : 'incorrect'}</span></h3>
+        <p class="your-answer">Votre réponse : ${escapeHtml(yourTxt)}</p>
+        <p>Bonne réponse : <strong>${escapeHtml(correctTxt)}</strong></p>
+      </div>`;
+  }).join('');
+
+  document.getElementById('scoreNum').textContent = score + '/' + gradable.length;
+  document.getElementById('playerSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('playerActions').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderCurrentOptions();
+renderQuizList();
+</script>
+
+</body>
+</html>

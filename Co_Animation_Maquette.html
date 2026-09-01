@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Co-animation — Maquette d'interface — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --vert: #15CA88;
+    --orange: #F5AB33;
+    --rouge: #DE5C5C;
+    --violet: #884EC2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.5;
+  }
+  button, input, textarea, select{font-family:inherit;}
+
+  /* ---------- Bandeau maquette ---------- */
+  .demo-bar{position:sticky;top:0;z-index:200;background:#20282b;color:#fff;display:flex;align-items:center;gap:14px;padding:9px 18px;flex-wrap:wrap;}
+  .demo-bar .demo-tag{background:var(--orange);color:#20282b;font-weight:800;font-size:11px;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:20px;flex-shrink:0;}
+  .demo-bar .demo-note{font-size:12px;color:#C9CDCC;flex:1;min-width:220px;}
+  .demo-bar .back-link{font-size:12px;font-weight:700;color:#fff;text-decoration:none;flex-shrink:0;}
+  .demo-bar .back-link:hover{text-decoration:underline;}
+  .view-switch{display:flex;gap:4px;background:rgba(255,255,255,0.08);border-radius:24px;padding:3px;flex-shrink:0;}
+  .view-switch button{border:none;background:none;color:#C9CDCC;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;}
+  .view-switch button.active{background:#fff;color:#20282b;}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--gris-clair);background:#fff;color:var(--gris);padding:7px 13px;border-radius:9px;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+  .btn:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .btn.primary{background:var(--bleu-fonce);border-color:var(--bleu-fonce);color:#fff;}
+  .btn.primary:hover{background:#00708a;}
+  .btn.small{padding:6px 12px;font-size:11.5px;}
+  .btn:disabled{opacity:.42;cursor:not-allowed;}
+  .btn:disabled:hover{border-color:var(--gris-clair);color:var(--gris);}
+
+  .shell{max-width:1080px;margin:0 auto;padding:22px 24px 60px;}
+
+  /* ---------- En-tête session + pilotage ---------- */
+  .coanim-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px;}
+  .coanim-head h1{margin:0 0 5px;font-size:20px;color:#20282b;}
+  .coanim-head .coanim-sub{margin:0;font-size:12.5px;color:var(--gris-moyen);}
+  .pilot-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gris-fond2);border-radius:20px;padding:8px 16px;font-size:12.5px;font-weight:800;color:#20282b;}
+  .pilot-badge.mine{background:#EAF7FB;color:var(--bleu-fonce);}
+  .pilot-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--vert);flex-shrink:0;}
+
+  .coanim-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--gris-clair);border-radius:14px;padding:14px 16px;margin-bottom:20px;}
+  .coanim-toolbar .sep{width:1px;align-self:stretch;background:var(--gris-clair);}
+  .page-nav{display:flex;align-items:center;gap:10px;}
+  .page-nav-label{font-size:13px;font-weight:800;color:#20282b;min-width:230px;}
+  .page-nav-label span{display:block;font-size:10.5px;font-weight:700;color:var(--gris-moyen);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px;}
+  .page-nav button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--gris-clair);background:#fff;cursor:pointer;font-size:14px;}
+  .page-nav button:hover:not(:disabled){border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .page-nav button:disabled{opacity:.35;cursor:not-allowed;}
+
+  .coanim-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start;}
+  @media (max-width:840px){.coanim-grid{grid-template-columns:1fr;}}
+
+  .panel{background:#fff;border:1px solid var(--gris-clair);border-radius:16px;padding:18px 20px 20px;}
+  .panel h2{margin:0 0 4px;font-size:14px;color:#20282b;text-transform:uppercase;letter-spacing:.4px;}
+  .panel .panel-sub{margin:0 0 14px;font-size:12px;color:var(--gris-moyen);}
+
+  .page-preview{border-radius:12px;padding:22px 24px;background:var(--gris-fond2);min-height:180px;}
+  .page-preview .pp-tag{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--bleu-fonce);background:#EAF7FB;padding:4px 10px;border-radius:10px;margin-bottom:12px;}
+  .page-preview h3{margin:0 0 8px;font-size:16.5px;color:#20282b;}
+  .page-preview p{margin:0;font-size:13px;color:var(--gris);}
+  .page-preview-note{margin-top:16px;font-size:11.5px;color:var(--gris-moyen);font-style:italic;}
+
+  .salle-mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .salle-mini span{font-size:11.5px;font-weight:700;color:var(--gris);background:var(--gris-fond2);border-radius:12px;padding:5px 11px;}
+  .salle-mini span.alert{color:#8A1F1F;background:#FBEAEA;}
+
+  .notes-list{display:flex;flex-direction:column;gap:9px;max-height:260px;overflow-y:auto;margin-bottom:14px;padding-right:2px;}
+  .note{max-width:88%;border-radius:12px;padding:9px 12px;font-size:12.5px;color:#20282b;}
+  .note.from-me{align-self:flex-end;background:#EAF7FB;}
+  .note.from-other{align-self:flex-start;background:var(--gris-fond2);}
+  .note-meta{display:block;font-size:10px;font-weight:800;color:var(--gris-moyen);margin-top:4px;}
+  .note-add-row{display:flex;gap:8px;}
+  .note-add-row input{flex:1;border:1.5px solid var(--gris-clair);border-radius:10px;padding:9px 12px;font-size:12.5px;color:#20282b;}
+  .note-add-row input:focus{outline:none;border-color:var(--bleu);}
+  .note-hint{font-size:10.5px;color:var(--gris-moyen);margin:8px 0 0;}
+</style>
+</head>
+<body>
+
+<div class="demo-bar" id="demoBar">
+  <span class="demo-tag">Maquette</span>
+  <span class="demo-note">Co-animation — deux formateurs sur une même session. Données factices, aucune synchronisation réelle. Objectif : valider le pilotage à deux et l'échange privé entre co-animateurs.</span>
+  <div class="view-switch" id="viewSwitch"></div>
+  <a class="back-link" href="Sommaire.html">&larr; Boîte à outils</a>
+</div>
+
+<div class="shell">
+
+  <div class="coanim-head">
+    <div>
+      <h1 id="coanimTitre"></h1>
+      <p class="coanim-sub" id="coanimSub"></p>
+    </div>
+    <div class="pilot-badge" id="pilotBadge"></div>
+  </div>
+
+  <div class="coanim-toolbar">
+    <div class="page-nav">
+      <button type="button" onclick="changePage(-1)" id="btnPrevPage">◀</button>
+      <div class="page-nav-label"><span id="pageNavCount"></span><span id="pageNavTitle" style="display:block;font-size:13px;color:#20282b;font-weight:800;"></span></div>
+      <button type="button" onclick="changePage(1)" id="btnNextPage">▶</button>
+    </div>
+    <div class="sep"></div>
+    <button class="btn primary" id="btnControl" onclick="toggleControl()"></button>
+  </div>
+
+  <div class="coanim-grid">
+
+    <div class="panel">
+      <h2>Ce qui est projeté</h2>
+      <p class="panel-sub">Aperçu partagé — identique pour les deux co-animateurs, quel que soit qui pilote.</p>
+      <div class="page-preview" id="pagePreview"></div>
+      <div class="salle-mini" id="salleMini"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Entre vous</h2>
+      <p class="panel-sub">Notes visibles uniquement par les deux co-animateurs — jamais par les participants.</p>
+      <div class="notes-list" id="notesList"></div>
+      <div class="note-add-row">
+        <input type="text" id="noteInput" placeholder="Écrire une note…">
+        <button class="btn small primary" onclick="addNote()">Envoyer</button>
+      </div>
+      <p class="note-hint" id="noteHint"></p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   DONNÉES DE DÉMONSTRATION
+   Cette maquette ne se connecte à rien : tout vit en mémoire, dans cet onglet.
+   Les deux perspectives (Vous / Co-animateur·trice) lisent le même état partagé
+   — c'est ce qui permet de visualiser, sans vraie synchronisation, ce que
+   chaque personne voit et peut faire au même instant de la session.
+   ========================================================= */
+const SESSION = { titre: "Prévenir les RPS dans les équipes", code: "482 193" };
+const COANIMATEURS = {
+  vous:  { nom: "Vous", role: "Formatrice principale" },
+  autre: { nom: "Sami Tarek", role: "Co-animateur" }
+};
+const PAGES = [
+  { type:'diapo',   titre:"Accueil et objectifs de la session", detail:"Présentation du déroulé et du cadre de la matinée." },
+  { type:'diapo',   titre:"Qu'est-ce qu'un risque psychosocial ?", detail:"Définition et distinction entre trait individuel et phénomène organisationnel." },
+  { type:'sondage', titre:"Sondage — principal facteur de risque perçu", detail:"4 options, réponses en direct depuis le téléphone des participants." },
+  { type:'tableau', titre:"Tableau blanc — cartographie des tensions", detail:"Post-it collaboratifs, un par situation observée." },
+  { type:'debrief', titre:"Débrief express (ROTI)", detail:"Note de 1 à 5 sur la valeur du temps investi." }
+];
+const PAGE_ICONS = { diapo:'📄', sondage:'🗳️', tableau:'🧠', debrief:'💬' };
+
+let currentPerspective = 'vous';   // quelle personne on regarde : 'vous' ou 'autre'
+let pilotKey = 'vous';             // qui pilote actuellement la session
+let activePageIdx = 0;
+let notes = [
+  { auteur:'autre', texte:"On garde 5 minutes de plus sur le sondage, la discussion est riche.", heure:"10:14" },
+  { auteur:'vous',  texte:"Ok, je ralentis. Une personne semble en retrait depuis le début — à surveiller.", heure:"10:15" }
+];
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+  });
+}
+function viewer(){ return COANIMATEURS[currentPerspective]; }
+function otherKey(){ return currentPerspective === 'vous' ? 'autre' : 'vous'; }
+function other(){ return COANIMATEURS[otherKey()]; }
+function nowLabel(){
+  const d = new Date();
+  const pad = function(n){ return (n<10?'0':'')+n; };
+  return pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+
+/* =========================================================
+   SWITCHER DE PERSPECTIVE
+   ========================================================= */
+function renderViewSwitch(){
+  document.getElementById('viewSwitch').innerHTML =
+    '<button type="button" class="' + (currentPerspective==='vous'?'active':'') + '" onclick="setPerspective(\'vous\')">🧑‍🏫 Vous</button>' +
+    '<button type="button" class="' + (currentPerspective==='autre'?'active':'') + '" onclick="setPerspective(\'autre\')">🧑‍🏫 ' + escapeHtml(COANIMATEURS.autre.nom) + '</button>';
+}
+function setPerspective(key){
+  currentPerspective = key;
+  renderApp();
+}
+
+/* =========================================================
+   RENDU
+   ========================================================= */
+function renderApp(){
+  renderViewSwitch();
+
+  document.getElementById('coanimTitre').textContent = SESSION.titre;
+  document.getElementById('coanimSub').textContent = 'Code de session ' + SESSION.code + ' · vous regardez l\'écran de : ' + viewer().nom + (currentPerspective==='vous' ? '' : ' (' + other().role.toLowerCase() + ')');
+
+  const jePilote = pilotKey === currentPerspective;
+  const badge = document.getElementById('pilotBadge');
+  badge.className = 'pilot-badge' + (jePilote ? ' mine' : '');
+  badge.innerHTML = '<span class="dot"></span>Pilotage : ' + (jePilote ? 'vous' : escapeHtml(pilotKey === 'vous' ? COANIMATEURS.vous.nom : COANIMATEURS.autre.nom));
+
+  const page = PAGES[activePageIdx];
+  document.getElementById('pageNavCount').textContent = 'Page ' + (activePageIdx+1) + ' / ' + PAGES.length;
+  document.getElementById('pageNavTitle').textContent = page.titre;
+  document.getElementById('btnPrevPage').disabled = !jePilote || activePageIdx === 0;
+  document.getElementById('btnNextPage').disabled = !jePilote || activePageIdx === PAGES.length - 1;
+
+  const btnControl = document.getElementById('btnControl');
+  btnControl.textContent = jePilote ? ('🤝 Rendre la main à ' + (pilotKey==='vous' ? COANIMATEURS.autre.nom : COANIMATEURS.vous.nom)) : '🎮 Prendre la main';
+  btnControl.className = 'btn' + (jePilote ? '' : ' primary');
+
+  document.getElementById('pagePreview').innerHTML =
+    '<span class="pp-tag">' + PAGE_ICONS[page.type] + ' ' + escapeHtml(page.type.charAt(0).toUpperCase()+page.type.slice(1)) + '</span>' +
+    '<h3>' + escapeHtml(page.titre) + '</h3>' +
+    '<p>' + escapeHtml(page.detail) + '</p>' +
+    '<p class="page-preview-note">' + (jePilote ? 'C\'est vous qui contrôlez la navigation ci-dessus.' : (escapeHtml(pilotKey==='vous'?COANIMATEURS.vous.nom:COANIMATEURS.autre.nom) + ' contrôle actuellement la navigation — vous voyez le même écran, en lecture seule.')) + '</p>';
+
+  document.getElementById('salleMini').innerHTML =
+    '<span>👥 18 participants</span><span>🟢 Activité élevée</span><span class="alert">🚩 1 demande d\'aide</span>';
+
+  renderNotes();
+}
+
+function renderNotes(){
+  const list = document.getElementById('notesList');
+  list.innerHTML = notes.map(function(n){
+    const mine = n.auteur === currentPerspective;
+    const auteurNom = mine ? viewer().nom : other().nom;
+    return '<div class="note ' + (mine ? 'from-me' : 'from-other') + '">' + escapeHtml(n.texte) + '<span class="note-meta">' + escapeHtml(auteurNom) + ' · ' + n.heure + '</span></div>';
+  }).join('');
+  list.scrollTop = list.scrollHeight;
+  document.getElementById('noteHint').textContent = 'Ce fil est commun aux deux co-animateurs, quelle que soit la personne connectée.';
+}
+
+function changePage(delta){
+  if(pilotKey !== currentPerspective) return;
+  const next = Math.max(0, Math.min(PAGES.length - 1, activePageIdx + delta));
+  if(next === activePageIdx) return;
+  activePageIdx = next;
+  renderApp();
+}
+function toggleControl(){
+  pilotKey = (pilotKey === currentPerspective) ? otherKey() : currentPerspective;
+  renderApp();
+}
+function addNote(){
+  const input = document.getElementById('noteInput');
+  const val = input.value.trim();
+  if(!val) return;
+  notes.push({ auteur: currentPerspective, texte: val, heure: nowLabel() });
+  input.value = '';
+  renderApp();
+}
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+if(window.self !== window.top){
+  const bar = document.getElementById('demoBar');
+  if(bar) bar.style.display = 'none';
+}
+renderApp();
+const initInput = document.getElementById('noteInput');
+if(initInput) initInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') addNote(); });
+</script>
+
+</body>
+</html>

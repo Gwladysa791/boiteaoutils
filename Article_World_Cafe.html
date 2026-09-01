@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le World Café : une méthode d'animation pour développer l'intelligence collective — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  header{
+    background:var(--bleu-fonce);
+    color:#fff;
+    padding:40px 24px 32px;
+    text-align:center;
+  }
+  header .brand-logo{
+    height:50px;
+    width:auto;
+    display:block;
+    margin:0 auto 16px;
+  }
+  header h1{
+    margin:0;
+    font-size:22px;
+    font-weight:700;
+  }
+  header p.signature{
+    margin:8px 0 0;
+    font-size:13.5px;
+    color:#eaf7fb;
+    font-style:italic;
+  }
+  .container{
+    max-width:760px;
+    margin:0 auto;
+    padding:30px 20px 70px;
+  }
+  .back-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin:0 0 22px;
+  }
+  .back-link{
+    display:inline-block;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+
+  article{
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    padding:38px 40px 44px;
+  }
+  .theme-tag{
+    display:inline-block;
+    background:var(--gris-fond2);
+    color:var(--bleu-fonce);
+    font-size:11.5px;
+    font-weight:700;
+    padding:5px 13px;
+    border-radius:14px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    margin-bottom:16px;
+  }
+  .article-title{
+    margin:0 0 14px;
+    font-size:25px;
+    line-height:1.32;
+    font-weight:700;
+    color:#20282b;
+  }
+  .article-meta{
+    font-size:12.5px;
+    color:var(--gris-moyen);
+    margin-bottom:28px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--gris-fond2);
+  }
+  .article-meta span{margin-right:14px;}
+  .article-body p{
+    font-size:14.5px;
+    color:var(--gris);
+    margin:0 0 16px;
+  }
+  .article-body h2.section-h2{
+    margin:32px 0 12px;
+    font-size:19px;
+    color:var(--bleu-fonce);
+  }
+
+  .closing-note{
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:20px 24px;
+    margin-top:10px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .closing-note strong{color:var(--bleu-fonce);}
+
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--gris-moyen);
+    padding:24px 20px;
+  }
+
+  @media print{
+    header, .back-links, footer{display:none !important;}
+    body{background:#fff;}
+    article{box-shadow:none;padding:0;}
+  }
+  @media (max-width:600px){input,select,textarea{font-size:16px;}
+    article{padding:28px 22px 34px;}
+    .article-title{font-size:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="brand-logo" src="brand_assets/logo_axismundi_blanc.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+  <h1>Blog Pédagogie &amp; Animations</h1>
+  <p class="signature">Articles et repères pour nourrir votre pratique de formateur</p>
+</header>
+
+<div class="container">
+
+  <div class="back-links">
+    <a class="back-link" href="Pedagogie.html">&larr; Retour au blog</a>
+    <a class="back-link" href="index.html">Accueil</a>
+  </div>
+
+  <article>
+    <span class="theme-tag">Dynamiques de groupe</span>
+    <h1 class="article-title">Le World Café : une méthode d'animation pour développer l'intelligence collective</h1>
+    <div class="article-meta">
+      <span>3 min de lecture</span>
+      <span>Publié le 22/07/2026</span>
+    </div>
+
+    <div class="article-body">
+      <p>Parmi les méthodes d'animation participatives, le World Café occupe une place de choix. Simple à mettre en œuvre, il permet de mobiliser l'ensemble des participants autour d'une réflexion commune tout en favorisant l'écoute, le dialogue et la co-construction. Initialement développé dans les années 1990, ce dispositif est aujourd'hui largement utilisé en formation, en accompagnement du changement, en séminaire ou dans les démarches de qualité de vie et des conditions de travail.</p>
+      <p>Le World Café repose sur une conviction simple : les meilleures idées émergent lorsque les personnes échangent librement dans un cadre convivial, où chacun peut contribuer à partir de son expérience.</p>
+
+      <h2 class="section-h2">Le principe du World Café</h2>
+      <p>Le World Café consiste à faire travailler simultanément plusieurs petits groupes autour de questions ouvertes. Chaque groupe échange pendant un temps limité avant que les participants changent de table. À chaque rotation, les nouvelles personnes découvrent les idées produites précédemment, les complètent, les questionnent ou les enrichissent. Progressivement, une réflexion collective se construit grâce aux contributions successives de l'ensemble des participants.</p>
+
+      <h2 class="section-h2">Les objectifs pédagogiques</h2>
+      <p>Cette méthode vise à faire émerger les représentations, partager les expériences, produire des idées nouvelles, favoriser l'implication des participants et construire une vision commune. Elle est particulièrement adaptée lorsque les sujets ne disposent pas d'une réponse unique et nécessitent la confrontation de points de vue.</p>
+
+      <h2 class="section-h2">Le déroulement d'une animation</h2>
+      <p>Le formateur prépare plusieurs tables, chacune consacrée à une question. Les participants se répartissent par petits groupes. Après un premier temps d'échange de 15 à 20 minutes, ils changent de table tandis qu'un « hôte de table » reste sur place pour présenter les idées déjà produites. Plusieurs rotations sont organisées avant une restitution collective permettant de faire émerger les enseignements principaux.</p>
+
+      <h2 class="section-h2">Le rôle du formateur</h2>
+      <p>Le formateur n'est pas un expert qui apporte des réponses. Il conçoit les questions, garantit le cadre, veille au respect des temps, stimule la participation de chacun et facilite la synthèse finale. Sa posture consiste davantage à accompagner l'intelligence collective qu'à transmettre un savoir descendant.</p>
+
+      <h2 class="section-h2">Les facteurs clés de réussite</h2>
+      <p>Un World Café efficace repose sur des questions ouvertes, un temps d'échange suffisant, des groupes de taille réduite (4 à 6 personnes), un environnement favorisant les échanges et une restitution structurée. Les questions doivent inviter à réfléchir plutôt qu'à rechercher une bonne réponse.</p>
+
+      <h2 class="section-h2">Adapter le World Café en distanciel</h2>
+      <p>Le principe peut être reproduit à distance grâce aux salles de sous-groupes de Teams ou Zoom. Chaque salle dispose d'un tableau collaboratif (Miro, Mural, Whiteboard ou Klaxoon) sur lequel les idées sont consignées. Les participants changent de salle à chaque rotation tandis que l'animateur ou un rapporteur présente les productions du groupe précédent.</p>
+
+      <h2 class="section-h2">Les erreurs fréquentes</h2>
+      <p>Le World Café perd de son efficacité lorsque les questions sont trop fermées, que les groupes sont trop nombreux, que les rotations sont trop rapides ou qu'aucune synthèse n'est réalisée. Il ne s'agit pas d'un simple brainstorming, mais d'un processus progressif de construction collective.</p>
+
+      <h2 class="section-h2">Quand utiliser cette méthode ?</h2>
+      <p>Le World Café est particulièrement pertinent pour les formations en management, QVCT, prévention des RPS, conduite du changement, innovation, cohésion d'équipe ou encore développement des pratiques professionnelles. Il convient parfaitement lorsque l'objectif est de partager des expériences et de faire émerger des solutions collectives.</p>
+
+      <h2 class="section-h2">À retenir</h2>
+      <div class="closing-note">
+        Le World Café constitue une méthode d'animation puissante pour rendre les participants pleinement acteurs de leur apprentissage. En favorisant le dialogue, la circulation des idées et l'intelligence collective, il permet de produire des échanges riches et des apprentissages durables. <strong>Bien préparé et correctement animé, il devient un formidable levier d'engagement, aussi bien en présentiel qu'en distanciel.</strong>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<footer>AXIS MUNDI — Article rédigé par l'équipe AXIS MUNDI à destination des formateurs et intervenants.</footer>
+
+</body>
+</html>
