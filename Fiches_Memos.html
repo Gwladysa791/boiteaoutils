@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiches mémos — AXIS MUNDI</title>
+<style>
+  @font-face {
+    font-family: 'Century Gothic Fallback';
+    src: local('Century Gothic'), local('CenturyGothic');
+  }
+  :root{
+    --bleu: #00B5E2;
+    --bleu-fonce: #0088A9;
+    --gris-clair: #D7D3CE;
+    --gris: #5D6160;
+    --gris-moyen: #A2A5A4;
+    --fond: #F0EBE5;
+    --gris-fond2: #ECEDED;
+    --orange: #F5AB33;
+    --vert: #15CA88;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Century Gothic Fallback','Century Gothic',Futura,'Trebuchet MS',sans-serif;
+    background:var(--fond);
+    color:var(--gris);
+    line-height:1.6;
+  }
+  /* ---------- Hero header ---------- */
+  .hero-header{position:relative;background:linear-gradient(135deg,#ffffff 0%,#eef8fb 55%,#e3f3f8 100%);overflow:hidden;}
+  .hero-inner{max-width:980px;margin:0 auto;padding:44px 32px 70px;display:flex;align-items:center;gap:40px;position:relative;z-index:2;}
+  .hero-copy{flex:1 1 400px;min-width:260px;}
+  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
+  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
+  .hero-title{margin:0 0 14px;font-size:31px;font-weight:700;line-height:1.18;color:#20282b;}
+  .hero-title span{display:block;color:var(--bleu-fonce);}
+  .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
+  .stat-pill .icon-circle{width:26px;height:26px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-pill .icon-circle svg{width:14px;height:14px;stroke:#fff;fill:none;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--bleu-fonce);color:#fff;border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,136,169,0.20);transition:background .15s ease, transform .15s ease;}
+  .hero-cta:hover{background:#006f87;transform:translateY(-1px);}
+  .hero-illus{flex:0 0 340px;height:290px;position:relative;}
+  .hero-illus svg{width:100%;height:100%;overflow:visible;}
+  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  @media (max-width:760px){input,select,textarea{font-size:16px;}
+    .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
+    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
+    .hero-stats{justify-content:center;}
+    .hero-rule{margin-left:auto;margin-right:auto;}
+    .hero-illus{flex:0 0 auto;width:100%;max-width:260px;height:220px;}
+  }
+  .container{max-width:1020px;margin:0 auto;padding:28px 20px 100px;}
+  .back-link{
+    display:inline-block;
+    margin:0 0 18px;
+    font-size:12.5px;
+    color:var(--bleu-fonce);
+    text-decoration:none;
+    font-weight:700;
+  }
+  .back-link:hover{text-decoration:underline;}
+  .intro{
+    background:#fff;
+    border-left:4px solid var(--bleu);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:var(--gris);
+  }
+  .intro p{margin:0 0 10px;}
+  .intro p:last-child{margin-bottom:0;}
+  .intro strong{color:var(--bleu-fonce);}
+  .library-toolbar{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    margin-bottom:16px;
+  }
+  .library-toolbar h2{margin:0;font-size:16px;color:#20282b;}
+  .toolbar-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .btn-ghost{
+    background:#fff;border:1.5px solid var(--gris-clair);color:var(--gris);
+    padding:8px 16px;border-radius:20px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;
+  }
+  .btn-ghost:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+
+  .library-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(270px, 1fr));
+    gap:18px;
+  }
+  .fiche-card{
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.07);
+    display:flex;
+    flex-direction:column;
+    border:2px solid transparent;
+    transition:border-color .15s ease, transform .15s ease;
+    position:relative;
+  }
+  .fiche-card.selected{border-color:var(--bleu-fonce);}
+  .fiche-card:hover{transform:translateY(-2px);}
+  .fiche-thumb-wrap{
+    position:relative;
+    aspect-ratio:2000/1414;
+    background:var(--gris-fond2);
+    cursor:zoom-in;
+    overflow:hidden;
+  }
+  .fiche-thumb-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .2s ease;}
+  .fiche-thumb-wrap:hover img{transform:scale(1.03);}
+  .fiche-checkbox-wrap{
+    position:absolute;top:10px;left:10px;z-index:2;
+  }
+  .fiche-checkbox-wrap input{
+    width:22px;height:22px;cursor:pointer;accent-color:var(--bleu-fonce);
+    border-radius:5px;
+  }
+  .fiche-zoom-hint{
+    position:absolute;bottom:8px;right:8px;background:rgba(32,40,43,0.72);color:#fff;
+    font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:12px;
+    display:flex;align-items:center;gap:5px;
+  }
+  .fiche-zoom-hint svg{width:11px;height:11px;}
+  .fiche-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1;}
+  .fiche-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+  .fiche-tags span{
+    background:var(--gris-fond2);color:var(--bleu-fonce);font-size:10px;font-weight:800;
+    padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:0.3px;
+  }
+  .fiche-card h3{margin:0 0 8px;font-size:15px;color:#20282b;line-height:1.3;}
+  .fiche-card p.desc{margin:0 0 16px;font-size:12.8px;color:var(--gris);flex:1;}
+  .fiche-actions{display:flex;gap:8px;}
+  .btn-small{
+    flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    padding:9px 10px;border-radius:16px;font-size:12px;font-weight:700;cursor:pointer;
+    font-family:inherit;text-decoration:none;border:1.5px solid var(--gris-clair);color:var(--gris);background:#fff;
+  }
+  .btn-small:hover{border-color:var(--bleu-fonce);color:var(--bleu-fonce);}
+  .btn-small.primary{background:var(--bleu-fonce);border-color:var(--bleu-fonce);color:#fff;}
+  .btn-small.primary:hover{background:#006f87;color:#fff;}
+  .btn-small svg{width:13px;height:13px;}
+
+  /* ---------- Barre de sélection sticky ---------- */
+  .selection-bar{
+    position:fixed;left:0;right:0;bottom:-100px;z-index:50;
+    background:#20282b;color:#fff;
+    padding:14px 24px;
+    display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;
+    box-shadow:0 -6px 20px rgba(0,0,0,0.18);
+    transition:bottom .25s ease;
+  }
+  .selection-bar.visible{bottom:0;}
+  .selection-bar .count{font-size:13.5px;font-weight:700;}
+  .selection-bar .count strong{color:var(--bleu);}
+  .selection-bar .bar-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .bar-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:9px 18px;border-radius:20px;font-size:12.5px;font-weight:700;cursor:pointer;
+    font-family:inherit;border:1.5px solid rgba(255,255,255,0.25);background:transparent;color:#fff;
+  }
+  .bar-btn:hover{background:rgba(255,255,255,0.1);}
+  .bar-btn.primary{background:var(--bleu-fonce);border-color:var(--bleu-fonce);}
+  .bar-btn.primary:hover{background:#00a0c4;}
+  .bar-btn svg{width:14px;height:14px;}
+  @media (max-width:640px){
+    .selection-bar{flex-direction:column;gap:10px;padding:14px 16px;}
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox-overlay{
+    display:none;position:fixed;inset:0;background:rgba(20,26,28,0.88);z-index:100;
+    align-items:center;justify-content:center;padding:24px;
+  }
+  .lightbox-overlay.open{display:flex;}
+  .lightbox-box{
+    background:#fff;border-radius:10px;max-width:min(900px, 92vw);max-height:90vh;
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .lightbox-img-wrap{overflow:auto;background:var(--gris-fond2);}
+  .lightbox-img-wrap img{width:100%;display:block;}
+  .lightbox-footer{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    padding:14px 20px;border-top:1px solid var(--gris-clair);
+  }
+  .lightbox-footer h3{margin:0;font-size:14.5px;color:#20282b;}
+  .lightbox-close{
+    position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.9);border:none;
+    width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    color:#20282b;
+  }
+  .lightbox-close svg{width:16px;height:16px;}
+
+  .howto-box{
+    background:var(--gris-fond2);
+    border-radius:8px;
+    padding:16px 18px;
+    margin-top:28px;
+    font-size:12.5px;
+    color:var(--gris);
+  }
+  .howto-box strong{color:var(--bleu-fonce);}
+
+  footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
+
+  @media print{
+    .hero-header, .back-link, .selection-bar, .fiche-actions, .fiche-checkbox-wrap, footer{display:none !important;}
+  }
+
+  /* ---------- Fil d'Ariane ---------- */
+  .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 18px;font-size:12.5px;}
+  .breadcrumb a{color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+  .breadcrumb-sep{color:var(--gris-moyen);}
+  .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero-header">
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+      <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="hero-rule"></div>
+      <h1 class="hero-title">Fiches mémos<span>À sélectionner pour vos sessions</span></h1>
+      <p class="hero-desc">Une bibliothèque de fiches synthétiques prêtes à l'emploi — repères managériaux, cadre légal, prévention des RPS. Sélectionnez celles utiles à votre session pour les télécharger ou les préparer à la diffusion.</p>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span id="statCount">8 fiches disponibles</span>
+        </div>
+        <div class="stat-pill">
+          <span class="icon-circle"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" stroke-width="2" stroke-linecap="round"/></svg></span>
+          Sélection multiple
+        </div>
+      </div>
+      <button class="hero-cta" onclick="document.getElementById('library').scrollIntoView({behavior:'smooth',block:'start'})">
+        Parcourir les fiches &rarr;
+      </button>
+    </div>
+
+    <div class="hero-illus" aria-hidden="true">
+      <svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#0088A9" opacity="0.14">
+          <circle cx="20" cy="35" r="2.2"/><circle cx="44" cy="18" r="1.8"/><circle cx="12" cy="75" r="1.8"/>
+          <circle cx="215" cy="28" r="2.2"/><circle cx="226" cy="60" r="1.8"/><circle cx="60" cy="192" r="1.8"/>
+        </g>
+        <rect x="46" y="34" width="92" height="122" rx="7" fill="#fff" stroke="#0088A9" stroke-width="2.2" transform="rotate(-6 92 95)"/>
+        <rect x="60" y="46" width="92" height="122" rx="7" fill="#fff" stroke="#0088A9" stroke-width="2.4"/>
+        <rect x="72" y="58" width="50" height="10" rx="3" fill="#00B5E2"/>
+        <rect x="72" y="78" width="68" height="7" rx="3" fill="#ECEDED"/>
+        <rect x="72" y="92" width="60" height="7" rx="3" fill="#ECEDED"/>
+        <rect x="72" y="106" width="68" height="7" rx="3" fill="#ECEDED"/>
+        <circle cx="152" cy="66" r="11" fill="#F5AB33"/>
+        <path d="M148 66l3 3 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <rect x="72" y="132" width="26" height="26" rx="6" fill="#15CA88" opacity="0.18"/>
+        <path d="M78 145l4 4 9-9" stroke="#15CA88" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="index.html">Accueil</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <a href="Sommaire.html">Sommaire des outils</a>
+    <span class="breadcrumb-sep">&rsaquo;</span>
+    <span class="breadcrumb-current">Fiches mémos</span>
+  </nav>
+
+  <div class="intro">
+    <p><strong>À propos de cette page :</strong> chaque fiche mémo condense en une page les repères essentiels sur un sujet (questions à se poser, clés de compréhension, bonnes pratiques). Cochez une ou plusieurs fiches pour les télécharger avant une session, un CODIR ou un entretien.</p>
+  </div>
+
+  <div id="library">
+    <div class="library-toolbar">
+      <h2>Bibliothèque des fiches</h2>
+      <div class="toolbar-actions">
+        <button class="btn-ghost" onclick="selectAll()">Tout sélectionner</button>
+        <button class="btn-ghost" onclick="deselectAll()">Tout désélectionner</button>
+      </div>
+    </div>
+    <div class="library-grid" id="libraryGrid"></div>
+  </div>
+
+  <div class="howto-box">
+    <strong>Contenu de la bibliothèque :</strong> les fiches couvrent aujourd'hui la prévention des RPS, la posture managériale, le cadre légal (harcèlement, fait religieux) et la gestion du stress. D'autres fiches viendront enrichir cette bibliothèque au fil des besoins identifiés en mission.
+  </div>
+
+</div>
+
+<div class="selection-bar" id="selectionBar">
+  <div class="count"><strong id="selectionCount">0</strong> fiche(s) sélectionnée(s)</div>
+  <div class="bar-actions">
+    <button class="bar-btn" onclick="deselectAll()">Effacer la sélection</button>
+    <button class="bar-btn primary" onclick="downloadSelected()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke-linecap="round"/></svg>
+      Télécharger la sélection
+    </button>
+  </div>
+</div>
+
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="if(event.target===this) closeLightbox()">
+  <div class="lightbox-box">
+    <div class="lightbox-img-wrap">
+      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+      <img id="lightboxImg" src="" alt="">
+    </div>
+    <div class="lightbox-footer">
+      <h3 id="lightboxTitle"></h3>
+      <a class="btn-small primary" id="lightboxDownload" href="#" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke-linecap="round"/></svg>
+        Télécharger cette fiche
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>AXIS MUNDI — Fiches destinées à un usage interne aux formateurs et intervenants AXIS MUNDI.</footer>
+
+<script>
+/*
+  Pour ajouter une fiche à cette bibliothèque, ajouter un objet à ce tableau :
+  {
+    id: "identifiant-unique",
+    titre: "Titre de la fiche",
+    tags: ["Thème 1","Thème 2"],
+    description: "Description courte de son contenu et de son usage.",
+    fichier: "Fiches mémos/nom-du-fichier.png"
+  }
+*/
+const FICHES = [
+  {
+    id: "changement",
+    titre: "Accompagner son équipe en période de changement",
+    tags: ["Conduite du changement", "Management"],
+    description: "Repères pour un manager confronté à une réorganisation : comprendre les réactions de l'équipe, garder le lien et structurer les pratiques qui rassurent.",
+    fichier: "Fiches mémos/1_Mémo-Accompagner son équipe en période de changement .png"
+  },
+  {
+    id: "manager-preventeur",
+    titre: "Être un manager préventeur",
+    tags: ["Management", "RPS et QVCT"],
+    description: "Le rôle du manager dans le repérage des signaux faibles et la prévention des risques psychosociaux au sein de son équipe.",
+    fichier: "Fiches mémos/2_Memo-Etre un manager préventeur.png"
+  },
+  {
+    id: "entretien-aide",
+    titre: "Mener un entretien d'aide et d'orientation",
+    tags: ["Management", "RPS et QVCT"],
+    description: "Cadre, posture d'écoute et limites d'intervention pour un entretien individuel face à une situation de souffrance au travail.",
+    fichier: "Fiches mémos/3_Memo-Mener-un-entretien-daide-et-dorientation.png"
+  },
+  {
+    id: "agissements-sexistes",
+    titre: "Prévenir les agissements sexistes et le harcèlement sexuel",
+    tags: ["Cadre légal", "Prévention"],
+    description: "Définitions, cadre juridique et bonnes pratiques pour repérer, prévenir et traiter ces situations en entreprise.",
+    fichier: "Fiches mémos/4_ Mémo-Prévenir les agissements sexistes et le harcèlement sexuel.png"
+  },
+  {
+    id: "fait-religieux",
+    titre: "La gestion du fait religieux",
+    tags: ["Cadre légal", "Management"],
+    description: "Principes juridiques, distinction secteur public/privé et postures organisationnelles possibles face aux expressions de convictions religieuses au travail.",
+    fichier: "Fiches mémos/5_AM-Fiche-Récap-Fait-religieux.png"
+  },
+  {
+    id: "stress-quotidien",
+    titre: "Gérer son stress au quotidien",
+    tags: ["Stress", "Développement personnel"],
+    description: "Signaux physiques, mentaux, émotionnels et comportementaux du stress, et leviers concrets pour relâcher la pression au quotidien.",
+    fichier: "Fiches mémos/6_Mémo-Gérer son stress au quotidien.png"
+  },
+  {
+    id: "signaux-faibles",
+    titre: "Identifier les signaux faibles",
+    tags: ["RPS et QVCT", "Management"],
+    description: "Repérer les signaux physiques, cognitifs, émotionnels et comportementaux annonciateurs d'une difficulté, avant qu'elle ne s'aggrave.",
+    fichier: "Fiches mémos/7_AM-Fiche-Récap-Répérer les signaux faibles.png"
+  },
+  {
+    id: "rps-equipe",
+    titre: "Prévenir les risques psychosociaux dans son équipe",
+    tags: ["RPS et QVCT", "Management"],
+    description: "Une grille de lecture pour le manager : signaux à observer, dialogue à ouvrir avec l'équipe, relais à mobiliser en cas de besoin.",
+    fichier: "Fiches mémos/8_Mémo-Prévenir les risques psychosociaux dans son équipe.png"
+  }
+];
+
+const selectedIds = new Set();
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function baseName(path){
+  const parts = path.split('/');
+  return parts[parts.length - 1];
+}
+
+function ficheCardHtml(f){
+  const isSelected = selectedIds.has(f.id);
+  return `
+    <div class="fiche-card${isSelected ? ' selected' : ''}" data-id="${f.id}">
+      <div class="fiche-thumb-wrap" onclick="openLightbox('${f.id}')">
+        <div class="fiche-checkbox-wrap" onclick="event.stopPropagation()">
+          <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect('${f.id}')" aria-label="Sélectionner cette fiche">
+        </div>
+        <img src="${encodeURI(f.fichier)}" alt="${escapeHtml(f.titre)}" loading="lazy">
+        <span class="fiche-zoom-hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          Aperçu
+        </span>
+      </div>
+      <div class="fiche-body">
+        <div class="fiche-tags">${f.tags.map(t => `<span>${escapeHtml(t)}</span>`).join('')}</div>
+        <h3>${escapeHtml(f.titre)}</h3>
+        <p class="desc">${escapeHtml(f.description)}</p>
+        <div class="fiche-actions">
+          <button class="btn-small" onclick="openLightbox('${f.id}')">Aperçu</button>
+          <a class="btn-small primary" href="${encodeURI(f.fichier)}" download="${escapeHtml(baseName(f.fichier))}">Télécharger</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderLibrary(){
+  const grid = document.getElementById('libraryGrid');
+  grid.innerHTML = FICHES.map(ficheCardHtml).join('');
+  document.getElementById('statCount').textContent = FICHES.length + (FICHES.length > 1 ? ' fiches disponibles' : ' fiche disponible');
+}
+
+function toggleSelect(id){
+  if(selectedIds.has(id)){
+    selectedIds.delete(id);
+  } else {
+    selectedIds.add(id);
+  }
+  const card = document.querySelector('.fiche-card[data-id="' + id + '"]');
+  if(card) card.classList.toggle('selected', selectedIds.has(id));
+  updateSelectionBar();
+}
+
+function selectAll(){
+  FICHES.forEach(f => selectedIds.add(f.id));
+  renderLibrary();
+  updateSelectionBar();
+}
+
+function deselectAll(){
+  selectedIds.clear();
+  renderLibrary();
+  updateSelectionBar();
+}
+
+function updateSelectionBar(){
+  const bar = document.getElementById('selectionBar');
+  const count = selectedIds.size;
+  document.getElementById('selectionCount').textContent = count;
+  bar.classList.toggle('visible', count > 0);
+}
+
+function downloadSelected(){
+  const ids = Array.from(selectedIds);
+  ids.forEach((id, i) => {
+    const f = FICHES.find(x => x.id === id);
+    if(!f) return;
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = encodeURI(f.fichier);
+      a.download = baseName(f.fichier);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }, i * 350);
+  });
+}
+
+function openLightbox(id){
+  const f = FICHES.find(x => x.id === id);
+  if(!f) return;
+  document.getElementById('lightboxImg').src = encodeURI(f.fichier);
+  document.getElementById('lightboxImg').alt = f.titre;
+  document.getElementById('lightboxTitle').textContent = f.titre;
+  const dl = document.getElementById('lightboxDownload');
+  dl.href = encodeURI(f.fichier);
+  dl.setAttribute('download', baseName(f.fichier));
+  document.getElementById('lightboxOverlay').classList.add('open');
+}
+
+function closeLightbox(){
+  document.getElementById('lightboxOverlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeLightbox();
+});
+
+renderLibrary();
+</script>
+
+</body>
+</html>
