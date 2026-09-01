@@ -70,6 +70,13 @@
   }
   .consigne-panel h2{margin:0 0 6px; font-size:15px; color:var(--bleu-fonce);}
   .consigne-panel .consigne-sub{margin:0 0 14px; font-size:12.5px; color:var(--gris-moyen);}
+  .champ-label{display:block; font-size:11.5px; font-weight:700; color:var(--gris-moyen); margin:0 0 6px;}
+  .titre-row{margin-bottom:14px;}
+  .titre-row input{
+    width:100%; border:1.5px solid var(--gris-clair); border-radius:8px;
+    padding:10px 14px; font-family:inherit; font-size:13.5px; color:var(--gris);
+  }
+  .titre-row input:focus{outline:none; border-color:var(--bleu);}
   .consigne-row{display:flex; gap:10px; flex-wrap:wrap;}
   .consigne-row textarea{
     flex:1 1 320px; min-height:60px; border:1.5px solid var(--gris-clair); border-radius:8px;
@@ -131,8 +138,13 @@
 
   <div>
     <div class="consigne-panel">
-      <h2>Consigne donnée aux participants</h2>
+      <h2>Ce que voient les participants</h2>
       <p class="consigne-sub">Modifiable à tout moment — la mise à jour est immédiate sur les téléphones des participants déjà connectés.</p>
+      <div class="titre-row">
+        <label class="champ-label" for="titreInput">Titre affiché (ex. intitulé de la formation)</label>
+        <input type="text" id="titreInput" placeholder="Ex. : Prévention des RPS — Équipe Nord" maxlength="80">
+      </div>
+      <label class="champ-label" for="consigneInput">Consigne</label>
       <div class="consigne-row">
         <textarea id="consigneInput" placeholder="Ex. : Un mot qui décrit votre semaine…"></textarea>
         <button type="button" id="btnEnregistrerConsigne" onclick="enregistrerConsigne()">Enregistrer</button>
@@ -182,9 +194,13 @@ async function init(){
 
     document.getElementById('outilNom').textContent = TOOL_LABELS[outil] || outil;
     document.getElementById('joinCode').textContent = code;
+    document.getElementById('titreInput').value = sessionRow.titre || '';
     document.getElementById('consigneInput').value = sessionRow.consigne || '';
     AXMSession.ecouterSession(sessionRow.id, function(s){
       sessionRow = s;
+      if(document.activeElement !== document.getElementById('titreInput')){
+        document.getElementById('titreInput').value = s.titre || '';
+      }
       if(document.activeElement !== document.getElementById('consigneInput')){
         document.getElementById('consigneInput').value = s.consigne || '';
       }
@@ -413,13 +429,15 @@ async function enregistrerConsigne(){
   if(!sessionRow) return;
   const btn = document.getElementById('btnEnregistrerConsigne');
   const statusEl = document.getElementById('consigneStatus');
-  const texte = document.getElementById('consigneInput').value.trim();
+  const titre = document.getElementById('titreInput').value.trim();
+  const consigne = document.getElementById('consigneInput').value.trim();
   btn.disabled = true;
   btn.textContent = 'Enregistrement…';
   try{
-    await AXMSession.definirConsigne(sessionRow.id, texte);
-    sessionRow.consigne = texte;
-    statusEl.textContent = 'Consigne à jour, visible côté participants.';
+    await AXMSession.mettreAJourSession(sessionRow.id, { titre: titre || null, consigne: consigne || null });
+    sessionRow.titre = titre;
+    sessionRow.consigne = consigne;
+    statusEl.textContent = 'À jour, visible côté participants.';
   } catch(e){
     statusEl.textContent = 'Erreur : ' + e.message;
   } finally {

@@ -97,6 +97,13 @@
     if (error) throw error;
   }
 
+  async function mettreAJourSession(sessionId, champs) {
+    const client = getClient();
+    if (!client) throw new Error('Supabase indisponible');
+    const { error } = await client.from('sessions').update(champs).eq('id', sessionId);
+    if (error) throw error;
+  }
+
   async function fermerSession(sessionId) {
     const client = getClient();
     if (!client) throw new Error('Supabase indisponible');
@@ -113,6 +120,7 @@
     ecouterReponses,
     ecouterSession,
     definirConsigne,
+    mettreAJourSession,
     fermerSession,
     getClient
   };

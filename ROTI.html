@@ -39,6 +39,7 @@
   .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:14px;}
   .hero-title{margin:0 0 14px;font-size:29px;font-weight:700;line-height:1.2;color:#20282b;}
   .hero-title span{display:block;color:var(--bleu-fonce);font-size:16px;font-weight:700;margin-top:6px;}
+  .hero-title #heroTitleMain{display:inline;color:inherit;font-size:inherit;font-weight:inherit;margin-top:0;}
   .hero-desc{margin:0 0 22px;font-size:14.5px;color:var(--gris);max-width:460px;}
   .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
   .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 2px 10px rgba(0,90,110,0.10);font-size:12.5px;font-weight:700;color:#33393b;}
@@ -199,7 +200,7 @@
       <script>if (window.self !== window.top) { document.getElementById('backToSommaire').style.display = 'none'; document.getElementById('lancerSessionLink').style.display = 'none'; }</script>
       <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
       <div class="hero-rule"></div>
-      <h1 class="hero-title">ROTI<span>Return On Time Invested</span></h1>
+      <h1 class="hero-title"><span id="heroTitleMain">ROTI</span><span>Return On Time Invested</span></h1>
       <p class="hero-desc">Une évaluation rapide et directe : combien valait, à vos yeux, le temps consacré à cette session ? Notez de 1 à 5, puis expliquez votre choix — un retour concret pour ajuster les prochaines séances.</p>
       <div class="hero-stats">
         <div class="stat-pill">
@@ -370,9 +371,11 @@ async function initSessionMode(){
   afficherStatutSession('Session en direct — code ' + liveSessionRow.code);
   document.getElementById('sessionSendBlock').style.display = 'block';
   appliquerConsigne(liveSessionRow.consigne);
+  appliquerTitre(liveSessionRow.titre);
   AXMSession.ecouterSession(liveSessionRow.id, function(s){
     liveSessionRow = s;
     appliquerConsigne(s.consigne);
+    appliquerTitre(s.titre);
   });
 }
 
@@ -380,6 +383,10 @@ function appliquerConsigne(consigne){
   if(consigne && consigne.trim()){
     document.getElementById('introConsigneText').textContent = consigne;
   }
+}
+
+function appliquerTitre(titre){
+  document.getElementById('heroTitleMain').textContent = (titre && titre.trim()) ? titre : 'ROTI';
 }
 
 async function envoyerReponseSession(){
