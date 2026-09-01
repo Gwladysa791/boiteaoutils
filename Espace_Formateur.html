@@ -30,60 +30,35 @@
     color:var(--gris);
     line-height:1.55;
   }
-  /* ---------- Hero header ---------- */
-  .hero-header{position:relative;min-height:400px;overflow:hidden;background:var(--bleu-fonce);}
-  .hero-bgphoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;}
-  .hero-scrim{
-    position:absolute;inset:0;
-    background:linear-gradient(102deg,
-      rgba(0,89,110,0.96) 0%,
-      rgba(0,89,110,0.94) 32%,
-      rgba(0,89,110,0.74) 46%,
-      rgba(0,89,110,0.30) 62%,
-      rgba(0,89,110,0.02) 76%);
+  /* ---------- Bandeau de travail du Studio ---------- */
+  .studio-workspace-header{
+    background:linear-gradient(135deg,#006f87 0%,var(--bleu-fonce) 58%,#009abc 100%);
+    border-bottom:3px solid var(--bleu);
+    color:#fff;
+    box-shadow:0 5px 18px rgba(0,65,82,0.16);
   }
-  .hero-inner{max-width:1080px;margin:0 auto;padding:52px 32px 70px;position:relative;z-index:2;}
-  .hero-copy{max-width:490px;}
-  .hero-logo{height:32px;width:auto;display:block;margin-bottom:24px;}
-  .hero-rule{width:44px;height:4px;background:var(--bleu);border-radius:2px;margin-bottom:16px;}
-  .hero-title{margin:0 0 14px;font-size:30px;font-weight:700;line-height:1.2;color:#fff;}
-  .hero-title span{display:block;color:var(--bleu);font-size:15.5px;font-weight:700;margin-top:8px;}
-  .hero-desc{margin:0 0 22px;font-size:14px;color:#eaf7fb;max-width:450px;line-height:1.6;}
-  .hero-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;}
-  .stat-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:30px;padding:7px 16px 7px 7px;box-shadow:0 4px 14px rgba(0,20,30,0.22);font-size:12px;font-weight:700;color:#33393b;}
-  .stat-pill .icon-circle{width:24px;height:24px;border-radius:50%;background:var(--bleu-fonce);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;}
-  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--bleu-fonce);border:none;padding:11px 22px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,20,30,0.20);transition:background .15s ease, transform .15s ease;}
-  .hero-cta:hover{background:#eaf7fb;transform:translateY(-1px);}
-  .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
-  @media (max-width:760px){
-    .hero-header{min-height:auto;}
-    .hero-bgphoto{object-position:center 32%;}
-    .hero-scrim{background:rgba(0,89,110,0.90);}
-    .hero-inner{padding:36px 22px 58px;text-align:center;}
-    .hero-copy{max-width:none;}
-    .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
-    .hero-stats{justify-content:center;}
-    .hero-rule{margin-left:auto;margin-right:auto;}
+  .studio-workspace-inner{
+    max-width:1320px;
+    margin:0 auto;
+    padding:17px 20px 18px;
+    display:grid;
+    grid-template-columns:minmax(250px,.82fr) minmax(540px,1.18fr);
+    gap:28px;
+    align-items:center;
   }
-  .container{max-width:1320px;margin:0 auto;padding:26px 20px 60px;}
-  .back-link{display:inline-block;margin:0 0 18px;font-size:12.5px;color:var(--bleu-fonce);text-decoration:none;font-weight:700;}
-  .back-link:hover{text-decoration:underline;}
-  .intro{background:#fff;border-left:4px solid var(--bleu);border-radius:6px;padding:18px 20px;margin-bottom:20px;font-size:13.5px;color:var(--gris);}
-  .intro p{margin:0 0 10px;}
-  .intro p:last-of-type{margin-bottom:0;}
-  .intro .note-dev{display:block;margin-top:12px;font-size:12px;color:var(--gris-moyen);font-style:italic;}
-
-  .panel{background:#fff;border-radius:8px;padding:20px 22px 24px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
-  .panel h2{margin:0 0 6px;font-size:15.5px;color:var(--bleu-fonce);}
-  .panel .panel-sub{margin:0 0 16px;font-size:12.5px;color:var(--gris-moyen);}
-
+  .workspace-back{display:inline-flex;align-items:center;gap:5px;margin-bottom:5px;color:#d9f5fb;text-decoration:none;font-size:11.5px;font-weight:700;}
+  .workspace-back:hover,.workspace-back:focus-visible{color:#fff;text-decoration:underline;}
+  .workspace-eyebrow{margin:0 0 2px;color:#8ee9f8;font-size:10.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;}
+  .workspace-heading h1{margin:0;color:#fff;font-size:22px;line-height:1.2;font-weight:700;}
+  .workspace-controls{display:grid;grid-template-columns:minmax(300px,1fr) minmax(220px,.62fr);gap:14px;align-items:end;}
+  .workspace-field-label{display:block;margin:0 0 5px;color:#eafaff;font-size:11px;font-weight:700;}
+  .workspace-session-field,.workspace-logo-field{min-width:0;}
+  .workspace-logo-field{padding-left:14px;border-left:1px solid rgba(255,255,255,.26);}
+  .workspace-logo-field .logo-control{min-height:42px;}
+  .panel-sub{font-size:12.5px;color:var(--gris-moyen);}
   .name-input{width:100%;border:1.5px solid var(--gris-clair);border-radius:8px;padding:11px 14px;font-family:inherit;font-size:14.5px;font-weight:700;color:#20282b;}
-  .name-input:focus{outline:none;border-color:var(--bleu);}
-
-  .panel-row{display:flex;gap:26px;align-items:flex-start;}
-  .panel-row-main{flex:1.4;min-width:0;}
-  .panel-row-logo{flex:1;min-width:0;border-left:1px solid var(--gris-clair);padding-left:26px;}
-  @media (max-width:760px){.panel-row{flex-direction:column;}.panel-row-logo{border-left:none;padding-left:0;border-top:1px solid var(--gris-clair);padding-top:16px;}}
+  .name-input:focus{outline:none;border-color:var(--bleu);box-shadow:0 0 0 3px rgba(0,181,226,.22);}
+  .container{max-width:1320px;margin:0 auto;padding:18px 20px 60px;}
   .logo-control{display:flex;align-items:center;gap:12px;}
   .logo-upload-btn{border:1.5px dashed var(--gris-clair);background:var(--gris-fond2);color:var(--gris);padding:9px 14px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
   .logo-upload-btn:hover{border-color:var(--bleu);color:var(--bleu-fonce);}
@@ -97,6 +72,19 @@
   .diapo-image-preview-box img{max-height:64px;max-width:110px;border-radius:5px;object-fit:cover;display:block;}
   .formation-diapo .diapo-logo{max-height:9%;}
   .print-page .diapo-logo{position:absolute;top:4%;right:4%;max-height:10%;}
+  .studio-workspace-header .logo-upload-btn{min-height:42px;background:#fff;border-color:rgba(255,255,255,.72);color:var(--bleu-fonce);}
+  .studio-workspace-header .logo-upload-btn:hover{background:#eaf7fb;border-color:#fff;}
+  .studio-workspace-header .logo-preview-box{min-height:42px;background:#fff;}
+  @media (max-width:980px){
+    .studio-workspace-inner{grid-template-columns:1fr;gap:14px;}
+  }
+  @media (max-width:680px){
+    .studio-workspace-inner{padding:14px 16px 16px;}
+    .workspace-heading h1{font-size:19px;}
+    .workspace-controls{grid-template-columns:1fr;gap:10px;}
+    .workspace-logo-field{padding:10px 0 0;border-left:none;border-top:1px solid rgba(255,255,255,.24);}
+    .container{padding:12px 10px 42px;}
+  }
 
   /* ================================================================
      STUDIO — coquille générale
@@ -439,8 +427,8 @@
   .print-fiche-page img{max-width:100%;max-height:100%;object-fit:contain;}
 
   @media print{
-    .hero-header, .back-link, .studio-topbar, .magic-strip, .pages-rail, .studio-actions, footer, header.site-header,
-    .intro, .container > .panel, .studio-panel{display:none !important;}
+    .studio-workspace-header, .studio-topbar, .magic-strip, .pages-rail, .studio-actions, footer, header.site-header,
+    .studio-panel{display:none !important;}
     body{background:#fff;}
     .print-only{display:block;}
   }
@@ -548,53 +536,28 @@ nav.main-nav > a:hover, nav.main-nav > a:focus-visible{background:#EAF7FB;color:
   </div>
 </header>
 
-<div class="hero-header">
-  <img class="hero-bgphoto" src="brand_assets/espace_formateur_hero.jpg" alt="Formateur animant une séance devant un tableau blanc, entouré de son équipe">
-  <div class="hero-scrim" aria-hidden="true"></div>
-  <div class="hero-inner">
-    <div class="hero-copy">
-      <img class="hero-logo" src="brand_assets/logo_axismundi_blanc.svg" alt="AXIS MUNDI — Développer le potentiel humain">
-      <div class="hero-rule"></div>
-      <h1 class="hero-title">Studio d'animation pédagogique<span>Préparez, animez et projetez toute votre séquence depuis un seul espace</span></h1>
-      <p class="hero-desc">Construisez une succession de pages — diapositives, tableau blanc, outils AXIS MUNDI, synthèses, débriefings — puis passez en Mode Formation pour animer sans jamais quitter votre fil conducteur.</p>
-      <div class="hero-stats">
-        <div class="stat-pill"><span class="icon-circle">🗂️</span> 5 types de page</div>
-        <div class="stat-pill"><span class="icon-circle">🪄</span> Outils magiques intégrés</div>
-        <div class="stat-pill"><span class="icon-circle">🖥️</span> Écran de projection séparé</div>
-      </div>
-      <button class="hero-cta" onclick="document.getElementById('studioPanel').scrollIntoView({behavior:'smooth',block:'start'})">
-        Ouvrir le Studio &rarr;
-      </button>
+<section class="studio-workspace-header" aria-labelledby="studioWorkspaceTitle">
+  <div class="studio-workspace-inner">
+    <div class="workspace-heading">
+      <a class="workspace-back" href="Sommaire.html">&larr; Boîte à outils</a>
+      <p class="workspace-eyebrow">STUDIO D'ANIMATION</p>
+      <h1 id="studioWorkspaceTitle">Studio d'animation pédagogique</h1>
     </div>
-  </div>
-  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,30 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z" fill="var(--fond)"/>
-  </svg>
-</div>
-
-<div class="container">
-
-  <a class="back-link" href="index.html">&larr; Retour à l'accueil</a>
-
-  <div class="intro">
-    <p>Le Studio est votre espace de préparation : composez vos pages dans la colonne de gauche, éditez chacune dans la zone centrale. Pour animer, deux outils distincts vous attendent en haut à droite : le <strong>Mode Formation</strong> passe VOTRE écran en plein écran avec la barre d'outils formateur sous la main (focus, annotation, notes…) — pratique en solo ou en visio. La <strong>Fenêtre de projection</strong> ouvre un second écran séparé, sans aucun outil visible, à glisser sur le vidéoprojecteur : c'est ce que voit le groupe, synchronisé automatiquement avec ce que vous faites.</p>
-  </div>
-
-  <div class="panel">
-    <div class="panel-row">
-      <div class="panel-row-main">
-        <h2>Nom de la session</h2>
-        <p class="panel-sub">Facultatif — utile pour vous y retrouver et pour vos exports.</p>
-        <input type="text" class="name-input" id="studioNameInput" placeholder="Ex. Formation Management — Module RPS, juillet 2026" oninput="onStudioNameInput(this.value)">
-      </div>
-      <div class="panel-row-logo">
-        <h2>Logo client</h2>
-        <p class="panel-sub">Facultatif — affiché sur les diapositives, en projection et dans les exports.</p>
+    <div class="workspace-controls">
+      <label class="workspace-session-field" for="studioNameInput">
+        <span class="workspace-field-label">Nom de la session</span>
+        <input type="text" class="name-input" id="studioNameInput" placeholder="Ex. Formation Management — Module RPS" oninput="onStudioNameInput(this.value)">
+      </label>
+      <div class="workspace-logo-field">
+        <span class="workspace-field-label">Logo client <span aria-hidden="true">·</span> facultatif</span>
         <div class="logo-control" id="logoControl"></div>
         <input type="file" id="logoFileInput" accept="image/*" style="display:none;" onchange="onLogoFileChosen(this.files)">
       </div>
     </div>
   </div>
+</section>
+
+<div class="container">
 
   <div class="studio-panel" id="studioPanel">
     <div class="studio-shell">
