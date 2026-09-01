@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="tool-view-context.js"></script>
+<script src="nuage-formateur-config.js"></script>
 <title>Nuage de mots — AXIS MUNDI</title>
 <style>
   @font-face {
@@ -243,7 +244,65 @@
   .session-pseudo-row input:focus{outline:none;border-color:var(--bleu);}
   .session-send-status{font-size:12px;color:var(--gris-moyen);margin:8px 0 0;}
 
-  /* Vue participant : header compact dédié quand la page est ouverte via ?session=CODE. */
+  /* Vue formateur : espace de préparation opérationnel, sans contenu de présentation. */
+  .formateur-view{display:none;min-height:100vh;background:#f4f6f7;}
+  html.mode-formateur .hero-header,
+  html.mode-formateur .container,
+  html.mode-formateur footer{display:none !important;}
+  html.mode-formateur .formateur-view{display:block;}
+  .formateur-topbar{background:#fff;border-bottom:1px solid #dfe5e7;}
+  .formateur-topbar-inner{max-width:1080px;margin:0 auto;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .formateur-brand{display:flex;align-items:center;gap:18px;min-width:0;}
+  .formateur-logo{width:122px;height:auto;display:block;flex:0 0 auto;}
+  .formateur-heading{min-width:0;border-left:1px solid #dfe5e7;padding-left:18px;}
+  .formateur-eyebrow{margin:0 0 2px;color:var(--bleu-fonce);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+  .formateur-heading h1{margin:0;color:#20282b;font-size:21px;line-height:1.2;}
+  .formateur-save-status{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;color:#47705f;background:#edf8f3;border:1px solid #d4eee2;border-radius:999px;padding:7px 12px;font-size:11.5px;font-weight:700;}
+  .formateur-save-status::before{content:'✓';display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--vert);color:#fff;font-size:10px;}
+  .formateur-workspace{max-width:1080px;margin:0 auto;padding:26px;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(310px,.92fr);gap:22px;align-items:start;}
+  .formateur-card{background:#fff;border:1px solid #e1e6e8;border-radius:14px;box-shadow:0 8px 26px rgba(31,53,60,.06);overflow:hidden;}
+  .formateur-card-head{padding:20px 22px 16px;border-bottom:1px solid #edf0f1;}
+  .formateur-card-head h2{margin:0 0 4px;color:#20282b;font-size:16px;}
+  .formateur-card-head p{margin:0;color:#7a8182;font-size:12.5px;}
+  .formateur-form{padding:20px 22px 22px;display:grid;gap:18px;}
+  .formateur-field{display:grid;gap:7px;}
+  .formateur-field label{color:#343c3f;font-size:12.5px;font-weight:700;}
+  .formateur-field input,
+  .formateur-field textarea,
+  .formateur-field select{width:100%;border:1.5px solid #ccd5d8;border-radius:9px;background:#fff;padding:11px 12px;color:#303638;font:inherit;font-size:13.5px;transition:border-color .15s,box-shadow .15s;}
+  .formateur-field textarea{min-height:112px;resize:vertical;line-height:1.5;}
+  .formateur-field select{max-width:190px;}
+  .formateur-field input:focus,
+  .formateur-field textarea:focus,
+  .formateur-field select:focus{outline:none;border-color:var(--bleu-fonce);box-shadow:0 0 0 3px rgba(0,136,169,.10);}
+  .formateur-field-help{margin:0;color:#899092;font-size:11px;}
+  .formateur-reset{justify-self:start;background:transparent;border:0;padding:0;color:var(--bleu-fonce);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+  .formateur-preview-body{padding:20px 22px 22px;}
+  .participant-preview{background:linear-gradient(145deg,#f9fdfe,#eaf6f9);border:1px solid #d9ebef;border-radius:14px;padding:20px;min-height:296px;box-shadow:inset 0 0 0 5px rgba(255,255,255,.55);}
+  .participant-preview-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:25px;}
+  .participant-preview-logo{width:92px;height:auto;}
+  .participant-preview-live{color:var(--bleu-fonce);font-size:8.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;}
+  .participant-preview-rule{width:32px;height:3px;background:var(--bleu);border-radius:3px;margin-bottom:9px;}
+  .participant-preview h3{margin:0 0 7px;color:#20282b;font-size:20px;line-height:1.2;overflow-wrap:anywhere;}
+  .participant-preview-instruction{margin:0 0 18px;color:#636b6d;font-size:12.5px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;}
+  .participant-preview-input{height:40px;border:1.5px solid #cbdadd;border-radius:20px;background:#fff;display:flex;align-items:center;padding:0 15px;color:#a0a7a9;font-size:11.5px;}
+  .participant-preview-limit{margin:8px 2px 0;color:#7a8587;font-size:10.5px;}
+  .formateur-preview-actions{display:flex;gap:10px;margin-top:16px;}
+  .formateur-preview-link{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:10px 16px;border-radius:9px;background:var(--bleu-fonce);color:#fff;text-decoration:none;font-size:12px;font-weight:700;transition:background .15s;}
+  .formateur-preview-link:hover{background:#006f87;}
+  .participant-limit-note{display:none;margin-top:8px !important;color:var(--bleu-fonce);font-size:12px;font-weight:700;}
+  @media (max-width:800px){
+    .formateur-topbar-inner{align-items:flex-start;padding:16px 18px;}
+    .formateur-brand{align-items:flex-start;gap:12px;}
+    .formateur-logo{width:92px;margin-top:2px;}
+    .formateur-heading{padding-left:12px;}
+    .formateur-heading h1{font-size:17px;}
+    .formateur-save-status{font-size:0;padding:6px;}
+    .formateur-save-status::before{font-size:10px;}
+    .formateur-workspace{grid-template-columns:1fr;padding:18px;gap:16px;}
+  }
+
+  /* Vue participant : header compact dédié pour une session ou une prévisualisation. */
   html.mode-participant #backToSommaire,
   html.mode-participant #lancerSessionLink,
   html.mode-participant .hero-stats,
@@ -280,6 +339,75 @@
 <body>
 
 <script>if (new URLSearchParams(location.search).get('session')) { document.documentElement.classList.add('mode-participant'); }</script>
+
+<section class="formateur-view" id="formateurView" aria-labelledby="formateurViewTitle">
+  <header class="formateur-topbar">
+    <div class="formateur-topbar-inner">
+      <div class="formateur-brand">
+        <img class="formateur-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+        <div class="formateur-heading">
+          <p class="formateur-eyebrow">Vue formateur</p>
+          <h1 id="formateurViewTitle">Nuage de mots</h1>
+        </div>
+      </div>
+      <div class="formateur-save-status" id="formateurSaveStatus" role="status">Enregistré sur cet appareil</div>
+    </div>
+  </header>
+
+  <div class="formateur-workspace">
+    <div class="formateur-card">
+      <div class="formateur-card-head">
+        <h2>Réglages de l’activité</h2>
+        <p>Les modifications sont enregistrées automatiquement.</p>
+      </div>
+      <form class="formateur-form" id="formateurConfigForm">
+        <div class="formateur-field">
+          <label for="formateurTitleInput">Titre affiché aux participants</label>
+          <input id="formateurTitleInput" name="title" type="text" maxlength="100" autocomplete="off">
+        </div>
+        <div class="formateur-field">
+          <label for="formateurInstructionInput">Consigne</label>
+          <textarea id="formateurInstructionInput" name="instruction" maxlength="500"></textarea>
+          <p class="formateur-field-help">Formulez directement ce que les participants doivent faire.</p>
+        </div>
+        <div class="formateur-field">
+          <label for="formateurMaxWordsInput">Nombre maximal de mots par participant</label>
+          <select id="formateurMaxWordsInput" name="maxWords">
+            <option value="1">1 mot</option>
+            <option value="2">2 mots</option>
+            <option value="3">3 mots</option>
+            <option value="4">4 mots</option>
+            <option value="5">5 mots</option>
+          </select>
+        </div>
+        <button class="formateur-reset" id="formateurResetButton" type="button">Réinitialiser les réglages</button>
+      </form>
+    </div>
+
+    <div class="formateur-card">
+      <div class="formateur-card-head">
+        <h2>Prévisualisation participant</h2>
+        <p>Mise à jour instantanée</p>
+      </div>
+      <div class="formateur-preview-body">
+        <div class="participant-preview" aria-live="polite">
+          <div class="participant-preview-top">
+            <img class="participant-preview-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="">
+            <span class="participant-preview-live">Session en direct</span>
+          </div>
+          <div class="participant-preview-rule"></div>
+          <h3 id="formateurPreviewTitle">Nuage de mots</h3>
+          <p class="participant-preview-instruction" id="formateurPreviewInstruction"></p>
+          <div class="participant-preview-input">Tapez un mot puis validez…</div>
+          <p class="participant-preview-limit" id="formateurPreviewLimit"></p>
+        </div>
+        <div class="formateur-preview-actions">
+          <a class="formateur-preview-link" id="formateurPreviewLink" href="Nuage_De_Mots.html?view=participant&amp;preview=1" target="_blank" rel="noopener">Ouvrir la vue participant ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div class="hero-header">
   <div class="hero-inner">
@@ -341,6 +469,7 @@
 
   <div class="intro">
     <p><strong>Consigne :</strong> <span id="introConsigneText">saisissez librement votre ou vos mots-clés en réponse à la question posée. Un mot saisi plusieurs fois grossit dans le nuage : sa taille reflète directement sa fréquence.</span></p>
+    <p class="participant-limit-note" id="participantLimitNote"></p>
   </div>
 
   <div class="panel" id="inputPanel">
@@ -664,9 +793,83 @@ async function envoyerMotSession(mot){
   }
 }
 
+/* ---------- Préparation formateur et prévisualisation locale ---------- */
+function afficherApercuFormateur(config){
+  const title = document.getElementById('formateurPreviewTitle');
+  const instruction = document.getElementById('formateurPreviewInstruction');
+  const limit = document.getElementById('formateurPreviewLimit');
+  if(title) title.textContent = config.title;
+  if(instruction) instruction.textContent = config.instruction;
+  if(limit) limit.textContent = 'Jusqu’à ' + config.maxWords + (config.maxWords > 1 ? ' mots' : ' mot') + ' par participant';
+}
+
+function remplirFormulaireFormateur(config){
+  document.getElementById('formateurTitleInput').value = config.title;
+  document.getElementById('formateurInstructionInput').value = config.instruction;
+  document.getElementById('formateurMaxWordsInput').value = String(config.maxWords);
+  afficherApercuFormateur(config);
+}
+
+function lireFormulaireFormateur(){
+  return {
+    title: document.getElementById('formateurTitleInput').value,
+    instruction: document.getElementById('formateurInstructionInput').value,
+    maxWords: document.getElementById('formateurMaxWordsInput').value
+  };
+}
+
+function initFormateurView(){
+  if(!document.documentElement.classList.contains('mode-formateur')) return;
+  if(!window.AxisMundiNuageConfig) return;
+
+  const api = window.AxisMundiNuageConfig;
+  const form = document.getElementById('formateurConfigForm');
+  const status = document.getElementById('formateurSaveStatus');
+  const previewLink = document.getElementById('formateurPreviewLink');
+  let statusTimer = null;
+
+  remplirFormulaireFormateur(api.load(window.localStorage));
+  previewLink.href = api.buildPreviewUrl(window.location.href);
+
+  function enregistrerReglages(){
+    const saved = api.save(window.localStorage, lireFormulaireFormateur());
+    afficherApercuFormateur(saved);
+    status.textContent = 'Enregistré';
+    window.clearTimeout(statusTimer);
+    statusTimer = window.setTimeout(function(){
+      status.textContent = 'Enregistré sur cet appareil';
+    }, 1400);
+  }
+
+  form.addEventListener('submit', function(event){ event.preventDefault(); });
+  form.addEventListener('input', enregistrerReglages);
+  form.addEventListener('change', enregistrerReglages);
+  document.getElementById('formateurResetButton').addEventListener('click', function(){
+    const defaults = api.clear(window.localStorage);
+    remplirFormulaireFormateur(defaults);
+    api.save(window.localStorage, defaults);
+    status.textContent = 'Réglages réinitialisés';
+  });
+}
+
+function initParticipantPreview(){
+  const params = new URLSearchParams(location.search);
+  if(params.get('preview') !== '1' || SESSION_CODE || !window.AxisMundiNuageConfig) return;
+
+  const config = window.AxisMundiNuageConfig.load(window.localStorage);
+  appliquerTitre(config.title);
+  appliquerConsigne(config.instruction);
+  const limit = document.getElementById('participantLimitNote');
+  limit.style.display = 'block';
+  limit.textContent = 'Vous pouvez proposer jusqu’à ' + config.maxWords + (config.maxWords > 1 ? ' mots.' : ' mot.');
+  afficherStatutSession('Prévisualisation participant');
+}
+
 if(SESSION_CODE){
   chargerScriptsSession(initSessionMode);
 }
+initFormateurView();
+initParticipantPreview();
 </script>
 
 </body>
