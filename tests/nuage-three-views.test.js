@@ -149,6 +149,14 @@ test('the live-session state module is available', () => {
   assert.ok(fs.existsSync(livePath), 'nuage-live-session.js is missing');
 });
 
+test('participant input is locked before the asynchronous session connection starts', () => {
+  assert.match(
+    html,
+    /if\(SESSION_CODE\)\s*\{\s*actualiserEtatSaisieParticipant\(\);\s*chargerScriptsSession\(initSessionMode\);/,
+    'the participant can type before the live session is confirmed'
+  );
+});
+
 test('all inline scripts in Nuage de mots compile', () => {
   const inlineScripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
     .map((match) => match[1])
