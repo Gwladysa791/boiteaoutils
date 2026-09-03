@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="tool-view-context.js"></script>
+<script src="sondage-formateur-config.js"></script>
 <title>Outil de sondage — AXIS MUNDI</title>
 <style>
   @font-face {
@@ -144,6 +145,133 @@
 
   footer{text-align:center;font-size:11px;color:var(--gris-moyen);padding:24px 20px;}
 
+  /* ---------- Espaces dédiés formateur et participant ---------- */
+  #sondageFormateurView,#sondageParticipantView{display:none;}
+  html.mode-formateur body,html.mode-participant body{background:#f4f6f7;}
+  html.mode-formateur .hero-header,html.mode-formateur body>.container,html.mode-formateur body>footer,
+  html.mode-participant .hero-header,html.mode-participant body>.container,html.mode-participant body>footer{display:none !important;}
+  html.mode-formateur #sondageFormateurView{display:block;min-height:100vh;}
+  html.mode-participant #sondageParticipantView{display:block;min-height:100vh;}
+
+  .sondage-app-topbar{background:#fff;border-bottom:1px solid #dfe5e7;}
+  .sondage-app-topbar-inner{max-width:1080px;margin:0 auto;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:22px;}
+  .sondage-app-brand{display:flex;align-items:center;gap:18px;min-width:0;}
+  .sondage-app-logo{width:122px;height:auto;display:block;}
+  .sondage-app-heading{border-left:1px solid #dfe5e7;padding-left:18px;min-width:0;}
+  .sondage-app-eyebrow{margin:0 0 2px;color:var(--bleu-fonce);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+  .sondage-app-heading h1{margin:0;color:#20282b;font-size:21px;line-height:1.2;overflow-wrap:anywhere;}
+  .sondage-save-status,.sondage-live-status{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:7px 12px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+  .sondage-save-status{color:#47705f;background:#edf8f3;border:1px solid #d4eee2;}
+  .sondage-live-status{color:#6e787a;background:#eef2f3;}
+  .sondage-live-status.is-active{color:#36705a;background:#eaf8f2;}
+  .sondage-live-status.is-closed{color:#737a7c;background:#ededed;}
+  .sondage-workspace{max-width:1080px;margin:0 auto;padding:26px;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(310px,.92fr);gap:22px;align-items:start;}
+  .sondage-card{background:#fff;border:1px solid #e1e6e8;border-radius:14px;box-shadow:0 8px 26px rgba(31,53,60,.06);overflow:hidden;}
+  .sondage-card-head{padding:20px 22px 16px;border-bottom:1px solid #edf0f1;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .sondage-card-head h2{margin:0 0 4px;color:#20282b;font-size:16px;}
+  .sondage-card-head p{margin:0;color:#7a8182;font-size:12.5px;}
+  .sondage-form{padding:20px 22px 22px;display:grid;gap:17px;}
+  .sondage-field{display:grid;gap:7px;}
+  .sondage-field label{color:#343c3f;font-size:12.5px;font-weight:700;}
+  .sondage-field input{width:100%;border:1.5px solid #ccd5d8;border-radius:9px;background:#fff;padding:11px 12px;color:#303638;font:inherit;font-size:13.5px;}
+  .sondage-field input:focus{outline:none;border-color:var(--bleu-fonce);box-shadow:0 0 0 3px rgba(0,136,169,.10);}
+  .sondage-options-editor{display:grid;gap:8px;}
+  .sondage-option-edit{display:grid;grid-template-columns:24px minmax(0,1fr) 34px;align-items:center;gap:8px;}
+  .sondage-option-number{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;color:#fff;font-size:10.5px;font-weight:700;}
+  .sondage-remove-option{border:0;background:#f5f6f6;color:#7b8486;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:17px;}
+  .sondage-remove-option:hover{background:#fff0ee;color:#a8493e;}
+  .sondage-form-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .sondage-text-button{border:0;background:transparent;padding:0;color:var(--bleu-fonce);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+  .sondage-preview-body{padding:20px 22px 22px;}
+  .sondage-preview{background:linear-gradient(145deg,#f9fdfe,#eaf6f9);border:1px solid #d9ebef;border-radius:14px;padding:20px;min-height:292px;box-shadow:inset 0 0 0 5px rgba(255,255,255,.55);}
+  .sondage-preview-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+  .sondage-preview-logo{width:92px;}
+  .sondage-preview-live{color:var(--bleu-fonce);font-size:8.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;}
+  .sondage-preview h3{margin:0 0 6px;color:#20282b;font-size:19px;overflow-wrap:anywhere;}
+  .sondage-preview-question{margin:0 0 15px;color:#5d6668;font-size:12.5px;line-height:1.45;overflow-wrap:anywhere;}
+  .sondage-preview-options{display:grid;gap:7px;}
+  .sondage-preview-option{display:flex;align-items:center;gap:9px;border:1px solid #d8e4e7;border-radius:9px;background:#fff;padding:8px 10px;color:#394144;font-size:11px;font-weight:700;}
+  .sondage-preview-link{display:flex;align-items:center;justify-content:center;margin-top:16px;padding:10px 16px;border-radius:9px;background:var(--bleu-fonce);color:#fff;text-decoration:none;font-size:12px;font-weight:700;}
+  .sondage-live-card{grid-column:1/-1;}
+  .sondage-live-setup{padding:25px 22px 26px;display:flex;align-items:center;justify-content:space-between;gap:22px;}
+  .sondage-live-setup h3{margin:0 0 5px;color:#20282b;font-size:14.5px;}
+  .sondage-live-setup p{margin:0;color:#7a8182;font-size:12.5px;}
+  .sondage-primary,.sondage-secondary,.sondage-danger{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;}
+  .sondage-primary{background:var(--bleu-fonce);color:#fff;}
+  .sondage-secondary{background:#eef4f5;color:#365f68;}
+  .sondage-danger{background:#fff0ee;color:#a8493e;}
+  .sondage-primary:disabled,.sondage-secondary:disabled,.sondage-danger:disabled{opacity:.5;cursor:default;}
+  .sondage-live-active{display:none;padding:22px;gap:20px;grid-template-columns:280px minmax(0,1fr);}
+  .sondage-live-active.is-visible{display:grid;}
+  .sondage-join-box{border:1px solid #dce7e9;border-radius:12px;background:#f8fbfc;padding:19px;text-align:center;}
+  .sondage-join-box p{margin:0 0 8px;color:#7e888a;font-size:11px;}
+  .sondage-live-code{margin:0 0 11px;color:var(--bleu-fonce);font-size:30px;font-weight:700;letter-spacing:5px;}
+  #sondageLiveQr{display:block;width:156px;height:156px;margin:0 auto 12px;border-radius:7px;background:#fff;}
+  .sondage-live-url{font-size:10px!important;word-break:break-all;line-height:1.4;}
+  .sondage-share-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .sondage-share-actions a{display:flex;align-items:center;justify-content:center;text-decoration:none;}
+  .sondage-results{min-width:0;}
+  .sondage-results-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;}
+  .sondage-metric{color:#687173;font-size:11.5px;}
+  .sondage-metric strong{display:block;color:var(--bleu-fonce);font-size:25px;line-height:1.1;}
+  .sondage-chart-toggle{display:flex;gap:6px;}
+  .sondage-chart-toggle button{border:1px solid #d5dfe2;background:#fff;color:#637072;border-radius:8px;padding:7px 10px;font:inherit;font-size:10.5px;font-weight:700;cursor:pointer;}
+  .sondage-chart-toggle button.active{border-color:var(--bleu-fonce);color:var(--bleu-fonce);background:#eef9fb;}
+  .sondage-chart-area{min-height:230px;border:1px solid #e2e8ea;border-radius:12px;padding:16px;display:grid;align-items:center;}
+  .sondage-result-bars{display:grid;gap:11px;}
+  .sondage-result-row{display:grid;grid-template-columns:minmax(110px,.7fr) minmax(120px,1.3fr) 58px;align-items:center;gap:10px;font-size:11.5px;}
+  .sondage-result-label{color:#343c3f;font-weight:700;overflow-wrap:anywhere;}
+  .sondage-result-track{height:18px;border-radius:999px;background:#edf0f1;overflow:hidden;}
+  .sondage-result-fill{display:block;height:100%;border-radius:999px;}
+  .sondage-result-value{text-align:right;color:#687173;font-weight:700;}
+  .sondage-pie-layout{display:grid;grid-template-columns:180px minmax(0,1fr);align-items:center;gap:22px;}
+  .sondage-pie{width:170px;height:170px;border-radius:50%;margin:auto;background:#edf0f1;}
+  .sondage-legend{display:grid;gap:8px;}
+  .sondage-legend-row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:11.5px;}
+  .sondage-legend-dot{width:10px;height:10px;border-radius:3px;}
+  .sondage-live-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px;}
+  .sondage-live-error{display:none;margin:0 22px 20px;border-radius:8px;background:#fff1ef;color:#a44339;padding:10px 12px;font-size:12px;font-weight:700;}
+  .sondage-live-error.is-visible{display:block;}
+
+  .sondage-participant-header{background:linear-gradient(135deg,#fff,#e8f6f9);border-bottom:1px solid #dcebee;}
+  .sondage-participant-header-inner{max-width:680px;margin:0 auto;padding:22px 26px 30px;display:flex;align-items:center;gap:24px;}
+  .sondage-participant-header img{width:116px;}
+  .sondage-participant-heading{border-left:1px solid #cedfe3;padding-left:22px;min-width:0;}
+  .sondage-participant-heading p{margin:0 0 3px;color:var(--bleu-fonce);font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;}
+  .sondage-participant-heading h1{margin:0;color:#20282b;font-size:23px;line-height:1.2;overflow-wrap:anywhere;}
+  .sondage-participant-main{max-width:680px;margin:0 auto;padding:24px 20px 50px;}
+  .sondage-participant-card{background:#fff;border:1px solid #e1e6e8;border-radius:14px;padding:22px;box-shadow:0 8px 26px rgba(31,53,60,.06);}
+  .sondage-session-badge{display:inline-flex;margin-bottom:14px;border-radius:999px;background:#eaf8f2;color:#36705a;padding:6px 10px;font-size:10.5px;font-weight:700;}
+  .sondage-participant-question{margin:0 0 18px;color:#20282b;font-size:19px;line-height:1.4;overflow-wrap:anywhere;}
+  .sondage-participant-options{display:grid;gap:10px;}
+  .sondage-participant-option{display:flex;align-items:center;gap:12px;width:100%;border:1.5px solid #d5dddf;border-radius:11px;background:#fff;padding:13px 14px;text-align:left;color:#30383a;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;}
+  .sondage-participant-option.is-selected{border-color:var(--bleu-fonce);background:#eef9fb;box-shadow:0 0 0 3px rgba(0,136,169,.08);}
+  .sondage-participant-option:disabled{cursor:default;opacity:.62;}
+  .sondage-participant-dot{width:14px;height:14px;border-radius:50%;flex:0 0 auto;}
+  .sondage-participant-submit{width:100%;margin-top:16px;border:0;border-radius:10px;background:var(--bleu-fonce);color:#fff;padding:12px 18px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;}
+  .sondage-participant-submit:disabled{opacity:.55;cursor:default;}
+  .sondage-participant-status{margin:10px 0 0;color:#667174;font-size:12px;text-align:center;min-height:19px;}
+
+  @media (max-width:800px){
+    .sondage-app-topbar-inner{align-items:flex-start;padding:15px 18px;}
+    .sondage-app-brand{gap:12px;align-items:flex-start;}
+    .sondage-app-logo{width:92px;margin-top:2px;}
+    .sondage-app-heading{padding-left:12px;}
+    .sondage-app-heading h1{font-size:17px;}
+    .sondage-save-status{font-size:0;padding:8px;}
+    .sondage-workspace{grid-template-columns:1fr;padding:18px;gap:16px;}
+    .sondage-live-setup{align-items:stretch;flex-direction:column;}
+    .sondage-live-active.is-visible{grid-template-columns:1fr;}
+    .sondage-join-box{width:100%;max-width:360px;margin:auto;}
+    .sondage-pie-layout{grid-template-columns:1fr;}
+    .sondage-result-row{grid-template-columns:minmax(90px,.8fr) minmax(90px,1.2fr) 48px;gap:7px;}
+    .sondage-participant-header-inner{display:block;text-align:center;padding:20px 20px 27px;}
+    .sondage-participant-header img{width:104px;margin-bottom:12px;}
+    .sondage-participant-heading{border-left:0;border-top:1px solid #cedfe3;padding:12px 0 0;}
+    .sondage-participant-heading h1{font-size:21px;}
+    .sondage-participant-card{padding:18px;}
+  }
+
   @media print{
     .hero-header, .breadcrumb, #builderSection, .chart-toggle, .vote-buttons, .edit-row, .actions-row, footer{display:none !important;}
     body{background:#fff;}
@@ -153,6 +281,135 @@
 </style>
 </head>
 <body>
+
+<section id="sondageFormateurView" aria-labelledby="sondageFormateurTitle">
+  <header class="sondage-app-topbar">
+    <div class="sondage-app-topbar-inner">
+      <div class="sondage-app-brand">
+        <img class="sondage-app-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+        <div class="sondage-app-heading">
+          <p class="sondage-app-eyebrow">Vue formateur</p>
+          <h1 id="sondageFormateurTitle">Sondage</h1>
+        </div>
+      </div>
+      <span class="sondage-save-status" id="sondageSaveStatus" role="status">Enregistré sur cet appareil</span>
+    </div>
+  </header>
+
+  <div class="sondage-workspace">
+    <div class="sondage-card">
+      <div class="sondage-card-head">
+        <div>
+          <h2>Préparer le sondage</h2>
+          <p>La question et les réponses seront figées à l’ouverture.</p>
+        </div>
+      </div>
+      <form class="sondage-form" id="sondageConfigForm">
+        <div class="sondage-field">
+          <label for="sondageTitleInput">Titre affiché aux participants</label>
+          <input id="sondageTitleInput" type="text" maxlength="100" autocomplete="off">
+        </div>
+        <div class="sondage-field">
+          <label for="sondageQuestionInput">Question</label>
+          <input id="sondageQuestionInput" type="text" maxlength="300" autocomplete="off" placeholder="Ex. : Quel sujet traiter en priorité ?">
+        </div>
+        <div class="sondage-field">
+          <label>Réponses possibles</label>
+          <div class="sondage-options-editor" id="sondageOptionsEditor"></div>
+        </div>
+        <div class="sondage-form-actions">
+          <button class="sondage-text-button" id="sondageAddOptionButton" type="button">+ Ajouter une réponse</button>
+          <button class="sondage-text-button" id="sondageResetButton" type="button">Réinitialiser</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="sondage-card">
+      <div class="sondage-card-head">
+        <div>
+          <h2>Prévisualisation participant</h2>
+          <p>Mise à jour instantanée</p>
+        </div>
+      </div>
+      <div class="sondage-preview-body">
+        <div class="sondage-preview" aria-live="polite">
+          <div class="sondage-preview-top">
+            <img class="sondage-preview-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="">
+            <span class="sondage-preview-live">Session en direct</span>
+          </div>
+          <h3 id="sondagePreviewTitle">Sondage</h3>
+          <p class="sondage-preview-question" id="sondagePreviewQuestion">Votre question apparaîtra ici.</p>
+          <div class="sondage-preview-options" id="sondagePreviewOptions"></div>
+        </div>
+        <a class="sondage-preview-link" id="sondagePreviewLink" href="Outil_Sondage.html?view=participant&amp;preview=1" target="_blank" rel="noopener">Ouvrir la vue participant ↗</a>
+      </div>
+    </div>
+
+    <div class="sondage-card sondage-live-card">
+      <div class="sondage-card-head">
+        <div>
+          <h2>Session en direct</h2>
+          <p>Partage, votes et résultats depuis le Studio</p>
+        </div>
+        <span class="sondage-live-status" id="sondageLiveStatus" role="status">Non ouverte</span>
+      </div>
+      <div class="sondage-live-setup" id="sondageLiveSetup">
+        <div>
+          <h3>Le sondage est prêt à être ouvert</h3>
+          <p>Un code et un QR code seront générés pour les participants.</p>
+        </div>
+        <button class="sondage-primary" id="sondageOpenSessionButton" type="button">Ouvrir la participation</button>
+      </div>
+      <div class="sondage-live-active" id="sondageLiveActive">
+        <div class="sondage-join-box">
+          <p>Code participant</p>
+          <div class="sondage-live-code" id="sondageLiveCode">—</div>
+          <canvas id="sondageLiveQr" aria-label="QR code participant"></canvas>
+          <p class="sondage-live-url" id="sondageLiveUrl"></p>
+          <div class="sondage-share-actions">
+            <button class="sondage-secondary" id="sondageCopyLinkButton" type="button">Copier le lien</button>
+            <a class="sondage-secondary" id="sondageParticipantLink" href="#" target="_blank" rel="noopener">Ouvrir ↗</a>
+          </div>
+        </div>
+        <div class="sondage-results">
+          <div class="sondage-results-toolbar">
+            <div class="sondage-metric"><strong id="sondageResponseCount">0</strong> vote(s)</div>
+            <div class="sondage-chart-toggle">
+              <button class="active" id="sondageChartPieButton" type="button">Camembert</button>
+              <button id="sondageChartBarsButton" type="button">Histogramme</button>
+            </div>
+          </div>
+          <div class="sondage-chart-area" id="sondageChartArea"></div>
+          <div class="sondage-live-actions">
+            <button class="sondage-danger" id="sondageCloseSessionButton" type="button">Clôturer le sondage</button>
+          </div>
+        </div>
+      </div>
+      <p class="sondage-live-error" id="sondageLiveError" role="alert"></p>
+    </div>
+  </div>
+</section>
+
+<section id="sondageParticipantView" aria-labelledby="sondageParticipantTitle">
+  <header class="sondage-participant-header">
+    <div class="sondage-participant-header-inner">
+      <img src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+      <div class="sondage-participant-heading">
+        <p>Session en direct</p>
+        <h1 id="sondageParticipantTitle">Sondage</h1>
+      </div>
+    </div>
+  </header>
+  <main class="sondage-participant-main">
+    <div class="sondage-participant-card">
+      <span class="sondage-session-badge" id="sondageParticipantBadge">Connexion au sondage…</span>
+      <h2 class="sondage-participant-question" id="sondageParticipantQuestion">Chargement de la question…</h2>
+      <div class="sondage-participant-options" id="sondageParticipantOptions"></div>
+      <button class="sondage-participant-submit" id="sondageParticipantSubmit" type="button" disabled>Envoyer mon vote</button>
+      <p class="sondage-participant-status" id="sondageParticipantStatus" role="status"></p>
+    </div>
+  </main>
+</section>
 
 <div class="hero-header">
   <div class="hero-inner">
@@ -520,6 +777,511 @@ function resetAll(){
 }
 
 renderOptions();
+</script>
+
+<script src="qrcode-generator.js"></script>
+<script src="sondage-live-session.js"></script>
+<script>
+const SONDAGE_PARAMS = new URLSearchParams(location.search);
+const SONDAGE_SESSION_CODE = SONDAGE_PARAMS.get('session');
+const SONDAGE_LIVE_COLORS = ['#0088A9','#F5AB33','#15CA88','#884EC2','#DE5C5C','#5D6160','#00B5E2','#5FA7A0'];
+let sondageSessionModulesPromise = null;
+let sondageTrainerSession = null;
+let sondageTrainerTracker = null;
+let sondageTrainerChart = 'pie';
+let sondageParticipantSession = null;
+let sondageParticipantConfig = null;
+let sondageParticipantChoice = '';
+let sondageParticipantSubmitted = 0;
+let sondageParticipantPending = 0;
+let sondageParticipantTransient = '';
+
+function chargerModulesSondage(){
+  if(window.AXMSession) return Promise.resolve(window.AXMSession);
+  if(sondageSessionModulesPromise) return sondageSessionModulesPromise;
+  sondageSessionModulesPromise = new Promise(function(resolve, reject){
+    function chargerSessionLive(){
+      if(window.AXMSession){ resolve(window.AXMSession); return; }
+      const script = document.createElement('script');
+      script.src = 'session-live.js';
+      script.onload = function(){ resolve(window.AXMSession); };
+      script.onerror = function(){ reject(new Error('Module de session indisponible.')); };
+      document.body.appendChild(script);
+    }
+    if(window.supabase && window.supabase.createClient){ chargerSessionLive(); return; }
+    const sdk = document.createElement('script');
+    sdk.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    sdk.onload = chargerSessionLive;
+    sdk.onerror = function(){ reject(new Error('Connexion au service de session impossible.')); };
+    document.body.appendChild(sdk);
+  });
+  return sondageSessionModulesPromise;
+}
+
+function sondageDraftFromForm(){
+  return {
+    title: document.getElementById('sondageTitleInput').value,
+    question: document.getElementById('sondageQuestionInput').value,
+    options: Array.from(document.querySelectorAll('#sondageOptionsEditor input')).map(function(input){
+      return { id: input.dataset.optionId, text: input.value };
+    })
+  };
+}
+
+function renderSondageEditor(config){
+  document.getElementById('sondageTitleInput').value = config.title;
+  document.getElementById('sondageQuestionInput').value = config.question;
+  const editor = document.getElementById('sondageOptionsEditor');
+  editor.textContent = '';
+  config.options.forEach(function(option, index){
+    const row = document.createElement('div');
+    row.className = 'sondage-option-edit';
+    const number = document.createElement('span');
+    number.className = 'sondage-option-number';
+    number.style.background = SONDAGE_LIVE_COLORS[index % SONDAGE_LIVE_COLORS.length];
+    number.textContent = String(index + 1);
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.maxLength = 160;
+    input.dataset.optionId = option.id;
+    input.value = option.text;
+    input.placeholder = 'Réponse ' + (index + 1);
+    input.setAttribute('aria-label', 'Réponse ' + (index + 1));
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'sondage-remove-option';
+    remove.dataset.removeOption = option.id;
+    remove.setAttribute('aria-label', 'Supprimer la réponse ' + (index + 1));
+    remove.textContent = '×';
+    row.appendChild(number);
+    row.appendChild(input);
+    row.appendChild(remove);
+    editor.appendChild(row);
+  });
+  document.getElementById('sondageAddOptionButton').disabled = config.options.length >= 8;
+  renderSondagePreview(config);
+}
+
+function renderSondagePreview(config){
+  document.getElementById('sondagePreviewTitle').textContent = config.title || 'Sondage';
+  document.getElementById('sondagePreviewQuestion').textContent = config.question || 'Votre question apparaîtra ici.';
+  const wrap = document.getElementById('sondagePreviewOptions');
+  wrap.textContent = '';
+  const visible = config.options.filter(function(option){ return option.text; });
+  const previewOptions = visible.length ? visible : [
+    { id: 'preview-1', text: 'Première réponse' },
+    { id: 'preview-2', text: 'Deuxième réponse' }
+  ];
+  previewOptions.forEach(function(option, index){
+    const row = document.createElement('div');
+    row.className = 'sondage-preview-option';
+    const dot = document.createElement('span');
+    dot.className = 'sondage-participant-dot';
+    dot.style.background = SONDAGE_LIVE_COLORS[index % SONDAGE_LIVE_COLORS.length];
+    const text = document.createElement('span');
+    text.textContent = option.text;
+    row.appendChild(dot);
+    row.appendChild(text);
+    wrap.appendChild(row);
+  });
+}
+
+function saveSondageDraft(){
+  const config = window.AxisMundiSondageConfig.save(window.localStorage, sondageDraftFromForm());
+  renderSondagePreview(config);
+  const status = document.getElementById('sondageSaveStatus');
+  status.textContent = 'Enregistré';
+  window.clearTimeout(saveSondageDraft.timer);
+  saveSondageDraft.timer = window.setTimeout(function(){ status.textContent = 'Enregistré sur cet appareil'; }, 1200);
+  return config;
+}
+
+function addSondageOption(){
+  const config = window.AxisMundiSondageConfig.sanitize(sondageDraftFromForm());
+  if(config.options.length >= 8) return;
+  config.options.push({ id: 'option-' + Date.now().toString(36), text: '' });
+  renderSondageEditor(window.AxisMundiSondageConfig.save(window.localStorage, config));
+  const inputs = document.querySelectorAll('#sondageOptionsEditor input');
+  if(inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function removeSondageOption(id){
+  const config = window.AxisMundiSondageConfig.sanitize(sondageDraftFromForm());
+  config.options = config.options.filter(function(option){ return option.id !== id; });
+  renderSondageEditor(window.AxisMundiSondageConfig.save(window.localStorage, config));
+}
+
+function lockSondageEditor(){
+  document.querySelectorAll('#sondageConfigForm input,#sondageConfigForm button').forEach(function(control){ control.disabled = true; });
+}
+
+function setSondageLiveError(message){
+  const error = document.getElementById('sondageLiveError');
+  error.textContent = message || '';
+  error.classList.toggle('is-visible', !!message);
+}
+
+function setSondageLiveStatus(text, state){
+  const status = document.getElementById('sondageLiveStatus');
+  status.textContent = text;
+  status.classList.remove('is-active','is-closed');
+  if(state) status.classList.add(state);
+}
+
+function drawSondageQr(text){
+  if(typeof qrcode !== 'function') return;
+  let qr;
+  try{ qr = qrcode(0,'M'); qr.addData(text); qr.make(); } catch(error){ return; }
+  const modules = qr.getModuleCount();
+  const scale = 4;
+  const quiet = 3;
+  const size = (modules + quiet * 2) * scale;
+  const canvas = document.getElementById('sondageLiveQr');
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext('2d');
+  context.fillStyle = '#fff';
+  context.fillRect(0,0,size,size);
+  context.fillStyle = '#20282b';
+  for(let row = 0; row < modules; row++){
+    for(let column = 0; column < modules; column++){
+      if(qr.isDark(row,column)) context.fillRect((column + quiet) * scale,(row + quiet) * scale,scale,scale);
+    }
+  }
+}
+
+function renderSondageLiveResults(snapshot){
+  document.getElementById('sondageResponseCount').textContent = String(snapshot.total);
+  const area = document.getElementById('sondageChartArea');
+  area.textContent = '';
+  if(snapshot.total === 0){
+    const empty = document.createElement('p');
+    empty.className = 'empty-votes';
+    empty.textContent = 'Les résultats apparaîtront dès le premier vote.';
+    area.appendChild(empty);
+    return;
+  }
+  if(sondageTrainerChart === 'bars'){
+    const bars = document.createElement('div');
+    bars.className = 'sondage-result-bars';
+    snapshot.results.forEach(function(result,index){
+      const row = document.createElement('div');
+      row.className = 'sondage-result-row';
+      const label = document.createElement('span');
+      label.className = 'sondage-result-label';
+      label.textContent = result.text;
+      const track = document.createElement('span');
+      track.className = 'sondage-result-track';
+      const fill = document.createElement('span');
+      fill.className = 'sondage-result-fill';
+      fill.style.width = result.percentage + '%';
+      fill.style.background = SONDAGE_LIVE_COLORS[index % SONDAGE_LIVE_COLORS.length];
+      const value = document.createElement('span');
+      value.className = 'sondage-result-value';
+      value.textContent = result.count + ' · ' + result.percentage + '%';
+      track.appendChild(fill);
+      row.appendChild(label);
+      row.appendChild(track);
+      row.appendChild(value);
+      bars.appendChild(row);
+    });
+    area.appendChild(bars);
+    return;
+  }
+  const layout = document.createElement('div');
+  layout.className = 'sondage-pie-layout';
+  const pie = document.createElement('div');
+  pie.className = 'sondage-pie';
+  let start = 0;
+  const segments = [];
+  snapshot.results.forEach(function(result,index){
+    const end = start + result.percentage;
+    segments.push(SONDAGE_LIVE_COLORS[index % SONDAGE_LIVE_COLORS.length] + ' ' + start + '% ' + end + '%');
+    start = end;
+  });
+  if(start < 100 && segments.length) segments[segments.length - 1] = segments[segments.length - 1].replace(/\d+(?:\.\d+)?%$/, '100%');
+  pie.style.background = 'conic-gradient(' + segments.join(',') + ')';
+  const legend = document.createElement('div');
+  legend.className = 'sondage-legend';
+  snapshot.results.forEach(function(result,index){
+    const row = document.createElement('div');
+    row.className = 'sondage-legend-row';
+    const dot = document.createElement('span');
+    dot.className = 'sondage-legend-dot';
+    dot.style.background = SONDAGE_LIVE_COLORS[index % SONDAGE_LIVE_COLORS.length];
+    const label = document.createElement('span');
+    label.textContent = result.text;
+    const value = document.createElement('strong');
+    value.textContent = result.count + ' · ' + result.percentage + '%';
+    row.appendChild(dot);
+    row.appendChild(label);
+    row.appendChild(value);
+    legend.appendChild(row);
+  });
+  layout.appendChild(pie);
+  layout.appendChild(legend);
+  area.appendChild(layout);
+}
+
+function addSondageTrainerResponse(response){
+  if(sondageTrainerTracker && sondageTrainerTracker.add(response)) renderSondageLiveResults(sondageTrainerTracker.snapshot());
+}
+
+function applySondageTrainerSessionState(session){
+  const closed = session && session.statut === 'fermee';
+  setSondageLiveStatus(closed ? 'Clôturé' : 'Ouvert', closed ? 'is-closed' : 'is-active');
+  const close = document.getElementById('sondageCloseSessionButton');
+  close.disabled = closed;
+  close.textContent = closed ? 'Sondage clôturé' : 'Clôturer le sondage';
+}
+
+async function activateSondageTrainerSession(session, config){
+  sondageTrainerSession = session;
+  sondageTrainerTracker = window.AxisMundiSondageLive.createVoteTracker(config.options);
+  const participantUrl = window.AxisMundiSondageLive.buildParticipantUrl(location.href, session.code);
+  document.getElementById('sondageLiveSetup').style.display = 'none';
+  document.getElementById('sondageLiveActive').classList.add('is-visible');
+  document.getElementById('sondageLiveCode').textContent = session.code;
+  document.getElementById('sondageLiveUrl').textContent = participantUrl;
+  document.getElementById('sondageParticipantLink').href = participantUrl;
+  drawSondageQr(participantUrl);
+  lockSondageEditor();
+  applySondageTrainerSessionState(session);
+  renderSondageLiveResults(sondageTrainerTracker.snapshot());
+  AXMSession.ecouterSession(session.id,function(updated){
+    sondageTrainerSession = updated;
+    applySondageTrainerSessionState(updated);
+  });
+  AXMSession.ecouterReponses(session.id,addSondageTrainerResponse);
+  const initial = await AXMSession.listerReponses(session.id);
+  initial.forEach(addSondageTrainerResponse);
+}
+
+async function openSondageSession(){
+  const button = document.getElementById('sondageOpenSessionButton');
+  const config = saveSondageDraft();
+  const validation = window.AxisMundiSondageConfig.validate(config);
+  if(validation){ setSondageLiveError(validation); return; }
+  setSondageLiveError('');
+  button.disabled = true;
+  button.textContent = 'Ouverture…';
+  setSondageLiveStatus('Connexion…');
+  try{
+    await chargerModulesSondage();
+    const session = await AXMSession.creerSession('sondage',config.title);
+    const patch = window.AxisMundiSondageLive.sessionPatch(config);
+    await AXMSession.mettreAJourSession(session.id,patch);
+    Object.assign(session,patch);
+    history.replaceState(null,'',window.AxisMundiSondageLive.buildTrainerUrl(location.href,session.code));
+    await activateSondageTrainerSession(session,window.AxisMundiSondageLive.readSessionConfig(session));
+  } catch(error){
+    setSondageLiveStatus('Non ouvert');
+    setSondageLiveError('Impossible d’ouvrir le sondage : ' + error.message);
+    button.disabled = false;
+    button.textContent = 'Réessayer';
+  }
+}
+
+async function resumeSondageSession(code){
+  setSondageLiveStatus('Connexion…');
+  try{
+    await chargerModulesSondage();
+    const session = await AXMSession.recupererSessionParCode(code);
+    if(!session || session.outil !== 'sondage') throw new Error('sondage introuvable');
+    const config = window.AxisMundiSondageLive.readSessionConfig(session);
+    if(window.AxisMundiSondageConfig.validate(config)) throw new Error('configuration du sondage invalide');
+    renderSondageEditor(config);
+    window.AxisMundiSondageConfig.save(window.localStorage,config);
+    document.getElementById('sondagePreviewLink').href = window.AxisMundiSondageConfig.buildPreviewUrl(location.href);
+    await activateSondageTrainerSession(session,config);
+  } catch(error){
+    setSondageLiveStatus('Indisponible');
+    setSondageLiveError('Impossible de reprendre le sondage : ' + error.message);
+  }
+}
+
+async function copySondageParticipantLink(){
+  const button = document.getElementById('sondageCopyLinkButton');
+  const url = document.getElementById('sondageParticipantLink').href;
+  try{ await navigator.clipboard.writeText(url); }
+  catch(error){
+    const field = document.createElement('textarea');
+    field.value = url;
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    document.execCommand('copy');
+    field.remove();
+  }
+  button.textContent = 'Lien copié ✓';
+  window.setTimeout(function(){ button.textContent = 'Copier le lien'; },1200);
+}
+
+async function closeSondageSession(){
+  if(!sondageTrainerSession || sondageTrainerSession.statut === 'fermee') return;
+  if(!window.confirm('Clôturer ce sondage ? Les participants ne pourront plus voter.')) return;
+  const button = document.getElementById('sondageCloseSessionButton');
+  button.disabled = true;
+  button.textContent = 'Clôture…';
+  try{
+    await AXMSession.fermerSession(sondageTrainerSession.id);
+    sondageTrainerSession.statut = 'fermee';
+    applySondageTrainerSessionState(sondageTrainerSession);
+  } catch(error){
+    button.disabled = false;
+    button.textContent = 'Clôturer le sondage';
+    setSondageLiveError('Clôture impossible : ' + error.message);
+  }
+}
+
+function initSondageTrainer(){
+  if(!document.documentElement.classList.contains('mode-formateur') || !window.AxisMundiSondageConfig) return;
+  const api = window.AxisMundiSondageConfig;
+  const config = api.load(window.localStorage);
+  renderSondageEditor(config);
+  document.getElementById('sondagePreviewLink').href = api.buildPreviewUrl(location.href);
+  const form = document.getElementById('sondageConfigForm');
+  form.addEventListener('submit',function(event){ event.preventDefault(); });
+  form.addEventListener('input',saveSondageDraft);
+  document.getElementById('sondageOptionsEditor').addEventListener('click',function(event){
+    const button = event.target.closest('[data-remove-option]');
+    if(button) removeSondageOption(button.dataset.removeOption);
+  });
+  document.getElementById('sondageAddOptionButton').addEventListener('click',addSondageOption);
+  document.getElementById('sondageResetButton').addEventListener('click',function(){
+    renderSondageEditor(api.clear(window.localStorage));
+    api.save(window.localStorage,sondageDraftFromForm());
+  });
+  document.getElementById('sondageOpenSessionButton').addEventListener('click',openSondageSession);
+  document.getElementById('sondageCopyLinkButton').addEventListener('click',copySondageParticipantLink);
+  document.getElementById('sondageCloseSessionButton').addEventListener('click',closeSondageSession);
+  document.getElementById('sondageChartPieButton').addEventListener('click',function(){
+    sondageTrainerChart = 'pie';
+    this.classList.add('active');
+    document.getElementById('sondageChartBarsButton').classList.remove('active');
+    if(sondageTrainerTracker) renderSondageLiveResults(sondageTrainerTracker.snapshot());
+  });
+  document.getElementById('sondageChartBarsButton').addEventListener('click',function(){
+    sondageTrainerChart = 'bars';
+    this.classList.add('active');
+    document.getElementById('sondageChartPieButton').classList.remove('active');
+    if(sondageTrainerTracker) renderSondageLiveResults(sondageTrainerTracker.snapshot());
+  });
+  if(SONDAGE_PARAMS.get('live')) resumeSondageSession(SONDAGE_PARAMS.get('live'));
+}
+
+function sondageParticipantStorageKey(){
+  return 'axis-mundi:sondage:voted:' + String(SONDAGE_SESSION_CODE || '').toUpperCase();
+}
+
+function loadSondageParticipantSubmitted(){
+  if(!SONDAGE_SESSION_CODE) return;
+  try{ sondageParticipantSubmitted = window.localStorage.getItem(sondageParticipantStorageKey()) === '1' ? 1 : 0; }
+  catch(error){ sondageParticipantSubmitted = 0; }
+}
+
+function rememberSondageParticipantVote(){
+  try{ window.localStorage.setItem(sondageParticipantStorageKey(),'1'); } catch(error){}
+}
+
+function renderSondageParticipant(config,preview){
+  sondageParticipantConfig = config;
+  document.getElementById('sondageParticipantTitle').textContent = config.title || 'Sondage';
+  document.getElementById('sondageParticipantQuestion').textContent = config.question || 'Votre question apparaîtra ici.';
+  const wrap = document.getElementById('sondageParticipantOptions');
+  wrap.textContent = '';
+  const allowed = preview || !!(window.AxisMundiSondageLive && window.AxisMundiSondageLive.canVote(
+    sondageParticipantSession,sondageParticipantSubmitted + sondageParticipantPending));
+  config.options.forEach(function(option,index){
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'sondage-participant-option';
+    button.classList.toggle('is-selected',sondageParticipantChoice === option.id);
+    button.disabled = !allowed;
+    button.dataset.optionId = option.id;
+    const dot = document.createElement('span');
+    dot.className = 'sondage-participant-dot';
+    dot.style.background = SONDAGE_LIVE_COLORS[index % SONDAGE_LIVE_COLORS.length];
+    const text = document.createElement('span');
+    text.textContent = option.text;
+    button.appendChild(dot);
+    button.appendChild(text);
+    button.addEventListener('click',function(){
+      sondageParticipantChoice = option.id;
+      renderSondageParticipant(config,preview);
+    });
+    wrap.appendChild(button);
+  });
+  const submit = document.getElementById('sondageParticipantSubmit');
+  submit.disabled = preview || !allowed || !sondageParticipantChoice;
+  if(preview) submit.textContent = 'Prévisualisation';
+  const status = document.getElementById('sondageParticipantStatus');
+  status.textContent = preview ? '' : window.AxisMundiSondageLive.participantStatus(
+    sondageParticipantSession,sondageParticipantSubmitted,sondageParticipantTransient);
+}
+
+async function sendSondageParticipantVote(){
+  if(!sondageParticipantChoice || !sondageParticipantConfig || !window.AxisMundiSondageLive.canVote(
+    sondageParticipantSession,sondageParticipantSubmitted + sondageParticipantPending)) return;
+  sondageParticipantPending++;
+  sondageParticipantTransient = '';
+  renderSondageParticipant(sondageParticipantConfig,false);
+  const submit = document.getElementById('sondageParticipantSubmit');
+  submit.textContent = 'Envoi…';
+  try{
+    await AXMSession.envoyerReponse(sondageParticipantSession.id,'',{ optionId: sondageParticipantChoice });
+    sondageParticipantPending--;
+    sondageParticipantSubmitted = 1;
+    rememberSondageParticipantVote();
+    submit.textContent = 'Vote enregistré';
+  } catch(error){
+    sondageParticipantPending--;
+    sondageParticipantTransient = 'Erreur d’envoi : ' + error.message;
+    submit.textContent = 'Envoyer mon vote';
+  }
+  renderSondageParticipant(sondageParticipantConfig,false);
+}
+
+async function initSondageParticipantSession(){
+  loadSondageParticipantSubmitted();
+  sondageParticipantTransient = '';
+  try{
+    await chargerModulesSondage();
+    const session = await AXMSession.recupererSessionParCode(SONDAGE_SESSION_CODE);
+    if(!session || session.outil !== 'sondage') throw new Error('Code de sondage introuvable.');
+    const config = window.AxisMundiSondageLive.readSessionConfig(session);
+    if(window.AxisMundiSondageConfig.validate(config)) throw new Error('Configuration du sondage invalide.');
+    sondageParticipantSession = session;
+    document.getElementById('sondageParticipantBadge').textContent = 'Sondage en direct · ' + session.code;
+    renderSondageParticipant(config,false);
+    AXMSession.ecouterSession(session.id,function(updated){
+      sondageParticipantSession = updated;
+      const updatedConfig = window.AxisMundiSondageLive.readSessionConfig(updated);
+      renderSondageParticipant(updatedConfig,false);
+    });
+  } catch(error){
+    sondageParticipantSession = null;
+    sondageParticipantTransient = error.message;
+    document.getElementById('sondageParticipantBadge').textContent = 'Sondage indisponible';
+    document.getElementById('sondageParticipantQuestion').textContent = 'Impossible de rejoindre ce sondage.';
+    document.getElementById('sondageParticipantStatus').textContent = error.message;
+  }
+}
+
+function initSondageParticipant(){
+  if(!document.documentElement.classList.contains('mode-participant')) return;
+  document.getElementById('sondageParticipantSubmit').addEventListener('click',sendSondageParticipantVote);
+  if(SONDAGE_PARAMS.get('preview') === '1' && !SONDAGE_SESSION_CODE){
+    document.getElementById('sondageParticipantBadge').textContent = 'Prévisualisation participant';
+    renderSondageParticipant(window.AxisMundiSondageConfig.load(window.localStorage),true);
+    return;
+  }
+  if(SONDAGE_SESSION_CODE) initSondageParticipantSession();
+}
+
+initSondageTrainer();
+initSondageParticipant();
 </script>
 
 </body>
