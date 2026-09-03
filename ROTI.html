@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="tool-view-context.js"></script>
+<script src="roti-formateur-config.js"></script>
 <title>ROTI — Return On Time Invested — AXIS MUNDI</title>
 <style>
   @font-face {
@@ -51,6 +52,7 @@
   .hero-illus{flex:0 0 400px;height:340px;position:relative;}
   .hero-illus svg{width:100%;height:100%;overflow:visible;}
   .hero-wave{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;display:block;z-index:1;}
+  .participant-eyebrow,.participant-subtitle,.participant-roti-mark{display:none;}
   @media (max-width:760px){
     .hero-inner{flex-direction:column;padding:36px 22px 60px;text-align:center;}
     .hero-desc{max-width:none;margin-left:auto;margin-right:auto;}
@@ -154,9 +156,7 @@
   .session-input-row button:disabled{opacity:.6;cursor:default;}
   .session-send-status{font-size:12.5px;color:var(--gris-moyen);margin:6px 0 0;}
 
-  /* Vue participant : masque les éléments destinés au formateur (navigation catalogue,
-     lancement de session, argumentaire de choix de l'outil) quand la page est ouverte
-     via un lien de session (?session=CODE). */
+  /* Vue participant : interface compacte, dédiée à la réponse. */
   html.mode-participant #backToSommaire,
   html.mode-participant #lancerSessionLink,
   html.mode-participant .hero-stats,
@@ -165,7 +165,143 @@
   html.mode-participant .actions-row,
   html.mode-participant .hero-desc,
   html.mode-participant .hero-title > span:not(#heroTitleMain){display:none !important;}
-  html.mode-participant .hero-inner{padding-bottom:30px;}
+  html.mode-participant .hero-header{border-bottom:1px solid rgba(0,136,169,.08);}
+  html.mode-participant .hero-inner{max-width:900px;margin:0 auto;padding:24px 32px 42px;display:block;}
+  html.mode-participant .hero-copy{min-width:0;position:relative;padding-right:100px;}
+  html.mode-participant .hero-logo{height:24px;margin:0 0 16px;}
+  html.mode-participant .participant-eyebrow{display:block;margin:0 0 8px;font-size:10.5px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:var(--bleu-fonce);}
+  html.mode-participant .hero-rule{width:34px;height:3px;margin:0 0 10px;}
+  html.mode-participant .hero-title{margin:0 0 6px;font-size:27px;line-height:1.15;color:#20282b;}
+  html.mode-participant .participant-subtitle{display:block;margin:0;max-width:560px;font-size:13.5px;color:var(--gris);}
+  html.mode-participant .participant-roti-mark{display:flex;position:absolute;right:0;top:34px;width:72px;height:72px;border-radius:22px;background:rgba(0,181,226,.11);align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(0,136,169,.08);}
+  html.mode-participant .participant-roti-mark span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--bleu-fonce);color:#fff;font-size:19px;font-weight:700;}
+  html.mode-participant .hero-wave{height:24px;}
+  html.mode-participant .container{max-width:760px;}
+  html.mode-participant .roti-scale{gap:8px;}
+  html.mode-participant .roti-option{padding:13px 8px 14px;}
+  html.mode-participant .roti-circle{width:45px;height:45px;}
+  html.mode-participant .roti-def{font-size:10.5px;}
+  html.mode-participant #sessionSendBlock{display:block;}
+
+  /* Vue formateur : poste de préparation et cockpit, sans argumentaire pédagogique. */
+  .formateur-view{display:none;min-height:100vh;background:#f4f6f7;}
+  html.mode-formateur .hero-header,
+  html.mode-formateur .container,
+  html.mode-formateur footer{display:none !important;}
+  html.mode-formateur .formateur-view{display:block;}
+  .formateur-topbar{background:#fff;border-bottom:1px solid #dfe5e7;}
+  .formateur-topbar-inner{max-width:1080px;margin:0 auto;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .formateur-brand{display:flex;align-items:center;gap:18px;min-width:0;}
+  .formateur-logo{width:122px;height:auto;display:block;flex:0 0 auto;}
+  .formateur-heading{min-width:0;border-left:1px solid #dfe5e7;padding-left:18px;}
+  .formateur-eyebrow{margin:0 0 2px;color:var(--bleu-fonce);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+  .formateur-heading h1{margin:0;color:#20282b;font-size:21px;line-height:1.2;}
+  .formateur-save-status{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;color:#47705f;background:#edf8f3;border:1px solid #d4eee2;border-radius:999px;padding:7px 12px;font-size:11.5px;font-weight:700;}
+  .formateur-save-status::before{content:'✓';display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--vert);color:#fff;font-size:10px;}
+  .formateur-workspace{max-width:1080px;margin:0 auto;padding:26px;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(310px,.92fr);gap:22px;align-items:start;}
+  .formateur-card{background:#fff;border:1px solid #e1e6e8;border-radius:14px;box-shadow:0 8px 26px rgba(31,53,60,.06);overflow:hidden;}
+  .formateur-card-head{padding:20px 22px 16px;border-bottom:1px solid #edf0f1;}
+  .formateur-card-head h2{margin:0 0 4px;color:#20282b;font-size:16px;}
+  .formateur-card-head p{margin:0;color:#7a8182;font-size:12.5px;}
+  .formateur-form{padding:20px 22px 22px;display:grid;gap:18px;}
+  .formateur-field{display:grid;gap:7px;}
+  .formateur-field label{color:#343c3f;font-size:12.5px;font-weight:700;}
+  .formateur-field input,.formateur-field textarea,.formateur-field select{width:100%;border:1.5px solid #ccd5d8;border-radius:9px;background:#fff;padding:11px 12px;color:#303638;font:inherit;font-size:13.5px;transition:border-color .15s,box-shadow .15s;}
+  .formateur-field textarea{min-height:112px;resize:vertical;line-height:1.5;}
+  .formateur-field select{max-width:230px;}
+  .formateur-field input:focus,.formateur-field textarea:focus,.formateur-field select:focus{outline:none;border-color:var(--bleu-fonce);box-shadow:0 0 0 3px rgba(0,136,169,.10);}
+  .formateur-field-help{margin:0;color:#899092;font-size:11px;}
+  .formateur-reset{justify-self:start;background:transparent;border:0;padding:0;color:var(--bleu-fonce);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+  .formateur-preview-body{padding:20px 22px 22px;}
+  .participant-preview{background:linear-gradient(145deg,#f9fdfe,#eaf6f9);border:1px solid #d9ebef;border-radius:14px;padding:20px;min-height:296px;box-shadow:inset 0 0 0 5px rgba(255,255,255,.55);}
+  .participant-preview-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+  .participant-preview-logo{width:92px;height:auto;}
+  .participant-preview-live{color:var(--bleu-fonce);font-size:8.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;}
+  .participant-preview-rule{width:32px;height:3px;background:var(--bleu);border-radius:3px;margin-bottom:9px;}
+  .participant-preview h3{margin:0 0 7px;color:#20282b;font-size:20px;line-height:1.2;overflow-wrap:anywhere;}
+  .participant-preview-instruction{margin:0 0 16px;color:#636b6d;font-size:12.5px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;}
+  .participant-preview-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;}
+  .participant-preview-score{display:grid;place-items:center;height:35px;border-radius:9px;color:#fff;font-size:12px;font-weight:700;}
+  .participant-preview-comment{height:40px;border:1.5px solid #cbdadd;border-radius:9px;background:#fff;display:flex;align-items:center;padding:0 12px;color:#a0a7a9;font-size:10.5px;}
+  .formateur-preview-actions{display:flex;gap:10px;margin-top:16px;}
+  .formateur-preview-link{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:10px 16px;border-radius:9px;background:var(--bleu-fonce);color:#fff;text-decoration:none;font-size:12px;font-weight:700;transition:background .15s;}
+  .formateur-preview-link:hover{background:#006f87;}
+  .formateur-live-card{grid-column:1 / -1;}
+  .formateur-live-card-head{display:flex;align-items:center;justify-content:space-between;gap:18px;}
+  .formateur-live-state{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;border-radius:999px;padding:7px 11px;background:#eef2f3;color:#6e787a;font-size:11px;font-weight:700;}
+  .formateur-live-state::before{content:'';width:8px;height:8px;border-radius:50%;background:#aab2b4;}
+  .formateur-live-state.is-active{background:#eaf8f2;color:#36705a;}
+  .formateur-live-state.is-active::before{background:var(--vert);box-shadow:0 0 0 4px rgba(21,202,136,.13);}
+  .formateur-live-state.is-closed{background:#f2f2f2;color:#737a7c;}
+  .formateur-live-setup{padding:25px 22px 26px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .formateur-live-setup-copy h3{margin:0 0 5px;color:#20282b;font-size:14.5px;}
+  .formateur-live-setup-copy p{margin:0;max-width:600px;color:#7a8182;font-size:12.5px;}
+  .formateur-primary-button,.formateur-secondary-button,.formateur-danger-button{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:background .15s,opacity .15s;}
+  .formateur-primary-button{background:var(--bleu-fonce);color:#fff;}
+  .formateur-primary-button:hover{background:#006f87;}
+  .formateur-secondary-button{background:#eef4f5;color:#365f68;}
+  .formateur-secondary-button:hover{background:#e1ecee;}
+  .formateur-danger-button{background:#fff0ee;color:#a8493e;}
+  .formateur-danger-button:hover{background:#fbe3df;}
+  .formateur-primary-button:disabled,.formateur-secondary-button:disabled,.formateur-danger-button:disabled{opacity:.5;cursor:default;}
+  .formateur-live-active{display:none;padding:22px;gap:20px;}
+  .formateur-live-active.is-visible{display:grid;grid-template-columns:280px minmax(0,1fr);}
+  .formateur-join-box{border:1px solid #dce7e9;border-radius:12px;background:#f8fbfc;padding:19px;text-align:center;}
+  .formateur-join-label{margin:0 0 8px;color:#7e888a;font-size:11px;}
+  .formateur-live-code{margin:0 0 11px;color:var(--bleu-fonce);font-size:30px;font-weight:700;letter-spacing:5px;}
+  #formateurLiveQr{display:block;width:156px;height:156px;margin:0 auto 12px;border-radius:7px;background:#fff;}
+  .formateur-live-url{margin:0 0 13px;color:#7c8587;font-size:10px;word-break:break-all;line-height:1.4;}
+  .formateur-share-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .formateur-share-actions a{display:flex;align-items:center;justify-content:center;text-decoration:none;}
+  .formateur-live-results{min-width:0;display:grid;gap:16px;}
+  .formateur-live-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .formateur-metric{border-radius:10px;background:#f4f7f8;padding:13px 14px;color:#687173;font-size:11.5px;}
+  .formateur-metric strong{display:block;color:var(--bleu-fonce);font-size:25px;line-height:1.1;margin-bottom:3px;}
+  .formateur-results-grid{display:grid;grid-template-columns:minmax(260px,.9fr) minmax(0,1.1fr);gap:16px;}
+  .formateur-results-panel{border:1px solid #e2e8ea;border-radius:12px;padding:16px;min-width:0;}
+  .formateur-results-panel h3{margin:0 0 13px;color:#343c3f;font-size:13px;}
+  .score-distribution{display:grid;gap:9px;}
+  .score-row{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;align-items:center;gap:8px;font-size:11.5px;}
+  .score-row-label{font-weight:700;text-align:center;}
+  .score-track{height:10px;border-radius:999px;background:#edf0f1;overflow:hidden;}
+  .score-fill{height:100%;border-radius:999px;width:0;transition:width .25s ease;}
+  .score-count{text-align:right;color:#7c8587;}
+  .formateur-comments-list{display:grid;gap:9px;max-height:250px;overflow:auto;}
+  .formateur-comment{border-radius:9px;background:#f7f8f8;padding:10px 11px;}
+  .formateur-comment-head{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px;color:#657073;font-size:10.5px;font-weight:700;}
+  .formateur-comment p{margin:0;color:#394144;font-size:12px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;}
+  .formateur-empty{margin:0;color:#9aa2a4;font-size:12px;font-style:italic;}
+  .formateur-live-actions{display:flex;flex-wrap:wrap;gap:9px;}
+  .formateur-live-error{display:none;margin:0 22px 20px;border-radius:8px;background:#fff1ef;color:#a44339;padding:10px 12px;font-size:12px;font-weight:700;}
+  .formateur-live-error.is-visible{display:block;}
+
+  @media (max-width:800px){
+    input,select,textarea{font-size:16px;}
+    .formateur-topbar-inner{align-items:flex-start;padding:16px 18px;}
+    .formateur-brand{align-items:flex-start;gap:12px;}
+    .formateur-logo{width:92px;margin-top:2px;}
+    .formateur-heading{padding-left:12px;}
+    .formateur-heading h1{font-size:17px;}
+    .formateur-save-status{font-size:0;padding:6px;}
+    .formateur-save-status::before{font-size:10px;}
+    .formateur-workspace{grid-template-columns:1fr;padding:18px;gap:16px;}
+    .formateur-live-setup{align-items:stretch;flex-direction:column;}
+    .formateur-live-active.is-visible,.formateur-results-grid{grid-template-columns:1fr;}
+    .formateur-join-box{max-width:360px;width:100%;margin:0 auto;}
+    html.mode-participant .hero-inner{padding:20px 20px 36px;text-align:center;}
+    html.mode-participant .hero-copy{padding-right:0;text-align:center;}
+    html.mode-participant .hero-logo{height:23px;margin:0 auto 14px;}
+    html.mode-participant .participant-eyebrow{margin-bottom:7px;}
+    html.mode-participant .hero-rule{margin:0 auto 10px;}
+    html.mode-participant .hero-title{font-size:25px;}
+    html.mode-participant .participant-subtitle{margin:0 auto;max-width:360px;font-size:13px;}
+    html.mode-participant .participant-roti-mark{position:static;width:56px;height:56px;border-radius:18px;margin:14px auto 0;}
+    html.mode-participant .participant-roti-mark span{width:34px;height:34px;font-size:16px;}
+    html.mode-participant .roti-scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;}
+    html.mode-participant .roti-option{min-width:0;padding:9px 3px;}
+    html.mode-participant .roti-circle{width:40px;height:40px;}
+    html.mode-participant .roti-def{display:none;}
+  }
 
   .actions-row{text-align:center;margin-top:20px;}
   .actions-row button{
@@ -194,6 +330,132 @@
 
 <script>if (new URLSearchParams(location.search).get('session')) { document.documentElement.classList.add('mode-participant'); }</script>
 
+<section class="formateur-view" id="formateurView" aria-labelledby="formateurViewTitle">
+  <header class="formateur-topbar">
+    <div class="formateur-topbar-inner">
+      <div class="formateur-brand">
+        <img class="formateur-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+        <div class="formateur-heading">
+          <p class="formateur-eyebrow">Vue formateur</p>
+          <h1 id="formateurViewTitle">ROTI</h1>
+        </div>
+      </div>
+      <div class="formateur-save-status" id="formateurSaveStatus" role="status">Enregistré sur cet appareil</div>
+    </div>
+  </header>
+
+  <div class="formateur-workspace">
+    <div class="formateur-card">
+      <div class="formateur-card-head">
+        <h2>Réglages de l’activité</h2>
+        <p>Les modifications sont enregistrées automatiquement.</p>
+      </div>
+      <form class="formateur-form" id="formateurConfigForm">
+        <div class="formateur-field">
+          <label for="formateurTitleInput">Titre affiché aux participants</label>
+          <input id="formateurTitleInput" name="title" type="text" maxlength="100" autocomplete="off">
+        </div>
+        <div class="formateur-field">
+          <label for="formateurInstructionInput">Consigne</label>
+          <textarea id="formateurInstructionInput" name="instruction" maxlength="500"></textarea>
+          <p class="formateur-field-help">Formulez directement ce que les participants doivent faire.</p>
+        </div>
+        <div class="formateur-field">
+          <label for="formateurCommentModeInput">Commentaire après la note</label>
+          <select id="formateurCommentModeInput" name="commentMode">
+            <option value="optional">Facultatif</option>
+            <option value="required">Obligatoire</option>
+            <option value="none">Non demandé</option>
+          </select>
+        </div>
+        <button class="formateur-reset" id="formateurResetButton" type="button">Réinitialiser les réglages</button>
+      </form>
+    </div>
+
+    <div class="formateur-card">
+      <div class="formateur-card-head">
+        <h2>Prévisualisation participant</h2>
+        <p>Mise à jour instantanée</p>
+      </div>
+      <div class="formateur-preview-body">
+        <div class="participant-preview" aria-live="polite">
+          <div class="participant-preview-top">
+            <img class="participant-preview-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="">
+            <span class="participant-preview-live">Session en direct</span>
+          </div>
+          <div class="participant-preview-rule"></div>
+          <h3 id="formateurPreviewTitle">ROTI</h3>
+          <p class="participant-preview-instruction" id="formateurPreviewInstruction"></p>
+          <div class="participant-preview-scale" aria-hidden="true">
+            <span class="participant-preview-score" style="background:#DE5C5C">1</span>
+            <span class="participant-preview-score" style="background:#F5AB33">2</span>
+            <span class="participant-preview-score" style="background:#A2A5A4">3</span>
+            <span class="participant-preview-score" style="background:#00B5E2">4</span>
+            <span class="participant-preview-score" style="background:#15CA88">5</span>
+          </div>
+          <div class="participant-preview-comment" id="formateurPreviewComment">Votre commentaire (facultatif)…</div>
+        </div>
+        <div class="formateur-preview-actions">
+          <a class="formateur-preview-link" id="formateurPreviewLink" href="ROTI.html?view=participant&amp;preview=1&amp;comment=optional" target="_blank" rel="noopener">Ouvrir la vue participant ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="formateur-card formateur-live-card">
+      <div class="formateur-card-head formateur-live-card-head">
+        <div>
+          <h2>Session en direct</h2>
+          <p>Partage, réponses et pilotage depuis le Studio</p>
+        </div>
+        <span class="formateur-live-state" id="formateurLiveStatus" role="status">Non ouverte</span>
+      </div>
+
+      <div class="formateur-live-setup" id="formateurLiveSetup">
+        <div class="formateur-live-setup-copy">
+          <h3>Les réglages sont prêts</h3>
+          <p>L’ouverture crée le code participant et fige le mode de commentaire pour cette session.</p>
+        </div>
+        <button class="formateur-primary-button" id="formateurOpenSessionButton" type="button">Ouvrir la participation</button>
+      </div>
+
+      <div class="formateur-live-active" id="formateurLiveActive">
+        <div class="formateur-join-box">
+          <p class="formateur-join-label">Code à communiquer</p>
+          <p class="formateur-live-code" id="formateurLiveCode">—</p>
+          <canvas id="formateurLiveQr" width="180" height="180" aria-label="QR code participant"></canvas>
+          <p class="formateur-live-url" id="formateurLiveUrl"></p>
+          <div class="formateur-share-actions">
+            <button class="formateur-secondary-button" id="formateurCopyLinkButton" type="button">Copier le lien</button>
+            <a class="formateur-secondary-button" id="formateurLiveParticipantLink" href="#" target="_blank" rel="noopener">Ouvrir ↗</a>
+          </div>
+        </div>
+
+        <div class="formateur-live-results">
+          <div class="formateur-live-metrics">
+            <div class="formateur-metric"><strong id="formateurResponseCount">0</strong>réponse(s) reçue(s)</div>
+            <div class="formateur-metric"><strong id="formateurAverageScore">—</strong>moyenne sur 5</div>
+          </div>
+          <div class="formateur-results-grid">
+            <div class="formateur-results-panel">
+              <h3>Répartition des notes</h3>
+              <div class="score-distribution" id="formateurScoreDistribution"></div>
+            </div>
+            <div class="formateur-results-panel">
+              <h3>Commentaires</h3>
+              <div class="formateur-comments-list" id="formateurCommentsList"></div>
+            </div>
+          </div>
+          <div class="formateur-live-actions">
+            <button class="formateur-primary-button" id="formateurSyncSessionButton" type="button">Mettre à jour les participants</button>
+            <button class="formateur-danger-button" id="formateurCloseSessionButton" type="button">Clôturer la session</button>
+          </div>
+        </div>
+      </div>
+      <p class="formateur-live-error" id="formateurLiveError" role="alert"></p>
+    </div>
+  </div>
+</section>
+
 <div class="hero-header">
   <div class="hero-inner">
 
@@ -202,8 +464,11 @@
       <a class="lancer-session-link" id="lancerSessionLink" href="Session_Direct.html?outil=roti" target="_blank" rel="noopener">Lancer une session en direct (formateur) &rarr;</a>
       <script>if (window.self !== window.top) { document.getElementById('backToSommaire').style.display = 'none'; document.getElementById('lancerSessionLink').style.display = 'none'; }</script>
       <img class="hero-logo" src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI — Développer le potentiel humain">
+      <div class="participant-eyebrow">Session en direct</div>
       <div class="hero-rule"></div>
       <h1 class="hero-title"><span id="heroTitleMain">ROTI</span><span>Return On Time Invested</span></h1>
+      <p class="participant-subtitle">Évaluez la valeur du temps consacré à cette session</p>
+      <div class="participant-roti-mark" aria-hidden="true"><span>5</span></div>
       <p class="hero-desc">Une évaluation rapide et directe : combien valait, à vos yeux, le temps consacré à cette session ? Notez de 1 à 5, puis expliquez votre choix — un retour concret pour ajuster les prochaines séances.</p>
       <div class="hero-stats">
         <div class="stat-pill">
@@ -289,15 +554,15 @@
     </div>
   </div>
 
-  <div class="panel">
-    <h2>Pourquoi cette note ?</h2>
-    <p class="panel-sub">Qu'est-ce qui explique votre choix ? Qu'auriez-vous aimé de différent ?</p>
-    <textarea class="roti-textarea" id="rotiComment" placeholder="Votre explication…"></textarea>
+  <div class="panel" id="rotiCommentPanel">
+    <h2 id="rotiCommentTitle">Pourquoi cette note ?</h2>
+    <p class="panel-sub" id="rotiCommentHelp">Qu'est-ce qui explique votre choix ? Qu'auriez-vous aimé de différent ?</p>
+    <textarea class="roti-textarea" id="rotiComment" placeholder="Votre explication…" maxlength="500"></textarea>
   </div>
 
   <div class="panel" id="sessionSendBlock" style="display:none;">
     <h2>Envoyer ma réponse au formateur</h2>
-    <p class="panel-sub">Votre note et votre commentaire seront transmis en direct, avec le prénom que vous indiquez (facultatif).</p>
+    <p class="panel-sub" id="sessionSendHelp">Votre note et votre commentaire seront transmis en direct, avec le prénom que vous indiquez (facultatif).</p>
     <div class="session-input-row">
       <input type="text" id="sessionPseudo" placeholder="Votre prénom (facultatif)" maxlength="40">
       <button type="button" id="btnEnvoyerSession" onclick="envoyerReponseSession()">Envoyer ma réponse</button>
@@ -314,10 +579,46 @@
 
 <footer>AXIS MUNDI — Outil de clôture. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
 
+<script src="qrcode-generator.js"></script>
+<script src="roti-live-session.js"></script>
 <script>
 let rotiScore = null;
+const ROTI_PARAMS = new URLSearchParams(location.search);
+const SESSION_CODE = ROTI_PARAMS.get('session');
+const COMMENT_MODE = window.AxisMundiRotiLive
+  ? window.AxisMundiRotiLive.normalizeCommentMode(ROTI_PARAMS.get('comment'))
+  : 'optional';
+let liveSessionRow = null;
+let participantSubmissionCount = 0;
+let participantPendingCount = 0;
+let participantTransientStatus = '';
+let sessionScriptsPromise = null;
+
+function participantStorageKey(){
+  return 'axis-mundi:roti:submitted:' + String(SESSION_CODE || '').toUpperCase();
+}
+
+function chargerEtatParticipant(){
+  if(!SESSION_CODE) return;
+  try{
+    participantSubmissionCount = window.localStorage.getItem(participantStorageKey()) === '1' ? 1 : 0;
+  } catch(error){
+    participantSubmissionCount = 0;
+  }
+}
+
+function memoriserReponseParticipant(){
+  if(!SESSION_CODE) return;
+  try{
+    window.localStorage.setItem(participantStorageKey(), '1');
+  } catch(error){
+    // La confirmation reste active pour la page courante si le stockage est indisponible.
+  }
+}
 
 function selectRoti(score){
+  if(SESSION_CODE && (!liveSessionRow || !window.AxisMundiRotiLive ||
+    !window.AxisMundiRotiLive.canSubmit(liveSessionRow, participantSubmissionCount + participantPendingCount))) return;
   rotiScore = score;
   document.querySelectorAll('.roti-option').forEach(function(el){
     el.classList.toggle('selected', parseInt(el.dataset.score, 10) === score);
@@ -325,6 +626,7 @@ function selectRoti(score){
 }
 
 function resetAll(){
+  if(SESSION_CODE && participantSubmissionCount > 0) return;
   const hasContent = rotiScore !== null || document.getElementById('rotiComment').value.trim() !== '';
   if(hasContent){
     if(!confirm('Effacer votre note et votre commentaire ?')) return;
@@ -336,22 +638,58 @@ function resetAll(){
   document.getElementById('rotiComment').value = '';
 }
 
+function appliquerModeCommentaire(mode){
+  const normalized = window.AxisMundiRotiLive
+    ? window.AxisMundiRotiLive.normalizeCommentMode(mode)
+    : 'optional';
+  const panel = document.getElementById('rotiCommentPanel');
+  const title = document.getElementById('rotiCommentTitle');
+  const help = document.getElementById('rotiCommentHelp');
+  const sendHelp = document.getElementById('sessionSendHelp');
+  panel.style.display = normalized === 'none' ? 'none' : '';
+  title.textContent = normalized === 'required' ? 'Pourquoi cette note ? *' : 'Pourquoi cette note ?';
+  help.textContent = normalized === 'required'
+    ? 'Expliquez brièvement votre choix avant d’envoyer votre réponse.'
+    : 'Vous pouvez expliquer votre choix si vous le souhaitez.';
+  if(sendHelp){
+    sendHelp.textContent = normalized === 'none'
+      ? 'Votre note sera transmise en direct, avec le prénom que vous indiquez (facultatif).'
+      : 'Votre note et votre commentaire seront transmis en direct, avec le prénom que vous indiquez (facultatif).';
+  }
+}
+
 /* ---------- Session en direct (optionnelle, ?session=CODE) ---------- */
-const SESSION_CODE = new URLSearchParams(location.search).get('session');
-let liveSessionRow = null;
+function chargerModulesSession(){
+  if(window.AXMSession) return Promise.resolve(window.AXMSession);
+  if(sessionScriptsPromise) return sessionScriptsPromise;
+
+  sessionScriptsPromise = new Promise(function(resolve, reject){
+    function chargerModuleMetier(){
+      if(window.AXMSession){ resolve(window.AXMSession); return; }
+      const moduleScript = document.createElement('script');
+      moduleScript.src = 'session-live.js';
+      moduleScript.onload = function(){ resolve(window.AXMSession); };
+      moduleScript.onerror = function(){ reject(new Error('Module de session indisponible.')); };
+      document.body.appendChild(moduleScript);
+    }
+
+    if(window.supabase && window.supabase.createClient){
+      chargerModuleMetier();
+      return;
+    }
+    const sdkScript = document.createElement('script');
+    sdkScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    sdkScript.onload = chargerModuleMetier;
+    sdkScript.onerror = function(){ reject(new Error('Connexion au service de session impossible.')); };
+    document.body.appendChild(sdkScript);
+  });
+  return sessionScriptsPromise;
+}
 
 function chargerScriptsSession(cb){
-  const s1 = document.createElement('script');
-  s1.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-  s1.onload = function(){
-    const s2 = document.createElement('script');
-    s2.src = 'session-live.js';
-    s2.onload = cb;
-    s2.onerror = function(){ afficherStatutSession('Module de session indisponible.'); };
-    document.body.appendChild(s2);
-  };
-  s1.onerror = function(){ afficherStatutSession('Connexion au service de session impossible (hors ligne ?).'); };
-  document.body.appendChild(s1);
+  chargerModulesSession().then(cb).catch(function(error){
+    afficherStatutSession(error.message);
+  });
 }
 
 function afficherStatutSession(texte){
@@ -362,23 +700,30 @@ function afficherStatutSession(texte){
 
 async function initSessionMode(){
   afficherStatutSession('Connexion à la session…');
+  chargerEtatParticipant();
+  actualiserEtatSaisieParticipant();
   try{
     liveSessionRow = await AXMSession.recupererSessionParCode(SESSION_CODE);
   } catch(e){
     liveSessionRow = null;
   }
-  if(!liveSessionRow){
+  if(!liveSessionRow || liveSessionRow.outil !== 'roti'){
+    liveSessionRow = null;
     afficherStatutSession('Code de session introuvable — vérifiez le lien fourni par le formateur.');
+    actualiserEtatSaisieParticipant();
     return;
   }
   afficherStatutSession('Session en direct — code ' + liveSessionRow.code);
   document.getElementById('sessionSendBlock').style.display = 'block';
   appliquerConsigne(liveSessionRow.consigne);
   appliquerTitre(liveSessionRow.titre);
+  appliquerModeCommentaire(COMMENT_MODE);
+  actualiserEtatSaisieParticipant();
   AXMSession.ecouterSession(liveSessionRow.id, function(s){
     liveSessionRow = s;
     appliquerConsigne(s.consigne);
     appliquerTitre(s.titre);
+    actualiserEtatSaisieParticipant();
   });
 }
 
@@ -392,31 +737,402 @@ function appliquerTitre(titre){
   document.getElementById('heroTitleMain').textContent = (titre && titre.trim()) ? titre : 'ROTI';
 }
 
+function actualiserEtatSaisieParticipant(){
+  if(!SESSION_CODE) return;
+  const submitted = participantSubmissionCount + participantPendingCount;
+  const allowed = !!(liveSessionRow && window.AxisMundiRotiLive &&
+    window.AxisMundiRotiLive.canSubmit(liveSessionRow, submitted));
+  document.querySelectorAll('.roti-option').forEach(function(option){ option.disabled = !allowed; });
+  document.getElementById('rotiComment').disabled = !allowed || COMMENT_MODE === 'none';
+  document.getElementById('sessionPseudo').disabled = !allowed;
+  document.getElementById('btnEnvoyerSession').disabled = !allowed;
+
+  const status = document.getElementById('sessionSendStatus');
+  status.textContent = window.AxisMundiRotiLive
+    ? window.AxisMundiRotiLive.participantStatus(liveSessionRow, participantSubmissionCount, participantTransientStatus)
+    : (participantTransientStatus || 'Connexion à la session…');
+}
+
 async function envoyerReponseSession(){
   if(rotiScore === null){
     alert('Choisissez une note avant d\'envoyer votre réponse.');
     return;
   }
-  if(!liveSessionRow) return;
+  const commentaire = document.getElementById('rotiComment').value.trim();
+  if(window.AxisMundiRotiLive && !window.AxisMundiRotiLive.isCommentValid(COMMENT_MODE, commentaire)){
+    participantTransientStatus = 'Ajoutez un commentaire pour expliquer votre note.';
+    actualiserEtatSaisieParticipant();
+    document.getElementById('rotiComment').focus();
+    return;
+  }
+  if(!liveSessionRow || !window.AxisMundiRotiLive ||
+    !window.AxisMundiRotiLive.canSubmit(liveSessionRow, participantSubmissionCount + participantPendingCount)){
+    actualiserEtatSaisieParticipant();
+    return;
+  }
   const btn = document.getElementById('btnEnvoyerSession');
-  btn.disabled = true;
+  participantTransientStatus = '';
+  participantPendingCount++;
+  actualiserEtatSaisieParticipant();
   btn.textContent = 'Envoi…';
   try{
     const pseudo = document.getElementById('sessionPseudo').value.trim();
-    const commentaire = document.getElementById('rotiComment').value.trim();
-    await AXMSession.envoyerReponse(liveSessionRow.id, pseudo, { score: rotiScore, commentaire: commentaire });
+    await AXMSession.envoyerReponse(liveSessionRow.id, pseudo, {
+      score: rotiScore,
+      commentaire: COMMENT_MODE === 'none' ? '' : commentaire
+    });
+    participantPendingCount--;
+    participantSubmissionCount = 1;
+    participantTransientStatus = '';
+    memoriserReponseParticipant();
     btn.textContent = 'Réponse envoyée';
-    document.getElementById('sessionSendStatus').textContent = 'Merci, votre réponse a été transmise au formateur.';
   } catch(e){
-    btn.disabled = false;
+    participantPendingCount--;
     btn.textContent = 'Envoyer ma réponse';
-    document.getElementById('sessionSendStatus').textContent = "Erreur d'envoi : " + e.message;
+    participantTransientStatus = "Erreur d'envoi : " + e.message;
+  }
+  actualiserEtatSaisieParticipant();
+}
+
+/* ---------- Préparation formateur et cockpit ---------- */
+function afficherApercuFormateur(config){
+  document.getElementById('formateurPreviewTitle').textContent = config.title;
+  document.getElementById('formateurPreviewInstruction').textContent = config.instruction;
+  const previewComment = document.getElementById('formateurPreviewComment');
+  if(config.commentMode === 'none'){
+    previewComment.style.display = 'none';
+  } else {
+    previewComment.style.display = 'flex';
+    previewComment.textContent = config.commentMode === 'required'
+      ? 'Votre commentaire (obligatoire)…'
+      : 'Votre commentaire (facultatif)…';
   }
 }
 
+function remplirFormulaireFormateur(config){
+  document.getElementById('formateurTitleInput').value = config.title;
+  document.getElementById('formateurInstructionInput').value = config.instruction;
+  document.getElementById('formateurCommentModeInput').value = config.commentMode;
+  afficherApercuFormateur(config);
+}
+
+function lireFormulaireFormateur(){
+  return {
+    title: document.getElementById('formateurTitleInput').value,
+    instruction: document.getElementById('formateurInstructionInput').value,
+    commentMode: document.getElementById('formateurCommentModeInput').value
+  };
+}
+
+let formateurLiveSessionRow = null;
+let formateurLiveTracker = window.AxisMundiRotiLive
+  ? window.AxisMundiRotiLive.createResponseTracker()
+  : null;
+let formateurLiveCommentMode = 'optional';
+const ROTI_COLORS = ['#DE5C5C','#F5AB33','#A2A5A4','#00B5E2','#15CA88'];
+
+function afficherErreurFormateurLive(message){
+  const error = document.getElementById('formateurLiveError');
+  error.textContent = message || '';
+  error.classList.toggle('is-visible', !!message);
+}
+
+function afficherStatutFormateurLive(label, stateClass){
+  const status = document.getElementById('formateurLiveStatus');
+  status.textContent = label;
+  status.classList.remove('is-active', 'is-closed');
+  if(stateClass) status.classList.add(stateClass);
+}
+
+function dessinerQrCodeFormateur(text){
+  if(typeof qrcode !== 'function') return;
+  let qr;
+  try{
+    qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+  } catch(error){
+    return;
+  }
+  const modules = qr.getModuleCount();
+  const scale = 4;
+  const quiet = 3;
+  const size = (modules + quiet * 2) * scale;
+  const canvas = document.getElementById('formateurLiveQr');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, size, size);
+  ctx.fillStyle = '#20282b';
+  for(let row = 0; row < modules; row++){
+    for(let col = 0; col < modules; col++){
+      if(qr.isDark(row, col)) ctx.fillRect((col + quiet) * scale, (row + quiet) * scale, scale, scale);
+    }
+  }
+}
+
+function renderFormateurResults(snapshot){
+  document.getElementById('formateurResponseCount').textContent = String(snapshot.total);
+  document.getElementById('formateurAverageScore').textContent = snapshot.average === null
+    ? '—'
+    : String(snapshot.average).replace('.', ',');
+
+  const distribution = document.getElementById('formateurScoreDistribution');
+  distribution.textContent = '';
+  snapshot.distribution.forEach(function(item, index){
+    const row = document.createElement('div');
+    row.className = 'score-row';
+    const label = document.createElement('span');
+    label.className = 'score-row-label';
+    label.textContent = String(item.score);
+    const track = document.createElement('span');
+    track.className = 'score-track';
+    const fill = document.createElement('span');
+    fill.className = 'score-fill';
+    fill.style.background = ROTI_COLORS[index];
+    fill.style.width = snapshot.total ? Math.round(item.count / snapshot.total * 100) + '%' : '0%';
+    track.appendChild(fill);
+    const count = document.createElement('span');
+    count.className = 'score-count';
+    count.textContent = String(item.count);
+    row.appendChild(label);
+    row.appendChild(track);
+    row.appendChild(count);
+    distribution.appendChild(row);
+  });
+
+  const comments = document.getElementById('formateurCommentsList');
+  comments.textContent = '';
+  if(snapshot.comments.length === 0){
+    const empty = document.createElement('p');
+    empty.className = 'formateur-empty';
+    empty.textContent = 'Aucun commentaire pour le moment.';
+    comments.appendChild(empty);
+    return;
+  }
+  snapshot.comments.forEach(function(comment){
+    const card = document.createElement('article');
+    card.className = 'formateur-comment';
+    const head = document.createElement('div');
+    head.className = 'formateur-comment-head';
+    const author = document.createElement('span');
+    author.textContent = comment.pseudo || 'Anonyme';
+    const score = document.createElement('span');
+    score.textContent = comment.score + '/5';
+    const text = document.createElement('p');
+    text.textContent = comment.text;
+    head.appendChild(author);
+    head.appendChild(score);
+    card.appendChild(head);
+    card.appendChild(text);
+    comments.appendChild(card);
+  });
+}
+
+function traiterReponseFormateurLive(response){
+  if(!formateurLiveTracker || !formateurLiveTracker.add(response)) return;
+  renderFormateurResults(formateurLiveTracker.snapshot());
+}
+
+function appliquerEtatFormateurLive(session){
+  const closed = session && session.statut === 'fermee';
+  afficherStatutFormateurLive(closed ? 'Clôturée' : 'Ouverte', closed ? 'is-closed' : 'is-active');
+  document.getElementById('formateurSyncSessionButton').disabled = closed;
+  document.getElementById('formateurCloseSessionButton').disabled = closed;
+  document.getElementById('formateurCloseSessionButton').textContent = closed ? 'Session clôturée' : 'Clôturer la session';
+}
+
+async function activerCockpitFormateur(session, commentMode){
+  formateurLiveSessionRow = session;
+  formateurLiveCommentMode = window.AxisMundiRotiLive.normalizeCommentMode(commentMode);
+  formateurLiveTracker = window.AxisMundiRotiLive.createResponseTracker();
+  const participantUrl = window.AxisMundiRotiLive.buildParticipantUrl(location.href, session.code, formateurLiveCommentMode);
+
+  document.getElementById('formateurLiveSetup').style.display = 'none';
+  document.getElementById('formateurLiveActive').classList.add('is-visible');
+  document.getElementById('formateurLiveCode').textContent = session.code;
+  document.getElementById('formateurLiveUrl').textContent = participantUrl;
+  document.getElementById('formateurLiveParticipantLink').href = participantUrl;
+  document.getElementById('formateurCommentModeInput').disabled = true;
+  document.getElementById('formateurResetButton').disabled = true;
+  dessinerQrCodeFormateur(participantUrl);
+  appliquerEtatFormateurLive(session);
+  renderFormateurResults(formateurLiveTracker.snapshot());
+
+  AXMSession.ecouterSession(session.id, function(updated){
+    formateurLiveSessionRow = updated;
+    appliquerEtatFormateurLive(updated);
+  });
+  AXMSession.ecouterReponses(session.id, traiterReponseFormateurLive);
+  const initialResponses = await AXMSession.listerReponses(session.id);
+  initialResponses.forEach(traiterReponseFormateurLive);
+}
+
+async function ouvrirSessionFormateur(){
+  const button = document.getElementById('formateurOpenSessionButton');
+  afficherErreurFormateurLive('');
+  button.disabled = true;
+  button.textContent = 'Ouverture…';
+  afficherStatutFormateurLive('Connexion…');
+  try{
+    await chargerModulesSession();
+    const config = window.AxisMundiRotiConfig.save(window.localStorage, lireFormulaireFormateur());
+    const session = await AXMSession.creerSession('roti', config.title);
+    const patch = window.AxisMundiRotiLive.sessionPatch(config);
+    await AXMSession.mettreAJourSession(session.id, patch);
+    Object.assign(session, patch);
+    const adminUrl = window.AxisMundiRotiLive.buildFormateurSessionUrl(location.href, session.code, config.commentMode);
+    history.replaceState(null, '', adminUrl);
+    await activerCockpitFormateur(session, config.commentMode);
+  } catch(error){
+    afficherStatutFormateurLive('Non ouverte');
+    afficherErreurFormateurLive('Impossible d’ouvrir la session : ' + error.message);
+    button.disabled = false;
+    button.textContent = 'Réessayer';
+  }
+}
+
+async function reprendreSessionFormateur(code, commentMode){
+  afficherErreurFormateurLive('');
+  afficherStatutFormateurLive('Connexion…');
+  try{
+    await chargerModulesSession();
+    const session = await AXMSession.recupererSessionParCode(code);
+    if(!session || session.outil !== 'roti') throw new Error('session introuvable');
+    const current = window.AxisMundiRotiConfig.sanitize({
+      title: session.titre,
+      instruction: session.consigne,
+      commentMode: commentMode
+    });
+    remplirFormulaireFormateur(current);
+    window.AxisMundiRotiConfig.save(window.localStorage, current);
+    document.getElementById('formateurPreviewLink').href =
+      window.AxisMundiRotiConfig.buildPreviewUrl(location.href, current.commentMode);
+    await activerCockpitFormateur(session, current.commentMode);
+  } catch(error){
+    afficherStatutFormateurLive('Indisponible');
+    afficherErreurFormateurLive('Impossible de reprendre la session : ' + error.message);
+  }
+}
+
+async function synchroniserSessionFormateur(){
+  if(!formateurLiveSessionRow || formateurLiveSessionRow.statut === 'fermee') return;
+  const button = document.getElementById('formateurSyncSessionButton');
+  const config = window.AxisMundiRotiConfig.save(window.localStorage, lireFormulaireFormateur());
+  const patch = window.AxisMundiRotiLive.sessionPatch(config);
+  button.disabled = true;
+  button.textContent = 'Mise à jour…';
+  afficherErreurFormateurLive('');
+  try{
+    await AXMSession.mettreAJourSession(formateurLiveSessionRow.id, patch);
+    Object.assign(formateurLiveSessionRow, patch);
+    button.textContent = 'Participants à jour ✓';
+    window.setTimeout(function(){
+      if(formateurLiveSessionRow && formateurLiveSessionRow.statut !== 'fermee'){
+        button.disabled = false;
+        button.textContent = 'Mettre à jour les participants';
+      }
+    }, 1400);
+  } catch(error){
+    button.disabled = false;
+    button.textContent = 'Réessayer la mise à jour';
+    afficherErreurFormateurLive('Mise à jour impossible : ' + error.message);
+  }
+}
+
+async function copierLienParticipant(){
+  const button = document.getElementById('formateurCopyLinkButton');
+  const url = document.getElementById('formateurLiveParticipantLink').href;
+  try{
+    await navigator.clipboard.writeText(url);
+  } catch(error){
+    const field = document.createElement('textarea');
+    field.value = url;
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    document.execCommand('copy');
+    document.body.removeChild(field);
+  }
+  button.textContent = 'Lien copié ✓';
+  window.setTimeout(function(){ button.textContent = 'Copier le lien'; }, 1400);
+}
+
+async function cloturerSessionFormateur(){
+  if(!formateurLiveSessionRow || formateurLiveSessionRow.statut === 'fermee') return;
+  if(!window.confirm('Clôturer cette session ? Les participants ne pourront plus envoyer de réponse.')) return;
+  const button = document.getElementById('formateurCloseSessionButton');
+  button.disabled = true;
+  button.textContent = 'Clôture…';
+  afficherErreurFormateurLive('');
+  try{
+    await AXMSession.fermerSession(formateurLiveSessionRow.id);
+    formateurLiveSessionRow.statut = 'fermee';
+    appliquerEtatFormateurLive(formateurLiveSessionRow);
+  } catch(error){
+    button.disabled = false;
+    button.textContent = 'Clôturer la session';
+    afficherErreurFormateurLive('Clôture impossible : ' + error.message);
+  }
+}
+
+function initFormateurView(){
+  if(!document.documentElement.classList.contains('mode-formateur') || !window.AxisMundiRotiConfig) return;
+  const api = window.AxisMundiRotiConfig;
+  const form = document.getElementById('formateurConfigForm');
+  const status = document.getElementById('formateurSaveStatus');
+  const previewLink = document.getElementById('formateurPreviewLink');
+  let statusTimer = null;
+
+  const initialConfig = api.load(window.localStorage);
+  remplirFormulaireFormateur(initialConfig);
+  previewLink.href = api.buildPreviewUrl(window.location.href, initialConfig.commentMode);
+
+  function enregistrerReglages(){
+    const saved = api.save(window.localStorage, lireFormulaireFormateur());
+    afficherApercuFormateur(saved);
+    previewLink.href = api.buildPreviewUrl(window.location.href, saved.commentMode);
+    status.textContent = 'Enregistré';
+    window.clearTimeout(statusTimer);
+    statusTimer = window.setTimeout(function(){ status.textContent = 'Enregistré sur cet appareil'; }, 1400);
+  }
+
+  form.addEventListener('submit', function(event){ event.preventDefault(); });
+  form.addEventListener('input', enregistrerReglages);
+  form.addEventListener('change', enregistrerReglages);
+  document.getElementById('formateurOpenSessionButton').addEventListener('click', ouvrirSessionFormateur);
+  document.getElementById('formateurSyncSessionButton').addEventListener('click', synchroniserSessionFormateur);
+  document.getElementById('formateurCopyLinkButton').addEventListener('click', copierLienParticipant);
+  document.getElementById('formateurCloseSessionButton').addEventListener('click', cloturerSessionFormateur);
+  document.getElementById('formateurResetButton').addEventListener('click', function(){
+    const defaults = api.clear(window.localStorage);
+    remplirFormulaireFormateur(defaults);
+    previewLink.href = api.buildPreviewUrl(window.location.href, defaults.commentMode);
+    api.save(window.localStorage, defaults);
+    status.textContent = 'Réglages réinitialisés';
+  });
+
+  if(ROTI_PARAMS.get('live')) reprendreSessionFormateur(ROTI_PARAMS.get('live'), ROTI_PARAMS.get('comment'));
+}
+
+function initParticipantPreview(){
+  if(ROTI_PARAMS.get('preview') !== '1' || SESSION_CODE || !window.AxisMundiRotiConfig) return;
+  const config = window.AxisMundiRotiConfig.load(window.localStorage);
+  appliquerTitre(config.title);
+  appliquerConsigne(config.instruction);
+  appliquerModeCommentaire(COMMENT_MODE);
+  afficherStatutSession('Prévisualisation participant');
+}
+
+appliquerModeCommentaire(COMMENT_MODE);
+initParticipantPreview();
 if(SESSION_CODE){
+  actualiserEtatSaisieParticipant();
   chargerScriptsSession(initSessionMode);
 }
+initFormateurView();
 </script>
 
 </body>
