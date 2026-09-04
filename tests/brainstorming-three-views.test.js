@@ -48,14 +48,28 @@ test('the participant workspace separates private collection from revealed votin
     'brainstormingParticipantTitle',
     'brainstormingParticipantInstruction',
     'brainstormingParticipantPhase',
-    'brainstormingParticipantColumnSelect',
-    'brainstormingParticipantIdeaInput',
-    'brainstormingSubmitIdeaButton',
+    'brainstormingParticipantColumnInputs',
     'brainstormingParticipantStatus',
     'brainstormingParticipantBoard',
     'brainstormingParticipantVoteStatus',
   ];
   requiredIds.forEach((id) => assert.match(html, new RegExp(`id="${id}"`), `${id} is missing`));
+});
+
+test('participant collection renders every column as a visible input card', () => {
+  const live = require(livePath);
+  const markup = live.renderParticipantColumnCards([
+    { id: 'faits', name: 'Les faits' },
+    { id: 'idees', name: 'Les idées' },
+    { id: 'actions', name: 'Les actions' },
+  ]);
+
+  assert.equal((markup.match(/class="participant-column-card"/g) || []).length, 3);
+  assert.match(markup, />Les faits</);
+  assert.match(markup, />Les idées</);
+  assert.match(markup, />Les actions</);
+  assert.equal((markup.match(/data-brainstorming-column=/g) || []).length, 3);
+  assert.doesNotMatch(markup, /<select/i);
 });
 
 test('Brainstorming drafts normalize columns and enforce practical mobile limits', () => {

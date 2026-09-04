@@ -194,6 +194,30 @@
     return 'Collecte des idées';
   }
 
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function renderParticipantColumnCards(columns) {
+    return normalizeColumns(columns).map(function(column, index) {
+      const inputId = 'brainstormingParticipantIdeaInput-' + index;
+      return '<article class="participant-column-card">'
+        + '<h2><span>' + (index + 1) + '</span>' + escapeHtml(column.name) + '</h2>'
+        + '<label class="participant-column-field" for="' + inputId + '">'
+        + '<span>Votre idée</span>'
+        + '<textarea id="' + inputId + '" maxlength="240" placeholder="Une idée courte et concrète…"></textarea>'
+        + '</label>'
+        + '<button class="primary-button participant-column-submit" type="button" data-brainstorming-column="' + escapeHtml(column.id) + '">Envoyer dans cette colonne</button>'
+        + '<p class="participant-column-feedback" role="status"></p>'
+        + '</article>';
+    }).join('');
+  }
+
   return {
     buildParticipantUrl,
     buildTrainerUrl,
@@ -205,5 +229,6 @@
     canViewBoard,
     canVote,
     phaseLabel,
+    renderParticipantColumnCards,
   };
 });

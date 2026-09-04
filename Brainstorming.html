@@ -496,14 +496,31 @@
   .vote-button:disabled{cursor:not-allowed;opacity:.7;}
   .empty-board{grid-column:1/-1;text-align:center;color:#8a9395;font-size:12px;padding:34px 12px;background:#fafbfb;border:1px dashed #d7dddf;border-radius:10px;}
 
-  .participant-shell{max-width:720px;margin:0 auto;padding:18px 16px 46px;}
+  .participant-shell{max-width:1180px;margin:0 auto;padding:18px 16px 46px;}
   .participant-hero{background:linear-gradient(135deg,#fff,#e8f6f9);border-bottom:1px solid #dbe9ed;padding:18px 18px 20px;}
-  .participant-hero-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:13px;}
+  .participant-hero-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:13px;}
   .participant-hero img{width:92px;height:auto;}
   .participant-hero h1{margin:2px 0 0;color:#20282b;font-size:20px;line-height:1.2;}
   .participant-phase{display:inline-block;color:var(--bleu-fonce);font-size:9px;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
   .participant-instruction{margin:0 0 16px;color:#4f5a5d;font-size:14px;white-space:pre-wrap;}
   .participant-status{margin:12px 0 0;min-height:19px;color:#147654;font-size:12px;font-weight:700;}
+  .participant-column-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:stretch;}
+  .participant-column-card{display:flex;flex-direction:column;min-width:0;padding:14px;border:1px solid #e0e5e7;border-top:4px solid var(--bleu);border-radius:11px;background:#f8fafb;}
+  .participant-column-card:nth-child(2){border-top-color:var(--violet);}
+  .participant-column-card:nth-child(3){border-top-color:var(--vert);}
+  .participant-column-card:nth-child(4){border-top-color:var(--orange);}
+  .participant-column-card:nth-child(5){border-top-color:var(--rouge);}
+  .participant-column-card h2{display:flex;align-items:center;gap:8px;margin:0 0 12px;color:#293235;font-size:14px;line-height:1.25;}
+  .participant-column-card h2 span{display:grid;place-items:center;flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--bleu);color:#fff;font-size:10px;}
+  .participant-column-card:nth-child(2) h2 span{background:var(--violet);}
+  .participant-column-card:nth-child(3) h2 span{background:var(--vert);}
+  .participant-column-card:nth-child(4) h2 span{background:var(--orange);}
+  .participant-column-card:nth-child(5) h2 span{background:var(--rouge);}
+  .participant-column-field{display:flex;flex:1;flex-direction:column;gap:6px;color:#4f5a5d;font-size:11px;font-weight:800;}
+  .participant-column-field textarea{width:100%;min-height:112px;resize:vertical;border:1.5px solid #d8dfe1;border-radius:9px;padding:10px 11px;background:#fff;color:#20282b;font:inherit;font-size:13px;}
+  .participant-column-field textarea:focus{outline:none;border-color:var(--bleu-fonce);box-shadow:0 0 0 3px rgba(0,136,169,.09);}
+  .participant-column-submit{width:100%;margin-top:10px;padding:10px 8px;font-size:11px;}
+  .participant-column-feedback{min-height:16px;margin:7px 0 0;color:#147654;font-size:10.5px;font-weight:700;}
   .participant-wait{padding:22px;text-align:center;border-radius:10px;background:#f8fafb;color:#6d777a;font-size:13px;}
   .participant-board-wrap{margin-top:16px;}
   .participant-board-wrap h2{margin:0 0 5px;color:#20282b;font-size:16px;}
@@ -512,7 +529,7 @@
 
   @media(max-width:860px){.trainer-shell{grid-template-columns:1fr;}.session-share{grid-template-columns:110px 1fr;}.qr-box{min-height:110px;}}
   @media(max-width:520px){
-    .live-topbar{padding:12px 15px}.live-topbar img{width:92px}.live-topbar h1{font-size:16px}.trainer-shell{padding:14px}.live-card{padding:16px}.limit-row{grid-template-columns:1fr}.session-share{grid-template-columns:1fr}.qr-box{width:132px}.button-row>*{flex:1 1 auto}.participant-hero-inner{align-items:flex-start;flex-direction:column}.participant-hero img{width:86px}
+    .live-topbar{padding:12px 15px}.live-topbar img{width:92px}.live-topbar h1{font-size:16px}.trainer-shell{padding:14px}.live-card{padding:16px}.limit-row{grid-template-columns:1fr}.session-share{grid-template-columns:1fr}.qr-box{width:132px}.button-row>*{flex:1 1 auto}.participant-hero-inner{align-items:flex-start;flex-direction:column}.participant-hero img{width:86px}.participant-column-inputs{grid-template-columns:1fr}.participant-column-field textarea{min-height:94px}
   }
 </style>
 </head>
@@ -761,15 +778,7 @@
         <p class="participant-instruction" id="brainstormingParticipantInstruction"></p>
 
         <div id="brainstormingCollectionArea">
-          <label class="live-field">
-            <span>Colonne</span>
-            <select id="brainstormingParticipantColumnSelect"></select>
-          </label>
-          <label class="live-field">
-            <span>Votre idée</span>
-            <textarea id="brainstormingParticipantIdeaInput" maxlength="240" placeholder="Une idée courte et concrète…"></textarea>
-          </label>
-          <button class="primary-button" id="brainstormingSubmitIdeaButton" type="button">Envoyer mon idée</button>
+          <div class="participant-column-inputs" id="brainstormingParticipantColumnInputs"></div>
           <p class="participant-status" id="brainstormingParticipantStatus" role="status"></p>
         </div>
 
@@ -1496,7 +1505,8 @@ function updateBrainstormingParticipantView(){
   collection.hidden = config.phase !== 'collecte' || closed;
   wait.hidden = config.phase !== 'collecte' || counts.ideas === 0 || closed;
   boardArea.hidden = !window.AxisMundiBrainstormingLive.canViewBoard(brainstormingParticipantSession,config.phase);
-  document.getElementById('brainstormingSubmitIdeaButton').disabled = !maySubmit;
+  document.querySelectorAll('[data-brainstorming-column]').forEach(function(button){ button.disabled = !maySubmit; });
+  document.querySelectorAll('#brainstormingParticipantColumnInputs textarea').forEach(function(input){ input.disabled = !maySubmit; });
   document.getElementById('brainstormingParticipantStatus').textContent = closed
     ? 'Cette session est clôturée.'
     : counts.ideas + ' idée' + (counts.ideas > 1 ? 's' : '') + ' envoyée' + (counts.ideas > 1 ? 's' : '') + ' sur ' + config.maxIdeas + '.';
@@ -1507,31 +1517,30 @@ function updateBrainstormingParticipantView(){
 }
 
 function populateBrainstormingParticipantColumns(config){
-  const select = document.getElementById('brainstormingParticipantColumnSelect');
-  select.textContent = '';
-  config.columns.forEach(function(column){
-    const option = document.createElement('option');
-    option.value = column.id;
-    option.textContent = column.name;
-    select.appendChild(option);
+  const container = document.getElementById('brainstormingParticipantColumnInputs');
+  container.innerHTML = window.AxisMundiBrainstormingLive.renderParticipantColumnCards(config.columns);
+  container.querySelectorAll('[data-brainstorming-column]').forEach(function(button){
+    button.addEventListener('click',function(){
+      const card = button.closest('.participant-column-card');
+      submitBrainstormingIdea(button.dataset.brainstormingColumn,card.querySelector('textarea'),button,card.querySelector('.participant-column-feedback'));
+    });
   });
 }
 
-async function submitBrainstormingIdea(){
-  const input = document.getElementById('brainstormingParticipantIdeaInput');
+async function submitBrainstormingIdea(columnId,input,button,feedback){
   const status = document.getElementById('brainstormingParticipantStatus');
   const text = input.value.trim();
   const counts = brainstormingParticipantTracker.participantCounts(brainstormingParticipantClientId);
-  if(!text){ status.textContent = 'Écrivez une idée avant de l’envoyer.'; return; }
+  document.querySelectorAll('.participant-column-feedback').forEach(function(message){ message.textContent = ''; });
+  if(!text){ feedback.textContent = 'Écrivez une idée avant de l’envoyer.'; return; }
   if(!window.AxisMundiBrainstormingLive.canSubmitIdea(brainstormingParticipantSession,brainstormingParticipantConfig.phase,counts.ideas,brainstormingParticipantConfig.maxIdeas)) return;
   const payload = {
     type:'idea',
     clientId:brainstormingParticipantClientId,
-    columnId:document.getElementById('brainstormingParticipantColumnSelect').value,
+    columnId:columnId,
     text:text,
     color:BRAINSTORM_COLORS[counts.ideas % BRAINSTORM_COLORS.length].key
   };
-  const button = document.getElementById('brainstormingSubmitIdeaButton');
   button.disabled = true;
   try{
     let response;
@@ -1542,9 +1551,10 @@ async function submitBrainstormingIdea(){
     }
     addBrainstormingParticipantResponse(response);
     input.value = '';
-    status.textContent = 'Idée envoyée ✓';
+    feedback.textContent = 'Idée envoyée ✓';
   } catch(error){
-    status.textContent = 'Envoi impossible : ' + error.message;
+    feedback.textContent = 'Envoi impossible : ' + error.message;
+    status.textContent = '';
     button.disabled = false;
   }
 }
@@ -1564,7 +1574,6 @@ async function voteBrainstormingIdea(ideaId){
 async function initBrainstormingParticipant(){
   if(!document.documentElement.classList.contains('mode-participant')) return;
   brainstormingParticipantClientId = brainstormingClientId(BRAINSTORM_SESSION_CODE || 'preview');
-  document.getElementById('brainstormingSubmitIdeaButton').addEventListener('click',submitBrainstormingIdea);
   if(BRAINSTORM_PARAMS.get('preview') === '1'){
     const defaults = window.AxisMundiBrainstormingConfig.sanitize(window.AxisMundiBrainstormingConfig.DEFAULT_CONFIG);
     brainstormingParticipantSession = {id:'preview',code:'APERÇU',statut:'ouverte'};
