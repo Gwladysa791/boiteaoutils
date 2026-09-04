@@ -427,6 +427,93 @@
   .breadcrumb a:hover{text-decoration:underline;}
   .breadcrumb-sep{color:var(--gris-moyen);}
   .breadcrumb-current{color:var(--gris-moyen);font-weight:600;}
+
+  /* ---------- Vues Formateur et Participant ---------- */
+  #brainstormingFormateurView,#brainstormingParticipantView{display:none;}
+  html.mode-formateur body,html.mode-participant body{background:#f4f6f7;}
+  html.mode-formateur .hero-header,html.mode-formateur body>.container,html.mode-formateur body>footer,html.mode-formateur body>.modal-overlay,
+  html.mode-participant .hero-header,html.mode-participant body>.container,html.mode-participant body>footer,html.mode-participant body>.modal-overlay{display:none!important;}
+  html.mode-formateur #brainstormingFormateurView{display:block;min-height:100vh;}
+  html.mode-participant #brainstormingParticipantView{display:block;min-height:100vh;}
+
+  .live-app{min-height:100vh;background:#f4f6f7;color:#354044;}
+  .live-topbar{background:#fff;border-bottom:1px solid #e0e5e7;padding:14px 22px;display:flex;align-items:center;gap:16px;}
+  .live-topbar img{width:118px;height:auto;}
+  .live-topbar-copy{min-width:0;}
+  .live-eyebrow{margin:0 0 2px;color:var(--bleu-fonce);font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;}
+  .live-topbar h1{margin:0;color:#20282b;font-size:19px;line-height:1.25;}
+  .trainer-shell{max-width:1240px;margin:0 auto;padding:22px;display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:20px;}
+  .live-card{background:#fff;border:1px solid #e2e7e9;border-radius:14px;padding:20px;box-shadow:0 5px 20px rgba(40,55,60,.06);}
+  .live-card+.live-card{margin-top:16px;}
+  .live-card h2{margin:0 0 5px;color:#20282b;font-size:16px;}
+  .live-muted{margin:0 0 16px;color:#7c8588;font-size:12px;}
+  .live-field{display:block;margin-bottom:14px;}
+  .live-field>span{display:block;margin-bottom:5px;color:#4c575a;font-size:11px;font-weight:800;}
+  .live-field input,.live-field textarea,.live-field select,.column-edit input{width:100%;border:1.5px solid #d8dfe1;border-radius:9px;padding:10px 11px;background:#fff;color:#20282b;font:inherit;font-size:13px;}
+  .live-field textarea{min-height:86px;resize:vertical;}
+  .live-field input:focus,.live-field textarea:focus,.live-field select:focus,.column-edit input:focus{outline:none;border-color:var(--bleu-fonce);box-shadow:0 0 0 3px rgba(0,136,169,.09);}
+  .limit-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .column-edit{display:grid;grid-template-columns:24px 1fr 30px;gap:8px;align-items:center;margin-bottom:8px;}
+  .column-dot{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:9px;font-weight:800;}
+  .icon-button{border:0;background:#f0f2f3;color:#7b8487;border-radius:7px;width:30px;height:30px;cursor:pointer;font-size:17px;}
+  .icon-button:hover{color:var(--rouge);}
+  .button-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center;}
+  .primary-button,.secondary-button,.danger-button{border:0;border-radius:9px;padding:10px 15px;font:inherit;font-size:12px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+  .primary-button{background:var(--bleu-fonce);color:#fff;}
+  .primary-button:hover{background:#006f87;}
+  .secondary-button{background:#edf6f8;color:var(--bleu-fonce);border:1px solid #cbe5eb;}
+  .danger-button{background:#fff0f0;color:#b43f3f;border:1px solid #f0caca;}
+  .primary-button:disabled,.secondary-button:disabled{opacity:.48;cursor:not-allowed;}
+  .form-message{min-height:18px;margin:10px 0 0;font-size:12px;color:#b43f3f;}
+  .preview-box{border:1px dashed #bfd6dc;border-radius:10px;padding:13px;background:#f8fbfc;}
+  .preview-box strong{display:block;color:#20282b;font-size:13px;}
+  .preview-box p{margin:4px 0 8px;font-size:11.5px;color:#697376;}
+  .preview-chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .preview-chip{background:#fff;border:1px solid #dce5e7;border-radius:999px;padding:4px 8px;font-size:10.5px;}
+  .session-share{display:grid;grid-template-columns:132px 1fr;gap:18px;align-items:center;}
+  .qr-box{background:#fff;border:1px solid #dfe5e7;border-radius:10px;padding:8px;display:grid;place-items:center;min-height:132px;}
+  .qr-box img,.qr-box canvas{max-width:116px;height:auto;}
+  .session-code{font-size:27px;font-weight:900;letter-spacing:5px;color:#20282b;}
+  .session-url{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6d777a;font-size:11px;margin:3px 0 10px;}
+  .phase-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+  .phase-badge{display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:#e6f7f1;color:#08734f;padding:6px 11px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.6px;}
+  .phase-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--vert);}
+  .phase-badge.vote{background:#fff3dd;color:#8d5b08;}
+  .phase-badge.vote::before{background:var(--orange);}
+  .phase-badge.resultats{background:#eaf3f7;color:#006d87;}
+  .phase-badge.resultats::before{background:var(--bleu-fonce);}
+  .live-counts{font-size:12px;color:#6e787b;}
+  .brainstorm-live-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;align-items:start;}
+  .live-column{background:#f1f3f4;border-radius:11px;border-top:4px solid var(--bleu);padding:12px;min-height:150px;}
+  .live-column h3{margin:0 0 10px;color:#293235;font-size:13px;display:flex;justify-content:space-between;gap:8px;}
+  .live-column h3 span{background:#fff;border-radius:999px;padding:1px 7px;color:#7b8588;font-size:10px;}
+  .live-postit{border-radius:7px;padding:11px;margin-bottom:9px;box-shadow:0 2px 7px rgba(0,0,0,.09);color:#293235;font-size:12.5px;overflow-wrap:anywhere;}
+  .live-postit p{margin:0 0 8px;white-space:pre-wrap;}
+  .postit-meta{display:flex;align-items:center;justify-content:space-between;gap:7px;color:#6d7779;font-size:10px;}
+  .postit-move-select{max-width:115px;border:1px solid rgba(0,0,0,.12);border-radius:6px;padding:4px;background:rgba(255,255,255,.65);font:inherit;font-size:9.5px;}
+  .vote-button{border:1px solid rgba(0,0,0,.14);border-radius:999px;background:rgba(255,255,255,.72);padding:5px 8px;cursor:pointer;color:#5b6062;font:inherit;font-size:10px;font-weight:800;}
+  .vote-button.selected{background:var(--orange);border-color:var(--orange);color:#fff;}
+  .vote-button:disabled{cursor:not-allowed;opacity:.7;}
+  .empty-board{grid-column:1/-1;text-align:center;color:#8a9395;font-size:12px;padding:34px 12px;background:#fafbfb;border:1px dashed #d7dddf;border-radius:10px;}
+
+  .participant-shell{max-width:720px;margin:0 auto;padding:18px 16px 46px;}
+  .participant-hero{background:linear-gradient(135deg,#fff,#e8f6f9);border-bottom:1px solid #dbe9ed;padding:18px 18px 20px;}
+  .participant-hero-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:13px;}
+  .participant-hero img{width:92px;height:auto;}
+  .participant-hero h1{margin:2px 0 0;color:#20282b;font-size:20px;line-height:1.2;}
+  .participant-phase{display:inline-block;color:var(--bleu-fonce);font-size:9px;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;}
+  .participant-instruction{margin:0 0 16px;color:#4f5a5d;font-size:14px;white-space:pre-wrap;}
+  .participant-status{margin:12px 0 0;min-height:19px;color:#147654;font-size:12px;font-weight:700;}
+  .participant-wait{padding:22px;text-align:center;border-radius:10px;background:#f8fafb;color:#6d777a;font-size:13px;}
+  .participant-board-wrap{margin-top:16px;}
+  .participant-board-wrap h2{margin:0 0 5px;color:#20282b;font-size:16px;}
+  .participant-vote-status{margin:0 0 13px;color:#6f797c;font-size:12px;}
+  .participant-board{grid-template-columns:1fr;}
+
+  @media(max-width:860px){.trainer-shell{grid-template-columns:1fr;}.session-share{grid-template-columns:110px 1fr;}.qr-box{min-height:110px;}}
+  @media(max-width:520px){
+    .live-topbar{padding:12px 15px}.live-topbar img{width:92px}.live-topbar h1{font-size:16px}.trainer-shell{padding:14px}.live-card{padding:16px}.limit-row{grid-template-columns:1fr}.session-share{grid-template-columns:1fr}.qr-box{width:132px}.button-row>*{flex:1 1 auto}.participant-hero-inner{align-items:flex-start;flex-direction:column}.participant-hero img{width:86px}
+  }
 </style>
 </head>
 <body>
@@ -553,6 +640,152 @@
     </div>
   </div>
 </div>
+
+<section id="brainstormingFormateurView" aria-labelledby="brainstormingFormateurTitle">
+  <div class="live-app">
+    <header class="live-topbar">
+      <img src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+      <div class="live-topbar-copy">
+        <p class="live-eyebrow">Studio d'animation · Vue formateur</p>
+        <h1 id="brainstormingFormateurTitle">Brainstorming</h1>
+      </div>
+    </header>
+
+    <div class="trainer-shell">
+      <aside>
+        <div class="live-card" id="brainstormingPreparationCard">
+          <h2>Préparer l'activité</h2>
+          <p class="live-muted">Ces éléments seront affichés aux participants.</p>
+
+          <label class="live-field">
+            <span>Titre de la session</span>
+            <input id="brainstormingTitleInput" type="text" maxlength="100" autocomplete="off">
+          </label>
+          <label class="live-field">
+            <span>Consigne</span>
+            <textarea id="brainstormingInstructionInput" maxlength="400"></textarea>
+          </label>
+
+          <div class="live-field">
+            <span>Colonnes du tableau</span>
+            <div id="brainstormingColumnsEditor"></div>
+            <button class="secondary-button" id="brainstormingAddColumnButton" type="button">+ Ajouter une colonne</button>
+          </div>
+
+          <div class="limit-row">
+            <label class="live-field">
+              <span>Idées par participant</span>
+              <select id="brainstormingMaxIdeasInput">
+                <option value="1">1 idée</option><option value="2">2 idées</option><option value="3">3 idées</option><option value="4">4 idées</option><option value="5">5 idées</option>
+              </select>
+            </label>
+            <label class="live-field">
+              <span>Votes par participant</span>
+              <select id="brainstormingMaxVotesInput">
+                <option value="1">1 vote</option><option value="2">2 votes</option><option value="3">3 votes</option><option value="4">4 votes</option><option value="5">5 votes</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="button-row">
+            <a class="secondary-button" id="brainstormingPreviewLink" target="_blank" rel="noopener">Prévisualiser</a>
+            <button class="primary-button" id="brainstormingOpenSessionButton" type="button">Ouvrir la participation</button>
+          </div>
+          <p class="form-message" id="brainstormingFormMessage" role="status"></p>
+        </div>
+
+        <div class="live-card">
+          <h2>Aperçu participant</h2>
+          <div class="preview-box">
+            <strong id="brainstormingPreviewTitle">Brainstorming</strong>
+            <p id="brainstormingPreviewInstruction"></p>
+            <div class="preview-chips" id="brainstormingPreviewColumns"></div>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <div class="live-card" id="brainstormingBeforeLive">
+          <h2>Tableau en attente</h2>
+          <p class="live-muted">Configurez l'activité, puis ouvrez la participation pour obtenir le code et le QR code.</p>
+          <div class="empty-board">Les idées reçues apparaîtront ici en temps réel.</div>
+        </div>
+
+        <div class="live-card" id="brainstormingLivePanel" hidden>
+          <div class="session-share">
+            <div class="qr-box" id="brainstormingLiveQr" aria-label="QR code de participation"></div>
+            <div>
+              <div class="live-eyebrow">Code participant</div>
+              <div class="session-code" id="brainstormingLiveCode">-----</div>
+              <span class="session-url" id="brainstormingLiveUrl"></span>
+              <button class="secondary-button" id="brainstormingCopyLinkButton" type="button">Copier le lien</button>
+            </div>
+          </div>
+
+          <hr style="border:0;border-top:1px solid #e5e9ea;margin:19px 0;">
+
+          <div class="phase-strip">
+            <div>
+              <span class="phase-badge" id="brainstormingPhaseBadge">Collecte des idées</span>
+              <span class="live-counts" id="brainstormingIdeaCount">0 idée · 0 vote</span>
+            </div>
+            <div class="button-row">
+              <button class="primary-button" id="brainstormingStartVoteButton" type="button">Révéler et ouvrir le vote</button>
+              <button class="secondary-button" id="brainstormingShowResultsButton" type="button" hidden>Afficher les résultats</button>
+              <button class="danger-button" id="brainstormingCloseSessionButton" type="button">Clôturer</button>
+            </div>
+          </div>
+
+          <div class="brainstorm-live-board" id="brainstormingTrainerBoard"></div>
+          <p class="form-message" id="brainstormingLiveMessage" role="status"></p>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section id="brainstormingParticipantView" aria-labelledby="brainstormingParticipantTitle">
+  <div class="live-app">
+    <header class="participant-hero">
+      <div class="participant-hero-inner">
+        <img src="brand_assets/logo_axismundi_couleur.svg" alt="AXIS MUNDI">
+        <div>
+          <span class="participant-phase" id="brainstormingParticipantPhase">Session en direct</span>
+          <h1 id="brainstormingParticipantTitle">Brainstorming</h1>
+        </div>
+      </div>
+    </header>
+
+    <main class="participant-shell">
+      <div class="live-card">
+        <p class="participant-instruction" id="brainstormingParticipantInstruction"></p>
+
+        <div id="brainstormingCollectionArea">
+          <label class="live-field">
+            <span>Colonne</span>
+            <select id="brainstormingParticipantColumnSelect"></select>
+          </label>
+          <label class="live-field">
+            <span>Votre idée</span>
+            <textarea id="brainstormingParticipantIdeaInput" maxlength="240" placeholder="Une idée courte et concrète…"></textarea>
+          </label>
+          <button class="primary-button" id="brainstormingSubmitIdeaButton" type="button">Envoyer mon idée</button>
+          <p class="participant-status" id="brainstormingParticipantStatus" role="status"></p>
+        </div>
+
+        <div class="participant-wait" id="brainstormingParticipantWait" hidden>
+          Vos idées ont bien été reçues. Le tableau sera révélé par le formateur à la fin de la collecte.
+        </div>
+
+        <div class="participant-board-wrap" id="brainstormingParticipantBoardArea" hidden>
+          <h2>Idées du groupe</h2>
+          <p class="participant-vote-status" id="brainstormingParticipantVoteStatus"></p>
+          <div class="brainstorm-live-board participant-board" id="brainstormingParticipantBoard"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
 
 <footer>AXIS MUNDI — Outil d'animation collective. Vos saisies restent dans votre session (aucun enregistrement, aucun envoi, aucun partage automatique avec le groupe ou le facilitateur).</footer>
 
@@ -848,6 +1081,532 @@ document.addEventListener('keydown', function(e){
 });
 
 renderBoard();
+</script>
+
+<script src="brainstorming-formateur-config.js"></script>
+<script src="brainstorming-live-session.js"></script>
+<script src="qrcode-generator.js"></script>
+<script>
+const BRAINSTORM_PARAMS = new URLSearchParams(location.search);
+const BRAINSTORM_SESSION_CODE = BRAINSTORM_PARAMS.get('session');
+const BRAINSTORM_LIVE_CODE = BRAINSTORM_PARAMS.get('live');
+const BRAINSTORM_COLORS = [
+  {key:'jaune',bg:'#FDEED6',accent:'#F5AB33'},
+  {key:'violet',bg:'#E7DCF3',accent:'#884EC2'},
+  {key:'vert',bg:'#CBFAE9',accent:'#15CA88'},
+  {key:'rose',bg:'#F8DEDE',accent:'#DE5C5C'},
+  {key:'bleu',bg:'#E3F2F7',accent:'#0088A9'},
+  {key:'gris',bg:'#ECEDED',accent:'#5D6160'}
+];
+let brainstormingModulesPromise = null;
+let brainstormingTrainerSession = null;
+let brainstormingTrainerConfig = null;
+let brainstormingTrainerTracker = null;
+let brainstormingParticipantSession = null;
+let brainstormingParticipantConfig = null;
+let brainstormingParticipantTracker = null;
+let brainstormingParticipantClientId = '';
+let brainstormingParticipantVotes = new Set();
+let brainstormingColumnSequence = 10;
+
+function brainstormingColor(key,index){
+  return BRAINSTORM_COLORS.find(function(color){ return color.key === key; }) || BRAINSTORM_COLORS[index % BRAINSTORM_COLORS.length];
+}
+
+function chargerModulesBrainstorming(){
+  if(window.AXMSession) return Promise.resolve(window.AXMSession);
+  if(brainstormingModulesPromise) return brainstormingModulesPromise;
+  brainstormingModulesPromise = new Promise(function(resolve,reject){
+    function chargerSessionLive(){
+      if(window.AXMSession){ resolve(window.AXMSession); return; }
+      const script = document.createElement('script');
+      script.src = 'session-live.js';
+      script.onload = function(){ resolve(window.AXMSession); };
+      script.onerror = function(){ reject(new Error('Module de session indisponible.')); };
+      document.body.appendChild(script);
+    }
+    if(window.supabase && window.supabase.createClient){ chargerSessionLive(); return; }
+    const sdk = document.createElement('script');
+    sdk.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    sdk.onload = chargerSessionLive;
+    sdk.onerror = function(){ reject(new Error('Connexion au service de session impossible.')); };
+    document.body.appendChild(sdk);
+  });
+  return brainstormingModulesPromise;
+}
+
+function brainstormingDraftFromForm(){
+  return {
+    title: document.getElementById('brainstormingTitleInput').value,
+    instruction: document.getElementById('brainstormingInstructionInput').value,
+    columns: Array.from(document.querySelectorAll('#brainstormingColumnsEditor input')).map(function(input){
+      return {id:input.dataset.columnId,name:input.value};
+    }),
+    maxIdeas: document.getElementById('brainstormingMaxIdeasInput').value,
+    maxVotes: document.getElementById('brainstormingMaxVotesInput').value
+  };
+}
+
+function renderBrainstormingColumnsEditor(config){
+  const editor = document.getElementById('brainstormingColumnsEditor');
+  editor.textContent = '';
+  config.columns.forEach(function(column,index){
+    const row = document.createElement('div');
+    row.className = 'column-edit';
+    const dot = document.createElement('span');
+    dot.className = 'column-dot';
+    dot.style.background = brainstormingColor('',index).accent;
+    dot.textContent = String(index + 1);
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.maxLength = 80;
+    input.value = column.name;
+    input.dataset.columnId = column.id;
+    input.setAttribute('aria-label','Nom de la colonne ' + (index + 1));
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'icon-button';
+    remove.dataset.removeColumn = column.id;
+    remove.setAttribute('aria-label','Supprimer la colonne ' + (index + 1));
+    remove.textContent = '×';
+    row.append(dot,input,remove);
+    editor.appendChild(row);
+  });
+}
+
+function renderBrainstormingEditor(config){
+  document.getElementById('brainstormingTitleInput').value = config.title;
+  document.getElementById('brainstormingInstructionInput').value = config.instruction;
+  document.getElementById('brainstormingMaxIdeasInput').value = String(config.maxIdeas);
+  document.getElementById('brainstormingMaxVotesInput').value = String(config.maxVotes);
+  renderBrainstormingColumnsEditor(config);
+  renderBrainstormingPreview(config);
+}
+
+function renderBrainstormingPreview(config){
+  document.getElementById('brainstormingPreviewTitle').textContent = config.title;
+  document.getElementById('brainstormingPreviewInstruction').textContent = config.instruction || 'Ajoutez une consigne.';
+  const columnsWrap = document.getElementById('brainstormingPreviewColumns');
+  columnsWrap.textContent = '';
+  config.columns.forEach(function(column){
+    const chip = document.createElement('span');
+    chip.className = 'preview-chip';
+    chip.textContent = column.name || 'Colonne sans nom';
+    columnsWrap.appendChild(chip);
+  });
+}
+
+function saveBrainstormingDraft(){
+  const config = window.AxisMundiBrainstormingConfig.save(window.localStorage,brainstormingDraftFromForm());
+  renderBrainstormingPreview(config);
+  document.getElementById('brainstormingPreviewLink').href = window.AxisMundiBrainstormingConfig.buildPreviewUrl(location.href);
+  return config;
+}
+
+function addBrainstormingColumn(){
+  const config = saveBrainstormingDraft();
+  if(config.columns.length >= 6){
+    document.getElementById('brainstormingFormMessage').textContent = 'Six colonnes maximum pour conserver un tableau lisible.';
+    return;
+  }
+  brainstormingColumnSequence += 1;
+  config.columns.push({id:'col-' + Date.now() + '-' + brainstormingColumnSequence,name:'Nouvelle colonne'});
+  renderBrainstormingEditor(window.AxisMundiBrainstormingConfig.save(window.localStorage,config));
+  document.getElementById('brainstormingFormMessage').textContent = '';
+}
+
+function removeBrainstormingColumn(columnId){
+  const config = saveBrainstormingDraft();
+  if(config.columns.length <= 2){
+    document.getElementById('brainstormingFormMessage').textContent = 'Le tableau doit conserver au moins deux colonnes.';
+    return;
+  }
+  config.columns = config.columns.filter(function(column){ return column.id !== columnId; });
+  renderBrainstormingEditor(window.AxisMundiBrainstormingConfig.save(window.localStorage,config));
+  document.getElementById('brainstormingFormMessage').textContent = '';
+}
+
+function drawBrainstormingQr(text){
+  const box = document.getElementById('brainstormingLiveQr');
+  box.textContent = '';
+  try{
+    const qr = qrcode(0,'M');
+    qr.addData(text);
+    qr.make();
+    box.innerHTML = qr.createImgTag(4,2);
+  } catch(error){
+    box.textContent = 'QR indisponible';
+  }
+}
+
+function renderBrainstormingBoard(container,config,snapshot,mode){
+  container.textContent = '';
+  if(!snapshot.totalIdeas){
+    const empty = document.createElement('div');
+    empty.className = 'empty-board';
+    empty.textContent = config.phase === 'collecte' ? 'Les idées arrivent en temps réel.' : 'Aucune idée à afficher.';
+    container.appendChild(empty);
+    return;
+  }
+  config.columns.forEach(function(column,columnIndex){
+    const ideas = snapshot.ideas.filter(function(idea){ return idea.columnId === column.id; });
+    if(config.phase === 'resultats') ideas.sort(function(a,b){ return b.votes - a.votes; });
+    const columnElement = document.createElement('div');
+    columnElement.className = 'live-column';
+    columnElement.style.borderTopColor = brainstormingColor('',columnIndex).accent;
+    const heading = document.createElement('h3');
+    heading.appendChild(document.createTextNode(column.name));
+    const count = document.createElement('span');
+    count.textContent = String(ideas.length);
+    heading.appendChild(count);
+    columnElement.appendChild(heading);
+    ideas.forEach(function(idea,ideaIndex){
+      const note = document.createElement('article');
+      note.className = 'live-postit';
+      note.style.background = brainstormingColor(idea.color,ideaIndex).bg;
+      const text = document.createElement('p');
+      text.textContent = idea.text;
+      note.appendChild(text);
+      const meta = document.createElement('div');
+      meta.className = 'postit-meta';
+      const votes = document.createElement('strong');
+      votes.textContent = idea.votes + ' ★';
+      meta.appendChild(votes);
+      if(mode === 'trainer'){
+        const select = document.createElement('select');
+        select.className = 'postit-move-select';
+        select.setAttribute('aria-label','Déplacer l’idée');
+        config.columns.forEach(function(target){
+          const option = document.createElement('option');
+          option.value = target.id;
+          option.textContent = target.name;
+          option.selected = target.id === idea.columnId;
+          select.appendChild(option);
+        });
+        select.addEventListener('change',function(){ moveBrainstormingIdea(idea.id,select.value); });
+        meta.appendChild(select);
+      } else if(config.phase === 'vote'){
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'vote-button' + (brainstormingParticipantVotes.has(idea.id) ? ' selected' : '');
+        button.textContent = brainstormingParticipantVotes.has(idea.id) ? 'Voté ✓' : 'Voter';
+        const counts = brainstormingParticipantTracker.participantCounts(brainstormingParticipantClientId);
+        button.disabled = brainstormingParticipantVotes.has(idea.id) || !window.AxisMundiBrainstormingLive.canVote(brainstormingParticipantSession,config.phase,counts.votes,config.maxVotes);
+        button.addEventListener('click',function(){ voteBrainstormingIdea(idea.id); });
+        meta.appendChild(button);
+      }
+      note.appendChild(meta);
+      columnElement.appendChild(note);
+    });
+    container.appendChild(columnElement);
+  });
+}
+
+function updateBrainstormingTrainerView(){
+  if(!brainstormingTrainerSession || !brainstormingTrainerConfig || !brainstormingTrainerTracker) return;
+  const snapshot = brainstormingTrainerTracker.snapshot();
+  const phase = brainstormingTrainerConfig.phase;
+  const badge = document.getElementById('brainstormingPhaseBadge');
+  badge.textContent = window.AxisMundiBrainstormingLive.phaseLabel(phase);
+  badge.className = 'phase-badge ' + (phase === 'collecte' ? '' : phase);
+  document.getElementById('brainstormingIdeaCount').textContent = snapshot.totalIdeas + ' idée' + (snapshot.totalIdeas > 1 ? 's' : '') + ' · ' + snapshot.totalVotes + ' vote' + (snapshot.totalVotes > 1 ? 's' : '');
+  document.getElementById('brainstormingStartVoteButton').hidden = phase !== 'collecte';
+  document.getElementById('brainstormingShowResultsButton').hidden = phase !== 'vote';
+  const closed = brainstormingTrainerSession.statut === 'fermee';
+  document.getElementById('brainstormingStartVoteButton').disabled = closed || snapshot.totalIdeas === 0;
+  document.getElementById('brainstormingShowResultsButton').disabled = closed;
+  document.getElementById('brainstormingCloseSessionButton').disabled = closed;
+  document.getElementById('brainstormingCloseSessionButton').textContent = closed ? 'Session clôturée' : 'Clôturer';
+  renderBrainstormingBoard(document.getElementById('brainstormingTrainerBoard'),brainstormingTrainerConfig,snapshot,'trainer');
+}
+
+function addBrainstormingTrainerResponse(response){
+  if(brainstormingTrainerTracker && brainstormingTrainerTracker.add(response)) updateBrainstormingTrainerView();
+}
+
+async function activateBrainstormingTrainerSession(session,config){
+  brainstormingTrainerSession = session;
+  brainstormingTrainerConfig = config;
+  brainstormingTrainerTracker = window.AxisMundiBrainstormingLive.createBoardTracker(config.columns,config.maxVotes,config.maxIdeas);
+  const participantUrl = window.AxisMundiBrainstormingLive.buildParticipantUrl(location.href,session.code);
+  document.getElementById('brainstormingBeforeLive').hidden = true;
+  document.getElementById('brainstormingLivePanel').hidden = false;
+  document.getElementById('brainstormingLiveCode').textContent = session.code;
+  document.getElementById('brainstormingLiveUrl').textContent = participantUrl;
+  document.getElementById('brainstormingLiveUrl').dataset.url = participantUrl;
+  drawBrainstormingQr(participantUrl);
+  document.querySelectorAll('#brainstormingPreparationCard input,#brainstormingPreparationCard textarea,#brainstormingPreparationCard select,#brainstormingPreparationCard button').forEach(function(element){ element.disabled = true; });
+  updateBrainstormingTrainerView();
+  AXMSession.ecouterReponses(session.id,addBrainstormingTrainerResponse);
+  AXMSession.ecouterSession(session.id,function(updated){
+    brainstormingTrainerSession = updated;
+    brainstormingTrainerConfig = window.AxisMundiBrainstormingLive.readSessionConfig(updated);
+    updateBrainstormingTrainerView();
+  });
+  const initial = await AXMSession.listerReponses(session.id);
+  initial.forEach(addBrainstormingTrainerResponse);
+}
+
+async function openBrainstormingSession(){
+  const button = document.getElementById('brainstormingOpenSessionButton');
+  const message = document.getElementById('brainstormingFormMessage');
+  const config = saveBrainstormingDraft();
+  const validation = window.AxisMundiBrainstormingConfig.validate(config);
+  if(validation){ message.textContent = validation; return; }
+  message.textContent = '';
+  button.disabled = true;
+  button.textContent = 'Ouverture…';
+  try{
+    await chargerModulesBrainstorming();
+    const session = await AXMSession.creerSession('brainstorming',config.title);
+    const patch = window.AxisMundiBrainstormingLive.sessionPatch(config,'collecte');
+    await AXMSession.mettreAJourSession(session.id,patch);
+    Object.assign(session,patch);
+    history.replaceState(null,'',window.AxisMundiBrainstormingLive.buildTrainerUrl(location.href,session.code));
+    await activateBrainstormingTrainerSession(session,window.AxisMundiBrainstormingLive.readSessionConfig(session));
+  } catch(error){
+    button.disabled = false;
+    button.textContent = 'Réessayer';
+    message.textContent = 'Impossible d’ouvrir la session : ' + error.message;
+  }
+}
+
+async function resumeBrainstormingSession(code){
+  try{
+    await chargerModulesBrainstorming();
+    const session = await AXMSession.recupererSessionParCode(code);
+    if(!session || session.outil !== 'brainstorming') throw new Error('brainstorming introuvable');
+    const config = window.AxisMundiBrainstormingLive.readSessionConfig(session);
+    if(window.AxisMundiBrainstormingConfig.validate(config)) throw new Error('configuration invalide');
+    renderBrainstormingEditor(config);
+    window.AxisMundiBrainstormingConfig.save(window.localStorage,config);
+    await activateBrainstormingTrainerSession(session,config);
+  } catch(error){
+    document.getElementById('brainstormingFormMessage').textContent = 'Impossible de reprendre la session : ' + error.message;
+  }
+}
+
+async function setBrainstormingPhase(phase){
+  if(!brainstormingTrainerSession || brainstormingTrainerSession.statut === 'fermee') return;
+  const message = document.getElementById('brainstormingLiveMessage');
+  message.textContent = '';
+  try{
+    const patch = window.AxisMundiBrainstormingLive.sessionPatch(brainstormingTrainerConfig,phase);
+    await AXMSession.mettreAJourSession(brainstormingTrainerSession.id,patch);
+    Object.assign(brainstormingTrainerSession,patch);
+    brainstormingTrainerConfig = window.AxisMundiBrainstormingLive.readSessionConfig(brainstormingTrainerSession);
+    updateBrainstormingTrainerView();
+  } catch(error){
+    message.textContent = 'Changement de phase impossible : ' + error.message;
+  }
+}
+
+async function moveBrainstormingIdea(ideaId,columnId){
+  if(!brainstormingTrainerSession || brainstormingTrainerSession.statut === 'fermee') return;
+  try{
+    const response = await AXMSession.envoyerReponse(brainstormingTrainerSession.id,null,{type:'move',ideaId:ideaId,columnId:columnId});
+    addBrainstormingTrainerResponse(response);
+  } catch(error){
+    document.getElementById('brainstormingLiveMessage').textContent = 'Déplacement impossible : ' + error.message;
+  }
+}
+
+async function copyBrainstormingLink(){
+  const button = document.getElementById('brainstormingCopyLinkButton');
+  const url = document.getElementById('brainstormingLiveUrl').dataset.url || '';
+  try{ await navigator.clipboard.writeText(url); }
+  catch(error){
+    const field = document.createElement('textarea');
+    field.value = url;
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    document.execCommand('copy');
+    field.remove();
+  }
+  button.textContent = 'Lien copié ✓';
+  setTimeout(function(){ button.textContent = 'Copier le lien'; },1200);
+}
+
+async function closeBrainstormingSession(){
+  if(!brainstormingTrainerSession || brainstormingTrainerSession.statut === 'fermee') return;
+  if(!window.confirm('Clôturer ce brainstorming ? Les participants ne pourront plus contribuer ni voter.')) return;
+  try{
+    await AXMSession.fermerSession(brainstormingTrainerSession.id);
+    brainstormingTrainerSession.statut = 'fermee';
+    updateBrainstormingTrainerView();
+  } catch(error){
+    document.getElementById('brainstormingLiveMessage').textContent = 'Clôture impossible : ' + error.message;
+  }
+}
+
+function initBrainstormingTrainer(){
+  if(!document.documentElement.classList.contains('mode-formateur')) return;
+  const api = window.AxisMundiBrainstormingConfig;
+  const config = api.load(window.localStorage);
+  renderBrainstormingEditor(config);
+  document.getElementById('brainstormingPreviewLink').href = api.buildPreviewUrl(location.href);
+  document.getElementById('brainstormingPreparationCard').addEventListener('input',saveBrainstormingDraft);
+  document.getElementById('brainstormingColumnsEditor').addEventListener('click',function(event){
+    const button = event.target.closest('[data-remove-column]');
+    if(button) removeBrainstormingColumn(button.dataset.removeColumn);
+  });
+  document.getElementById('brainstormingAddColumnButton').addEventListener('click',addBrainstormingColumn);
+  document.getElementById('brainstormingOpenSessionButton').addEventListener('click',openBrainstormingSession);
+  document.getElementById('brainstormingCopyLinkButton').addEventListener('click',copyBrainstormingLink);
+  document.getElementById('brainstormingStartVoteButton').addEventListener('click',function(){ setBrainstormingPhase('vote'); });
+  document.getElementById('brainstormingShowResultsButton').addEventListener('click',function(){ setBrainstormingPhase('resultats'); });
+  document.getElementById('brainstormingCloseSessionButton').addEventListener('click',closeBrainstormingSession);
+  if(BRAINSTORM_LIVE_CODE) resumeBrainstormingSession(BRAINSTORM_LIVE_CODE);
+}
+
+function brainstormingClientId(code){
+  const key = 'axis-mundi:brainstorming:participant:' + String(code || 'preview').toUpperCase();
+  try{
+    let value = localStorage.getItem(key);
+    if(!value){
+      value = window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : 'p-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+      localStorage.setItem(key,value);
+    }
+    return value;
+  } catch(error){
+    return 'p-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+  }
+}
+
+function addBrainstormingParticipantResponse(response){
+  const payload = response && response.payload || {};
+  if(payload.type === 'vote' && payload.clientId === brainstormingParticipantClientId) brainstormingParticipantVotes.add(payload.ideaId);
+  if(brainstormingParticipantTracker && brainstormingParticipantTracker.add(response)) updateBrainstormingParticipantView();
+}
+
+function updateBrainstormingParticipantView(){
+  if(!brainstormingParticipantSession || !brainstormingParticipantConfig || !brainstormingParticipantTracker) return;
+  const config = brainstormingParticipantConfig;
+  const counts = brainstormingParticipantTracker.participantCounts(brainstormingParticipantClientId);
+  const closed = brainstormingParticipantSession.statut === 'fermee';
+  document.getElementById('brainstormingParticipantTitle').textContent = config.title;
+  document.getElementById('brainstormingParticipantInstruction').textContent = config.instruction;
+  document.getElementById('brainstormingParticipantPhase').textContent = closed ? 'Session clôturée' : window.AxisMundiBrainstormingLive.phaseLabel(config.phase);
+  const collection = document.getElementById('brainstormingCollectionArea');
+  const wait = document.getElementById('brainstormingParticipantWait');
+  const boardArea = document.getElementById('brainstormingParticipantBoardArea');
+  const maySubmit = window.AxisMundiBrainstormingLive.canSubmitIdea(brainstormingParticipantSession,config.phase,counts.ideas,config.maxIdeas);
+  collection.hidden = config.phase !== 'collecte' || closed;
+  wait.hidden = config.phase !== 'collecte' || counts.ideas === 0 || closed;
+  boardArea.hidden = !window.AxisMundiBrainstormingLive.canViewBoard(brainstormingParticipantSession,config.phase);
+  document.getElementById('brainstormingSubmitIdeaButton').disabled = !maySubmit;
+  document.getElementById('brainstormingParticipantStatus').textContent = closed
+    ? 'Cette session est clôturée.'
+    : counts.ideas + ' idée' + (counts.ideas > 1 ? 's' : '') + ' envoyée' + (counts.ideas > 1 ? 's' : '') + ' sur ' + config.maxIdeas + '.';
+  document.getElementById('brainstormingParticipantVoteStatus').textContent = config.phase === 'vote'
+    ? counts.votes + ' vote' + (counts.votes > 1 ? 's' : '') + ' utilisé' + (counts.votes > 1 ? 's' : '') + ' sur ' + config.maxVotes + '.'
+    : 'Résultats du groupe : ' + brainstormingParticipantTracker.snapshot().totalVotes + ' vote' + (brainstormingParticipantTracker.snapshot().totalVotes > 1 ? 's' : '') + '.';
+  if(!boardArea.hidden) renderBrainstormingBoard(document.getElementById('brainstormingParticipantBoard'),config,brainstormingParticipantTracker.snapshot(),'participant');
+}
+
+function populateBrainstormingParticipantColumns(config){
+  const select = document.getElementById('brainstormingParticipantColumnSelect');
+  select.textContent = '';
+  config.columns.forEach(function(column){
+    const option = document.createElement('option');
+    option.value = column.id;
+    option.textContent = column.name;
+    select.appendChild(option);
+  });
+}
+
+async function submitBrainstormingIdea(){
+  const input = document.getElementById('brainstormingParticipantIdeaInput');
+  const status = document.getElementById('brainstormingParticipantStatus');
+  const text = input.value.trim();
+  const counts = brainstormingParticipantTracker.participantCounts(brainstormingParticipantClientId);
+  if(!text){ status.textContent = 'Écrivez une idée avant de l’envoyer.'; return; }
+  if(!window.AxisMundiBrainstormingLive.canSubmitIdea(brainstormingParticipantSession,brainstormingParticipantConfig.phase,counts.ideas,brainstormingParticipantConfig.maxIdeas)) return;
+  const payload = {
+    type:'idea',
+    clientId:brainstormingParticipantClientId,
+    columnId:document.getElementById('brainstormingParticipantColumnSelect').value,
+    text:text,
+    color:BRAINSTORM_COLORS[counts.ideas % BRAINSTORM_COLORS.length].key
+  };
+  const button = document.getElementById('brainstormingSubmitIdeaButton');
+  button.disabled = true;
+  try{
+    let response;
+    if(BRAINSTORM_PARAMS.get('preview') === '1'){
+      response = {id:'preview-' + Date.now(),payload:payload,pseudo:null};
+    } else {
+      response = await AXMSession.envoyerReponse(brainstormingParticipantSession.id,null,payload);
+    }
+    addBrainstormingParticipantResponse(response);
+    input.value = '';
+    status.textContent = 'Idée envoyée ✓';
+  } catch(error){
+    status.textContent = 'Envoi impossible : ' + error.message;
+    button.disabled = false;
+  }
+}
+
+async function voteBrainstormingIdea(ideaId){
+  const counts = brainstormingParticipantTracker.participantCounts(brainstormingParticipantClientId);
+  if(!window.AxisMundiBrainstormingLive.canVote(brainstormingParticipantSession,brainstormingParticipantConfig.phase,counts.votes,brainstormingParticipantConfig.maxVotes)) return;
+  try{
+    const payload = {type:'vote',clientId:brainstormingParticipantClientId,ideaId:ideaId};
+    const response = await AXMSession.envoyerReponse(brainstormingParticipantSession.id,null,payload);
+    addBrainstormingParticipantResponse(response);
+  } catch(error){
+    document.getElementById('brainstormingParticipantVoteStatus').textContent = 'Vote impossible : ' + error.message;
+  }
+}
+
+async function initBrainstormingParticipant(){
+  if(!document.documentElement.classList.contains('mode-participant')) return;
+  brainstormingParticipantClientId = brainstormingClientId(BRAINSTORM_SESSION_CODE || 'preview');
+  document.getElementById('brainstormingSubmitIdeaButton').addEventListener('click',submitBrainstormingIdea);
+  if(BRAINSTORM_PARAMS.get('preview') === '1'){
+    const defaults = window.AxisMundiBrainstormingConfig.sanitize(window.AxisMundiBrainstormingConfig.DEFAULT_CONFIG);
+    brainstormingParticipantSession = {id:'preview',code:'APERÇU',statut:'ouverte'};
+    brainstormingParticipantConfig = Object.assign({},defaults,{phase:'collecte'});
+    brainstormingParticipantTracker = window.AxisMundiBrainstormingLive.createBoardTracker(defaults.columns,defaults.maxVotes,defaults.maxIdeas);
+    populateBrainstormingParticipantColumns(defaults);
+    updateBrainstormingParticipantView();
+    return;
+  }
+  if(!BRAINSTORM_SESSION_CODE){
+    document.getElementById('brainstormingParticipantInstruction').textContent = 'Aucun code de session fourni.';
+    document.getElementById('brainstormingCollectionArea').hidden = true;
+    return;
+  }
+  try{
+    await chargerModulesBrainstorming();
+    const session = await AXMSession.recupererSessionParCode(BRAINSTORM_SESSION_CODE);
+    if(!session || session.outil !== 'brainstorming') throw new Error('session introuvable');
+    brainstormingParticipantSession = session;
+    brainstormingParticipantConfig = window.AxisMundiBrainstormingLive.readSessionConfig(session);
+    brainstormingParticipantTracker = window.AxisMundiBrainstormingLive.createBoardTracker(brainstormingParticipantConfig.columns,brainstormingParticipantConfig.maxVotes,brainstormingParticipantConfig.maxIdeas);
+    populateBrainstormingParticipantColumns(brainstormingParticipantConfig);
+    const initial = await AXMSession.listerReponses(session.id);
+    initial.forEach(addBrainstormingParticipantResponse);
+    AXMSession.ecouterReponses(session.id,addBrainstormingParticipantResponse);
+    AXMSession.ecouterSession(session.id,function(updated){
+      brainstormingParticipantSession = updated;
+      brainstormingParticipantConfig = window.AxisMundiBrainstormingLive.readSessionConfig(updated);
+      populateBrainstormingParticipantColumns(brainstormingParticipantConfig);
+      updateBrainstormingParticipantView();
+    });
+    updateBrainstormingParticipantView();
+  } catch(error){
+    document.getElementById('brainstormingParticipantInstruction').textContent = 'Impossible de rejoindre le brainstorming : ' + error.message;
+    document.getElementById('brainstormingCollectionArea').hidden = true;
+  }
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  initBrainstormingTrainer();
+  initBrainstormingParticipant();
+});
 </script>
 
 </body>
