@@ -8,6 +8,7 @@
 
   const VALID_PHASES = ['collecte', 'vote', 'resultats'];
   const VALID_COLORS = ['jaune', 'violet', 'vert', 'rose', 'bleu', 'gris'];
+  const PARTICIPANT_COLUMN_ACCENTS = ['#00B5E2', '#884EC2', '#15CA88', '#F5AB33', '#DE5C5C', '#5D6160'];
 
   function cleanSessionUrl(href) {
     const url = new URL(href);
@@ -206,7 +207,8 @@
   function renderParticipantColumnCards(columns) {
     return normalizeColumns(columns).map(function(column, index) {
       const inputId = 'brainstormingParticipantIdeaInput-' + index;
-      return '<article class="participant-column-card">'
+      const accent = PARTICIPANT_COLUMN_ACCENTS[index % PARTICIPANT_COLUMN_ACCENTS.length];
+      return '<article class="participant-column-card" style="--participant-accent:' + accent + '">'
         + '<h2><span>' + (index + 1) + '</span>' + escapeHtml(column.name) + '</h2>'
         + '<label class="participant-column-field" for="' + inputId + '">'
         + '<span>Votre idée</span>'

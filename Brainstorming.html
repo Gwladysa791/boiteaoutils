@@ -505,17 +505,9 @@
   .participant-instruction{margin:0 0 16px;color:#4f5a5d;font-size:14px;white-space:pre-wrap;}
   .participant-status{margin:12px 0 0;min-height:19px;color:#147654;font-size:12px;font-weight:700;}
   .participant-column-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:stretch;}
-  .participant-column-card{display:flex;flex-direction:column;min-width:0;padding:14px;border:1px solid #e0e5e7;border-top:4px solid var(--bleu);border-radius:11px;background:#f8fafb;}
-  .participant-column-card:nth-child(2){border-top-color:var(--violet);}
-  .participant-column-card:nth-child(3){border-top-color:var(--vert);}
-  .participant-column-card:nth-child(4){border-top-color:var(--orange);}
-  .participant-column-card:nth-child(5){border-top-color:var(--rouge);}
+  .participant-column-card{display:flex;flex-direction:column;min-width:0;padding:14px;border:1px solid #e0e5e7;border-top:4px solid var(--participant-accent,var(--bleu));border-radius:11px;background:#f8fafb;}
   .participant-column-card h2{display:flex;align-items:center;gap:8px;margin:0 0 12px;color:#293235;font-size:14px;line-height:1.25;}
-  .participant-column-card h2 span{display:grid;place-items:center;flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--bleu);color:#fff;font-size:10px;}
-  .participant-column-card:nth-child(2) h2 span{background:var(--violet);}
-  .participant-column-card:nth-child(3) h2 span{background:var(--vert);}
-  .participant-column-card:nth-child(4) h2 span{background:var(--orange);}
-  .participant-column-card:nth-child(5) h2 span{background:var(--rouge);}
+  .participant-column-card h2 span{display:grid;place-items:center;flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--participant-accent,var(--bleu));color:#fff;font-size:10px;}
   .participant-column-field{display:flex;flex:1;flex-direction:column;gap:6px;color:#4f5a5d;font-size:11px;font-weight:800;}
   .participant-column-field textarea{width:100%;min-height:112px;resize:vertical;border:1.5px solid #d8dfe1;border-radius:9px;padding:10px 11px;background:#fff;color:#20282b;font:inherit;font-size:13px;}
   .participant-column-field textarea:focus{outline:none;border-color:var(--bleu-fonce);box-shadow:0 0 0 3px rgba(0,136,169,.09);}

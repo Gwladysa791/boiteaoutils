@@ -69,6 +69,9 @@ test('participant collection renders every column as a visible input card', () =
   assert.match(markup, />Les idées</);
   assert.match(markup, />Les actions</);
   assert.equal((markup.match(/data-brainstorming-column=/g) || []).length, 3);
+  assert.match(markup, /style="--participant-accent:#00B5E2"/);
+  assert.match(markup, /style="--participant-accent:#884EC2"/);
+  assert.match(markup, /style="--participant-accent:#15CA88"/);
   assert.doesNotMatch(markup, /<select/i);
 });
 
